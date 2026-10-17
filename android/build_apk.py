@@ -8,7 +8,7 @@ import hashlib, json, os, struct, subprocess, tempfile, zipfile, zlib
 from pathlib import Path
 P=Path(__file__).resolve().parents[1]
 OUT=P/'dist';OUT.mkdir(exist_ok=True)
-APK=OUT/'GODSEED-v0.1-debug.apk'
+APK=OUT/'GODSEED-v0.2-debug.apk'
 
 U16=lambda n:struct.pack('<H',n)
 U32=lambda n:struct.pack('<I',n)

@@ -1,12 +1,36 @@
 # The Idle Open World Universe — GODSEED
 
-**GODSEED v0.1** is the first experimental build of an **offline Android god-observation RPG/simulation** for older phones. You are the god; **Nim** is an independently acting, rule-driven pixel-world inhabitant. You cannot control Nim directly. You can watch exploration, survival, crafting, wildlife encounters, leveling and memories, and change the world indirectly using Faith-powered divine actions.
+**GODSEED v0.2** is an experimental build of an **offline Android god-observation RPG/simulation** for older phones. You are the god; **Nim** is an independently acting, rule-driven pixel-world inhabitant. You cannot control Nim directly. You can watch exploration, survival, crafting, wildlife encounters, leveling and memories, and change the world indirectly using Faith-powered divine actions.
 
 ![720×400 gameplay preview](assets/godseed-android-landscape-720x400.png)
 
+## GODSEED en español — el jugador es el dios
+
+**Un mundo vivo. Un solo personaje. Tú observas e influyes.** GODSEED es un juego de simulación y aventura RPG de píxeles, pensado para Android antiguo, sin conexión a internet y con controles táctiles en horizontal.
+
+Nim **vive por su cuenta**: explora el mundo, busca comida, construye refugios, descansa, evita amenazas, pelea con animales, encuentra ruinas, descubre rumores y sube de nivel. Aprende habilidades usándolas y acumula recuerdos. **No es una IA consciente ni necesita internet:** su comportamiento procede de un simulador ligero basado en reglas.
+
+Tu función es la deidad. Puedes inspeccionar el terreno, usar Fe para curar, entregar comida, hacer brotar recursos, guiar o lanzar rayos y ajustar la velocidad del tiempo. **No controlas directamente el movimiento ni el combate de Nim.** El mundo solo se simula mientras la aplicación está abierta.
+
+En la rama experimental v0.2 están implementados cinco sistemas adicionales inspirados en las **mecánicas generales** del video facilitado (no en su aspecto 3D): origen personal, cinco habilidades que mejoran por uso, defensa táctica automática, trampas en ruinas y pistas de rumores. Pueblos completos, NPC conversacionales y mazmorras propias son ideas posteriores.
+
+### Cómo se propone que se vea en Android
+
+> **Maquetas conceptuales (no capturas reales del APK):** muestran una posible evolución visual para móviles. La interfaz de la APK actual todavía es diferente y no se ha comprobado su arranque en un dispositivo físico.
+
+**1. Nim explora solo**
+
+![Concepto de GODSEED en Android durante la exploración](assets/concepts/godseed-android-observacion.svg)
+
+**2. El dios usa Brotar para influir en el mundo**
+
+![Concepto de GODSEED en Android con intervención divina](assets/concepts/godseed-android-intervencion.svg)
+
+[Ver las decisiones de diseño, pantallas y próximos cinco pasos](docs/ANDROID_UI_VISION.md). También hay [una captura real del navegador](assets/godseed-android-landscape-720x400.png) para comparar el estado actual con la propuesta.
+
 ## Download and play
 
-- **[Download the Android APK (v0.1 debug prototype)](dist/GODSEED-v0.1-debug.apk)** — minimum Android 8.0/API 26; landscape; offline; no requested Android permissions. Install manually from a source you trust. Android may block unknown apps by default.
+- **[Download the Android APK (v0.2 debug prototype)](dist/GODSEED-v0.2-debug.apk)** — minimum Android 8.0/API 26; landscape; offline; no requested Android permissions. Install manually from a source you trust. Android may block unknown apps by default.
 - **[Play the offline HTML preview](GODSEED-Play.html)** — downloads as one self-contained file. Browser storage and Android app storage are separate.
 - [Project state and next five tasks](PROJECT_STATE.md) · [Full design batches](docs/DESIGN.md) · [Verification evidence](docs/QA_REPORT.md)
 
@@ -24,7 +48,7 @@ Nim is **not a sentient AI or LLM**. This is a small deterministic simulation wi
 - `src/ui.js`: rendering, mobile controls, chronicle, backups, speed, camera, and minimap.
 - `index.template.html`, `build.py` → `GODSEED-Play.html`: standalone browser game.
 - `android/`: Android reference manifest/activity and the experimental SDK-free APK builder.
-- `dist/GODSEED-v0.1-debug.apk`: signed experimental Android artifact, not a tested store release.
+- `dist/GODSEED-v0.2-debug.apk`: current experimental Android artifact; v0.1 remains for reference.
 - `tests/`: Node simulation, browser/mobile smoke, and APK structure checks.
 - `docs/`: roadmap and QA limits. `assets/`: real browser captures.
 
@@ -50,7 +74,11 @@ This repository contains the code and project documentation. Work in verified ba
 
 ## Status
 
-- 10/10 deterministic Node simulation tests passed in the transfer environment.
+- Baseline v0.1: 10/10 deterministic Node tests passed in the initial transfer; v0.2: 15/15 were reported passing in its feature implementation (not rerun for this documentation-only change).
 - Offline browser smoke and mobile-size controls/backup tests passed in Chromium.
 - APK ZIP, binary manifest, DEX structural checks and JAR-v1 signature checks passed.
 - Physical Android installation, frame rate, battery and memory measurements: **not verified**.
+
+## New v0.2 adventure depth (inspired by mechanics in a user-supplied gameplay clip)
+
+Five deterministic origins; survival/scouting/combat/crafting/lore proficiencies learned through play; automated combat dodge/parry; traps in ruins; and rumors linking discoveries. These are autonomous simulation mechanics, not a visual recreation of WYLDHEART. See [video feature translation](docs/VIDEO_FEATURE_TRANSLATION.md).

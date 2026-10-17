@@ -11,3 +11,46 @@ test('reincarnation preserves long-term progression',()=>{const x=S.create(55);x
 test('save and restore roundtrip; malformed files are rejected',()=>{const x=S.create(21);for(let i=0;i<70;i++)S.tick(x);x.bot.path=[[3,4]];x.marks.push({x:1,y:2,until:200});const raw=S.serialize(x),r=S.restore(raw);assert.ok(r);assert.equal(r.map.length,S.N);assert.deepEqual(r.bot.path,[]);assert.deepEqual(r.marks,[]);assert.equal(S.restore('not json'),null);const obj=JSON.parse(raw);obj.map.pop();assert.equal(S.restore(obj),null);});
 test('simulation survives 2,000 steps without invalid state or frozen position',()=>{const x=S.create(2026);let start=[x.bot.x,x.bot.y].join(',');for(let i=0;i<2000;i++)S.tick(x);assert.equal(S.validate(x),true);assert.ok(x.bot.steps>20,'bot must actually travel');assert.ok(x.bot.level>=2,'bot must gain levels');assert.ok(x.bot.fights+x.bot.wood+x.bot.stone+x.bot.ruins+x.bot.steps>20);assert.notEqual([x.bot.x,x.bot.y].join(','),start);assert.ok(x.log.length<=45);assert.ok(x.bot.memory.length<=12);});
 test('multiple seeds do not crash after 750 ticks',()=>{for(let seed=1;seed<=5;seed++){const x=S.create(seed);for(let i=0;i<750;i++)S.tick(x);assert.ok(S.validate(x),'seed '+seed);assert.ok(x.bot.steps>4,'seed '+seed);}});
+
+test('origin and traits are reproducible but vary between lives',()=>{
+ const a=S.create(1),b=S.create(1),c=S.create(2);
+ assert.deepEqual(a.bot.personality,b.bot.personality);
+ assert.equal(a.bot.background,b.bot.background);
+ assert.notEqual(a.bot.background,c.bot.background);
+ assert.ok(a.bot.originStory.length>12);
+ assert.equal(a.bot.skills.survival,1);
+});
+test('five skills advance by practice, not by class selection',()=>{
+ const s=S.create(5),before=s.bot.skills.lore;
+ S.improve(s,'lore',180);
+ assert.ok(s.bot.skills.lore>before);
+ assert.ok(s.bot.skills.lore<=20);
+ assert.ok(s.bot.memory.some(m=>m.includes('lore')));
+ assert.equal(S.improve(s,'imaginary',10),false);
+});
+test('rumors come from ruins and lead to further actual locations',()=>{
+ const s=S.create(3);
+ for(let i=0;i<6000;i++)S.tick(s);
+ assert.ok(s.bot.ruins>=2);
+ assert.ok(s.story.clues.length>=1);
+ assert.ok(s.story.completed>=1);
+ assert.ok(s.story.clues.every(q=>S.inside(q.x,q.y)));
+});
+test('tactics and trap detection happen without player controlling the bot',()=>{
+ const s=S.create(789);
+ for(let i=0;i<6000;i++)S.tick(s);
+ assert.ok(s.bot.tactics.dodge+s.bot.tactics.parry>=1);
+ assert.ok(s.bot.tactics.trapsAvoided+s.bot.tactics.trapsTriggered>=1);
+ assert.equal(S.validate(s),true);
+});
+test('old v0.1 saves migrate to new story and skill state',()=>{
+ const s=S.create(16),raw=JSON.parse(S.serialize(s));
+ delete raw.story;for(const k of ['background','originStory','skills','skillXP','tactics'])delete raw.bot[k];
+ const migrated=S.restore(raw);
+ assert.ok(migrated);
+ assert.ok(migrated.bot.skills);
+ assert.ok(migrated.bot.tactics);
+ assert.deepEqual(migrated.story,{clues:[],completed:0});
+ for(let i=0;i<80;i++)S.tick(migrated);
+ assert.equal(S.validate(migrated),true);
+});
