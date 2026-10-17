@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib,struct,subprocess,zipfile,zlib,json
 P=Path(__file__).resolve().parents[1]
-A=P/'dist/GODSEED-v0.2-debug.apk'
+A=P/'dist/GODSEED-v0.3-debug.apk'
 assert A.exists(),A
 with zipfile.ZipFile(A) as z:
     assert z.testzip() is None
