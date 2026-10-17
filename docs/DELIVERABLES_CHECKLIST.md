@@ -2,6 +2,7 @@
 
 ## Prepared in this branch
 - [x] Codex instructions in `AGENTS.md`
+- [x] Full game product spec, detailed HTML-in-APK architecture, staged P/I/R readiness gates, and a final copy-paste Codex Cloud prompt
 - [x] Vision, art bible, architecture, interaction spec and 5×5 implementation plan
 - [x] Explicit autonomy/NPC rules, world lore, save safety and old-Android budgets
 - [x] Four pixel PNG starter sheets in repository, with deterministic generator
