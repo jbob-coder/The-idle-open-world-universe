@@ -23,7 +23,7 @@ jobs:
       - name: Build offline HTML
         run: python build.py
       - name: Run deterministic simulation tests
-        run: node --test tests/sim.test.js
+        run: node --test tests/*.test.js
       - name: Rebuild debug APK with temporary CI signing key
         run: python android/build_apk.py
       - name: Check APK structure and signature
