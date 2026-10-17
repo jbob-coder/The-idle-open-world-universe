@@ -1,440 +1,326 @@
 {
-  "project": "GODSEED",
-  "purpose": "Codex Cloud implementation backlog; this preparation PR implements none of these tasks",
-  "branch": "feat/godseed-medieval-skyworld-v1",
-  "currentState": "ready_for_codex",
-  "date": "2026-10-17",
-  "total": 25,
-  "groupSize": 5,
-  "definitions": {
-    "todo": "Not started; specs/assets may exist",
-    "in_progress": "Claimed by one implementation agent",
-    "blocked": "Cannot proceed; record exact blocker",
-    "done": "Code tested with evidence"
-  },
-  "tasks": [
+  "schema": "godseed.work-items.v1",
+  "title": "Codex Cloud implementation ledger",
+  "authority": "prep/codex-skyworld-v0.5",
+  "implementation_branch": "feat/godseed-medieval-skyworld-v1",
+  "status": "ready_for_implementation",
+  "created": "2026-10-17",
+  "rule": "5 tasks per slice, done requires test and evidence",
+  "entries": [
     {
       "id": "A01",
-      "slice": "A",
-      "area": "camera",
-      "title": "Higher sky default",
-      "description": "Set 32x20 high-sky as default while preserving 24x15 and 16x10",
+      "epic": "A",
+      "epic_title": "High-sky camera",
       "status": "todo",
+      "title": "Set 32x20 default; retain 24x15 and 16x10",
+      "acceptance": "State and UI tests assert default 32x20 and zoom cycle.",
+      "evidence": [],
       "dependencies": [],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "A02",
-      "slice": "A",
-      "area": "camera",
-      "title": "Camera transforms",
-      "description": "Extract well-tested worldToCanvas/pointerToWorld with letterbox offsets",
+      "epic": "A",
+      "epic_title": "High-sky camera",
       "status": "todo",
+      "title": "Extract pure world/canvas pointer transforms",
+      "acceptance": "Roundtrips correct at every zoom, with letterbox margins.",
+      "evidence": [],
       "dependencies": [
         "A01"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "A03",
-      "slice": "A",
-      "area": "camera",
-      "title": "Follow and pan",
-      "description": "Preserve autonomous Nim follow and free divine inspection camera",
+      "epic": "A",
+      "epic_title": "High-sky camera",
       "status": "todo",
+      "title": "Implement integer camera follow and free pan",
+      "acceptance": "Tile coordinates remain stable; no subpixel blur.",
+      "evidence": [],
       "dependencies": [
         "A02"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "A04",
-      "slice": "A",
-      "area": "camera",
-      "title": "Pixel clarity",
-      "description": "Enforce integer scaling, no smoothing and crisp pixel squares",
+      "epic": "A",
+      "epic_title": "High-sky camera",
       "status": "todo",
+      "title": "Protect crisp pixel-square scaling and safe areas",
+      "acceptance": "Canvas remains pixelated and never clips target cells.",
+      "evidence": [],
       "dependencies": [
         "A03"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "A05",
-      "slice": "A",
-      "area": "camera",
-      "title": "Viewport evidence",
-      "description": "Capture all zooms at 640x360,720x400,960x540 and validate targeting",
+      "epic": "A",
+      "epic_title": "High-sky camera",
       "status": "todo",
+      "title": "Capture 3 viewport sizes × zoom and verify commands",
+      "acceptance": "9 screenshots and touch tests; 10 visible controls.",
+      "evidence": [],
       "dependencies": [
         "A04"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "B01",
-      "slice": "B",
-      "area": "terrain",
-      "title": "Terrain atlas",
-      "description": "Load terrain starter or improved original tiles by semantic IDs 0–10",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
       "status": "todo",
-      "dependencies": [
-        "A05"
-      ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "title": "Wire four starter PNG sheets through manifest into renderer",
+      "acceptance": "Runtime shows actual atlas pixels, all offline.",
+      "evidence": [],
+      "dependencies": [],
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "B02",
-      "slice": "B",
-      "area": "terrain",
-      "title": "Roads and shores",
-      "description": "Compute four-neighbor deterministic road, water adjacency",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
       "status": "todo",
+      "title": "Draw roads and water adjacency masks",
+      "acceptance": "Test joins, bends and edges without altering collision.",
+      "evidence": [],
       "dependencies": [
         "B01"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "B03",
-      "slice": "B",
-      "area": "terrain",
-      "title": "World props",
-      "description": "Place flora, trees, fence, rocks, posts with nonblocking seeded noise",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
       "status": "todo",
+      "title": "Add deterministic nonblocking environmental props",
+      "acceptance": "World seed yields same placements after reload.",
+      "evidence": [],
       "dependencies": [
         "B02"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "B04",
-      "slice": "B",
-      "area": "terrain",
-      "title": "Medieval landmarks",
-      "description": "Make hamlets, ruins, shrines, camps unmistakable without fake collision",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
       "status": "todo",
+      "title": "Improve hamlet, shrine, ruin and camp silhouettes",
+      "acceptance": "Readable destinations at 32x20, no phantom interiors.",
+      "evidence": [],
       "dependencies": [
         "B03"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "B05",
-      "slice": "B",
-      "area": "terrain",
-      "title": "Render budget",
-      "description": "Cache scene, profile redraw and preserve old-hardware frame budget",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
       "status": "todo",
+      "title": "Cache/invalidate scenery and profile before/after",
+      "acceptance": "Evidence of no stale tiles and bounded redraws.",
+      "evidence": [],
       "dependencies": [
         "B04"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "C01",
-      "slice": "C",
-      "area": "actors",
-      "title": "Nim directions",
-      "description": "Replace starter with 4 facing directions, idle, 2–4 step frames",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
       "status": "todo",
-      "dependencies": [
-        "B05"
-      ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "title": "Draw Nim with four facings and 2–4 frame walk cycle",
+      "acceptance": "Movement animation derived from tick, not draw calls.",
+      "evidence": [],
+      "dependencies": [],
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "C02",
-      "slice": "C",
-      "area": "actors",
-      "title": "NPC role sprites",
-      "description": "Apothecary, Squire, Rune Scholar distinct in the world",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
       "status": "todo",
+      "title": "Distinctively draw the three professions",
+      "acceptance": "Roles readable at 640x360 / 32x20.",
+      "evidence": [],
       "dependencies": [
         "C01"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "C03",
-      "slice": "C",
-      "area": "actors",
-      "title": "Creature sprites",
-      "description": "Represent simulated Wolf and Boar; no fictional wildlife gameplay",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
       "status": "todo",
+      "title": "Add visual wolves and boars; defer unsimulated animals",
+      "acceptance": "Only existing enemy types rendered and tested.",
+      "evidence": [],
       "dependencies": [
         "C02"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "C04",
-      "slice": "C",
-      "area": "actors",
-      "title": "Autonomous cues",
-      "description": "Visualize Nim intent/action state without direct control",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
       "status": "todo",
+      "title": "Show actions/goals without control prompts",
+      "acceptance": "Why/goal UI and activity legible with time sped up.",
+      "evidence": [],
       "dependencies": [
         "C03"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "C05",
-      "slice": "C",
-      "area": "actors",
-      "title": "Sprite layering",
-      "description": "Sort by feet, handle canopy occlusion and actor labels",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
       "status": "todo",
+      "title": "Correct foot-Y sorting and tree occlusion",
+      "acceptance": "No invisible Nim behind foliage; test overlay order.",
+      "evidence": [],
       "dependencies": [
         "C04"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "D01",
-      "slice": "D",
-      "area": "divine",
-      "title": "Target feedback",
-      "description": "Power selected/valid/invalid highlight with zero spending on errors",
+      "epic": "D",
+      "epic_title": "God's visible influence",
       "status": "todo",
-      "dependencies": [
-        "C05"
-      ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "title": "Preview valid/invalid tile targeting",
+      "acceptance": "Invalid events cost no Faith; readable cursor.",
+      "evidence": [],
+      "dependencies": [],
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "D02",
-      "slice": "D",
-      "area": "divine",
-      "title": "Five power FX",
-      "description": "Bless, Gift, Bloom, Guide, Storm compact frames",
+      "epic": "D",
+      "epic_title": "God's visible influence",
       "status": "todo",
+      "title": "Render finite FX for bless/gift/bloom/guide/storm",
+      "acceptance": "All effects arise from simulator events, capped cost.",
+      "evidence": [],
       "dependencies": [
         "D01"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "D03",
-      "slice": "D",
-      "area": "divine",
-      "title": "Inspire response",
-      "description": "NPC profession effect and readable journal feedback",
+      "epic": "D",
+      "epic_title": "God's visible influence",
       "status": "todo",
+      "title": "Inspire a traveler with a unique role reaction",
+      "acceptance": "One click → one favor, correct chronicle/favor marker.",
+      "evidence": [],
       "dependencies": [
         "D02"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "D04",
-      "slice": "D",
-      "area": "divine",
-      "title": "One event one effect",
-      "description": "Prevent duplicate grant/FX from redraw or pause",
+      "epic": "D",
+      "epic_title": "God's visible influence",
       "status": "todo",
+      "title": "Deduplicate visual effects without duplicate rewards",
+      "acceptance": "No render frame can mutate Faith or sim state.",
+      "evidence": [],
       "dependencies": [
         "D03"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "D05",
-      "slice": "D",
-      "area": "divine",
-      "title": "Reduced motion",
-      "description": "Static fallback and deterministic FX lifespan tests",
+      "epic": "D",
+      "epic_title": "God's visible influence",
       "status": "todo",
+      "title": "Implement reduced-motion and textual alternatives",
+      "acceptance": "Effects understandable without animation.",
+      "evidence": [],
       "dependencies": [
         "D04"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "E01",
-      "slice": "E",
-      "area": "release",
-      "title": "Compact landscape HUD",
-      "description": "No clipped buttons on old Android, thought panel, Faith and NPC inspect",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
       "status": "todo",
-      "dependencies": [
-        "D05"
-      ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "title": "Compact HUD and touch safe areas",
+      "acceptance": "No lost buttons or unreadable NPC info at 640x360.",
+      "evidence": [],
+      "dependencies": [],
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "E02",
-      "slice": "E",
-      "area": "release",
-      "title": "Save and offline QA",
-      "description": "Old save import/export, touch maps, no external network",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
       "status": "todo",
+      "title": "Run browser smoke, save roundtrip and 10k ticks",
+      "acceptance": "All tests green, no offline network needed.",
+      "evidence": [],
       "dependencies": [
         "E01"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "E03",
-      "slice": "E",
-      "area": "release",
-      "title": "Debug APK build",
-      "description": "Assemble/test experimental debug package without secret keys",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
       "status": "todo",
+      "title": "Build and verify v1 experimental debug APK",
+      "acceptance": "Signed ZIP manifest structurally valid; no keystore leaks.",
+      "evidence": [],
       "dependencies": [
         "E02"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "E04",
-      "slice": "E",
-      "area": "release",
-      "title": "Phone acceptance",
-      "description": "Install and measure if hardware available; else report blocker",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
       "status": "todo",
+      "title": "Collect physical Android evidence when device available",
+      "acceptance": "FPS, memory, 20min session; mark BLOCKED otherwise.",
+      "evidence": [],
       "dependencies": [
         "E03"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     },
     {
       "id": "E05",
-      "slice": "E",
-      "area": "release",
-      "title": "Evidence and PR",
-      "description": "Source, screenshots, tests, APK sha, follow-up and review request",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
       "status": "todo",
+      "title": "Publish source, screenshots, APK and verification PR",
+      "acceptance": "Evidence exact; no unverified claims or accidental main merge.",
+      "evidence": [],
       "dependencies": [
         "E04"
       ],
-      "acceptance": [
-        "code integrated",
-        "tests pass",
-        "captured evidence from actual build",
-        "docs/hand-off updated"
-      ]
+      "assigned_to": "Codex Cloud"
     }
   ]
 }
