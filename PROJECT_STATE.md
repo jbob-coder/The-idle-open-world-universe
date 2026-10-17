@@ -1,3 +1,15 @@
+## Storage policy update — October 17, 2026
+
+REQUIREMENT: GODSEED's eventual game content should target **1 GB core installed persistent storage** and optionally use up to **5 GB additional free Android disk** when user consents and the device has it. Nominal app-managed limit 6 GB, NOT 6 GB RAM. Do not pad tiny APK with dummy bytes, assume 5 GB is available, silently preallocate, or make optional packs mandatory for offline play.
+
+COMMITTED: `docs/STORAGE_BUDGET_AND_PACKS.md`, `config/storage-budget.json`, `work-items/storage-tasks.json` (S01–S05), `scripts/validate_storage_budget.mjs` (static configuration and representative limit math only). Updated canonical Codex prompt, README, AGENTS, Android packaging spec, performance budget, acceptance plan and handoff workflow. Total **30 TODO implementation items**: 25 A–E plus five S.
+
+STATUS: SPECIFICATION ONLY. Current APK remains a tiny experimental WebView debug prototype; there is no 1 GB content pack or 5 GB optional storage manager and no demonstrated quota enforcement or physical Android test.
+
+NEXT: Codex implements the original art/game work and an independent tested S batch, with actual disk-space accounting, user consent, safe optional pack import/removal, low-space safeguards, rollback and device evidence.
+
+---
+
 ## Final Codex Cloud architecture handoff — 2026-10-17
 
 CURRENT_OBJECTIVE: Answer the architecture question (“why HTML in APK?”) with a normative product and packaging design, and provide one ready-to-use Codex Cloud implementation prompt **after all preparation assets/docs are available**.

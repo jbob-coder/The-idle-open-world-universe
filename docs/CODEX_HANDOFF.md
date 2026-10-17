@@ -10,6 +10,8 @@ Open PR stack when prepared: v0.2 PR #1 into main; v0.3 PR #2 into v0.2; v0.4 PR
 
 **New prep materials:** root `AGENTS.md` instruction for Codex; specifications, work list, palette, pixel starter atlases, concept illustrations and asset manifest. Starter PNGs are *not wired to the existing renderer yet*. Do not claim implementation done merely because they are committed.
 
+**New owner storage directive:** planned 1 GB meaningful installed core content, plus up to 5 GB extra opt-in managed persistent storage (nominal 6 GB total), **not RAM**; current APK remains tiny and quota isn't implemented. See `docs/STORAGE_BUDGET_AND_PACKS.md` / `config/storage-budget.json` and five additional S01–S05 tasks, raising work to 30 total.
+
 **First five steps for Codex:** verify baseline; plan camera semantics; implement high-sky default and transforms; verify landscape touch/screenshots; commit evidence. Then perform subsequent 5-task slices per plan.
 
 **Known release blockers:** No stable production keystore in repository; CI debug signing is ephemeral; no confirmed device tests for new rendering. Keep QA reporting honest.
