@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright
 from pathlib import Path
 p=Path(__file__).resolve().parents[1]
 with sync_playwright() as pw:
-    browser=pw.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
+    browser=pw.chromium.launch(**({'executable_path':'/usr/bin/chromium'} if Path('/usr/bin/chromium').exists() else {}),headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
     for width,height in [(1280,800),(720,400),(390,844)]:
         page=browser.new_page(viewport={'width':width,'height':height},device_scale_factor=1)
         errors=[]
@@ -18,7 +18,7 @@ with sync_playwright() as pw:
         assert not errors,errors
         assert not outgoing,outgoing
         page.screenshot(path=str(p/'assets'/f'screenshot-{width}x{height}.png'),full_page=True)
-        assert page.locator('[data-power]').count()==12
+        assert page.locator('[data-power]').count()==14
         # Advance enough to confirm autonomy, independent of wall clock.
         page.evaluate('()=>{GodseedDebug.setSpeed(0);GodseedDebug.step(120)}')
         s=page.evaluate("()=>({tick:GodseedDebug.getState().tick,steps:GodseedDebug.getState().bot.steps,energy:GodseedDebug.getState().bot.energy})")
