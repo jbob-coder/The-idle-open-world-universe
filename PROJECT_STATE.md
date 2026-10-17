@@ -1,3 +1,21 @@
+## Final Codex Cloud architecture handoff — 2026-10-17
+
+CURRENT_OBJECTIVE: Answer the architecture question (“why HTML in APK?”) with a normative product and packaging design, and provide one ready-to-use Codex Cloud implementation prompt **after all preparation assets/docs are available**.
+
+COMPLETED: `docs/GODSEED_INTENDED_GAME.md` defines GODSEED as a rule-driven autonomous medieval fantasy world under god observation; `docs/ANDROID_HTML_APK_SPEC.md` documents HTML/CSS/JavaScript/Canvas2D/WebView division of responsibility, offlined bundled art, secure host configuration, lifecycle, localStorage backup/origin migration, developer-only handcrafted APK and optional supported Gradle WebView migration; `docs/HANDOFF_READINESS.md` differentiates preparation Gate P, implementation Gate I and hardware/release Gate R; `docs/CODEX_CLOUD_READY_PROMPT.md` is the canonical prompt to submit to Codex Cloud. Entry points and implementation slice updated.
+
+VERIFIED_REALITY: Source reviewed on `prep/codex-skyworld-v0.5`: 64×48, sim tile IDs 0..10, v0.4 WebView file:// assets/index.html generated with `build.py`, prototype debug signing, current default 24×15. The future default 32×20, integrated sprite atlases and Gradle packaging are specified **but not implemented** in this documentation-only change.
+
+HANDOFF_INSTRUCTION: Send `docs/CODEX_CLOUD_READY_PROMPT.md` to Codex Cloud with repository `jbob-coder/The-idle-open-world-universe` and checkout branch `prep/codex-skyworld-v0.5`. Create `feat/godseed-medieval-skyworld-v1`. Do not confuse prep completion with shipped APK.
+
+NEXT_ACTION: Validate GitHub files and automation, let Codex perform task ledger A01–E05 and capture actual browser evidence. Android real-device launch, performance, signing and migration remain release blockers until tested.
+
+FILES: `README.md`, `AGENTS.md`, `docs/CODEX_CLOUD_BUILD_PROMPT.md`, `docs/CODEX_RUNBOOK.md`, `docs/IMPLEMENTATION_SLICES.md`, `docs/DELIVERABLES_CHECKLIST.md` and 4 new documents listed above.
+
+GRAPH: `src/sim.js` → deterministic AI/game state; `src/ui.js` → Canvas rendering and UI; `index.template.html` + `build.py` → offline HTML; `android/build_apk.py` → prototype WebView APK; `docs/ANDROID_HTML_APK_SPEC.md` → target wrapper specification; `docs/CODEX_CLOUD_READY_PROMPT.md` → future implementation handoff.
+
+---
+
 ## Handoff preparado para Codex Cloud (2026-10-17)
 
 BRANCH: `prep/codex-skyworld-v0.5`; base `feat/skyview-zoom-v0.4`. No introducir cambios en `main` hasta revisar cadena de PRs.
