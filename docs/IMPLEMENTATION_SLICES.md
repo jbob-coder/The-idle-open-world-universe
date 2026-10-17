@@ -33,7 +33,7 @@ D05 Reduced-motion alternative, text feedback, FPS cap and interaction tests.
 ## Slice E — Android, packaging and verification (priority 5)
 E01 Compact responsive HUD shows goal/thoughts, Faith, weather, NPC events without obscuring world.
 E02 Full browser touch/keyboard and JSON backup regression all target viewports.
-E03 SDK-free experimental debug APK build + JAR signature/manifest validation; handle signing keys safely.
+E03 Keep SDK-free experimental debug APK build + signature/manifest validation passing; handle signing keys safely. Evaluate conventional Gradle WebView packaging separately per `docs/ANDROID_HTML_APK_SPEC.md`, with storage-origin migration and device testing before replacement.
 E04 Hardware QA plan executed if device access exists, otherwise mark physical test BLOCKED with exact reason.
 E05 Publish screenshots, APK artifacts, before/after metrics, migration instructions and completion evidence.
 
