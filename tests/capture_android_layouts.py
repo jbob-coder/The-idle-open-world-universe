@@ -50,6 +50,17 @@ with sync_playwright() as pw:
           for(const p of s.npcs) s.seen[p.y*64+p.x]=1;
         }""")
         page.locator("#androidDock [data-power=inspire]").click()
+        # Recenter a controlled QA scenario; the character still has autonomous rules.
+        # On 640x360 the moving traveler may otherwise be behind the fixed dock.
+        page.evaluate("""() => {
+          const s=window.GodseedDebug.getState();
+          s.bot.x=s.npcs[0].x;
+          s.bot.y=s.npcs[0].y;
+          s.settings.follow=true;
+          s.settings.speed=0;
+          window.GodseedDebug.step(0);
+        }""")
+        page.locator("#world").scroll_into_view_if_needed()
         coords = page.evaluate("""() => {
           const s=window.GodseedDebug.getState(), p=s.npcs[0],
             r=document.querySelector('#world').getBoundingClientRect(),
@@ -59,15 +70,23 @@ with sync_playwright() as pw:
             cameraY=Math.max(0,Math.min(48-22,s.bot.y-11));
           return {x:r.left+(r.width-drawnWidth)/2+(p.x-cameraX+0.5)*16*scale,
                   y:r.top+(r.height-drawnHeight)/2+(p.y-cameraY+0.5)*16*scale,
-                  before:s.faith, target:p.name};
+                  before:s.faith, target:p.name,
+                  canvas:{top:r.top,left:r.left,bottom:r.bottom,right:r.right}};
         }""")
+        target_under_pointer=page.evaluate("""(pos) => {
+          const node=document.elementFromPoint(pos.x,pos.y);
+          return {id:node?.id||'',tag:node?.tagName||''};
+        }""", coords)
+        assert target_under_pointer["id"]=="world", (
+            f"NPC is obscured by another interface element at {width}x{height}: "
+            f"{target_under_pointer}, {coords}")
         page.mouse.click(coords["x"], coords["y"])
         result=page.evaluate("""() => {
           const s=window.GodseedDebug.getState();
           return {faith:s.faith, inspired:s.npcs.some(p=>p.favorUntil>s.tick),
                   log:s.log.some(e=>e.title==='Divine inspiration')};
         }""")
-        assert result["faith"] == coords["before"]-5, f"inspire tap did not spend Faith at {width}x{height}: {result}"
+        assert result["faith"] == coords["before"]-5, f"inspire tap did not spend Faith at {width}x{height}: {result}, {coords}, toast={page.locator('#toast').inner_text()}"
         assert result["inspired"] and result["log"], "traveler not inspired"
         page.wait_for_timeout(250)
         path2 = OUT / f"godseed-medieval-inspirar-{width}x{height}.png"
