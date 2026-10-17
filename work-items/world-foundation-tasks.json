@@ -164,57 +164,77 @@
     {
       "id": "W06",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Ruin/shrine region encounters and finite rewards",
       "acceptance": "Oathkeeper/Crownfall/Moonwell experiences have finite and save-safe discovery.",
       "dependencies": [
         "W05"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+      ]
     },
     {
       "id": "W07",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Region discovery, chronicle and minimap metadata",
       "acceptance": "Unknown areas stay fogged, titles reveal correctly, inspect and divine targeting coherent.",
       "dependencies": [
         "W06"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+      ]
     },
     {
       "id": "W08",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Region weather and activity flavor",
       "acceptance": "Distinct rain/wildlife/ambient cues do not alter world RNG on render or tank mobile FPS.",
       "dependencies": [
         "W07"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+      ]
     },
     {
       "id": "W09",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Save migration, seeded reconstruction and schema audit",
       "acceptance": "v1 save format preserved; pre-region saves work; 100 seed region membership tests pass.",
       "dependencies": [
         "W08"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+      ]
     },
     {
       "id": "W10",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Long-run QA and 2\u20133GB Android validation evidence",
       "acceptance": "10k tick multi-seed suite, responsive 640x360 UI, Android 2/3GB RAM test or explicit block.",
       "dependencies": [
         "W09"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+      ]
     }
   ]
 }

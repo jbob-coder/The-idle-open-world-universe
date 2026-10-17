@@ -19,3 +19,6 @@ Physical Android device testing: NOT VERIFIED (no attached Android hardware). Br
 W01–W05: manifest-backed seeded Voronoi overlay with sanctuary reservation; deterministic forest/quarry/fen ecology; walkable roads to eight anchors and existing shrines; protected starter resources and enemy exclusion radius; three original NPC homes retained. 100-seed coverage/connectivity suite passes. 35 Node tests and offline lifecycle checks pass. Visual acceptance pending A–D integration.
 
 Ruling: old saves derive an immutable worldSeed from their saved RNG seed when no original seed exists. Map, progress and positions are never regenerated. New roads replace water with semantic ROAD (dry causeway), not cosmetic bridges over blocked water.
+
+## Discovery
+W06–W10: finite Crownfall/Moonwell ruin rewards, Oathkeeper shrine preserved, one-time region chronicle/memory, region inspection and local atmospheric labels. Metadata migration preserves old maps and restores discovered IDs. 37 simulation tests pass, including 100 seeds and five 10k runs. Visual QA pending atlas integration. W10 physical 2/3GB-device evidence NOT VERIFIED: no adb, emulator or attached phone.

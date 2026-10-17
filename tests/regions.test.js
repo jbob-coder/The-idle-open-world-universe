@@ -17,3 +17,17 @@ test('regional ecology supplies distinct forest, quarry and fen while keeping NP
  assert.deepEqual(s.npcs.map(p=>[p.homeX,p.homeY]),[[37,27],[25,21],[42,19]]);
  for(let i=0;i<2000;i++){S.tick(s);assert.ok(s.enemies.length<=5);assert.ok(s.enemies.every(e=>Math.abs(e.x-32)+Math.abs(e.y-24)>5));}
 });
+test('region discovery is finite and old maps migrate without reconstruction',()=>{
+ const s=S.create(2);assert.deepEqual(s.regions.discovered,['R00']);
+ for(const r of data.regions){s.bot.x=r.anchor[0];s.bot.y=r.anchor[1];S.tick(s);}
+ assert.equal(new Set(s.regions.discovered).size,8);
+ const restored=S.restore(S.serialize(s));assert.deepEqual(restored.regions,s.regions);
+ const old=JSON.parse(S.serialize(s));delete old.regions;delete old.worldSeed;
+ const migrated=S.restore(old);assert.deepEqual(migrated.map,old.map);assert.equal(migrated.worldSeed,old.seed);assert.ok(migrated.regions);
+ const raw=S.serialize(migrated);for(let i=0;i<100;i++)S.regionAt(migrated,50,39);assert.equal(S.serialize(migrated),raw);
+});
+test('Crownfall and Moonwell rewards cannot repeat after restoration',()=>{
+ for(const [x,y] of [[31,7],[50,39]]){const s=S.create(4);s.bot.x=x;s.bot.y=y;s.bot.food=5;s.bot.tool=1;s.camp={x:32,y:24};s.npcs=[];s.seen.fill(1);
+ S.tick(s);S.tick(s);assert.notEqual(s.map[S.idx(x,y)],S.T.RUIN);assert.equal(s.bot.ruins,1);
+ const r=S.restore(S.serialize(s));r.bot.x=x;r.bot.y=y;S.tick(r);S.tick(r);assert.equal(r.bot.ruins,1);}
+});
