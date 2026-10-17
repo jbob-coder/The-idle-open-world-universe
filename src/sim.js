@@ -14,16 +14,16 @@ const ORIGINS=[
 const SKILLS=['survival','scouting','combat','crafting','lore'];
 // Maximum three light-weight villagers. This is rule-driven life, not an online AI.
 const PEOPLE=[
- {name:'Ira',role:'Herbalist',dx:5,dy:3,color:0},
- {name:'Toren',role:'Wanderer',dx:-7,dy:-3,color:1},
- {name:'Mera',role:'Lorekeeper',dx:10,dy:-5,color:2}
+ {name:'Ira',role:'Apothecary',dx:5,dy:3,color:0},
+ {name:'Toren',role:'Squire',dx:-7,dy:-3,color:1},
+ {name:'Mera',role:'Rune Scholar',dx:10,dy:-5,color:2}
 ];
 const LORE=[
- ['Fallen Observatory','A shattered lens once pointed toward a secret stonework.'],
- ['Whispering Steps','The old roads hide a place where names are carved in stone.'],
- ['The Mossbound Oath','Travelers once guarded a forgotten sanctuary.'],
- ['Buried Fire','Stone scribes left signs of a hidden ember chamber.'],
- ['The Last Cartographer','A route to lost knowledge survives among the ruins.']
+ ['The Ashen Crown','A royal crown was hidden beneath the old kingdom.'],
+ ['The Moonwell','A moonlit well once granted visions to the royal scribes.'],
+ ['The Mossbound Oath','Oathkeepers once guarded a shrine in the deep woods.'],
+ ['Buried Fire','Runesmiths sealed a chamber of ancient flame.'],
+ ['The Last Cartographer','The royal mapmaker hid a path to lost knowledge.']
 ];
 function progress(b){
  if(!b.background)b.background=ORIGINS[0].name;
@@ -83,8 +83,14 @@ function meetPerson(s,p){
  if(divine||p.trust>=50){
   if(b.food<4){b.food+=2;detail+=' A helpful offering gave Nim two food.';}
   else {b.energy=clamp(b.energy+10,0,100);detail+=' Words of comfort restored energy.';}
- }else if(p.role==='Lorekeeper'){
-  detail+=' They shared a tale of distant ruins.';
+ }else if(p.role==='Rune Scholar'||p.role==='Lorekeeper'){
+  detail+=' They shared a legend of the forgotten kingdom.';
+  improve(s,'lore',2);
+ }else if(p.role==='Squire'){
+  detail+=' They warned Nim about wolves on the old road.';
+ }else if(p.role==='Apothecary'||p.role==='Herbalist'){
+  detail+=' They taught Nim to recognize healing herbs.';
+  improve(s,'survival',1);
  }
  b.thought=divine?'Someone feels strangely blessed.':'There are other lives in this world.';
  b.path=[];gain(s,3,'meeting '+p.name);improve(s,'lore',1);
@@ -114,7 +120,7 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,d
  s.map=terrain(s);for(let y=s.bot.y-3;y<=s.bot.y+3;y++)for(let x=s.bot.x-3;x<=s.bot.x+3;x++)if(inside(x,y))s.map[idx(x,y)]=T.GRASS;
  s.map[idx(s.bot.x+2,s.bot.y)]=T.BERRY;s.map[idx(s.bot.x-2,s.bot.y)]=T.FOREST;s.map[idx(s.bot.x,s.bot.y-2)]=T.STONE;
  for(let i=0;i<10;i++){const x=5+rint(s,W-10),y=5+rint(s,H-10);if(Math.abs(x-s.bot.x)+Math.abs(y-s.bot.y)>8 && s.map[idx(x,y)]!==T.WATER)s.map[idx(x,y)]=T.RUIN;}
- s.npcs=initPeople(s);discover(s,s.bot.x,s.bot.y);event(s,'A spark awakens',`Nim, a ${origin.name}, opens their eyes in an unfamiliar world. ${origin.past}`,'milestone');
+ s.npcs=initPeople(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
  return s;}
 function discover(s,x,y){let count=0;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const xx=x+ox,yy=y+oy;if(!inside(xx,yy)||ox*ox+oy*oy>12)continue;const n=idx(xx,yy);if(!s.seen[n]){s.seen[n]=1;count++;}}return count;}
 function remember(s,subject){let m=s.bot.memory;if(m[m.length-1]!==subject){m.push(subject);if(m.length>12)m.shift();}}
@@ -185,7 +191,7 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
  const tile=s.map[idx(b.x,b.y)];
  if(b.goal==='Eat'){b.food--;improve(s,'survival',1);b.hunger=clamp(b.hunger+37,0,100);b.hp=clamp(b.hp+2,0,b.maxHp);b.thought='That was needed.';return;}
  if(b.goal==='Recover'||b.goal==='Rest'){b.energy=clamp(b.energy+(s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3?17:12),0,100);b.hp=clamp(b.hp+(s.camp?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
- if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First shelter','Nim built a small shelter at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
+ if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First camp','Nim raised a canvas shelter and stone hearth at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
  if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');improve(s,'crafting',5);return;}
  if(tile===T.BERRY){b.food+=2+rint(s,2);s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'foraging');improve(s,'survival',2);b.thought='These berries will last a little while.';return;}
  if(tile===T.FOREST&&b.goal==='Gather wood'){b.wood+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'woodcutting');improve(s,'survival',2);return;}
@@ -197,7 +203,7 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
   const hazard=rand(s)<.36;
   if(hazard){
    const detected=rand(s)<clamp(.19+b.personality.caution*.42+b.skills.scouting*.045,0,.88);
-   if(detected){b.tactics.trapsAvoided++;improve(s,'scouting',3);event(s,'Trap spotted','Nim avoided a hidden floor snare.');}
+   if(detected){b.tactics.trapsAvoided++;improve(s,'scouting',3);event(s,'Trap spotted','Nim recognized an ancient pressure-stone beneath the moss.');}
    else{const dmg=2+rint(s,4);b.hp-=dmg;b.tactics.trapsTriggered++;event(s,'Ruin trap','A concealed snare injured Nim for '+dmg+'.','danger');addMark(s,b.x,b.y,'hurt');}
   }
   if(s.story&&Array.isArray(s.story.clues)){
@@ -209,13 +215,13 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
      if(target&&target.length){const [tx,ty]=target[target.length-1];
       if(!s.story.clues.some(q=>q.x===tx&&q.y===ty)){
        const [title,detail]=LORE[(b.ruins-1)%LORE.length];s.story.clues.push({title,detail,x:tx,y:ty,solved:false});
-       event(s,'New rumor',title+': '+detail);
+       event(s,'Whispered legend',title+': '+detail);
       }
      }
     }
   }
   improve(s,'lore',5);gain(s,18,'exploring ruins');
-  event(s,'Ancient knowledge','Nim decoded a forgotten stone monument.','milestone');remember(s,'Found ruin #'+b.ruins);return;
+  event(s,'Ancient runes','Nim deciphered a monument of the lost kingdom.','milestone');remember(s,'Found ruin #'+b.ruins);return;
  }
  // Deterministic recovery for fully explored or depleted worlds; movement stays bounded.
  b.energy=clamp(b.energy+5,0,100);const p=findPath(s,(x,y,t)=>t===T.FOREST||t===T.BERRY||t===T.RUIN);if(p)b.path=p;
@@ -268,7 +274,7 @@ function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))r
  else if(kind==='inspire'){
   citizen.trust=clamp(citizen.trust+30,0,100);citizen.mood='hopeful';
   citizen.favorUntil=s.tick+240;
-  event(s,'Divine inspiration',citizen.name+' feels renewed purpose and may help Nim if they meet.','god');
+  event(s,'Divine inspiration',citizen.name+' witnesses an omen from the heavens and may offer Nim aid at their next meeting.','god');
   addMark(s,citizen.x,citizen.y,'inspire');
  }
  else if(kind==='storm'){let struck=0;s.enemies=s.enemies.filter(e=>{const d=Math.abs(e.x-x)+Math.abs(e.y-y);if(d<=3){struck++;return false;}return true;});event(s,'Judgment',struck?struck+' nearby hostile creatures dispersed.':'Lightning struck the empty earth.','god');addMark(s,x,y,'storm');}
