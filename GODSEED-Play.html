@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111b20"><title>GODSEED — A World for One</title>
+<style>
+:root{color-scheme:dark;--ink:#101a1d;--panel:#182428;--panel2:#213036;--line:#33484a;--muted:#a9bfbb;--bright:#f0e5c6;--green:#a6d19d;--gold:#e7c784;--red:#e18c83}
+*{box-sizing:border-box}body{margin:0;background:var(--ink);color:var(--bright);font:14px/1.48 ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',monospace}
+button{font:inherit;cursor:pointer;border:1px solid #49615a;color:var(--bright);background:#24373a;border-radius:5px;padding:9px 12px;min-height:43px;transition:background .1s}button:hover{background:#31504b}button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}button.active{border-color:var(--gold);background:#3d493c;color:#fff4c8}button.unaffordable{opacity:.46}strong,b{font-weight:700}
+.site{max-width:1480px;margin:auto;padding:18px clamp(12px,2.3vw,34px) 30px}header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;padding:0 0 17px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px}.sigil{font-size:26px;color:#edce8d;background:#2b3630;border:1px solid #6d7859;padding:8px 13px}.eyebrow{color:#b3bea9;font-size:10px;letter-spacing:.17em}h1{font-family:Georgia,serif;font-size:27px;letter-spacing:.06em;margin:0;line-height:1.15;font-weight:600}header p{margin:5px 0 0;color:var(--muted);font-size:11px}.header-meta{display:flex;align-items:center;gap:12px;color:var(--green);font-size:11px;flex-wrap:wrap}.statusdot{width:8px;height:8px;border-radius:50%;background:#a1d39e;display:inline-block;margin-right:4px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:17px;align-items:start}.maincol,.sidecol{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:7px;overflow:hidden}.panelhead{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}.panelhead h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;margin:0;color:#e6e5c6;font-weight:700}.muted{color:var(--muted)}.tiny{font-size:11px}
+.worldframe{background:#172321;padding:12px;position:relative}.worldtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:10px;font-size:11px;color:#e8d8b0}.worldtop .right{color:#a4c6bc}#world{width:100%;height:auto;display:block;aspect-ratio:36/22;background:#121d1b;image-rendering:pixelated;border:2px solid #718078;touch-action:manipulation;cursor:crosshair}#minimap{width:128px;height:96px;border:1px solid #526460;image-rendering:pixelated;cursor:crosshair;display:block;background:#141f22}.underworld{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.powers{padding:13px 16px}.powers-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.power{display:flex;flex-direction:column;gap:2px;align-items:flex-start;padding:10px 11px;text-align:left}.power span{font-size:12px;font-weight:bold}.power small{color:#b5c3b5;font-size:10px}.power-icon{font-size:16px;line-height:1.1;color:var(--gold)}.power[data-power="inspect"] .power-icon{color:#a7bab7}.power[data-power="storm"] .power-icon{color:#edb19c}.powers-foot{margin:11px 0 0;color:#c1c7b5;font-size:11px}.timebox{padding:12px 16px;display:flex;gap:7px;align-items:center;flex-wrap:wrap}.timebox button{flex:1;min-width:40px;padding:6px}.timebox .stepbtn{flex:0 0 auto}.savebuttons{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px 14px}.savebuttons button{flex:1;font-size:11px;padding:7px}.savebuttons button.danger{color:#f0b5a2;border-color:#6d4d4d}.save-note{padding:0 16px 15px;font-size:10px;color:var(--muted)}
+.herohead{display:flex;align-items:center;gap:11px}.portrait{height:45px;width:45px;display:grid;place-items:center;background:#45574a;border:2px solid #758773;color:#f2dbac;font-size:22px;image-rendering:pixelated}.herohead h2{font-size:17px;font-family:Georgia,serif;margin:0;letter-spacing:0;text-transform:none}.herohead small{display:block;color:var(--green);font-size:10px}.hero-body{padding:14px 16px}.stat{margin:0 0 11px}.stathead{display:flex;justify-content:space-between;color:#d5d6c0;font-size:11px;margin-bottom:4px}.stathead b{color:#e9d7ab}.track{height:7px;background:#2c3d3d;border:1px solid #455657}.track i{height:100%;display:block;background:#719f8a}.track i.health{background:#c78177}.track i.hunger{background:#e7c47e}.track i.energy{background:#90b5ab}.track i.experience{background:#b3a0cb}.section-title{color:#b1bba9;letter-spacing:.14em;font-size:10px;text-transform:uppercase;margin:19px 0 7px}.goalbox{padding:11px;border:1px solid #597365;background:#253c36;border-left:3px solid var(--green);margin-top:6px}.goalbox strong{font-size:12px}.goalbox p{margin:3px 0 0;color:#d0dbc5;font-size:11px}.inventory{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:11px}.inventory span{display:flex;justify-content:space-between;gap:5px;color:#c3ccc4}.inventory b{color:#f5e9bc}.divider{height:1px;background:var(--line);margin:14px 0}.memory{font-size:10px;color:#e3d2ad}.side-lower{padding:14px 16px}.world-stats{display:flex;gap:15px;align-items:center;flex-wrap:wrap}.world-stats strong{color:#e6cf9c;font-size:16px}.minigroup{display:flex;gap:12px;align-items:flex-start}.logpanel{margin-top:14px}.events{max-height:245px;overflow-y:auto;padding:4px 13px 12px}.event{display:flex;gap:9px;padding:9px 2px;border-bottom:1px solid #2c3c3d}.event:last-child{border:0}.evt-time{min-width:23px;color:#789c93;font-size:10px}.event strong{display:block;font-size:11px;color:#efdab1}.event small{display:block;color:#abbdb6;font-size:10px;margin-top:3px}.event.milestone strong{color:#b6da9d}.event.danger strong{color:#eca7a1}.event.god strong{color:#e7c881}.footer{margin-top:15px;color:#899e9b;font-size:10px;line-height:1.7;border-top:1px solid var(--line);padding-top:10px}.footer strong{color:#cfdbc8}#toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,13px);padding:12px 18px;background:#e6d3a1;color:#142524;border:2px solid #c09a65;border-radius:4px;z-index:10;font-weight:700;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;text-align:center;max-width:90vw;font-size:12px}#toast.show{opacity:1;transform:translate(-50%,0)}.key{border:1px solid #586865;padding:2px 4px;border-radius:3px;color:#e6d6b4}
+@media(max-width:980px){main{grid-template-columns:minmax(0,1fr) 280px}.powers-grid{grid-template-columns:repeat(3,1fr)}.power{padding:9px}}
+@media(max-width:790px){main{grid-template-columns:1fr}.sidecol{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:13px}.sidecol>.panel:first-child{grid-row:span 2}.logpanel{margin-top:0}.site{padding:11px}#world{max-height:72vh;object-fit:contain}.worldframe{padding:8px}.powers-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:530px){h1{font-size:23px}.sidecol{display:block}.sidecol>.panel{margin-bottom:12px}.powers-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.power{min-height:61px}.site{padding:10px}.panelhead{padding:11px 12px}.powers{padding:11px 12px}.header-meta{gap:7px}}
+@media(prefers-reduced-motion:reduce){button,#toast{transition:none}}
+
+/* Portable backup dialog works on old Android WebViews without a native file picker. */
+#saveDialog[hidden]{display:none}
+#saveDialog{position:fixed;inset:0;z-index:30;background:rgba(4,12,16,.92);display:grid;place-items:center;padding:14px}
+#saveDialog .backup-panel{max-width:640px;width:100%;background:#172a2b;border:2px solid #c1aa75;border-radius:7px;padding:16px;box-shadow:0 6px 45px #000b}
+#saveDialog h2{margin:0 0 8px;color:#e7d6a4;font-size:19px}
+#saveDialog p{color:#b8cec4;line-height:1.5;font-size:12px}
+#saveText{display:block;box-sizing:border-box;width:100%;min-height:120px;max-height:35vh;background:#101e21;color:#d9e2d2;font:12px monospace;border:1px solid #81927c;padding:8px;resize:vertical}
+#saveDialog .backup-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+#saveDialog .backup-actions button{padding:10px 13px;min-height:42px}
+/* Compact Android landscape overlay. Keeps all divine commands within thumb reach. */
+#androidDock{display:none}
+@media (orientation:landscape) and (max-height:650px) {
+  :root {font-size:12px}
+  body{padding-bottom:74px}
+  .site{padding:7px;max-width:none}
+  header{padding:4px 2px 9px;margin-bottom:7px;gap:9px}
+  .sigil{width:34px;height:34px;font-size:17px}
+  h1{font-size:22px;margin:0}.brand p{display:none}
+  .eyebrow{font-size:8px}
+  main{grid-template-columns:minmax(0,1fr) minmax(200px,.43fr);gap:8px}
+  .panelhead{padding:7px 10px;min-height:30px}
+  .worldframe{padding:5px}.worldtop{padding:3px;font-size:9px}
+  #world{width:100%;max-height:58vh;height:auto;object-fit:contain}
+  .underworld{padding:4px 1px;font-size:9px}
+  .sidecol{display:block}.sidecol>.panel{margin-bottom:8px}
+  .hero-body{padding:9px 11px}.herohead{gap:7px}.portrait{width:29px;height:29px}
+  .herohead h2{font-size:13px}.section-title{margin:8px 0 3px}
+  .stat{margin:0 0 5px}.stathead{margin-bottom:2px;font-size:9px}
+  .panel.logpanel{margin-top:8px}.logpanel .events{max-height:160px}
+  .powers-grid{grid-template-columns:repeat(3,1fr)}
+  #androidDock{display:block;position:fixed;bottom:0;left:0;right:0;z-index:9;background:#101c20f7;border-top:2px solid #b9a77a;padding:3px max(7px,env(safe-area-inset-right)) calc(5px + env(safe-area-inset-bottom)) max(7px,env(safe-area-inset-left));box-shadow:0 -4px 20px #091114aa}
+  #androidDock .docktop{display:flex;align-items:center;justify-content:space-between;color:#e4c98e;font-size:9px;letter-spacing:.03em;height:15px}
+  #androidDock .dockrow{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+  #androidDock button{height:44px;min-width:0;padding:2px 1px;border-radius:4px;font-size:9px;line-height:1.05;touch-action:manipulation}
+  #androidDock button.active{background:#596049;border-color:#eed69a;color:#fff4cb}
+  #androidDock button .ico{display:block;font-size:17px;line-height:20px}
+  footer{display:none}
+}
+@media (orientation:landscape) and (max-height:650px) and (max-width:600px){
+  main{grid-template-columns:1fr}.sidecol{display:block}#world{max-height:47vh}
+}
+</style>
+</head><body><div class="site">
+<header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">THE WORLD EXISTS WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ ONE SMALL LIFE</span></h1><p>Observe a mind. Shape a world. Let a story emerge.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v0.1</span></div></header>
+<main><section class="maincol">
+<div class="panel"><div class="panelhead"><h2>01 / The Living World</h2><span class="tiny muted" id="clock">DAY 1</span></div>
+<div class="worldframe"><div class="worldtop"><span>THE GREEN EXPANSE <span style="color:#819f97">/ 64 × 48</span></span><span class="right">WEATHER <b id="weather">CLEAR</b></span></div>
+<canvas id="world" width="576" height="352" aria-label="Low resolution pixel world; click to inspect or use god powers"></canvas>
+<div class="underworld"><span id="coordinates">32,24</span><span><span class="key">CLICK</span> interact with world · <span class="key">F</span> follow</span></div></div></div>
+<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>02 / Divine Influence</h2><span style="font-size:12px;color:#e9cb85">✧ <b id="faith">18</b> FAITH</span></div>
+<div class="powers" id="powers"><div class="tiny muted">Select a power, then click a location on the map. Bless and Gift always affect Nim.</div>
+<div class="powers-grid">
+<button class="power active" data-power="inspect" aria-pressed="true" title="Key 0 · Free"><span class="power-icon">⌕</span><span>Inspect</span><small>Free · key 0</small></button>
+<button class="power" data-power="bless" title="Key 1 · Heal Nim"><span class="power-icon">✧</span><span>Bless</span><small>4 Faith · key 1</small></button>
+<button class="power" data-power="gift" title="Key 2 · Feed Nim"><span class="power-icon">▣</span><span>Gift Food</span><small>5 Faith · key 2</small></button>
+<button class="power" data-power="bloom" title="Key 3 · Grow berry bushes"><span class="power-icon">❀</span><span>Bloom</span><small>6 Faith · key 3</small></button>
+<button class="power" data-power="guide" title="Key 4 · Send a destination omen"><span class="power-icon">⌖</span><span>Guide</span><small>3 Faith · key 4</small></button>
+<button class="power" data-power="storm" title="Key 5 · Disperse enemies"><span class="power-icon">ϟ</span><span>Lightning</span><small>8 Faith · key 5</small></button>
+</div><p class="powers-foot" id="instruction">Inspect a tile by clicking the world.</p><p class="tiny muted" id="inspect">Nim has awakened. Watch their first decisions.</p></div></div>
+<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>03 / Time & World Control</h2><span class="tiny muted">4 logic steps / sec at 1×</span></div>
+<div class="timebox"><button data-speed="0" aria-pressed="false">Pause</button><button data-speed="1" class="active" aria-pressed="true">1×</button><button data-speed="3" aria-pressed="false">3×</button><button data-speed="8" aria-pressed="false">8×</button><button class="stepbtn" id="step" title="Advance 1 simulation step">+1 step</button><button id="follow" class="active" aria-pressed="true">Follow</button></div>
+<div class="savebuttons"><button id="save">Save now</button><button id="export">Export JSON</button><button id="import">Import JSON</button><button id="reset" class="danger">New World</button><input id="importFile" type="file" accept=".json,application/json" hidden></div><div class="save-note"><span id="saveState">Auto-save enabled when supported.</span> Saved locally in the app; use Export JSON to copy a backup.</div></div>
+</section><aside class="sidecol"><div class="panel"><div class="panelhead"><div class="herohead"><div class="portrait">♟</div><div><h2 id="heroName">Nim</h2><small id="level">LEVEL 1</small></div></div><span class="tiny muted">AUTONOMOUS</span></div>
+<div class="hero-body"><div class="eyebrow">SURVIVAL</div><div id="statbars" style="margin-top:10px"></div>
+<div class="section-title">CURRENT INTENTION</div><div class="goalbox"><strong id="goal">Awakening</strong><p id="thought">“Where am I?”</p></div>
+<div class="section-title">INVENTORY</div><div class="inventory" id="inventory"></div>
+<div class="section-title">PERSONALITY / ADAPTATION</div><p class="tiny muted" id="traits"></p>
+<div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
+<div class="divider"></div><div class="tiny muted" id="milestones"></div>
+</div></div>
+<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>World atlas</h2><span class="tiny muted">Tap to pan</span></div><div class="side-lower"><div class="minigroup"><canvas id="minimap" width="64" height="48" aria-label="Small world map. Click to pan the camera."></canvas><div class="tiny muted">The dark areas are unknown to Nim.<p style="margin:7px 0">Time moves only while the page is open.</p><p style="margin:7px 0">You are observing one life, not controlling it.</p></div></div></div></div>
+<div class="panel logpanel"><div class="panelhead"><h2>World chronicle</h2><span class="tiny muted">Events as they happen</span></div><div class="events" id="events" aria-live="polite"></div></div>
+</aside></main><footer class="footer"><strong>DESIGN LAB / FIRST LIFE</strong> · Single-file 2D Canvas · No network, external AI API, or engine · <span class="key">SPACE</span> pause · <span class="key">.</span> step · <span class="key">0–5</span> powers · arrows pan the camera. Your world saves locally on this device while the app stays installed. Export JSON periodically for a backup.</footer></div><div id="saveDialog" hidden role="dialog" aria-modal="true" aria-labelledby="backupTitle">
+  <div class="backup-panel"><h2 id="backupTitle">World backup</h2><p id="backupHelp"></p>
+  <textarea id="saveText" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+  <div class="backup-actions"><button id="saveCopy">Copy text</button><button id="saveApply" hidden>Import pasted save</button><button id="saveDownload">Download JSON</button><button id="saveClose">Close</button></div>
+  </div></div>
+<div id="androidDock" aria-label="Quick god powers and time controls">
+  <div class="docktop"><strong id="quickStatus">NIM · LEVEL 1</strong><span>SELECT POWER → TAP WORLD</span></div>
+  <div class="dockrow">
+    <button data-power="inspect" class="active"><span class="ico">⌕</span>Inspect</button>
+    <button data-power="bless"><span class="ico">✧</span>Heal</button>
+    <button data-power="gift"><span class="ico">▣</span>Food</button>
+    <button data-power="bloom"><span class="ico">❀</span>Bloom</button>
+    <button data-power="guide"><span class="ico">⌖</span>Guide</button>
+    <button data-power="storm"><span class="ico">ϟ</span>Storm</button>
+    <button data-speed="0"><span class="ico">Ⅱ</span>Pause</button>
+    <button data-speed="3"><span class="ico">»</span>3× Time</button>
+  </div>
+</div><div id="toast" role="status"></div>
+<script>/* GODSEED deterministic simulation. UMD: browser global + CommonJS. No external services. */
+(function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+'use strict';
+const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7};
+const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter'];
+const DIRS=[[1,0],[-1,0],[0,1],[0,-1]];
+function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
+function idx(x,y){return y*W+x;}
+function inside(x,y){return x>=0&&x<W&&y>=0&&y<H;}
+function rand(s){s.seed=(Math.imul(1664525,s.seed>>>0)+1013904223)>>>0;return s.seed/4294967296;}
+function rint(s,n){return Math.floor(rand(s)*n)}
+function randomNoise(seed,x,y){let h=(Math.imul(x+83,374761393)^Math.imul(y+57,668265263)^(seed>>>0))>>>0;h=Math.imul(h^(h>>>13),1274126177)>>>0;return ((h^(h>>>16))>>>0)/4294967296;}
+function terrain(s){const out=new Array(N);const key=s.seed>>>0;for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+ let n=0;for(let oy=-1;oy<=1;oy++)for(let ox=-1;ox<=1;ox++)n+=randomNoise(key,Math.floor(x/7)+ox,Math.floor(y/7)+oy)*(ox===0&&oy===0?4:1);n/=12;
+ const j=randomNoise(key^0x5511,x,y);let t=T.GRASS;
+ if(n<.265)t=T.WATER;else if(n>.71)t=T.STONE;else if(n>.47&&j<.68)t=T.FOREST;else if(j<.105)t=T.BERRY;else if(j>.89)t=T.MEADOW;
+ out[idx(x,y)]=t;
+ }return out;}
+function event(s,title,detail,type='event'){
+ const e={tick:s.tick,title:String(title),detail:String(detail),type};s.log.unshift(e);if(s.log.length>45)s.log.length=45;
+ if(type==='milestone'){s.faith=clamp(s.faith+3,0,50);s.milestones++;}
+}
+function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
+ map:[],seen:new Array(N).fill(0),enemies:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
+ bot:{name:'Nim',x:Math.floor(W/2),y:Math.floor(H/2),level:1,xp:0,hp:24,maxHp:24,hunger:86,energy:83,attack:4,defense:1,food:2,wood:0,stone:0,tool:0,
+ goal:'Awakening',thought:'Where am I?',target:null,path:[],actionDelay:0,fights:0,ruins:0,scars:0,steps:0,
+ personality:{curiosity:0.68,caution:0.42,diligence:0.57},memory:[]}};
+ s.map=terrain(s);for(let y=s.bot.y-3;y<=s.bot.y+3;y++)for(let x=s.bot.x-3;x<=s.bot.x+3;x++)if(inside(x,y))s.map[idx(x,y)]=T.GRASS;
+ s.map[idx(s.bot.x+2,s.bot.y)]=T.BERRY;s.map[idx(s.bot.x-2,s.bot.y)]=T.FOREST;s.map[idx(s.bot.x,s.bot.y-2)]=T.STONE;
+ for(let i=0;i<10;i++){const x=5+rint(s,W-10),y=5+rint(s,H-10);if(Math.abs(x-s.bot.x)+Math.abs(y-s.bot.y)>8 && s.map[idx(x,y)]!==T.WATER)s.map[idx(x,y)]=T.RUIN;}
+ discover(s,s.bot.x,s.bot.y);event(s,'A spark awakens','Nim opens their eyes in an unfamiliar world.','milestone');
+ return s;}
+function discover(s,x,y){let count=0;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const xx=x+ox,yy=y+oy;if(!inside(xx,yy)||ox*ox+oy*oy>12)continue;const n=idx(xx,yy);if(!s.seen[n]){s.seen[n]=1;count++;}}return count;}
+function remember(s,subject){let m=s.bot.memory;if(m[m.length-1]!==subject){m.push(subject);if(m.length>12)m.shift();}}
+function gain(s,xp,why){const b=s.bot;b.xp+=xp;let need=10+b.level*8;while(b.xp>=need&&b.level<50){b.xp-=need;b.level++;b.maxHp+=4;b.hp=Math.min(b.maxHp,b.hp+7);b.attack+=1;if(b.level%2===0)b.defense+=1;event(s,'LEVEL '+b.level,'Nim has grown stronger through '+why+'.','milestone');remember(s,'Level '+b.level+' reached');need=10+b.level*8;}}
+function walkable(s,x,y){return inside(x,y)&&s.map[idx(x,y)]!==T.WATER;}
+function findPath(s,predicate){ // BFS: max 3,072 tiles; deterministic neighbor order, no per-frame pathfinding
+ const b=s.bot,queue=new Int16Array(N),parents=new Int16Array(N);parents.fill(-2);const start=idx(b.x,b.y);let front=0,back=0;queue[back++]=start;parents[start]=-1;let found=-1;
+ while(front<back){const cur=queue[front++],cx=cur%W,cy=(cur/W)|0;if(predicate(cx,cy,s.map[cur],cur)){found=cur;break;}
+ for(const [dx,dy] of DIRS){let nx=cx+dx,ny=cy+dy;if(!walkable(s,nx,ny))continue;let n=idx(nx,ny);if(parents[n]!==-2)continue;parents[n]=cur;queue[back++]=n;}}
+ if(found===-1)return null;const path=[];let cur=found;while(cur!==start&&cur!==-1){path.push([cur%W,(cur/W)|0]);cur=parents[cur];}path.reverse();return path;
+}
+function nearestEnemy(s){const b=s.bot;let best=null,dist=1e9;for(const e of s.enemies){const d=Math.abs(e.x-b.x)+Math.abs(e.y-b.y);if(d<dist){best=e;dist=d;}}return {e:best,dist};}
+function setGoal(s,goal,thought,path){const b=s.bot;b.goal=goal;b.thought=thought;b.path=path||[];}
+function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
+ if(enemy.e&&enemy.dist<=1){if(b.hp< b.maxHp*.35 || b.energy<6){setGoal(s,'Escape','That beast is too dangerous!');return;}setGoal(s,'Defend','The beast is right beside me!');return;}
+ if(b.hp<b.maxHp*.35){setGoal(s,'Recover','I need to recover.');return;}
+ if(b.hunger<37&&b.food>0){setGoal(s,'Eat','My stomach is growling.');return;}
+ if(b.energy<=28){setGoal(s,'Rest','My feet cannot go on.');return;}
+ if(b.hunger<64 && b.food<=1){const p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','Find something edible.',p);return;}}
+ if(!s.camp){if(b.wood>=5&&b.stone>=3){setGoal(s,'Build','I could make a shelter.');return;}
+ if(b.wood<5){let p=findPath(s,(x,y,t)=>t===T.FOREST);if(p){setGoal(s,'Gather wood','I need timber for shelter.',p);return;}}
+ if(b.stone<3){let p=findPath(s,(x,y,t)=>t===T.STONE);if(p){setGoal(s,'Mine stone','Stones would make a strong hearth.',p);return;}}}
+ if(s.camp&&b.tool===0){
+ if(b.wood<2){const p=findPath(s,(x,y,t)=>t===T.FOREST);if(p){setGoal(s,'Gather wood','Now I need timber for a tool.',p);return;}}
+ if(b.stone<2){const p=findPath(s,(x,y,t)=>t===T.STONE);if(p){setGoal(s,'Mine stone','Now I need stone for a tool.',p);return;}}
+ if(b.wood>=2&&b.stone>=2){setGoal(s,'Craft','A better tool will help me.');return;}}
+ if(b.hunger<78&&b.food<3){let p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','I should pack some food.',p);return;}}
+ if(s.guide&&s.guide.ticks>0){const gx=s.guide.x,gy=s.guide.y;if(!walkable(s,gx,gy)){s.guide=null;}else{const p=findPath(s,(x,y)=>x===gx&&y===gy);if(p){setGoal(s,'Follow omen','Something calls to me from afar.',p);return;}s.guide=null;}}
+ if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
+ // Discovered ruins are meaningful goals; pursue unseen ones as exploration grows.
+ if(b.energy>45&&b.hunger>40){const p=findPath(s,(x,y,t,n)=>t===T.RUIN&&s.seen[n]);if(p){setGoal(s,'Study ruins','There is something ancient here.',p);return;}}
+ const p=findPath(s,(x,y,t,n)=>!s.seen[n]);if(p){setGoal(s,'Explore','What lies beyond the known paths?',p);return;}
+ const q=findPath(s,(x,y,t)=>t===T.FOREST||t===T.STONE||t===T.BERRY);setGoal(s,'Wander','I will make another journey.',q||[]);
+}
+function addMark(s,x,y,kind){s.marks.push({x,y,kind,until:s.tick+10});if(s.marks.length>12)s.marks.shift();}
+function botMove(s,x,y){const b=s.bot;if(!walkable(s,x,y))return; b.x=x;b.y=y;b.steps++;let d=discover(s,x,y);
+ if(d){b._discovered=(b._discovered||0)+d;if(b._discovered>=38){b._discovered-=38;gain(s,3,'exploration');s.faith=clamp(s.faith+1,0,50);}}
+ if(s.guide&&x===s.guide.x&&y===s.guide.y){event(s,'Omen followed','Nim reached the place you pointed to.','milestone');s.guide=null;}
+}
+function botAct(s){const b=s.bot;const near=nearestEnemy(s);
+ if(near.e&&near.dist<=1&&b.goal!=='Escape'){if(b.actionDelay>0)return;const e=near.e;const dmg=Math.max(1,b.attack+b.tool*2+rint(s,4)-e.defense);e.hp-=dmg;b.energy=clamp(b.energy-3,0,100);b.actionDelay=2;addMark(s,e.x,e.y,'hit');
+ b.thought='I must survive this fight.';
+ if(e.hp<=0){s.enemies=s.enemies.filter(z=>z!==e);b.fights++;b.personality.caution=clamp(b.personality.caution-.006,.1,.9);gain(s,10,'defeating '+e.type);if(rand(s)<.5)b.food++;event(s,'Creature defeated','Nim overcame a '+e.type+'.','event');remember(s,'Defeated a '+e.type);}
+ return;}
+ if(b.goal==='Escape'&&near.e){const e=near.e;let directions=DIRS.map(([dx,dy])=>[b.x+dx,b.y+dy]).filter(([x,y])=>walkable(s,x,y)&&!s.enemies.some(q=>q.x===x&&q.y===y));directions.sort((a,c)=>(Math.abs(c[0]-e.x)+Math.abs(c[1]-e.y))-(Math.abs(a[0]-e.x)+Math.abs(a[1]-e.y)));if(directions.length){botMove(s,...directions[0]);b.energy=clamp(b.energy-2,0,100);}else{b.hp-=1;} b.personality.caution=clamp(b.personality.caution+.001,.1,.9);b.path=[];return;}
+ if(b.path&&b.path.length){const [x,y]=b.path.shift();if(!walkable(s,x,y)){b.path=[];return;}botMove(s,x,y);return;}
+ const tile=s.map[idx(b.x,b.y)];
+ if(b.goal==='Eat'){b.food--;b.hunger=clamp(b.hunger+37,0,100);b.hp=clamp(b.hp+2,0,b.maxHp);b.thought='That was needed.';return;}
+ if(b.goal==='Recover'||b.goal==='Rest'){b.energy=clamp(b.energy+(s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3?17:12),0,100);b.hp=clamp(b.hp+(s.camp?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
+ if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First shelter','Nim built a small shelter at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');return;}
+ if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');return;}
+ if(tile===T.BERRY){b.food+=2+rint(s,2);s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'foraging');b.thought='These berries will last a little while.';return;}
+ if(tile===T.FOREST&&b.goal==='Gather wood'){b.wood+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'woodcutting');return;}
+ if(tile===T.STONE&&b.goal==='Mine stone'){b.stone+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'mining');return;}
+ if(tile===T.RUIN){s.map[idx(b.x,b.y)]=T.MEADOW;b.ruins++;b.personality.curiosity=clamp(b.personality.curiosity+.015,.1,.95);gain(s,18,'exploring ruins');event(s,'Ancient knowledge','Nim decoded a forgotten stone monument.','milestone');remember(s,'Found ruin #'+b.ruins);return;}
+ // Deterministic recovery for fully explored or depleted worlds; movement stays bounded.
+ b.energy=clamp(b.energy+5,0,100);const p=findPath(s,(x,y,t)=>t===T.FOREST||t===T.BERRY||t===T.RUIN);if(p)b.path=p;
+}
+function revive(s){const b=s.bot;if(b.hp>0)return;
+ b.scars++;b.hp=Math.max(10,Math.round(b.maxHp*.65));b.hunger=65;b.energy=65;b.x=s.camp?s.camp.x:(W>>1);b.y=s.camp?s.camp.y:(H>>1);b.path=[];s.enemies=[];discover(s,b.x,b.y);remember(s,'Survived fall #'+b.scars);event(s,'Life restored','The god returns Nim from the edge of death.','milestone');
+}
+function updateEnemies(s){const b=s.bot;
+ if(s.enemies.length<5&&s.tick%53===0){for(let i=0;i<18;i++){const x=clamp(b.x+rint(s,19)-9,1,W-2),y=clamp(b.y+rint(s,17)-8,1,H-2),d=Math.abs(x-b.x)+Math.abs(y-b.y);if(d>5&&d<14&&walkable(s,x,y)&&(!s.camp||Math.abs(x-s.camp.x)+Math.abs(y-s.camp.y)>3)&&!s.enemies.some(e=>e.x===x&&e.y===y)){
+ const tougher=s.day>4&&rand(s)<.35;s.enemies.push({id:s.nextEnemyId++,type:tougher?'Boar':'Wolf',x,y,hp:tougher?17:11,defense:tougher?2:0,attack:tougher?4:2,cooldown:1});break;}}}
+ for(const e of s.enemies){if(e.cooldown>0){e.cooldown--;continue;}const d=Math.abs(e.x-b.x)+Math.abs(e.y-b.y);
+ if(d===1){const dmg=Math.max(1,e.attack+rint(s,3)-b.defense);b.hp-=dmg;e.cooldown=3;addMark(s,b.x,b.y,'hurt');if(s.tick%8===0)event(s,'Under attack','A '+e.type+' struck Nim for '+dmg+' health.','danger');}
+ else if(d<6&&s.tick%3===0){let options=DIRS.map(([dx,dy])=>[e.x+dx,e.y+dy]).filter(([x,y])=>walkable(s,x,y)&&!(x===b.x&&y===b.y)&&!s.enemies.some(o=>o!==e&&o.x===x&&o.y===y));options.sort((a,c)=>(Math.abs(a[0]-b.x)+Math.abs(a[1]-b.y))-(Math.abs(c[0]-b.x)+Math.abs(c[1]-b.y)));if(options.length){e.x=options[0][0];e.y=options[0][1];}e.cooldown=1;}
+ }
+ revive(s);
+}
+function tick(s){s.tick++;revive(s);if(s.tick%240===0){s.day++;event(s,'Day '+s.day,'The world turns and Nim continues living.');}
+ if(s.weatherUntil&&s.tick>=s.weatherUntil){s.weather='clear';s.weatherUntil=0;}
+ if(s.tick%12===0){const b=s.bot;b.hunger=clamp(b.hunger-1,0,100);b.energy=clamp(b.energy-1,0,100);if(b.hunger===0)b.hp-=1;}
+ if(s.tick%72===0)s.faith=clamp(s.faith+1,0,50);
+ if(s.tick%93===0){for(let i=0;i<3;i++){let x=rint(s,W),y=rint(s,H),n=idx(x,y);if(s.map[n]===T.GRASS)s.map[n]=T.BERRY;}}
+ if(s.guide){s.guide.ticks--;if(s.guide.ticks<=0)s.guide=null;}
+ s.marks=s.marks.filter(z=>z.until>s.tick);
+ // Planning is deliberate: every movement step or completed action chooses what matters now.
+ const b=s.bot;if(b.actionDelay>0)b.actionDelay--;
+ if(s.tick%2===0){plan(s);botAct(s);updateEnemies(s);}
+ return s;}
+const COST={bless:4,gift:5,bloom:6,guide:3,storm:8};
+function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))return {ok:false,why:'Unknown power'};
+ x=Math.floor(Number(x));y=Math.floor(Number(y));if(!inside(x,y))return {ok:false,why:'Choose a place on the map'};
+ if(s.faith<COST[kind])return {ok:false,why:'Not enough Faith'};
+ const b=s.bot;if(kind==='guide'&&!walkable(s,x,y))return {ok:false,why:'Nim cannot walk on water'};
+ s.faith-=COST[kind];if(kind==='bless'){b.hp=clamp(b.hp+12,0,b.maxHp);b.energy=clamp(b.energy+28,0,100);event(s,'Divine blessing','A warm light restores Nim.','god');addMark(s,b.x,b.y,'bless');}
+ else if(kind==='gift'){b.food+=3;b.hunger=clamp(b.hunger+10,0,100);event(s,'Gift of sustenance','Three portions appear in Nim’s pack.','god');addMark(s,b.x,b.y,'gift');}
+ else if(kind==='bloom'){let grows=0;for(let i=0;i<55&&grows<9;i++){let nx=x+rint(s,11)-5,ny=y+rint(s,11)-5;if(inside(nx,ny)&&s.map[idx(nx,ny)]===T.GRASS){s.map[idx(nx,ny)]=T.BERRY;grows++;}}
+ s.weather='rain';s.weatherUntil=s.tick+120;event(s,'Rain of life',grows+' food bushes have sprouted.','god');addMark(s,x,y,'bloom');}
+ else if(kind==='guide'){s.guide={x,y,ticks:300};event(s,'A divine whisper','Nim senses a direction in the wind.','god');addMark(s,x,y,'guide');}
+ else if(kind==='storm'){let struck=0;s.enemies=s.enemies.filter(e=>{const d=Math.abs(e.x-x)+Math.abs(e.y-y);if(d<=3){struck++;return false;}return true;});event(s,'Judgment',struck?struck+' nearby hostile creatures dispersed.':'Lightning struck the empty earth.','god');addMark(s,x,y,'storm');}
+ return {ok:true,kind,cost:COST[kind]};}
+function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!==N||!Array.isArray(s.seen)||s.seen.length!==N||!s.bot)return false;
+ const b=s.bot;return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.CAMP)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10;}
+function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
+function restore(raw){try{const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
+return {W,H,N,T,COST,TILE_NAMES,create,tick,power,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan};
+});
+</script>
+<script>/* GODSEED UI: intentionally dependency-free and low-resolution. */
+(function(){'use strict';
+const A=window.GodseedSim; if(!A)throw new Error('GODSEED simulation missing');
+const $=id=>document.getElementById(id),size=16,VW=36,VH=22;
+const canvas=$('world'),ctx=canvas.getContext('2d',{alpha:false}),mini=$('minimap'),mctx=mini.getContext('2d',{alpha:false});
+ctx.imageSmoothingEnabled=false;mctx.imageSmoothingEnabled=false;
+const SAVE_KEY='godseed-one-small-life-v1';let s,mode='inspect',camX=0,camY=0,lastDraw=0,lastHUD=0,lastSave=0,acc=0,frameLast=0,hover=null,flashMessage='',flashUntil=0;
+try{s=A.restore(localStorage.getItem(SAVE_KEY));}catch(_){s=null}if(!s)s=A.create(Math.floor(Date.now()/1000));
+const setMode=v=>{mode=v;document.querySelectorAll('[data-power]').forEach(b=>{b.classList.toggle('active',b.dataset.power===mode);b.setAttribute('aria-pressed',String(b.dataset.power===mode));});$('instruction').textContent=(v==='inspect'?'Inspect a tile by clicking the world.':`Select a tile to use ${v.toUpperCase()}.`);};
+const html=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function notify(message){flashMessage=message;flashUntil=Date.now()+2700;$('toast').textContent=message;$('toast').classList.add('show');}
+function stamp(s){const hour=Math.floor((s.tick%240)/10),min=Math.floor((s.tick%10)*6);return `DAY ${s.day} · ${String(hour).padStart(2,'0')}:${String(min).padStart(2,'0')}`;}
+const colors=['#375648','#234a3b','#26536a','#62635e','#3d6846','#837458','#638653','#725338'];
+const hash=(x,y)=>((Math.imul(x+91,374761393)^Math.imul(y+37,668265263))>>>0);
+function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
+function dot(x,y,c){rect(x,y,1,1,c);}
+function drawTile(tile,x,y,wx,wy){let v=hash(wx,wy);rect(x,y,size,size,colors[tile]);
+ if(tile===A.T.WATER){rect(x,y+7,16,1,'#366b85');rect(x+(v%8),y+4,5,1,'#6ba5a9');if(v%3===0)rect(x+2,y+12,4,1,'#4d8499');return;}
+ if(tile===A.T.FOREST){rect(x+4,y+7,8,7,'#75583c');rect(x+2,y+5,12,6,'#1d3c31');rect(x+1,y+2,11,7,'#2d7750');rect(x+5,y+1,7,6,'#38815c');rect(x+4,y+4,2,2,'#66a575');return;}
+ if(tile===A.T.STONE){rect(x+2,y+10,13,5,'#3e4448');rect(x+4,y+5,10,8,'#90958a');rect(x+6,y+4,5,2,'#a3aa99');rect(x+11,y+9,3,3,'#66746c');return;}
+ if(tile===A.T.BERRY){rect(x+4,y+10,8,4,'#27563c');rect(x+3,y+5,10,8,'#4c9c5b');rect(x+6,y+4,6,6,'#2b7348');dot(x+4,y+7,'#e99b85');rect(x+10,y+9,2,2,'#f49c90');return;}
+ if(tile===A.T.RUIN){rect(x+2,y+9,12,6,'#454843');rect(x+4,y+2,9,10,'#a8a38e');rect(x+6,y+4,5,1,'#dfc9a4');rect(x+7,y+6,2,5,'#555f56');dot(x+12,y+10,'#c1b49c');return;}
+ if(tile===A.T.CAMP){rect(x+1,y+13,14,2,'#2e2b25');rect(x+2,y+8,11,5,'#775039');rect(x+7,y+2,6,11,'#cb9f64');rect(x+2,y+7,12,2,'#d4b77f');rect(x+4,y+10,3,3,'#332d22');return;}
+ if(tile===A.T.MEADOW){rect(x+2,y+11,2,3,'#a3ba77');rect(x+11,y+8,2,3,'#b1d48c');dot(x+8,y+6,'#eacb81');dot(x+10,y+12,'#ebd0a1');return;}
+ dot(x+1+(v%12),y+2+((v>>>6)%12),'#50765b');if(v%4===0)dot(x+10,y+4,'#729478');
+}
+function drawBot(cx,cy,worldTime){const p=worldTime%6<3?0:1;rect(cx+4,cy+13,10,2,'#1c2926');rect(cx+5,cy+3,7,4,'#dfb482');rect(cx+6,cy+1,6,3,'#77533d');rect(cx+4,cy+7,9,5,'#e3c573');rect(cx+3,cy+8,2,3,'#af865d');rect(cx+12,cy+8,2,3,'#af865d');rect(cx+5,cy+12,3,2+p,'#453d38');rect(cx+10,cy+12,3,3-p,'#453d38');dot(cx+10,cy+4,'#302c29');}
+function drawEnemy(x,y,e){rect(x+2,y+13,13,2,'#1b2b27');if(e.type==='Boar'){rect(x+2,y+6,12,7,'#b67a57');rect(x+10,y+3,4,5,'#d1a174');rect(x+3,y+5,3,2,'#7a4c36');dot(x+12,y+7,'#292424');rect(x+2,y+12,3,2,'#6b4534');}else{rect(x+3,y+7,10,6,'#a88473');rect(x+4,y+3,3,6,'#cab096');rect(x+10,y+3,3,6,'#cab096');rect(x+5,y+7,2,2,'#edcf9b');rect(x+10,y+7,2,2,'#edcf9b');dot(x+6,y+7,'#222');dot(x+11,y+7,'#222');}}
+function positionCamera(){if(s.settings.follow){camX=Math.max(0,Math.min(A.W-VW,s.bot.x-(VW>>1)));camY=Math.max(0,Math.min(A.H-VH,s.bot.y-(VH>>1)));}}
+function draw(){positionCamera();const b=s.bot;
+ for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy),x=rx*size,y=ry*size;
+ if(!s.seen[n]){rect(x,y,16,16,'#141e22');if(hash(wx,wy)%13===0)rect(x+7,y+7,2,2,'#233238');continue;}
+ drawTile(s.map[n],x,y,wx,wy);
+ if(s.seen[n]&&((s.tick%240)>172||(s.tick%240)<42))rect(x,y,16,16,'rgba(8,23,38,.13)');
+ }
+ if(s.guide&&s.guide.x>=camX&&s.guide.x<camX+VW&&s.guide.y>=camY&&s.guide.y<camY+VH){const x=(s.guide.x-camX)*16,y=(s.guide.y-camY)*16;rect(x,y,16,1,'#e4d386');rect(x,y+15,16,1,'#e4d386');rect(x,y,1,16,'#e4d386');rect(x+15,y,1,16,'#e4d386');}
+ for(const e of s.enemies)if(e.x>=camX&&e.x<camX+VW&&e.y>=camY&&e.y<camY+VH&&s.seen[A.idx(e.x,e.y)])drawEnemy((e.x-camX)*16,(e.y-camY)*16,e);
+ if(b.x>=camX&&b.x<camX+VW&&b.y>=camY&&b.y<camY+VH){const px=(b.x-camX)*16,py=(b.y-camY)*16;rect(px+1,py+14,14,1,'#cfdda2');drawBot(px,py,s.tick>>1);ctx.fillStyle='#f0e0a2';ctx.font='bold 8px monospace';ctx.textAlign='center';ctx.fillText('NIM',px+8,py-3);ctx.textAlign='start';}
+ for(const m of s.marks){if(m.x<camX||m.x>=camX+VW||m.y<camY||m.y>=camY+VH)continue;const xx=(m.x-camX)*16,yy=(m.y-camY)*16,c=({hit:'#e9dd88',hurt:'#ee7770',bless:'#c4f7aa',gift:'#f1cb8d',bloom:'#85dbbb',guide:'#ddda92',storm:'#c6dffc'})[m.kind];rect(xx+2,yy+2,12,2,c);rect(xx+2,yy+12,12,2,c);rect(xx+2,yy+2,2,12,c);rect(xx+12,yy+2,2,12,c);}
+ if(hover&&hover.x>=camX&&hover.x<camX+VW&&hover.y>=camY&&hover.y<camY+VH){const xx=(hover.x-camX)*16,yy=(hover.y-camY)*16;rect(xx,yy,16,1,'#efe2ac');rect(xx,yy+15,16,1,'#efe2ac');rect(xx,yy,1,16,'#efe2ac');rect(xx+15,yy,1,16,'#efe2ac');}
+ $('coordinates').textContent=`${b.x}, ${b.y} · ${A.TILE_NAMES[s.map[A.idx(b.x,b.y)]]}`;
+}
+function drawMini(){const image=mctx.createImageData(A.W,A.H);for(let i=0;i<A.N;i++){const t=s.map[i],c=s.seen[i]?colors[t]:'#121c20';const k=i*4;image.data[k]=parseInt(c.slice(1,3),16);image.data[k+1]=parseInt(c.slice(3,5),16);image.data[k+2]=parseInt(c.slice(5,7),16);image.data[k+3]=255;}mctx.putImageData(image,0,0);mctx.fillStyle='#f9e6b2';mctx.fillRect(s.bot.x,s.bot.y,1,1);mctx.strokeStyle='#d9d8ab';mctx.lineWidth=.5;mctx.strokeRect(camX+.25,camY+.25,VW-.5,VH-.5);}
+function bar(label,n,max=100){const pct=Math.round(Math.max(0,Math.min(1,n/max))*100);return `<div class="stat"><div class="stathead"><span>${label}</span><b>${Math.round(n)} / ${Math.round(max)}</b></div><div class="track"><i style="width:${pct}%" class="${label.toLowerCase().split(' ')[0]}"></i></div></div>`;}
+function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
+ $('quickStatus').textContent=`NIM L${b.level} · HP ${Math.ceil(b.hp)}/${b.maxHp} · ✧ ${s.faith} · ${stamp(s)}`;
+ $('clock').textContent=stamp(s);$('weather').textContent=s.weather.toUpperCase();$('faith').textContent=s.faith;$('heroName').textContent=b.name;$('level').textContent=`LEVEL ${b.level}`;
+ $('statbars').innerHTML=bar('Health',b.hp,b.maxHp)+bar('Hunger',b.hunger)+bar('Energy',b.energy)+bar('Experience',b.xp,xpNeed);
+ $('goal').textContent=goal;$('thought').textContent='“'+b.thought+'”';
+ $('inventory').innerHTML=`<span>🍎 Food <b>${b.food}</b></span><span>▥ Wood <b>${b.wood}</b></span><span>◆ Stone <b>${b.stone}</b></span><span>⚒ Tool <b>${b.tool?'Hatchet':'Hands'}</b></span>`;
+ $('traits').textContent=`Curiosity ${Math.round(b.personality.curiosity*100)} · Caution ${Math.round(b.personality.caution*100)} · Resolve ${Math.round(b.personality.diligence*100)}`;
+ $('memory').textContent=b.memory.length?b.memory.slice(-4).reverse().join('  •  '):'Learning about the world…';
+ $('milestones').textContent=`${b.steps} steps · ${b.fights} wins · ${b.ruins} ruins · ${b.scars} second chances`;
+ $('events').innerHTML=s.log.slice(0,9).map(e=>`<div class="event ${html(e.type)}"><span class="evt-time">D${1+Math.floor(e.tick/240)}</span><div><strong>${html(e.title)}</strong><small>${html(e.detail)}</small></div></div>`).join('');
+ $('powers').querySelectorAll('[data-power]').forEach(el=>{const c=A.COST[el.dataset.power];if(c!==undefined)el.classList.toggle('unaffordable',c>s.faith);});
+ document.querySelectorAll('[data-speed]').forEach(el=>{const n=Number(el.dataset.speed);el.classList.toggle('active',s.settings.speed===n);el.setAttribute('aria-pressed',String(s.settings.speed===n));});
+ $('follow').classList.toggle('active',s.settings.follow);$('follow').setAttribute('aria-pressed',String(s.settings.follow));
+ drawMini();}
+function save(){try{localStorage.setItem(SAVE_KEY,A.serialize(s));$('saveState').textContent='Saved locally';return true;}catch(e){$('saveState').textContent='Local saving blocked. Use Export.';return false;}}
+function exportSave(){const blob=new Blob([A.serialize(s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`godseed-day-${s.day}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),500);notify('World exported to JSON.');}
+function backupDialog(kind){
+ const box=$('saveDialog'),text=$('saveText');box.hidden=false;
+ const exporting=kind==='export';
+ $('backupTitle').textContent=exporting?'Export world backup':'Import world backup';
+ $('backupHelp').textContent=exporting?'Copy this JSON to a safe place. Your game also auto-saves while installed.':'Paste previously exported GODSEED JSON below, then choose Import. This replaces the current world.';
+ text.readOnly=exporting;text.value=exporting?A.serialize(s):'';text.placeholder=exporting?'':'Paste a saved GODSEED world here';
+ $('saveCopy').hidden=!exporting;$('saveApply').hidden=exporting;$('saveDownload').hidden=!exporting;
+ if(exporting){text.focus();text.select();}else{text.focus();}
+}
+$('saveClose').addEventListener('click',()=>{$('saveDialog').hidden=true;});
+$('saveCopy').addEventListener('click',()=>{
+ const t=$('saveText');t.focus();t.select();
+ let copied=false;try{copied=document.execCommand('copy');}catch(_){}
+ if(copied)notify('World backup copied.');else notify('Select the text and copy it manually.');
+});
+$('saveDownload').addEventListener('click',exportSave);
+$('saveApply').addEventListener('click',()=>{
+ const restored=A.restore($('saveText').value);if(!restored){notify('Invalid world backup.');return;}
+ if(!confirm('Replace current world with the pasted backup?'))return;
+ s=restored;save();hud();draw();$('saveDialog').hidden=true;notify('World backup restored.');
+});
+function importSave(file){if(!file||file.size>1000000){notify('Invalid or oversized save file.');return;}const reader=new FileReader();reader.onload=()=>{const data=A.restore(reader.result);if(!data){notify('Save rejected: incompatible world.');return;}s=data;save();hud();draw();notify('World restored.');};reader.readAsText(file);}
+function tileFromPointer(e){
+ const r=canvas.getBoundingClientRect();
+ // CSS object-fit:contain can letterbox the canvas on short landscape displays.
+ // Account for those margins or divine interventions hit the wrong tile.
+ const scale=Math.min(r.width/canvas.width,r.height/canvas.height);
+ const renderedW=canvas.width*scale,renderedH=canvas.height*scale;
+ const px=e.clientX-r.left-(r.width-renderedW)/2,py=e.clientY-r.top-(r.height-renderedH)/2;
+ const ix=Math.floor(px*VW/renderedW),iy=Math.floor(py*VH/renderedH);
+ return ix<0||iy<0||ix>=VW||iy>=VH?{x:-1,y:-1}:{x:camX+ix,y:camY+iy};
+}
+canvas.addEventListener('pointermove',e=>{hover=tileFromPointer(e);});canvas.addEventListener('pointerleave',()=>{hover=null;});
+canvas.addEventListener('click',e=>{let {x,y}=tileFromPointer(e);if(!A.inside(x,y))return;if(mode==='inspect'){const near=s.enemies.find(z=>z.x===x&&z.y===y),t=A.TILE_NAMES[s.map[A.idx(x,y)]];let message=`(${x},${y}) ${s.seen[A.idx(x,y)]?t:'Unexplored'}`+(near?` · ${near.type} ${near.hp} HP`:'');notify(message);$('inspect').textContent=message;return;}
+ const r=A.power(s,mode,x,y);notify(r.ok?`${mode.toUpperCase()} used. -${r.cost} Faith`:r.why);if(r.ok){save();hud();draw();}});
+mini.addEventListener('click',e=>{const r=mini.getBoundingClientRect(),x=Math.floor((e.clientX-r.left)*A.W/r.width),y=Math.floor((e.clientY-r.top)*A.H/r.height);s.settings.follow=false;camX=Math.max(0,Math.min(A.W-VW,x-(VW>>1)));camY=Math.max(0,Math.min(A.H-VH,y-(VH>>1)));hud();draw();});
+document.querySelectorAll('[data-power]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.power)));
+document.querySelectorAll('[data-speed]').forEach(b=>b.addEventListener('click',()=>{s.settings.speed=Number(b.dataset.speed);hud();notify(s.settings.speed===0?'Time paused.':`Time running at ${s.settings.speed}×.`);}));
+$('follow').addEventListener('click',()=>{s.settings.follow=!s.settings.follow;hud();draw();});
+$('save').addEventListener('click',()=>{save();notify('World saved.');});$('export').addEventListener('click',()=>backupDialog('export'));
+$('import').addEventListener('click',()=>backupDialog('import'));$('importFile').addEventListener('change',e=>{importSave(e.target.files[0]);e.target.value='';});
+$('reset').addEventListener('click',()=>{if(confirm('Create a new world? Current progress will be overwritten. Export a backup first if needed.')){s=A.create((Date.now()>>>0)^Math.floor(Math.random()*10000000));save();hud();draw();notify('A new life begins.');}});
+$('step').addEventListener('click',()=>{A.tick(s);hud();draw();});
+window.addEventListener('keydown',e=>{if(e.target&&['INPUT','TEXTAREA'].includes(e.target.tagName))return;
+ if(e.code==='Space'){e.preventDefault();s.settings.speed=s.settings.speed===0?1:0;hud();}
+ if(e.key.toLowerCase()==='f'){$('follow').click();}
+ if(e.key==='.'||e.key==='>'){$('step').click();}
+ if(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();s.settings.follow=false;camX=Math.max(0,Math.min(A.W-VW,camX+(e.key==='ArrowLeft'?-3:e.key==='ArrowRight'?3:0)));camY=Math.max(0,Math.min(A.H-VH,camY+(e.key==='ArrowUp'?-3:e.key==='ArrowDown'?3:0)));hud();draw();}
+ if(/^[0-5]$/.test(e.key)){const names=['inspect','bless','gift','bloom','guide','storm'];setMode(names[Number(e.key)]);}
+});
+let active=true;document.addEventListener('visibilitychange',()=>{active=!document.hidden;frameLast=0;acc=0;if(!active)save();});window.addEventListener('beforeunload',save);
+function frame(ts){requestAnimationFrame(frame);if(!active)return;if(!frameLast)frameLast=ts;const dt=Math.min(.15,Math.max(0,(ts-frameLast)/1000));frameLast=ts;acc+=dt*4*s.settings.speed;let loops=0;while(acc>=1&&loops<32){A.tick(s);acc-=1;loops++;}if(loops===32)acc=0;
+ if(ts-lastDraw>85){draw();lastDraw=ts;}
+ if(ts-lastHUD>450){hud();lastHUD=ts;}
+ if(ts-lastSave>16000){save();lastSave=ts;}
+ if(flashUntil&&Date.now()>flashUntil){$('toast').classList.remove('show');flashUntil=0;}}
+setMode('inspect');hud();draw();requestAnimationFrame(frame);
+window.GodseedDebug={getState:()=>s,setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
+})();
+</script>
+</body></html>

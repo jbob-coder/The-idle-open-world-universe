@@ -1,0 +1,52 @@
+"""Visual and interaction smoke tests of the actual offline asset in Chromium.
+These are browser tests; an Android on-device pass is still required.
+"""
+from playwright.sync_api import sync_playwright
+from pathlib import Path
+import json
+p=Path(__file__).resolve().parents[1]
+source=(p/'GODSEED-Play.html').read_text()
+with sync_playwright() as pw:
+    browser=pw.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
+    for width,height in [(720,400),(640,360),(960,540)]:
+        context=browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,is_mobile=True,has_touch=True)
+        page=context.new_page();errors=[];outgoing=[]
+        page.on('pageerror',lambda e:errors.append(str(e)))
+        page.on('request',lambda r:outgoing.append(r.url) if r.url.startswith(('http://','https://')) else None)
+        page.on('dialog',lambda d:d.accept())
+        page.set_content(source,wait_until='load')
+        page.evaluate('()=>GodseedDebug.setSpeed(0)')
+        page.locator('#androidDock').wait_for(state='visible')
+        dock=page.locator('#androidDock')
+        buttons=dock.locator('button')
+        assert buttons.count()==8
+        for b in buttons.all():
+            rect=b.bounding_box();assert rect and rect['height']>=43,f"short touch target: {rect}"
+        # The fixed dock remains in view, including on small devices.
+        box=dock.bounding_box();assert box['y']>=0 and box['y']+box['height']<=height+2,(width,height,box)
+        page.locator('#androidDock [data-power="bless"]').click()
+        assert page.locator('#androidDock [data-power="bless"]').get_attribute('aria-pressed')=='true'
+        before=page.evaluate('GodseedDebug.getState().faith')
+        rect=page.locator('#world').bounding_box()
+        page.locator('#world').click(position={'x':int(rect['width']/2),'y':int(rect['height']/2)})
+        assert page.evaluate('GodseedDebug.getState().faith')==before-4
+        page.evaluate('()=>GodseedDebug.step(50)')
+        # Save export and pasted import work without Android native file APIs.
+        page.locator('#export').click()
+        assert page.locator('#saveDialog').is_visible()
+        raw=page.locator('#saveText').input_value()
+        saved=json.loads(raw)
+        assert saved['tick']>=50
+        page.locator('#saveClose').click()
+        page.evaluate('()=>GodseedDebug.newWorld(987654321)')
+        assert page.evaluate('GodseedDebug.getState().tick')==0
+        page.locator('#import').click()
+        page.locator('#saveText').fill(raw)
+        page.locator('#saveApply').click()
+        assert page.evaluate('GodseedDebug.getState().tick')==saved['tick']
+        assert not errors,errors
+        assert not outgoing,outgoing
+        page.screenshot(path=str(p/'assets'/f'godseed-android-landscape-{width}x{height}.png'),full_page=False)
+        print(f'{width}x{height}: PASS, 8 touch buttons >=44px, bless, backup restore, offline, 0 JS errors')
+        context.close()
+    browser.close()

@@ -1,0 +1,10 @@
+{
+  "apk": "GODSEED-v0.1-debug.apk",
+  "size": 22456,
+  "sha256": "f223d3f6d19f3abbfa6e25a9f31e36d41a72191df8112c2e18c3a7ab2f149dfa",
+  "dex_sha1": "271f7674c3e8223b09532e4f9998927ea6ec5e46",
+  "min_sdk": 26,
+  "target_sdk": 28,
+  "signature": "JAR v1 debug",
+  "verified_with": "jarsigner -verify"
+}

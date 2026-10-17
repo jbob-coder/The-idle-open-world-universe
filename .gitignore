@@ -1,0 +1,20 @@
+# Private signing material; never commit to a public repository.
+android/debug-only/
+*.keystore
+*.jks
+*.p12
+
+# Local Python/browser caches and generated build intermediates.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.playwright/
+node_modules/
+dist/classes.dex
+dist/AndroidManifest.binary.xml
+dist/GODSEED-unsigned.apk
+
+# Scratch outputs.
+.tmp/
+*.log
+.DS_Store

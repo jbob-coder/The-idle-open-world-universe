@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111b20"><title>GODSEED — A World for One</title>
+<style>
+:root{color-scheme:dark;--ink:#101a1d;--panel:#182428;--panel2:#213036;--line:#33484a;--muted:#a9bfbb;--bright:#f0e5c6;--green:#a6d19d;--gold:#e7c784;--red:#e18c83}
+*{box-sizing:border-box}body{margin:0;background:var(--ink);color:var(--bright);font:14px/1.48 ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',monospace}
+button{font:inherit;cursor:pointer;border:1px solid #49615a;color:var(--bright);background:#24373a;border-radius:5px;padding:9px 12px;min-height:43px;transition:background .1s}button:hover{background:#31504b}button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}button.active{border-color:var(--gold);background:#3d493c;color:#fff4c8}button.unaffordable{opacity:.46}strong,b{font-weight:700}
+.site{max-width:1480px;margin:auto;padding:18px clamp(12px,2.3vw,34px) 30px}header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;padding:0 0 17px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px}.sigil{font-size:26px;color:#edce8d;background:#2b3630;border:1px solid #6d7859;padding:8px 13px}.eyebrow{color:#b3bea9;font-size:10px;letter-spacing:.17em}h1{font-family:Georgia,serif;font-size:27px;letter-spacing:.06em;margin:0;line-height:1.15;font-weight:600}header p{margin:5px 0 0;color:var(--muted);font-size:11px}.header-meta{display:flex;align-items:center;gap:12px;color:var(--green);font-size:11px;flex-wrap:wrap}.statusdot{width:8px;height:8px;border-radius:50%;background:#a1d39e;display:inline-block;margin-right:4px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:17px;align-items:start}.maincol,.sidecol{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:7px;overflow:hidden}.panelhead{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}.panelhead h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;margin:0;color:#e6e5c6;font-weight:700}.muted{color:var(--muted)}.tiny{font-size:11px}
+.worldframe{background:#172321;padding:12px;position:relative}.worldtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:10px;font-size:11px;color:#e8d8b0}.worldtop .right{color:#a4c6bc}#world{width:100%;height:auto;display:block;aspect-ratio:36/22;background:#121d1b;image-rendering:pixelated;border:2px solid #718078;touch-action:manipulation;cursor:crosshair}#minimap{width:128px;height:96px;border:1px solid #526460;image-rendering:pixelated;cursor:crosshair;display:block;background:#141f22}.underworld{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.powers{padding:13px 16px}.powers-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.power{display:flex;flex-direction:column;gap:2px;align-items:flex-start;padding:10px 11px;text-align:left}.power span{font-size:12px;font-weight:bold}.power small{color:#b5c3b5;font-size:10px}.power-icon{font-size:16px;line-height:1.1;color:var(--gold)}.power[data-power="inspect"] .power-icon{color:#a7bab7}.power[data-power="storm"] .power-icon{color:#edb19c}.powers-foot{margin:11px 0 0;color:#c1c7b5;font-size:11px}.timebox{padding:12px 16px;display:flex;gap:7px;align-items:center;flex-wrap:wrap}.timebox button{flex:1;min-width:40px;padding:6px}.timebox .stepbtn{flex:0 0 auto}.savebuttons{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px 14px}.savebuttons button{flex:1;font-size:11px;padding:7px}.savebuttons button.danger{color:#f0b5a2;border-color:#6d4d4d}.save-note{padding:0 16px 15px;font-size:10px;color:var(--muted)}
+.herohead{display:flex;align-items:center;gap:11px}.portrait{height:45px;width:45px;display:grid;place-items:center;background:#45574a;border:2px solid #758773;color:#f2dbac;font-size:22px;image-rendering:pixelated}.herohead h2{font-size:17px;font-family:Georgia,serif;margin:0;letter-spacing:0;text-transform:none}.herohead small{display:block;color:var(--green);font-size:10px}.hero-body{padding:14px 16px}.stat{margin:0 0 11px}.stathead{display:flex;justify-content:space-between;color:#d5d6c0;font-size:11px;margin-bottom:4px}.stathead b{color:#e9d7ab}.track{height:7px;background:#2c3d3d;border:1px solid #455657}.track i{height:100%;display:block;background:#719f8a}.track i.health{background:#c78177}.track i.hunger{background:#e7c47e}.track i.energy{background:#90b5ab}.track i.experience{background:#b3a0cb}.section-title{color:#b1bba9;letter-spacing:.14em;font-size:10px;text-transform:uppercase;margin:19px 0 7px}.goalbox{padding:11px;border:1px solid #597365;background:#253c36;border-left:3px solid var(--green);margin-top:6px}.goalbox strong{font-size:12px}.goalbox p{margin:3px 0 0;color:#d0dbc5;font-size:11px}.inventory{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:11px}.inventory span{display:flex;justify-content:space-between;gap:5px;color:#c3ccc4}.inventory b{color:#f5e9bc}.divider{height:1px;background:var(--line);margin:14px 0}.memory{font-size:10px;color:#e3d2ad}.side-lower{padding:14px 16px}.world-stats{display:flex;gap:15px;align-items:center;flex-wrap:wrap}.world-stats strong{color:#e6cf9c;font-size:16px}.minigroup{display:flex;gap:12px;align-items:flex-start}.logpanel{margin-top:14px}.events{max-height:245px;overflow-y:auto;padding:4px 13px 12px}.event{display:flex;gap:9px;padding:9px 2px;border-bottom:1px solid #2c3c3d}.event:last-child{border:0}.evt-time{min-width:23px;color:#789c93;font-size:10px}.event strong{display:block;font-size:11px;color:#efdab1}.event small{display:block;color:#abbdb6;font-size:10px;margin-top:3px}.event.milestone strong{color:#b6da9d}.event.danger strong{color:#eca7a1}.event.god strong{color:#e7c881}.footer{margin-top:15px;color:#899e9b;font-size:10px;line-height:1.7;border-top:1px solid var(--line);padding-top:10px}.footer strong{color:#cfdbc8}#toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,13px);padding:12px 18px;background:#e6d3a1;color:#142524;border:2px solid #c09a65;border-radius:4px;z-index:10;font-weight:700;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;text-align:center;max-width:90vw;font-size:12px}#toast.show{opacity:1;transform:translate(-50%,0)}.key{border:1px solid #586865;padding:2px 4px;border-radius:3px;color:#e6d6b4}
+@media(max-width:980px){main{grid-template-columns:minmax(0,1fr) 280px}.powers-grid{grid-template-columns:repeat(3,1fr)}.power{padding:9px}}
+@media(max-width:790px){main{grid-template-columns:1fr}.sidecol{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:13px}.sidecol>.panel:first-child{grid-row:span 2}.logpanel{margin-top:0}.site{padding:11px}#world{max-height:72vh;object-fit:contain}.worldframe{padding:8px}.powers-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:530px){h1{font-size:23px}.sidecol{display:block}.sidecol>.panel{margin-bottom:12px}.powers-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.power{min-height:61px}.site{padding:10px}.panelhead{padding:11px 12px}.powers{padding:11px 12px}.header-meta{gap:7px}}
+@media(prefers-reduced-motion:reduce){button,#toast{transition:none}}
+
+/* Portable backup dialog works on old Android WebViews without a native file picker. */
+#saveDialog[hidden]{display:none}
+#saveDialog{position:fixed;inset:0;z-index:30;background:rgba(4,12,16,.92);display:grid;place-items:center;padding:14px}
+#saveDialog .backup-panel{max-width:640px;width:100%;background:#172a2b;border:2px solid #c1aa75;border-radius:7px;padding:16px;box-shadow:0 6px 45px #000b}
+#saveDialog h2{margin:0 0 8px;color:#e7d6a4;font-size:19px}
+#saveDialog p{color:#b8cec4;line-height:1.5;font-size:12px}
+#saveText{display:block;box-sizing:border-box;width:100%;min-height:120px;max-height:35vh;background:#101e21;color:#d9e2d2;font:12px monospace;border:1px solid #81927c;padding:8px;resize:vertical}
+#saveDialog .backup-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+#saveDialog .backup-actions button{padding:10px 13px;min-height:42px}
+/* Compact Android landscape overlay. Keeps all divine commands within thumb reach. */
+#androidDock{display:none}
+@media (orientation:landscape) and (max-height:650px) {
+  :root {font-size:12px}
+  body{padding-bottom:74px}
+  .site{padding:7px;max-width:none}
+  header{padding:4px 2px 9px;margin-bottom:7px;gap:9px}
+  .sigil{width:34px;height:34px;font-size:17px}
+  h1{font-size:22px;margin:0}.brand p{display:none}
+  .eyebrow{font-size:8px}
+  main{grid-template-columns:minmax(0,1fr) minmax(200px,.43fr);gap:8px}
+  .panelhead{padding:7px 10px;min-height:30px}
+  .worldframe{padding:5px}.worldtop{padding:3px;font-size:9px}
+  #world{width:100%;max-height:58vh;height:auto;object-fit:contain}
+  .underworld{padding:4px 1px;font-size:9px}
+  .sidecol{display:block}.sidecol>.panel{margin-bottom:8px}
+  .hero-body{padding:9px 11px}.herohead{gap:7px}.portrait{width:29px;height:29px}
+  .herohead h2{font-size:13px}.section-title{margin:8px 0 3px}
+  .stat{margin:0 0 5px}.stathead{margin-bottom:2px;font-size:9px}
+  .panel.logpanel{margin-top:8px}.logpanel .events{max-height:160px}
+  .powers-grid{grid-template-columns:repeat(3,1fr)}
+  #androidDock{display:block;position:fixed;bottom:0;left:0;right:0;z-index:9;background:#101c20f7;border-top:2px solid #b9a77a;padding:3px max(7px,env(safe-area-inset-right)) calc(5px + env(safe-area-inset-bottom)) max(7px,env(safe-area-inset-left));box-shadow:0 -4px 20px #091114aa}
+  #androidDock .docktop{display:flex;align-items:center;justify-content:space-between;color:#e4c98e;font-size:9px;letter-spacing:.03em;height:15px}
+  #androidDock .dockrow{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+  #androidDock button{height:44px;min-width:0;padding:2px 1px;border-radius:4px;font-size:9px;line-height:1.05;touch-action:manipulation}
+  #androidDock button.active{background:#596049;border-color:#eed69a;color:#fff4cb}
+  #androidDock button .ico{display:block;font-size:17px;line-height:20px}
+  footer{display:none}
+}
+@media (orientation:landscape) and (max-height:650px) and (max-width:600px){
+  main{grid-template-columns:1fr}.sidecol{display:block}#world{max-height:47vh}
+}
+</style>
+</head><body><div class="site">
+<header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">THE WORLD EXISTS WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ ONE SMALL LIFE</span></h1><p>Observe a mind. Shape a world. Let a story emerge.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v0.1</span></div></header>
+<main><section class="maincol">
+<div class="panel"><div class="panelhead"><h2>01 / The Living World</h2><span class="tiny muted" id="clock">DAY 1</span></div>
+<div class="worldframe"><div class="worldtop"><span>THE GREEN EXPANSE <span style="color:#819f97">/ 64 × 48</span></span><span class="right">WEATHER <b id="weather">CLEAR</b></span></div>
+<canvas id="world" width="576" height="352" aria-label="Low resolution pixel world; click to inspect or use god powers"></canvas>
+<div class="underworld"><span id="coordinates">32,24</span><span><span class="key">CLICK</span> interact with world · <span class="key">F</span> follow</span></div></div></div>
+<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>02 / Divine Influence</h2><span style="font-size:12px;color:#e9cb85">✧ <b id="faith">18</b> FAITH</span></div>
+<div class="powers" id="powers"><div class="tiny muted">Select a power, then click a location on the map. Bless and Gift always affect Nim.</div>
+<div class="powers-grid">
+<button class="power active" data-power="inspect" aria-pressed="true" title="Key 0 · Free"><span class="power-icon">⌕</span><span>Inspect</span><small>Free · key 0</small></button>
+<button class="power" data-power="bless" title="Key 1 · Heal Nim"><span class="power-icon">✧</span><span>Bless</span><small>4 Faith · key 1</small></button>
+<button class="power" data-power="gift" title="Key 2 · Feed Nim"><span class="power-icon">▣</span><span>Gift Food</span><small>5 Faith · key 2</small></button>
+<button class="power" data-power="bloom" title="Key 3 · Grow berry bushes"><span class="power-icon">❀</span><span>Bloom</span><small>6 Faith · key 3</small></button>
+<button class="power" data-power="guide" title="Key 4 · Send a destination omen"><span class="power-icon">⌖</span><span>Guide</span><small>3 Faith · key 4</small></button>
+<button class="power" data-power="storm" title="Key 5 · Disperse enemies"><span class="power-icon">ϟ</span><span>Lightning</span><small>8 Faith · key 5</small></button>
+</div><p class="powers-foot" id="instruction">Inspect a tile by clicking the world.</p><p class="tiny muted" id="inspect">Nim has awakened. Watch their first decisions.</p></div></div>
+<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>03 / Time & World Control</h2><span class="tiny muted">4 logic steps / sec at 1×</span></div>
+<div class="timebox"><button data-speed="0" aria-pressed="false">Pause</button><button data-speed="1" class="active" aria-pressed="true">1×</button><button data-speed="3" aria-pressed="false">3×</button><button data-speed="8" aria-pressed="false">8×</button><button class="stepbtn" id="step" title="Advance 1 simulation step">+1 step</button><button id="follow" class="active" aria-pressed="true">Follow</button></div>
+<div class="savebuttons"><button id="save">Save now</button><button id="export">Export JSON</button><button id="import">Import JSON</button><button id="reset" class="danger">New World</button><input id="importFile" type="file" accept=".json,application/json" hidden></div><div class="save-note"><span id="saveState">Auto-save enabled when supported.</span> Saved locally in the app; use Export JSON to copy a backup.</div></div>
+</section><aside class="sidecol"><div class="panel"><div class="panelhead"><div class="herohead"><div class="portrait">♟</div><div><h2 id="heroName">Nim</h2><small id="level">LEVEL 1</small></div></div><span class="tiny muted">AUTONOMOUS</span></div>
+<div class="hero-body"><div class="eyebrow">SURVIVAL</div><div id="statbars" style="margin-top:10px"></div>
+<div class="section-title">CURRENT INTENTION</div><div class="goalbox"><strong id="goal">Awakening</strong><p id="thought">“Where am I?”</p></div>
+<div class="section-title">INVENTORY</div><div class="inventory" id="inventory"></div>
+<div class="section-title">PERSONALITY / ADAPTATION</div><p class="tiny muted" id="traits"></p>
+<div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
+<div class="divider"></div><div class="tiny muted" id="milestones"></div>
+</div></div>
+<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>World atlas</h2><span class="tiny muted">Tap to pan</span></div><div class="side-lower"><div class="minigroup"><canvas id="minimap" width="64" height="48" aria-label="Small world map. Click to pan the camera."></canvas><div class="tiny muted">The dark areas are unknown to Nim.<p style="margin:7px 0">Time moves only while the page is open.</p><p style="margin:7px 0">You are observing one life, not controlling it.</p></div></div></div></div>
+<div class="panel logpanel"><div class="panelhead"><h2>World chronicle</h2><span class="tiny muted">Events as they happen</span></div><div class="events" id="events" aria-live="polite"></div></div>
+</aside></main><footer class="footer"><strong>DESIGN LAB / FIRST LIFE</strong> · Single-file 2D Canvas · No network, external AI API, or engine · <span class="key">SPACE</span> pause · <span class="key">.</span> step · <span class="key">0–5</span> powers · arrows pan the camera. Your world saves locally on this device while the app stays installed. Export JSON periodically for a backup.</footer></div><div id="saveDialog" hidden role="dialog" aria-modal="true" aria-labelledby="backupTitle">
+  <div class="backup-panel"><h2 id="backupTitle">World backup</h2><p id="backupHelp"></p>
+  <textarea id="saveText" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+  <div class="backup-actions"><button id="saveCopy">Copy text</button><button id="saveApply" hidden>Import pasted save</button><button id="saveDownload">Download JSON</button><button id="saveClose">Close</button></div>
+  </div></div>
+<div id="androidDock" aria-label="Quick god powers and time controls">
+  <div class="docktop"><strong id="quickStatus">NIM · LEVEL 1</strong><span>SELECT POWER → TAP WORLD</span></div>
+  <div class="dockrow">
+    <button data-power="inspect" class="active"><span class="ico">⌕</span>Inspect</button>
+    <button data-power="bless"><span class="ico">✧</span>Heal</button>
+    <button data-power="gift"><span class="ico">▣</span>Food</button>
+    <button data-power="bloom"><span class="ico">❀</span>Bloom</button>
+    <button data-power="guide"><span class="ico">⌖</span>Guide</button>
+    <button data-power="storm"><span class="ico">ϟ</span>Storm</button>
+    <button data-speed="0"><span class="ico">Ⅱ</span>Pause</button>
+    <button data-speed="3"><span class="ico">»</span>3× Time</button>
+  </div>
+</div><div id="toast" role="status"></div>
+<script>/*SIM_SOURCE*/</script>
+<script>/*UI_SOURCE*/</script>
+</body></html>
