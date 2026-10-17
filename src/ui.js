@@ -13,11 +13,32 @@ const setMode=v=>{mode=v;document.querySelectorAll('[data-power]').forEach(b=>{b
 const html=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function notify(message){flashMessage=message;flashUntil=Date.now()+2700;$('toast').textContent=message;$('toast').classList.add('show');}
 function stamp(s){const hour=Math.floor((s.tick%240)/10),min=Math.floor((s.tick%10)*6);return `DAY ${s.day} · ${String(hour).padStart(2,'0')}:${String(min).padStart(2,'0')}`;}
-const colors=['#3c5c43','#254b3a','#26536a','#62635e','#426c49','#837458','#688b57','#725338'];
+const colors=['#3c5c43','#254b3a','#26536a','#62635e','#426c49','#837458','#688b57','#725338','#8b7e60','#76664c','#574f68'];
 const hash=(x,y)=>((Math.imul(x+91,374761393)^Math.imul(y+37,668265263))>>>0);
 function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
 function dot(x,y,c){rect(x,y,1,1,c);}
 function drawTile(tile,x,y,wx,wy){let v=hash(wx,wy);rect(x,y,size,size,colors[tile]);
+ // Each motif is at most a few rectangles, stamped to a cached 576x352 canvas.
+ if(tile===A.T.ROAD){
+  rect(x,y+4,16,9,'#a59a76');rect(x,y+5,16,1,'#c4b68e');
+  rect(x+(v%7),y+7,4,2,'#817661');rect(x+9,y+11,5,1,'#d3b58c');
+  if(v%3===0){dot(x+2,y+2,'#7da06e');dot(x+14,y+14,'#7da06e');}return;
+ }
+ if(tile===A.T.VILLAGE){
+  rect(x+1,y+13,14,2,'#332e2c');rect(x+2,y+7,12,7,'#a98c65');
+  rect(x+2,y+7,2,6,'#e3c18e');rect(x+12,y+7,2,6,'#e3c18e');
+  rect(x+6,y+10,4,4,'#40362f');rect(x+3,y+9,2,2,'#e8c97b');
+  rect(x+10,y+9,2,2,'#e8c97b');
+  rect(x+1,y+5,14,3,'#694b46');rect(x+3,y+3,10,3,'#995d50');
+  rect(x+5,y+2,6,2,'#bd7960');dot(x+7,y+3,'#e2b17b');return;
+ }
+ if(tile===A.T.SHRINE){
+  rect(x+1,y+13,14,2,'#2a2c34');rect(x+3,y+10,10,3,'#85808f');
+  rect(x+5,y+3,6,9,'#9b99a9');rect(x+4,y+2,8,2,'#d0c2af');
+  rect(x+7,y+5,2,5,'#4e7489');rect(x+6,y+6,1,3,'#e3d29d');
+  rect(x+9,y+6,1,3,'#e3d29d');rect(x+2,y+8,2,3,'#6c816c');
+  dot(x+8,y+1,'#d9d6b6');return;
+ }
  // All ground motifs are deterministic rectangles; no image assets, shaders or allocations.
  if(tile===A.T.GRASS){if(v%5===0){rect(x+3,y+10,2,4,'#73936a');rect(x+12,y+6,1,3,'#a1aa73');}
   if(v%17===0){rect(x+9,y+9,3,2,'#837b68');rect(x+10,y+8,1,1,'#a39a7d');}
@@ -114,7 +135,8 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('skillRanks').textContent=A.SKILLS.map(k=>k.toUpperCase().slice(0,3)+' '+b.skills[k]).join(' · ');
  $('adventures').textContent=`${s.story.completed} rumors solved · ${s.story.clues.filter(q=>!q.solved).length} leads · ${b.tactics.dodge} dodges · ${b.tactics.parry} parries · ${b.tactics.trapsAvoided} traps avoided`;
  $('lead').textContent=(s.story.clues.find(q=>!q.solved)||{}).title||'No active legend';
- $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · Confianza '+Math.round(p.trust)).join('  •  ')||'Sin viajeros todavía';
+ $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · '+(p.activity||'Patrullando')+' · Confianza '+Math.round(p.trust)).join('  •  ')||'Sin viajeros todavía';
+ $('milestones').title=(s.shrinesVisited||[]).length+' santuarios antiguos visitados';
  $('memory').textContent=b.memory.length?b.memory.slice(-4).reverse().join('  •  '):'Learning about the world…';
  $('milestones').textContent=`${b.steps} steps · ${b.fights} wins · ${b.ruins} ruins · ${b.scars} second chances`;
  $('events').innerHTML=s.log.slice(0,9).map(e=>`<div class="event ${html(e.type)}"><span class="evt-time">D${1+Math.floor(e.tick/240)}</span><div><strong>${html(e.title)}</strong><small>${html(e.detail)}</small></div></div>`).join('');
