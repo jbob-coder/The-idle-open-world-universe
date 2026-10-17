@@ -181,11 +181,12 @@ function nearestEnemy(s){const b=s.bot;let best=null,dist=1e9;for(const e of s.e
 function setGoal(s,goal,thought,path){const b=s.bot;b.goal=goal;b.thought=thought;b.path=path||[];}
 function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(enemy.e&&enemy.dist<=1){if(b.hp< b.maxHp*.35 || b.energy<6){setGoal(s,'Escape','That beast is too dangerous!');return;}setGoal(s,'Defend','The beast is right beside me!');return;}
+ if(b.hunger<37&&b.food>0){setGoal(s,'Eat','My stomach is growling.');return;}
  if(b.hp<b.maxHp*.35){setGoal(s,'Recover','I need to recover.');return;}
  if(b.hunger<37&&b.food>0){setGoal(s,'Eat','My stomach is growling.');return;}
  if(b.energy<=28){setGoal(s,'Rest','My feet cannot go on.');return;}
  if(b.hunger<64 && b.food<=1){const p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','Find something edible.',p);return;}}
- if(!s.camp){if(b.wood>=5&&b.stone>=3){setGoal(s,'Build','I could make a shelter.');return;}
+ if(!s.camp){if(b.wood>=5&&b.stone>=3){const p=findPath(s,(x,y,t)=>t===T.GRASS||t===T.MEADOW);if(p){setGoal(s,'Build','I could make a shelter.',p);return;}}
  if(b.wood<5){let p=findPath(s,(x,y,t)=>t===T.FOREST);if(p){setGoal(s,'Gather wood','I need timber for shelter.',p);return;}}
  if(b.stone<3){let p=findPath(s,(x,y,t)=>t===T.STONE);if(p){setGoal(s,'Mine stone','Stones would make a strong hearth.',p);return;}}}
  if(s.camp&&b.tool===0){
@@ -248,7 +249,7 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
  const tile=s.map[idx(b.x,b.y)];
  if(b.goal==='Eat'){b.food--;improve(s,'survival',1);b.hunger=clamp(b.hunger+37,0,100);b.hp=clamp(b.hp+2,0,b.maxHp);b.thought='That was needed.';return;}
  if(b.goal==='Recover'||b.goal==='Rest'){b.energy=clamp(b.energy+(s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3?17:12),0,100);b.hp=clamp(b.hp+(s.camp?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
- if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First camp','Nim raised a canvas shelter and stone hearth at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
+ if(b.goal==='Build'&&(tile===T.GRASS||tile===T.MEADOW)){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First camp','Nim raised a canvas shelter and stone hearth at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
  if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');improve(s,'crafting',5);return;}
 
  if(tile===T.BERRY){b.food+=2+rint(s,2);s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'foraging');improve(s,'survival',2);b.thought='These berries will last a little while.';return;}
@@ -305,11 +306,21 @@ function updateEnemies(s){const b=s.bot;
  }
  revive(s);
 }
+// Scan the reachable component only at ecological intervals, never each frame.
+// A depleted island must recover without rewriting water, landmarks or old saves.
+function renewResources(s){
+ const land=[],counts={[T.BERRY]:0,[T.FOREST]:0,[T.STONE]:0};
+ findPath(s,(x,y,t,n)=>{if(t in counts)counts[t]++;if(t===T.GRASS||t===T.MEADOW)land.push(n);return false;});
+ for(const t of [T.BERRY,T.FOREST,T.STONE]){
+  const floor=t===T.BERRY?6:4;
+  while(counts[t]<floor&&land.length){const n=land.shift();s.map[n]=t;counts[t]++;}
+ }
+}
 function tick(s){s.tick++;revive(s);if(s.tick%240===0){s.day++;event(s,'Day '+s.day,'The world turns and Nim continues living.');}
  if(s.weatherUntil&&s.tick>=s.weatherUntil){s.weather='clear';s.weatherUntil=0;}
  if(s.tick%12===0){const b=s.bot;b.hunger=clamp(b.hunger-1,0,100);b.energy=clamp(b.energy-1,0,100);if(b.hunger===0)b.hp-=1;}
  if(s.tick%72===0)s.faith=clamp(s.faith+1,0,50);
- if(s.tick%93===0){for(let i=0;i<3;i++){let x=rint(s,W),y=rint(s,H),n=idx(x,y);if(s.map[n]===T.GRASS)s.map[n]=T.BERRY;}}
+ if(s.tick%93===0){renewResources(s);for(let i=0;i<3;i++){let x=rint(s,W),y=rint(s,H),n=idx(x,y);if(s.map[n]===T.GRASS)s.map[n]=T.BERRY;}}
  if(s.guide){s.guide.ticks--;if(s.guide.ticks<=0)s.guide=null;}
  s.marks=s.marks.filter(z=>z.until>s.tick);
  // Planning is deliberate: every movement step or completed action chooses what matters now.
@@ -323,6 +334,7 @@ function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))r
  if(s.faith<COST[kind])return {ok:false,why:'Not enough Faith'};
  const b=s.bot;if(kind==='guide'&&!walkable(s,x,y))return {ok:false,why:'Nim cannot walk on water'};
  const citizen=kind==='inspire'&&s.seen[idx(x,y)]?nearPerson(s,x,y,1):null;
+ if(kind==='inspire'&&citizen&&citizen.favorUntil>s.tick&&!citizen.favorSpent)return {ok:false,why:'Traveler is already answering an omen'};
  if(kind==='inspire'&&!citizen)return {ok:false,why:'Choose a revealed traveler nearby'};
  s.faith-=COST[kind];if(kind==='bless'){b.hp=clamp(b.hp+12,0,b.maxHp);b.energy=clamp(b.energy+28,0,100);event(s,'Divine blessing','A warm light restores Nim.','god');addMark(s,b.x,b.y,'bless');}
  else if(kind==='gift'){b.food+=3;b.hunger=clamp(b.hunger+10,0,100);event(s,'Gift of sustenance','Three portions appear in Nim’s pack.','god');addMark(s,b.x,b.y,'gift');}
@@ -338,9 +350,13 @@ function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))r
  else if(kind==='storm'){let struck=0;s.enemies=s.enemies.filter(e=>{const d=Math.abs(e.x-x)+Math.abs(e.y-y);if(d<=3){struck++;return false;}return true;});event(s,'Judgment',struck?struck+' nearby hostile creatures dispersed.':'Lightning struck the empty earth.','god');addMark(s,x,y,'storm');}
  return {ok:true,kind,cost:COST[kind]};}
 function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!==N||!Array.isArray(s.seen)||s.seen.length!==N||!s.bot)return false;
- const b=s.bot;return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
+ const b=s.bot;
+ if(!['hp','maxHp','hunger','energy','food','wood','stone','tool','attack','defense','xp','steps','scars','ruins','fights'].every(k=>Number.isFinite(b[k])))return false;
+ if(!Number.isFinite(s.faith)||s.faith<0||s.faith>50||!Number.isInteger(s.day)||s.day<1)return false;
+ if(!Array.isArray(s.enemies)||!s.enemies.every(e=>e&&Number.isInteger(e.x)&&Number.isInteger(e.y)&&inside(e.x,e.y)&&['hp','attack','defense','cooldown','id'].every(k=>Number.isFinite(e[k]))))return false;
+ return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
 function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
-function restore(raw){try{const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
+function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
  progress(s.bot);
  // Migration: v0.1/v0.2 saves had no inhabitants. Keep old save schema intact.
  s.npcs=Array.isArray(s.npcs)?s.npcs.slice(0,3):initPeople(s);

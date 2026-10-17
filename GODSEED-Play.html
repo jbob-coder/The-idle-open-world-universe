@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111b20"><title>GODSEED — A World for One</title>
+<meta name="theme-color" content="#111b20"><title>GODSEED — A World for One • Fantasía medieval</title>
 <style>
-:root{color-scheme:dark;--ink:#101a1d;--panel:#182428;--panel2:#213036;--line:#33484a;--muted:#a9bfbb;--bright:#f0e5c6;--green:#a6d19d;--gold:#e7c784;--red:#e18c83}
+:root{color-scheme:dark;--ink:#121b19;--panel:#202721;--panel2:#29382d;--line:#53604b;--muted:#bac6b5;--bright:#f2e9d0;--green:#a6d19d;--gold:#ebcf88;--red:#e18c83}
 *{box-sizing:border-box}body{margin:0;background:var(--ink);color:var(--bright);font:14px/1.48 ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',monospace}
-button{font:inherit;cursor:pointer;border:1px solid #49615a;color:var(--bright);background:#24373a;border-radius:5px;padding:9px 12px;min-height:43px;transition:background .1s}button:hover{background:#31504b}button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}button.active{border-color:var(--gold);background:#3d493c;color:#fff4c8}button.unaffordable{opacity:.46}strong,b{font-weight:700}
-.site{max-width:1480px;margin:auto;padding:18px clamp(12px,2.3vw,34px) 30px}header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;padding:0 0 17px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px}.sigil{font-size:26px;color:#edce8d;background:#2b3630;border:1px solid #6d7859;padding:8px 13px}.eyebrow{color:#b3bea9;font-size:10px;letter-spacing:.17em}h1{font-family:Georgia,serif;font-size:27px;letter-spacing:.06em;margin:0;line-height:1.15;font-weight:600}header p{margin:5px 0 0;color:var(--muted);font-size:11px}.header-meta{display:flex;align-items:center;gap:12px;color:var(--green);font-size:11px;flex-wrap:wrap}.statusdot{width:8px;height:8px;border-radius:50%;background:#a1d39e;display:inline-block;margin-right:4px}
+button{font:inherit;cursor:pointer;border:1px solid #49615a;color:var(--bright);background:#354134;border-radius:5px;padding:9px 12px;min-height:43px;transition:background .1s}button:hover{background:#46533e}button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}button.active{border-color:var(--gold);background:#3d493c;color:#fff4c8}button.unaffordable{opacity:.46}strong,b{font-weight:700}
+.site{max-width:1480px;margin:auto;padding:18px clamp(12px,2.3vw,34px) 30px}header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;padding:0 0 17px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px}.sigil{font-size:26px;color:#edce8d;background:#3d352b;border:1px solid #97835a;padding:8px 13px}.eyebrow{color:#b3bea9;font-size:10px;letter-spacing:.17em}h1{font-family:Georgia,serif;font-size:27px;letter-spacing:.06em;margin:0;line-height:1.15;font-weight:600}header p{margin:5px 0 0;color:var(--muted);font-size:11px}.header-meta{display:flex;align-items:center;gap:12px;color:var(--green);font-size:11px;flex-wrap:wrap}.statusdot{width:8px;height:8px;border-radius:50%;background:#a1d39e;display:inline-block;margin-right:4px}
 main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:17px;align-items:start}.maincol,.sidecol{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:7px;overflow:hidden}.panelhead{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}.panelhead h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;margin:0;color:#e6e5c6;font-weight:700}.muted{color:var(--muted)}.tiny{font-size:11px}
-.worldframe{background:#172321;padding:12px;position:relative}.worldtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:10px;font-size:11px;color:#e8d8b0}.worldtop .right{color:#a4c6bc}#world{width:100%;height:auto;display:block;aspect-ratio:36/22;background:#121d1b;image-rendering:pixelated;border:2px solid #718078;touch-action:manipulation;cursor:crosshair}#minimap{width:128px;height:96px;border:1px solid #526460;image-rendering:pixelated;cursor:crosshair;display:block;background:#141f22}.underworld{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.worldframe{background:#1f2b21;padding:12px;position:relative}.worldtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:10px;font-size:11px;color:#e8d8b0}.worldtop .right{color:#a4c6bc}#world{width:100%;height:auto;display:block;aspect-ratio:8/5;background:#121d1b;image-rendering:pixelated;border:2px solid #718078;touch-action:manipulation;cursor:crosshair}#minimap{width:128px;height:96px;border:1px solid #526460;image-rendering:pixelated;cursor:crosshair;display:block;background:#141f22}.underworld{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--muted);flex-wrap:wrap}
 .powers{padding:13px 16px}.powers-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.power{display:flex;flex-direction:column;gap:2px;align-items:flex-start;padding:10px 11px;text-align:left}.power span{font-size:12px;font-weight:bold}.power small{color:#b5c3b5;font-size:10px}.power-icon{font-size:16px;line-height:1.1;color:var(--gold)}.power[data-power="inspect"] .power-icon{color:#a7bab7}.power[data-power="storm"] .power-icon{color:#edb19c}.powers-foot{margin:11px 0 0;color:#c1c7b5;font-size:11px}.timebox{padding:12px 16px;display:flex;gap:7px;align-items:center;flex-wrap:wrap}.timebox button{flex:1;min-width:40px;padding:6px}.timebox .stepbtn{flex:0 0 auto}.savebuttons{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px 14px}.savebuttons button{flex:1;font-size:11px;padding:7px}.savebuttons button.danger{color:#f0b5a2;border-color:#6d4d4d}.save-note{padding:0 16px 15px;font-size:10px;color:var(--muted)}
-.herohead{display:flex;align-items:center;gap:11px}.portrait{height:45px;width:45px;display:grid;place-items:center;background:#45574a;border:2px solid #758773;color:#f2dbac;font-size:22px;image-rendering:pixelated}.herohead h2{font-size:17px;font-family:Georgia,serif;margin:0;letter-spacing:0;text-transform:none}.herohead small{display:block;color:var(--green);font-size:10px}.hero-body{padding:14px 16px}.stat{margin:0 0 11px}.stathead{display:flex;justify-content:space-between;color:#d5d6c0;font-size:11px;margin-bottom:4px}.stathead b{color:#e9d7ab}.track{height:7px;background:#2c3d3d;border:1px solid #455657}.track i{height:100%;display:block;background:#719f8a}.track i.health{background:#c78177}.track i.hunger{background:#e7c47e}.track i.energy{background:#90b5ab}.track i.experience{background:#b3a0cb}.section-title{color:#b1bba9;letter-spacing:.14em;font-size:10px;text-transform:uppercase;margin:19px 0 7px}.goalbox{padding:11px;border:1px solid #597365;background:#253c36;border-left:3px solid var(--green);margin-top:6px}.goalbox strong{font-size:12px}.goalbox p{margin:3px 0 0;color:#d0dbc5;font-size:11px}.inventory{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:11px}.inventory span{display:flex;justify-content:space-between;gap:5px;color:#c3ccc4}.inventory b{color:#f5e9bc}.divider{height:1px;background:var(--line);margin:14px 0}.memory{font-size:10px;color:#e3d2ad}.side-lower{padding:14px 16px}.world-stats{display:flex;gap:15px;align-items:center;flex-wrap:wrap}.world-stats strong{color:#e6cf9c;font-size:16px}.minigroup{display:flex;gap:12px;align-items:flex-start}.logpanel{margin-top:14px}.events{max-height:245px;overflow-y:auto;padding:4px 13px 12px}.event{display:flex;gap:9px;padding:9px 2px;border-bottom:1px solid #2c3c3d}.event:last-child{border:0}.evt-time{min-width:23px;color:#789c93;font-size:10px}.event strong{display:block;font-size:11px;color:#efdab1}.event small{display:block;color:#abbdb6;font-size:10px;margin-top:3px}.event.milestone strong{color:#b6da9d}.event.danger strong{color:#eca7a1}.event.god strong{color:#e7c881}.footer{margin-top:15px;color:#899e9b;font-size:10px;line-height:1.7;border-top:1px solid var(--line);padding-top:10px}.footer strong{color:#cfdbc8}#toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,13px);padding:12px 18px;background:#e6d3a1;color:#142524;border:2px solid #c09a65;border-radius:4px;z-index:10;font-weight:700;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;text-align:center;max-width:90vw;font-size:12px}#toast.show{opacity:1;transform:translate(-50%,0)}.key{border:1px solid #586865;padding:2px 4px;border-radius:3px;color:#e6d6b4}
+.herohead{display:flex;align-items:center;gap:11px}.portrait{height:45px;width:45px;display:grid;place-items:center;background:#45574a;border:2px solid #758773;color:#f2dbac;font-size:22px;image-rendering:pixelated}.herohead h2{font-size:17px;font-family:Georgia,serif;margin:0;letter-spacing:0;text-transform:none}.herohead small{display:block;color:var(--green);font-size:10px}.hero-body{padding:14px 16px}.stat{margin:0 0 11px}.stathead{display:flex;justify-content:space-between;color:#d5d6c0;font-size:11px;margin-bottom:4px}.stathead b{color:#e9d7ab}.track{height:7px;background:#2c3d3d;border:1px solid #455657}.track i{height:100%;display:block;background:#719f8a}.track i.health{background:#c78177}.track i.hunger{background:#e7c47e}.track i.energy{background:#90b5ab}.track i.experience{background:#b3a0cb}.section-title{color:#b1bba9;letter-spacing:.14em;font-size:10px;text-transform:uppercase;margin:19px 0 7px}.goalbox{padding:11px;border:1px solid #597365;background:#354134;border-left:3px solid var(--gold);margin-top:6px}.goalbox strong{font-size:12px}.goalbox p{margin:3px 0 0;color:#d0dbc5;font-size:11px}.inventory{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:11px}.inventory span{display:flex;justify-content:space-between;gap:5px;color:#c3ccc4}.inventory b{color:#f5e9bc}.divider{height:1px;background:var(--line);margin:14px 0}.memory{font-size:10px;color:#e3d2ad}.side-lower{padding:14px 16px}.world-stats{display:flex;gap:15px;align-items:center;flex-wrap:wrap}.world-stats strong{color:#e6cf9c;font-size:16px}.minigroup{display:flex;gap:12px;align-items:flex-start}.logpanel{margin-top:14px}.events{max-height:245px;overflow-y:auto;padding:4px 13px 12px}.event{display:flex;gap:9px;padding:9px 2px;border-bottom:1px solid #2c3c3d}.event:last-child{border:0}.evt-time{min-width:23px;color:#789c93;font-size:10px}.event strong{display:block;font-size:11px;color:#efdab1}.event small{display:block;color:#abbdb6;font-size:10px;margin-top:3px}.event.milestone strong{color:#b6da9d}.event.danger strong{color:#eca7a1}.event.god strong{color:#e7c881}.footer{margin-top:15px;color:#899e9b;font-size:10px;line-height:1.7;border-top:1px solid var(--line);padding-top:10px}.footer strong{color:#cfdbc8}#toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,13px);padding:12px 18px;background:#e6d3a1;color:#142524;border:2px solid #c09a65;border-radius:4px;z-index:10;font-weight:700;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;text-align:center;max-width:90vw;font-size:12px}#toast.show{opacity:1;transform:translate(-50%,0)}.key{border:1px solid #586865;padding:2px 4px;border-radius:3px;color:#e6d6b4}
 @media(max-width:980px){main{grid-template-columns:minmax(0,1fr) 280px}.powers-grid{grid-template-columns:repeat(3,1fr)}.power{padding:9px}}
 @media(max-width:790px){main{grid-template-columns:1fr}.sidecol{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:13px}.sidecol>.panel:first-child{grid-row:span 2}.logpanel{margin-top:0}.site{padding:11px}#world{max-height:72vh;object-fit:contain}.worldframe{padding:8px}.powers-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:530px){h1{font-size:23px}.sidecol{display:block}.sidecol>.panel{margin-bottom:12px}.powers-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.power{min-height:61px}.site{padding:10px}.panelhead{padding:11px 12px}.powers{padding:11px 12px}.header-meta{gap:7px}}
@@ -47,7 +47,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:
   .powers-grid{grid-template-columns:repeat(3,1fr)}
   #androidDock{display:block;position:fixed;bottom:0;left:0;right:0;z-index:9;background:#101c20f7;border-top:2px solid #b9a77a;padding:3px max(7px,env(safe-area-inset-right)) calc(5px + env(safe-area-inset-bottom)) max(7px,env(safe-area-inset-left));box-shadow:0 -4px 20px #091114aa}
   #androidDock .docktop{display:flex;align-items:center;justify-content:space-between;color:#e4c98e;font-size:9px;letter-spacing:.03em;height:15px}
-  #androidDock .dockrow{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+  #androidDock .dockrow{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px}
   #androidDock button{height:44px;min-width:0;padding:2px 1px;border-radius:4px;font-size:9px;line-height:1.05;touch-action:manipulation}
   #androidDock button.active{background:#596049;border-color:#eed69a;color:#fff4cb}
   #androidDock button .ico{display:block;font-size:17px;line-height:20px}
@@ -58,14 +58,14 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:
 }
 </style>
 </head><body><div class="site">
-<header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">THE WORLD EXISTS WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ ONE SMALL LIFE</span></h1><p>Observe a mind. Shape a world. Let a story emerge.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v0.1</span></div></header>
+<header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">A FORGOTTEN KINGDOM LIVES WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ CRÓNICAS DEL REINO OLVIDADO</span></h1><p>Fantasía medieval · Observa una vida. Inspira a un reino.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v0.4 camera lab</span></div></header>
 <main><section class="maincol">
-<div class="panel"><div class="panelhead"><h2>01 / The Living World</h2><span class="tiny muted" id="clock">DAY 1</span></div>
-<div class="worldframe"><div class="worldtop"><span>THE GREEN EXPANSE <span style="color:#819f97">/ 64 × 48</span></span><span class="right">WEATHER <b id="weather">CLEAR</b></span></div>
-<canvas id="world" width="576" height="352" aria-label="Low resolution pixel world; click to inspect or use god powers"></canvas>
+<div class="panel"><div class="panelhead"><h2>01 / The Forgotten Kingdom</h2><span class="tiny muted" id="clock">DAY 1</span></div>
+<div class="worldframe"><div class="worldtop"><span>THE FORGOTTEN BORDERLANDS <span style="color:#819f97">/ 64 × 48</span></span><span class="right">WEATHER <b id="weather">CLEAR</b> · <span id="zoomStatus">Cerca · 24 × 15 casillas</span></span></div>
+<canvas id="world" width="384" height="240" aria-label="Low resolution pixel world; click to inspect or use god powers"></canvas>
 <div class="underworld"><span id="coordinates">32,24</span><span><span class="key">CLICK</span> interact with world · <span class="key">F</span> follow</span></div></div></div>
-<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>02 / Divine Influence</h2><span style="font-size:12px;color:#e9cb85">✧ <b id="faith">18</b> FAITH</span></div>
-<div class="powers" id="powers"><div class="tiny muted">Select a power, then click a location on the map. Bless and Gift always affect Nim.</div>
+<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>02 / Divine Influence • Omens</h2><span style="font-size:12px;color:#e9cb85">✧ <b id="faith">18</b> FAITH</span></div>
+<div class="powers" id="powers"><div class="tiny muted">Elige un poder y toca el mapa. Inspirar requiere un viajero descubierto; Nim actúa por sí mismo.</div>
 <div class="powers-grid">
 <button class="power active" data-power="inspect" aria-pressed="true" title="Key 0 · Free"><span class="power-icon">⌕</span><span>Inspect</span><small>Free · key 0</small></button>
 <button class="power" data-power="bless" title="Key 1 · Heal Nim"><span class="power-icon">✧</span><span>Bless</span><small>4 Faith · key 1</small></button>
@@ -73,9 +73,10 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:
 <button class="power" data-power="bloom" title="Key 3 · Grow berry bushes"><span class="power-icon">❀</span><span>Bloom</span><small>6 Faith · key 3</small></button>
 <button class="power" data-power="guide" title="Key 4 · Send a destination omen"><span class="power-icon">⌖</span><span>Guide</span><small>3 Faith · key 4</small></button>
 <button class="power" data-power="storm" title="Key 5 · Disperse enemies"><span class="power-icon">ϟ</span><span>Lightning</span><small>8 Faith · key 5</small></button>
-</div><p class="powers-foot" id="instruction">Inspect a tile by clicking the world.</p><p class="tiny muted" id="inspect">Nim has awakened. Watch their first decisions.</p></div></div>
-<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>03 / Time & World Control</h2><span class="tiny muted">4 logic steps / sec at 1×</span></div>
-<div class="timebox"><button data-speed="0" aria-pressed="false">Pause</button><button data-speed="1" class="active" aria-pressed="true">1×</button><button data-speed="3" aria-pressed="false">3×</button><button data-speed="8" aria-pressed="false">8×</button><button class="stepbtn" id="step" title="Advance 1 simulation step">+1 step</button><button id="follow" class="active" aria-pressed="true">Follow</button></div>
+  <button class="power" data-power="inspire" title="Key 6 · Inspire a revealed traveler"><span class="power-icon">✺</span><span>Inspire</span><small>5 Faith · key 6</small></button>
+</div><p class="powers-foot" id="instruction">Toca el mapa para observar o emplear un poder divino.</p><p class="tiny muted" id="inspect">Nim despierta en las fronteras de un reino olvidado.</p></div></div>
+<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>03 / Time & World Control</h2><span class="tiny muted">Top-down · Z = cambiar zoom · 4 pasos/seg</span></div>
+<div class="timebox"><button data-speed="0" aria-pressed="false">Pause</button><button data-speed="1" class="active" aria-pressed="true">1×</button><button data-speed="3" aria-pressed="false">3×</button><button data-speed="8" aria-pressed="false">8×</button><button class="stepbtn" id="step" title="Advance 1 simulation step">+1 step</button><button id="follow" class="active" aria-pressed="true">Follow</button><button id="zoom" title="Cambiar zoom de cámara (Z)">Zoom: Cerca</button></div>
 <div class="savebuttons"><button id="save">Save now</button><button id="export">Export JSON</button><button id="import">Import JSON</button><button id="reset" class="danger">New World</button><input id="importFile" type="file" accept=".json,application/json" hidden></div><div class="save-note"><span id="saveState">Auto-save enabled when supported.</span> Saved locally in the app; use Export JSON to copy a backup.</div></div>
 </section><aside class="sidecol"><div class="panel"><div class="panelhead"><div class="herohead"><div class="portrait">♟</div><div><h2 id="heroName">Nim</h2><small id="level">LEVEL 1</small></div></div><span class="tiny muted">AUTONOMOUS</span></div>
 <div class="hero-body"><div class="eyebrow">SURVIVAL</div><div id="statbars" style="margin-top:10px"></div>
@@ -83,12 +84,13 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:
 <div class="section-title">INVENTORY</div><div class="inventory" id="inventory"></div>
 <div class="section-title">PERSONALITY / ADAPTATION</div><p class="tiny muted" id="traits"></p>
 <div class="section-title">SKILLS — LEARNED BY DOING</div><div class="memory" id="skillRanks"></div><div class="section-title">TALES &amp; SURVIVAL</div><p class="tiny muted" id="adventures"></p><p class="tiny muted">Current rumor: <strong id="lead">No active legend</strong></p>
-<div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
+<div class="section-title">HABITANTES DEL REINO</div><p class="tiny muted" id="people" aria-live="off">The world is waking…</p>
+  <div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
 <div class="divider"></div><div class="tiny muted" id="milestones"></div>
 </div></div>
-<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>World atlas</h2><span class="tiny muted">Tap to pan</span></div><div class="side-lower"><div class="minigroup"><canvas id="minimap" width="64" height="48" aria-label="Small world map. Click to pan the camera."></canvas><div class="tiny muted">The dark areas are unknown to Nim.<p style="margin:7px 0">Time moves only while the page is open.</p><p style="margin:7px 0">You are observing one life, not controlling it.</p></div></div></div></div>
+<div class="panel" style="margin-top:14px"><div class="panelhead"><h2>World atlas</h2><span class="tiny muted">Tap to pan</span></div><div class="side-lower"><div class="minigroup"><canvas id="minimap" width="64" height="48" aria-label="Small world map. Tap to pan the camera."></canvas><div class="tiny muted">The dark areas are unknown to Nim. Travelers can be inspected and inspired.<p style="margin:7px 0">Time moves only while the page is open.</p><p style="margin:7px 0">You are observing one life, not controlling it.</p></div></div></div></div>
 <div class="panel logpanel"><div class="panelhead"><h2>World chronicle</h2><span class="tiny muted">Events as they happen</span></div><div class="events" id="events" aria-live="polite"></div></div>
-</aside></main><footer class="footer"><strong>DESIGN LAB / FIRST LIFE</strong> · Single-file 2D Canvas · No network, external AI API, or engine · <span class="key">SPACE</span> pause · <span class="key">.</span> step · <span class="key">0–5</span> powers · arrows pan the camera. Your world saves locally on this device while the app stays installed. Export JSON periodically for a backup.</footer></div><div id="saveDialog" hidden role="dialog" aria-modal="true" aria-labelledby="backupTitle">
+</aside></main><footer class="footer"><strong>DESIGN LAB / FIRST LIFE</strong> · Single-file 2D Canvas · No network, external AI API, or engine · <span class="key">SPACE</span> pause · <span class="key">.</span> step · <span class="key">0–6</span> powers · arrows pan the camera. Your world saves locally on this device while the app stays installed. Export JSON periodically for a backup.</footer></div><div id="saveDialog" hidden role="dialog" aria-modal="true" aria-labelledby="backupTitle">
   <div class="backup-panel"><h2 id="backupTitle">World backup</h2><p id="backupHelp"></p>
   <textarea id="saveText" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
   <div class="backup-actions"><button id="saveCopy">Copy text</button><button id="saveApply" hidden>Import pasted save</button><button id="saveDownload">Download JSON</button><button id="saveClose">Close</button></div>
@@ -102,6 +104,8 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:
     <button data-power="bloom"><span class="ico">❀</span>Bloom</button>
     <button data-power="guide"><span class="ico">⌖</span>Guide</button>
     <button data-power="storm"><span class="ico">ϟ</span>Storm</button>
+    <button data-power="inspire" title="Inspire a revealed traveler"><span class="ico">✺</span>Inspire</button>
+    <button id="zoomDock" title="Zoom (Z)"><span class="ico">⊕</span>Zoom</button>
     <button data-speed="0"><span class="ico">Ⅱ</span>Pause</button>
     <button data-speed="3"><span class="ico">»</span>3× Time</button>
   </div>
@@ -109,8 +113,8 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:
 <script>/* GODSEED deterministic simulation. UMD: browser global + CommonJS. No external services. */
 (function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
-const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7};
-const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter'];
+const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7,ROAD:8,VILLAGE:9,SHRINE:10};
+const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter','Kingdom road','Village','Ancient shrine'];
 const DIRS=[[1,0],[-1,0],[0,1],[0,-1]];
 const ORIGINS=[
  {name:'Lost Apprentice',past:'Once helped a traveling craftsperson.',focus:'crafting',curiosity:.64,caution:.43,diligence:.70},
@@ -120,12 +124,18 @@ const ORIGINS=[
  {name:'Wildland Survivor',past:'Survived seasons alone in the forest.',focus:'survival',curiosity:.53,caution:.67,diligence:.65}
 ];
 const SKILLS=['survival','scouting','combat','crafting','lore'];
+// Maximum three light-weight villagers. This is rule-driven life, not an online AI.
+const PEOPLE=[
+ {name:'Ira',role:'Apothecary',dx:5,dy:3,color:0},
+ {name:'Toren',role:'Squire',dx:-7,dy:-3,color:1},
+ {name:'Mera',role:'Rune Scholar',dx:10,dy:-5,color:2}
+];
 const LORE=[
- ['Fallen Observatory','A shattered lens once pointed toward a secret stonework.'],
- ['Whispering Steps','The old roads hide a place where names are carved in stone.'],
- ['The Mossbound Oath','Travelers once guarded a forgotten sanctuary.'],
- ['Buried Fire','Stone scribes left signs of a hidden ember chamber.'],
- ['The Last Cartographer','A route to lost knowledge survives among the ruins.']
+ ['The Ashen Crown','A royal crown was hidden beneath the old kingdom.'],
+ ['The Moonwell','A moonlit well once granted visions to the royal scribes.'],
+ ['The Mossbound Oath','Oathkeepers once guarded a shrine in the deep woods.'],
+ ['Buried Fire','Runesmiths sealed a chamber of ancient flame.'],
+ ['The Last Cartographer','The royal mapmaker hid a path to lost knowledge.']
 ];
 function progress(b){
  if(!b.background)b.background=ORIGINS[0].name;
@@ -148,6 +158,87 @@ function inside(x,y){return x>=0&&x<W&&y>=0&&y<H;}
 function rand(s){s.seed=(Math.imul(1664525,s.seed>>>0)+1013904223)>>>0;return s.seed/4294967296;}
 function rint(s,n){return Math.floor(rand(s)*n)}
 function randomNoise(seed,x,y){let h=(Math.imul(x+83,374761393)^Math.imul(y+57,668265263)^(seed>>>0))>>>0;h=Math.imul(h^(h>>>13),1274126177)>>>0;return ((h^(h>>>16))>>>0)/4294967296;}
+function initPeople(s){
+ const b=s.bot;
+ return PEOPLE.map((p,i)=>{
+  const ox=clamp(b.x+p.dx,1,W-2),oy=clamp(b.y+p.dy,1,H-2);
+  let x=ox,y=oy;
+  for(let radius=0;radius<=8&&!walkable(s,x,y);radius++){
+   for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+    if(walkable(s,ox+dx,oy+dy)){x=ox+dx;y=oy+dy;break;}
+   }
+  }
+  return {id:i+1,name:p.name,role:p.role,x,y,homeX:x,homeY:y,
+   trust:22,mood:'wary',met:false,lastTalk:-1000,favorUntil:0,favorSpent:false,activity:'Patrolling',encounters:0};
+ });
+}
+function nearPerson(s,x,y,max=1){return (s.npcs||[]).find(p=>Math.abs(p.x-x)+Math.abs(p.y-y)<=max)||null;}
+function updatePeople(s){
+ if(s.tick%12!==0)return;
+ for(const p of s.npcs||[]){
+  if(p.favorUntil<=s.tick&&p.mood==='hopeful')p.mood='calm';
+  // One purposeful response per divine blessing, never direct player control.
+  if(p.favorUntil>s.tick&&!p.favorSpent){
+   p.favorSpent=true;
+   if(p.role==='Apothecary'||p.role==='Herbalist'){
+    let planted=0;
+    for(const [dx,dy] of [[1,0],[0,1],[-1,0],[0,-1]]){
+     const nx=p.x+dx,ny=p.y+dy;
+     if(inside(nx,ny)&&s.map[idx(nx,ny)]===T.GRASS){s.map[idx(nx,ny)]=T.BERRY;planted++;}
+    }
+    p.activity='Tending blessed herbs';
+    event(s,'Apothecary answered',p.name+' tended '+planted+' new enchanted herb patches.','god');
+   }else if(p.role==='Squire'){
+    const before=s.enemies.length;
+    s.enemies=s.enemies.filter(e=>Math.abs(e.x-p.x)+Math.abs(e.y-p.y)>4);
+    p.activity='Guarding the old road';
+    event(s,'Squire answered',p.name+' drove off '+(before-s.enemies.length)+' nearby beasts.','god');
+   }else{
+    // The scholar reveals one ruin without teleporting Nim or issuing orders.
+    let nearest=-1,best=1e9;
+    for(let j=0;j<N;j++)if(s.map[j]===T.RUIN&&!s.seen[j]){
+     const d=Math.abs(j%W-p.x)+Math.abs(Math.floor(j/W)-p.y);
+     if(d<best){nearest=j;best=d;}
+    }
+    if(nearest>=0)s.seen[nearest]=1;
+    p.activity='Deciphering a prophecy';
+    event(s,'Rune scholar answered',p.name+(nearest>=0?' revealed a distant ruin in a vision.':' deciphered an old prophecy.'),'god');
+   }
+   addMark(s,p.x,p.y,'inspire');
+  }
+  // Capped to three tiny local wandering agents; no global per-NPC path search.
+  const directions=[[0,0],...DIRS], [dx,dy]=directions[rint(s,directions.length)];
+  const nx=p.x+dx,ny=p.y+dy;
+  if(walkable(s,nx,ny)&&Math.abs(nx-p.homeX)+Math.abs(ny-p.homeY)<=9&&
+     !s.npcs.some(other=>other!==p&&other.x===nx&&other.y===ny)){
+    p.x=nx;p.y=ny;
+  }
+  if(p.favorUntil<=s.tick)p.activity=p.role==='Apothecary'?'Collecting herbs':p.role==='Squire'?'Patrolling':'Studying runes';
+ }
+}
+function meetPerson(s,p){
+ const b=s.bot;if(!p||s.tick-p.lastTalk<100)return false;
+ p.lastTalk=s.tick;p.met=true;p.encounters++;p.trust=clamp(p.trust+4,0,100);
+ const divine=p.favorUntil>s.tick;
+ let detail=p.name+' the '+p.role.toLowerCase()+' spoke with Nim.';
+ if(divine||p.trust>=50){
+  if(b.food<4){b.food+=2;detail+=' A helpful offering gave Nim two food.';}
+  else {b.energy=clamp(b.energy+10,0,100);detail+=' Words of comfort restored energy.';}
+ }else if(p.role==='Rune Scholar'||p.role==='Lorekeeper'){
+  detail+=' They shared a legend of the forgotten kingdom.';
+  improve(s,'lore',2);
+ }else if(p.role==='Squire'){
+  detail+=' They warned Nim about wolves on the old road.';
+ }else if(p.role==='Apothecary'||p.role==='Herbalist'){
+  detail+=' They taught Nim to recognize healing herbs.';
+  improve(s,'survival',1);
+ }
+ b.thought=divine?'Someone feels strangely blessed.':'There are other lives in this world.';
+ b.path=[];gain(s,3,'meeting '+p.name);improve(s,'lore',1);
+ remember(s,'Met '+p.name+', the '+p.role.toLowerCase());
+ event(s,'Encounter: '+p.name,detail,'event');addMark(s,p.x,p.y,'talk');
+ return true;
+}
 function terrain(s){const out=new Array(N);const key=s.seed>>>0;for(let y=0;y<H;y++)for(let x=0;x<W;x++){
  let n=0;for(let oy=-1;oy<=1;oy++)for(let ox=-1;ox<=1;ox++)n+=randomNoise(key,Math.floor(x/7)+ox,Math.floor(y/7)+oy)*(ox===0&&oy===0?4:1);n/=12;
  const j=randomNoise(key^0x5511,x,y);let t=T.GRASS;
@@ -159,7 +250,7 @@ function event(s,title,detail,type='event'){
  if(type==='milestone'){s.faith=clamp(s.faith+3,0,50);s.milestones++;}
 }
 function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
- map:[],seen:new Array(N).fill(0),enemies:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
+ map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
  bot:{name:'Nim',x:Math.floor(W/2),y:Math.floor(H/2),level:1,xp:0,hp:24,maxHp:24,hunger:86,energy:83,attack:4,defense:1,food:2,wood:0,stone:0,tool:0,
  goal:'Awakening',thought:'Where am I?',target:null,path:[],actionDelay:0,fights:0,ruins:0,scars:0,steps:0,
  personality:{curiosity:0.68,caution:0.42,diligence:0.57},memory:[]}};
@@ -170,7 +261,23 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,d
  s.map=terrain(s);for(let y=s.bot.y-3;y<=s.bot.y+3;y++)for(let x=s.bot.x-3;x<=s.bot.x+3;x++)if(inside(x,y))s.map[idx(x,y)]=T.GRASS;
  s.map[idx(s.bot.x+2,s.bot.y)]=T.BERRY;s.map[idx(s.bot.x-2,s.bot.y)]=T.FOREST;s.map[idx(s.bot.x,s.bot.y-2)]=T.STONE;
  for(let i=0;i<10;i++){const x=5+rint(s,W-10),y=5+rint(s,H-10);if(Math.abs(x-s.bot.x)+Math.abs(y-s.bot.y)>8 && s.map[idx(x,y)]!==T.WATER)s.map[idx(x,y)]=T.RUIN;}
- discover(s,s.bot.x,s.bot.y);event(s,'A spark awakens',`Nim, a ${origin.name}, opens their eyes in an unfamiliar world. ${origin.past}`,'milestone');
+ // A light medieval-fantasy world: paths, villages and shrines as logical tiles.
+ const addRoad=(x1,y1,x2,y2)=>{
+  let x=x1,y=y1;
+  while(x!==x2||y!==y2){
+   if(inside(x,y)&&[T.GRASS,T.MEADOW].includes(s.map[idx(x,y)]))s.map[idx(x,y)]=T.ROAD;
+   if(x!==x2)x+=x<x2?1:-1;else y+=y<y2?1:-1;
+  }
+ };
+ const villageSites=[[s.bot.x+5,s.bot.y+3],[s.bot.x-7,s.bot.y-3]];
+ for(const [x,y] of villageSites){
+  addRoad(s.bot.x,s.bot.y,x,y);
+  s.map[idx(x,y)]=T.VILLAGE;
+ }
+ for(const [x,y] of [[s.bot.x+10,s.bot.y-5],[s.bot.x-12,s.bot.y+7]]){
+  s.map[idx(x,y)]=T.SHRINE;
+ }
+ s.npcs=initPeople(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
  return s;}
 function discover(s,x,y){let count=0;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const xx=x+ox,yy=y+oy;if(!inside(xx,yy)||ox*ox+oy*oy>12)continue;const n=idx(xx,yy);if(!s.seen[n]){s.seen[n]=1;count++;}}return count;}
 function remember(s,subject){let m=s.bot.memory;if(m[m.length-1]!==subject){m.push(subject);if(m.length>12)m.shift();}}
@@ -186,11 +293,12 @@ function nearestEnemy(s){const b=s.bot;let best=null,dist=1e9;for(const e of s.e
 function setGoal(s,goal,thought,path){const b=s.bot;b.goal=goal;b.thought=thought;b.path=path||[];}
 function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(enemy.e&&enemy.dist<=1){if(b.hp< b.maxHp*.35 || b.energy<6){setGoal(s,'Escape','That beast is too dangerous!');return;}setGoal(s,'Defend','The beast is right beside me!');return;}
+ if(b.hunger<37&&b.food>0){setGoal(s,'Eat','My stomach is growling.');return;}
  if(b.hp<b.maxHp*.35){setGoal(s,'Recover','I need to recover.');return;}
  if(b.hunger<37&&b.food>0){setGoal(s,'Eat','My stomach is growling.');return;}
  if(b.energy<=28){setGoal(s,'Rest','My feet cannot go on.');return;}
  if(b.hunger<64 && b.food<=1){const p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','Find something edible.',p);return;}}
- if(!s.camp){if(b.wood>=5&&b.stone>=3){setGoal(s,'Build','I could make a shelter.');return;}
+ if(!s.camp){if(b.wood>=5&&b.stone>=3){const p=findPath(s,(x,y,t)=>t===T.GRASS||t===T.MEADOW);if(p){setGoal(s,'Build','I could make a shelter.',p);return;}}
  if(b.wood<5){let p=findPath(s,(x,y,t)=>t===T.FOREST);if(p){setGoal(s,'Gather wood','I need timber for shelter.',p);return;}}
  if(b.stone<3){let p=findPath(s,(x,y,t)=>t===T.STONE);if(p){setGoal(s,'Mine stone','Stones would make a strong hearth.',p);return;}}}
  if(s.camp&&b.tool===0){
@@ -200,6 +308,22 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(b.hunger<78&&b.food<3){let p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','I should pack some food.',p);return;}}
  if(s.guide&&s.guide.ticks>0){const gx=s.guide.x,gy=s.guide.y;if(!walkable(s,gx,gy)){s.guide=null;}else{const p=findPath(s,(x,y)=>x===gx&&y===gy);if(p){setGoal(s,'Follow omen','Something calls to me from afar.',p);return;}s.guide=null;}}
  if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
+ if(b.hunger>55&&b.energy>55&&Array.isArray(s.shrinesVisited)){
+  const route=findPath(s,(x,y,t)=>t===T.SHRINE&&!s.shrinesVisited.includes(idx(x,y)));
+  if(route&&route.length){setGoal(s,'Study shrine','Ancient magic sleeps in these stones.',route);return;}
+ }
+ // Nim may choose to socialize, but the god never steers the traveler directly.
+ if(b.hunger>44&&b.energy>45){
+  const npc=(s.npcs||[]).find(p=>{
+   const d=Math.abs(p.x-b.x)+Math.abs(p.y-b.y);
+   return d<=8 && (d<=1||s.seen[idx(p.x,p.y)]) &&
+    s.tick-p.lastTalk>=100 && (!p.met||p.favorUntil>s.tick);
+  });
+  if(npc){
+   const path=findPath(s,(x,y)=>Math.abs(x-npc.x)+Math.abs(y-npc.y)<=1);
+   if(path){setGoal(s,'Meet traveler','I wonder what '+npc.name+' knows.',path);return;}
+  }
+ }
  // Discovered ruins are meaningful goals; pursue unseen ones as exploration grows.
  if(b.energy>45&&b.hunger>40){const p=findPath(s,(x,y,t,n)=>t===T.RUIN&&s.seen[n]);if(p){setGoal(s,'Study ruins','There is something ancient here.',p);return;}}
  if(s.story&&Array.isArray(s.story.clues)){
@@ -220,12 +344,26 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
  if(e.hp<=0){s.enemies=s.enemies.filter(z=>z!==e);b.fights++;b.personality.caution=clamp(b.personality.caution-.006,.1,.9);improve(s,'combat',4);gain(s,10,'defeating '+e.type);if(rand(s)<.5)b.food++;event(s,'Creature defeated','Nim overcame a '+e.type+'.','event');remember(s,'Defeated a '+e.type);}
  return;}
  if(b.goal==='Escape'&&near.e){const e=near.e;let directions=DIRS.map(([dx,dy])=>[b.x+dx,b.y+dy]).filter(([x,y])=>walkable(s,x,y)&&!s.enemies.some(q=>q.x===x&&q.y===y));directions.sort((a,c)=>(Math.abs(c[0]-e.x)+Math.abs(c[1]-e.y))-(Math.abs(a[0]-e.x)+Math.abs(a[1]-e.y)));if(directions.length){botMove(s,...directions[0]);b.energy=clamp(b.energy-2,0,100);}else{b.hp-=1;} b.personality.caution=clamp(b.personality.caution+.001,.1,.9);b.path=[];return;}
+ if(s.map[idx(b.x,b.y)]===T.SHRINE&&!s.shrinesVisited.includes(idx(b.x,b.y))){
+  s.shrinesVisited.push(idx(b.x,b.y));
+  improve(s,'lore',4);gain(s,9,'discovering a shrine');
+  s.faith=clamp(s.faith+4,0,50);
+  event(s,'Sacred shrine','Nim studied ancient runes and the god gained four Faith.','milestone');
+  remember(s,'Visited shrine '+s.shrinesVisited.length);
+  return;
+ }
  if(b.path&&b.path.length){const [x,y]=b.path.shift();if(!walkable(s,x,y)){b.path=[];return;}botMove(s,x,y);return;}
+ if(b.goal==='Meet traveler'){
+  const npc=nearPerson(s,b.x,b.y,1);
+  if(npc&&meetPerson(s,npc))return;
+  b.path=[];return;
+ }
  const tile=s.map[idx(b.x,b.y)];
  if(b.goal==='Eat'){b.food--;improve(s,'survival',1);b.hunger=clamp(b.hunger+37,0,100);b.hp=clamp(b.hp+2,0,b.maxHp);b.thought='That was needed.';return;}
  if(b.goal==='Recover'||b.goal==='Rest'){b.energy=clamp(b.energy+(s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3?17:12),0,100);b.hp=clamp(b.hp+(s.camp?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
- if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First shelter','Nim built a small shelter at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
+ if(b.goal==='Build'&&(tile===T.GRASS||tile===T.MEADOW)){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First camp','Nim raised a canvas shelter and stone hearth at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
  if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');improve(s,'crafting',5);return;}
+
  if(tile===T.BERRY){b.food+=2+rint(s,2);s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'foraging');improve(s,'survival',2);b.thought='These berries will last a little while.';return;}
  if(tile===T.FOREST&&b.goal==='Gather wood'){b.wood+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'woodcutting');improve(s,'survival',2);return;}
  if(tile===T.STONE&&b.goal==='Mine stone'){b.stone+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'mining');improve(s,'survival',2);return;}
@@ -236,7 +374,7 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
   const hazard=rand(s)<.36;
   if(hazard){
    const detected=rand(s)<clamp(.19+b.personality.caution*.42+b.skills.scouting*.045,0,.88);
-   if(detected){b.tactics.trapsAvoided++;improve(s,'scouting',3);event(s,'Trap spotted','Nim avoided a hidden floor snare.');}
+   if(detected){b.tactics.trapsAvoided++;improve(s,'scouting',3);event(s,'Trap spotted','Nim recognized an ancient pressure-stone beneath the moss.');}
    else{const dmg=2+rint(s,4);b.hp-=dmg;b.tactics.trapsTriggered++;event(s,'Ruin trap','A concealed snare injured Nim for '+dmg+'.','danger');addMark(s,b.x,b.y,'hurt');}
   }
   if(s.story&&Array.isArray(s.story.clues)){
@@ -248,13 +386,13 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
      if(target&&target.length){const [tx,ty]=target[target.length-1];
       if(!s.story.clues.some(q=>q.x===tx&&q.y===ty)){
        const [title,detail]=LORE[(b.ruins-1)%LORE.length];s.story.clues.push({title,detail,x:tx,y:ty,solved:false});
-       event(s,'New rumor',title+': '+detail);
+       event(s,'Whispered legend',title+': '+detail);
       }
      }
     }
   }
   improve(s,'lore',5);gain(s,18,'exploring ruins');
-  event(s,'Ancient knowledge','Nim decoded a forgotten stone monument.','milestone');remember(s,'Found ruin #'+b.ruins);return;
+  event(s,'Ancient runes','Nim deciphered a monument of the lost kingdom.','milestone');remember(s,'Found ruin #'+b.ruins);return;
  }
  // Deterministic recovery for fully explored or depleted worlds; movement stays bounded.
  b.energy=clamp(b.energy+5,0,100);const p=findPath(s,(x,y,t)=>t===T.FOREST||t===T.BERRY||t===T.RUIN);if(p)b.path=p;
@@ -280,80 +418,229 @@ function updateEnemies(s){const b=s.bot;
  }
  revive(s);
 }
+// Scan the reachable component only at ecological intervals, never each frame.
+// A depleted island must recover without rewriting water, landmarks or old saves.
+function renewResources(s){
+ const land=[],counts={[T.BERRY]:0,[T.FOREST]:0,[T.STONE]:0};
+ findPath(s,(x,y,t,n)=>{if(t in counts)counts[t]++;if(t===T.GRASS||t===T.MEADOW)land.push(n);return false;});
+ for(const t of [T.BERRY,T.FOREST,T.STONE]){
+  const floor=t===T.BERRY?6:4;
+  while(counts[t]<floor&&land.length){const n=land.shift();s.map[n]=t;counts[t]++;}
+ }
+}
 function tick(s){s.tick++;revive(s);if(s.tick%240===0){s.day++;event(s,'Day '+s.day,'The world turns and Nim continues living.');}
  if(s.weatherUntil&&s.tick>=s.weatherUntil){s.weather='clear';s.weatherUntil=0;}
  if(s.tick%12===0){const b=s.bot;b.hunger=clamp(b.hunger-1,0,100);b.energy=clamp(b.energy-1,0,100);if(b.hunger===0)b.hp-=1;}
  if(s.tick%72===0)s.faith=clamp(s.faith+1,0,50);
- if(s.tick%93===0){for(let i=0;i<3;i++){let x=rint(s,W),y=rint(s,H),n=idx(x,y);if(s.map[n]===T.GRASS)s.map[n]=T.BERRY;}}
+ if(s.tick%93===0){renewResources(s);for(let i=0;i<3;i++){let x=rint(s,W),y=rint(s,H),n=idx(x,y);if(s.map[n]===T.GRASS)s.map[n]=T.BERRY;}}
  if(s.guide){s.guide.ticks--;if(s.guide.ticks<=0)s.guide=null;}
  s.marks=s.marks.filter(z=>z.until>s.tick);
  // Planning is deliberate: every movement step or completed action chooses what matters now.
  const b=s.bot;if(b.actionDelay>0)b.actionDelay--;
  if(s.tick%2===0){plan(s);botAct(s);updateEnemies(s);}
+ updatePeople(s);
  return s;}
-const COST={bless:4,gift:5,bloom:6,guide:3,storm:8};
+const COST={bless:4,gift:5,bloom:6,guide:3,storm:8,inspire:5};
 function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))return {ok:false,why:'Unknown power'};
  x=Math.floor(Number(x));y=Math.floor(Number(y));if(!inside(x,y))return {ok:false,why:'Choose a place on the map'};
  if(s.faith<COST[kind])return {ok:false,why:'Not enough Faith'};
  const b=s.bot;if(kind==='guide'&&!walkable(s,x,y))return {ok:false,why:'Nim cannot walk on water'};
+ const citizen=kind==='inspire'&&s.seen[idx(x,y)]?nearPerson(s,x,y,1):null;
+ if(kind==='inspire'&&citizen&&citizen.favorUntil>s.tick&&!citizen.favorSpent)return {ok:false,why:'Traveler is already answering an omen'};
+ if(kind==='inspire'&&!citizen)return {ok:false,why:'Choose a revealed traveler nearby'};
  s.faith-=COST[kind];if(kind==='bless'){b.hp=clamp(b.hp+12,0,b.maxHp);b.energy=clamp(b.energy+28,0,100);event(s,'Divine blessing','A warm light restores Nim.','god');addMark(s,b.x,b.y,'bless');}
  else if(kind==='gift'){b.food+=3;b.hunger=clamp(b.hunger+10,0,100);event(s,'Gift of sustenance','Three portions appear in Nim’s pack.','god');addMark(s,b.x,b.y,'gift');}
  else if(kind==='bloom'){let grows=0;for(let i=0;i<55&&grows<9;i++){let nx=x+rint(s,11)-5,ny=y+rint(s,11)-5;if(inside(nx,ny)&&s.map[idx(nx,ny)]===T.GRASS){s.map[idx(nx,ny)]=T.BERRY;grows++;}}
  s.weather='rain';s.weatherUntil=s.tick+120;event(s,'Rain of life',grows+' food bushes have sprouted.','god');addMark(s,x,y,'bloom');}
  else if(kind==='guide'){s.guide={x,y,ticks:300};event(s,'A divine whisper','Nim senses a direction in the wind.','god');addMark(s,x,y,'guide');}
+ else if(kind==='inspire'){
+  citizen.trust=clamp(citizen.trust+30,0,100);citizen.mood='hopeful';
+  citizen.favorUntil=s.tick+240;citizen.favorSpent=false;citizen.activity='Answering an omen';
+  event(s,'Divine inspiration',citizen.name+' witnesses an omen from the heavens and may offer Nim aid at their next meeting.','god');
+  addMark(s,citizen.x,citizen.y,'inspire');
+ }
  else if(kind==='storm'){let struck=0;s.enemies=s.enemies.filter(e=>{const d=Math.abs(e.x-x)+Math.abs(e.y-y);if(d<=3){struck++;return false;}return true;});event(s,'Judgment',struck?struck+' nearby hostile creatures dispersed.':'Lightning struck the empty earth.','god');addMark(s,x,y,'storm');}
  return {ok:true,kind,cost:COST[kind]};}
 function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!==N||!Array.isArray(s.seen)||s.seen.length!==N||!s.bot)return false;
- const b=s.bot;return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.CAMP)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10;}
+ const b=s.bot;
+ if(!['hp','maxHp','hunger','energy','food','wood','stone','tool','attack','defense','xp','steps','scars','ruins','fights'].every(k=>Number.isFinite(b[k])))return false;
+ if(!Number.isFinite(s.faith)||s.faith<0||s.faith>50||!Number.isInteger(s.day)||s.day<1)return false;
+ if(!Array.isArray(s.enemies)||!s.enemies.every(e=>e&&Number.isInteger(e.x)&&Number.isInteger(e.y)&&inside(e.x,e.y)&&['hp','attack','defense','cooldown','id'].every(k=>Number.isFinite(e[k]))))return false;
+ return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
 function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
-function restore(raw){try{const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
- progress(s.bot);s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
+function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
+ progress(s.bot);
+ // Migration: v0.1/v0.2 saves had no inhabitants. Keep old save schema intact.
+ s.npcs=Array.isArray(s.npcs)?s.npcs.slice(0,3):initPeople(s);
+ s.npcs=s.npcs.filter(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&walkable(s,p.x,p.y)).map(p=>({
+  id:clamp(Number(p.id)||1,1,3),name:String(p.name||'Traveler').slice(0,32),
+  role:String(p.role||'Wanderer').slice(0,32),x:p.x,y:p.y,
+  homeX:inside(p.homeX,p.homeY)?p.homeX:p.x,
+  homeY:inside(p.homeX,p.homeY)?p.homeY:p.y,
+  trust:clamp(Number(p.trust)||0,0,100),
+  mood:['wary','calm','hopeful'].includes(p.mood)?p.mood:'calm',
+  met:!!p.met,lastTalk:Number.isFinite(p.lastTalk)?p.lastTalk:-1000,
+  favorUntil:Number.isFinite(p.favorUntil)?p.favorUntil:0,favorSpent:!!p.favorSpent,activity:String(p.activity||'Patrolling').slice(0,48),encounters:clamp(Number(p.encounters)||0,0,10000)
+ }));
+ s.shrinesVisited=Array.isArray(s.shrinesVisited)?s.shrinesVisited.filter(n=>Number.isInteger(n)&&n>=0&&n<N).slice(0,8):[];
+ s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
  s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
-return {W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,create,tick,power,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve};
+return {W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
 });
 </script>
 <script>/* GODSEED UI: intentionally dependency-free and low-resolution. */
 (function(){'use strict';
 const A=window.GodseedSim; if(!A)throw new Error('GODSEED simulation missing');
-const $=id=>document.getElementById(id),size=16,VW=36,VH=22;
-const canvas=$('world'),ctx=canvas.getContext('2d',{alpha:false}),mini=$('minimap'),mctx=mini.getContext('2d',{alpha:false});
-ctx.imageSmoothingEnabled=false;mctx.imageSmoothingEnabled=false;
+const $=id=>document.getElementById(id),size=16;
+const ZOOMS=[{name:'Cerca',w:24,h:15},{name:'Muy cerca',w:16,h:10},{name:'Panorama',w:32,h:20}];
+let zoomIndex=0,VW=ZOOMS[0].w,VH=ZOOMS[0].h;
+const canvas=$('world'),screenCtx=canvas.getContext('2d',{alpha:false}),mini=$('minimap'),mctx=mini.getContext('2d',{alpha:false});
+const scenery=document.createElement('canvas');scenery.width=canvas.width;scenery.height=canvas.height;
+const sceneryCtx=scenery.getContext('2d',{alpha:false});let ctx=screenCtx,sceneX=-1,sceneY=-1;
+let oldCells=new Int16Array(VW*VH);oldCells.fill(-99);
+screenCtx.imageSmoothingEnabled=false;sceneryCtx.imageSmoothingEnabled=false;mctx.imageSmoothingEnabled=false;
 const SAVE_KEY='godseed-one-small-life-v1';let s,mode='inspect',camX=0,camY=0,lastDraw=0,lastHUD=0,lastSave=0,acc=0,frameLast=0,hover=null,flashMessage='',flashUntil=0;
 try{s=A.restore(localStorage.getItem(SAVE_KEY));}catch(_){s=null}if(!s)s=A.create(Math.floor(Date.now()/1000));
+function setZoom(next){
+ zoomIndex=(next+ZOOMS.length)%ZOOMS.length;
+ ({w:VW,h:VH}=ZOOMS[zoomIndex]);
+ canvas.width=scenery.width=VW*size;canvas.height=scenery.height=VH*size;
+ screenCtx.imageSmoothingEnabled=false;sceneryCtx.imageSmoothingEnabled=false;
+ oldCells=new Int16Array(VW*VH);oldCells.fill(-99);sceneX=-1;sceneY=-1;
+ camX=Math.max(0,Math.min(A.W-VW,camX));camY=Math.max(0,Math.min(A.H-VH,camY));
+ const z=$('zoom');if(z){z.textContent='Zoom: '+ZOOMS[zoomIndex].name;z.setAttribute('aria-label','Zoom de cámara: '+ZOOMS[zoomIndex].name);}
+ const status=$('zoomStatus');if(status)status.textContent=ZOOMS[zoomIndex].name+' · '+VW+' × '+VH+' casillas';
+}
+setZoom(0);
 const setMode=v=>{mode=v;document.querySelectorAll('[data-power]').forEach(b=>{b.classList.toggle('active',b.dataset.power===mode);b.setAttribute('aria-pressed',String(b.dataset.power===mode));});$('instruction').textContent=(v==='inspect'?'Inspect a tile by clicking the world.':`Select a tile to use ${v.toUpperCase()}.`);};
 const html=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function notify(message){flashMessage=message;flashUntil=Date.now()+2700;$('toast').textContent=message;$('toast').classList.add('show');}
 function stamp(s){const hour=Math.floor((s.tick%240)/10),min=Math.floor((s.tick%10)*6);return `DAY ${s.day} · ${String(hour).padStart(2,'0')}:${String(min).padStart(2,'0')}`;}
-const colors=['#375648','#234a3b','#26536a','#62635e','#3d6846','#837458','#638653','#725338'];
+const colors=['#3c5c43','#254b3a','#26536a','#62635e','#426c49','#837458','#688b57','#725338','#8b7e60','#76664c','#574f68'];
 const hash=(x,y)=>((Math.imul(x+91,374761393)^Math.imul(y+37,668265263))>>>0);
 function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
 function dot(x,y,c){rect(x,y,1,1,c);}
 function drawTile(tile,x,y,wx,wy){let v=hash(wx,wy);rect(x,y,size,size,colors[tile]);
- if(tile===A.T.WATER){rect(x,y+7,16,1,'#366b85');rect(x+(v%8),y+4,5,1,'#6ba5a9');if(v%3===0)rect(x+2,y+12,4,1,'#4d8499');return;}
- if(tile===A.T.FOREST){rect(x+4,y+7,8,7,'#75583c');rect(x+2,y+5,12,6,'#1d3c31');rect(x+1,y+2,11,7,'#2d7750');rect(x+5,y+1,7,6,'#38815c');rect(x+4,y+4,2,2,'#66a575');return;}
- if(tile===A.T.STONE){rect(x+2,y+10,13,5,'#3e4448');rect(x+4,y+5,10,8,'#90958a');rect(x+6,y+4,5,2,'#a3aa99');rect(x+11,y+9,3,3,'#66746c');return;}
- if(tile===A.T.BERRY){rect(x+4,y+10,8,4,'#27563c');rect(x+3,y+5,10,8,'#4c9c5b');rect(x+6,y+4,6,6,'#2b7348');dot(x+4,y+7,'#e99b85');rect(x+10,y+9,2,2,'#f49c90');return;}
- if(tile===A.T.RUIN){rect(x+2,y+9,12,6,'#454843');rect(x+4,y+2,9,10,'#a8a38e');rect(x+6,y+4,5,1,'#dfc9a4');rect(x+7,y+6,2,5,'#555f56');dot(x+12,y+10,'#c1b49c');return;}
- if(tile===A.T.CAMP){rect(x+1,y+13,14,2,'#2e2b25');rect(x+2,y+8,11,5,'#775039');rect(x+7,y+2,6,11,'#cb9f64');rect(x+2,y+7,12,2,'#d4b77f');rect(x+4,y+10,3,3,'#332d22');return;}
- if(tile===A.T.MEADOW){rect(x+2,y+11,2,3,'#a3ba77');rect(x+11,y+8,2,3,'#b1d48c');dot(x+8,y+6,'#eacb81');dot(x+10,y+12,'#ebd0a1');return;}
+ // Each motif is at most a few rectangles, stamped to a cached 576x352 canvas.
+ if(tile===A.T.ROAD){
+  rect(x,y+4,16,9,'#a59a76');rect(x,y+5,16,1,'#c4b68e');
+  rect(x+(v%7),y+7,4,2,'#817661');rect(x+9,y+11,5,1,'#d3b58c');
+  if(v%3===0){dot(x+2,y+2,'#7da06e');dot(x+14,y+14,'#7da06e');}return;
+ }
+ if(tile===A.T.VILLAGE){
+  rect(x+1,y+13,14,2,'#332e2c');rect(x+2,y+7,12,7,'#a98c65');
+  rect(x+2,y+7,2,6,'#e3c18e');rect(x+12,y+7,2,6,'#e3c18e');
+  rect(x+6,y+10,4,4,'#40362f');rect(x+3,y+9,2,2,'#e8c97b');
+  rect(x+10,y+9,2,2,'#e8c97b');
+  rect(x+1,y+5,14,3,'#694b46');rect(x+3,y+3,10,3,'#995d50');
+  rect(x+5,y+2,6,2,'#bd7960');dot(x+7,y+3,'#e2b17b');return;
+ }
+ if(tile===A.T.SHRINE){
+  rect(x+1,y+13,14,2,'#2a2c34');rect(x+3,y+10,10,3,'#85808f');
+  rect(x+5,y+3,6,9,'#9b99a9');rect(x+4,y+2,8,2,'#d0c2af');
+  rect(x+7,y+5,2,5,'#4e7489');rect(x+6,y+6,1,3,'#e3d29d');
+  rect(x+9,y+6,1,3,'#e3d29d');rect(x+2,y+8,2,3,'#6c816c');
+  dot(x+8,y+1,'#d9d6b6');return;
+ }
+ // All ground motifs are deterministic rectangles; no image assets, shaders or allocations.
+ if(tile===A.T.GRASS){if(v%5===0){rect(x+3,y+10,2,4,'#73936a');rect(x+12,y+6,1,3,'#a1aa73');}
+  if(v%17===0){rect(x+9,y+9,3,2,'#837b68');rect(x+10,y+8,1,1,'#a39a7d');}
+  if(v%29===0){rect(x+6,y+5,3,2,'#c4a66b');dot(x+5,y+5,'#b2bd8b');}return;}
+ if(tile===A.T.WATER){rect(x,y+7,16,1,'#366b85');rect(x+(v%8),y+4,5,1,'#6ba5a9');if(v%3===0)rect(x+2,y+12,4,1,'#4d8499');
+  if(v%7===0){rect(x+11,y+11,3,1,'#b1c8ad');}return;}
+ if(tile===A.T.FOREST){rect(x+3,y+13,13,2,'#1b352a');rect(x+5,y+7,6,8,'#75583c');
+  rect(x+2,y+5,12,7,'#1d3c31');rect(x+(v%3),y+2,12,7,'#2d7750');
+  rect(x+5,y+1,7,6,v%3?'#38815c':'#51845e');rect(x+4,y+4,2,2,'#78a777');
+  if(v%8===0){rect(x+12,y+12,2,2,'#d6b08a');}return;}
+ if(tile===A.T.STONE){rect(x+1,y+13,14,2,'#303b3c');rect(x+2,y+10,13,5,'#3e4448');
+  rect(x+4,y+5,10,8,'#90958a');rect(x+6,y+4,5,2,'#bdc4b1');
+  rect(x+11,y+9,3,3,'#66746c');if(v%3===0){rect(x+2,y+2,4,2,'#666f66');}return;}
+ if(tile===A.T.BERRY){rect(x+4,y+11,9,3,'#254a36');rect(x+3,y+5,10,8,'#4c9c5b');
+  rect(x+6,y+4,6,6,'#2b7348');dot(x+4,y+7,'#e99b85');
+  rect(x+10,y+9,2,2,'#f49c90');if(v%2===0)dot(x+8,y+6,'#f9bd91');return;}
+ if(tile===A.T.RUIN){rect(x+1,y+12,14,3,'#353c36');rect(x+2,y+9,12,6,'#454843');
+  rect(x+4,y+2,9,10,'#a8a38e');rect(x+6,y+4,5,1,'#dfc9a4');
+  rect(x+7,y+6,2,5,'#555f56');dot(x+12,y+10,'#c1b49c');
+  rect(x+2,y+3,2,3,'#62685a');rect(x+13,y+11,2,2,'#c4b98e');
+  // Rune glyph is carved into the ancient stone, not a costly animated particle.
+  dot(x+8,y+2,'#74b9aa');rect(x+8,y+3,1,2,'#74b9aa');return;}
+ if(tile===A.T.CAMP){rect(x+1,y+13,14,2,'#2e2b25');rect(x+2,y+8,11,5,'#775039');
+  rect(x+7,y+2,6,11,'#cb9f64');rect(x+2,y+7,12,2,'#d4b77f');
+  rect(x+4,y+10,3,3,'#332d22');dot(x+8,y+1,'#d9d4b3');
+  rect(x+12,y+11,2,3,'#f4a85c');dot(x+13,y+10,'#edcf76');return;}
+ if(tile===A.T.MEADOW){rect(x+2,y+11,2,3,'#a3ba77');rect(x+11,y+8,2,3,'#b1d48c');
+  dot(x+8,y+6,'#eacb81');dot(x+10,y+12,'#ebd0a1');
+  if(v%4===0){rect(x+4,y+6,2,3,'#b5b688');dot(x+4,y+5,'#eabca0');}return;}
  dot(x+1+(v%12),y+2+((v>>>6)%12),'#50765b');if(v%4===0)dot(x+10,y+4,'#729478');
 }
-function drawBot(cx,cy,worldTime){const p=worldTime%6<3?0:1;rect(cx+4,cy+13,10,2,'#1c2926');rect(cx+5,cy+3,7,4,'#dfb482');rect(cx+6,cy+1,6,3,'#77533d');rect(cx+4,cy+7,9,5,'#e3c573');rect(cx+3,cy+8,2,3,'#af865d');rect(cx+12,cy+8,2,3,'#af865d');rect(cx+5,cy+12,3,2+p,'#453d38');rect(cx+10,cy+12,3,3-p,'#453d38');dot(cx+10,cy+4,'#302c29');}
+function drawBot(cx,cy,worldTime){
+ const step=worldTime%6<3?0:1;
+ // Overhead two-dimensional sprite: hair/face, cloak, satchel, feet and a readable silhouette.
+ rect(cx+2,cy+13,13,2,'#1c3029');
+ rect(cx+6,cy+12,3,3-step,'#423e37');rect(cx+11,cy+12+step,3,2,'#423e37');
+ rect(cx+4,cy+7,11,6,'#516d5b');rect(cx+6,cy+8,6,5,'#d3b675');
+ rect(cx+3,cy+8,2,3,'#a77956');rect(cx+14,cy+8,2,3,'#a77956');
+ rect(cx+12,cy+9,3,4,'#986d45');dot(cx+13,cy+10,'#e5cb91');
+ rect(cx+5,cy+3,9,6,'#d8aa83');rect(cx+5,cy+2,9,3,'#594639');
+ rect(cx+4,cy+4,2,3,'#75523d');rect(cx+13,cy+4,2,3,'#75523d');
+ rect(cx+7,cy+3,4,1,'#947354');dot(cx+7,cy+7,'#2c3735');dot(cx+12,cy+7,'#2c3735');
+}
 function drawEnemy(x,y,e){rect(x+2,y+13,13,2,'#1b2b27');if(e.type==='Boar'){rect(x+2,y+6,12,7,'#b67a57');rect(x+10,y+3,4,5,'#d1a174');rect(x+3,y+5,3,2,'#7a4c36');dot(x+12,y+7,'#292424');rect(x+2,y+12,3,2,'#6b4534');}else{rect(x+3,y+7,10,6,'#a88473');rect(x+4,y+3,3,6,'#cab096');rect(x+10,y+3,3,6,'#cab096');rect(x+5,y+7,2,2,'#edcf9b');rect(x+10,y+7,2,2,'#edcf9b');dot(x+6,y+7,'#222');dot(x+11,y+7,'#222');}}
+function drawPerson(x,y,p){
+ const coat=['Apothecary','Herbalist'].includes(p.role)?'#819c72':['Rune Scholar','Lorekeeper'].includes(p.role)?'#846d9c':'#9b9e96';
+ rect(x+3,y+13,11,2,'#22342c');rect(x+6,y+2,7,6,'#d8aa82');
+ rect(x+5,y+1,9,3,['Rune Scholar','Lorekeeper'].includes(p.role)?'#b1a0c5':'#66503b');
+ rect(x+4,y+8,10,5,coat);rect(x+3,y+9,2,3,'#d7b08c');
+ rect(x+12,y+9,2,3,'#d7b08c');rect(x+5,y+13,3,2,'#433d34');
+ rect(x+10,y+13,3,2,'#433d34');
+ // Guild silhouettes: shield for Squire, rune for Scholar, satchel for Apothecary.
+ if(p.role==='Squire'){rect(x+13,y+4,3,7,'#afb9af');rect(x+14,y+5,1,5,'#f0debd');}
+ if(p.role==='Rune Scholar'){rect(x+5,y+3,8,1,'#b2b0dd');rect(x+3,y+11,3,4,'#dbcda2');}
+ if(p.role==='Apothecary'){rect(x+12,y+10,4,4,'#82705b');dot(x+13,y+10,'#b5daa3');}
+ // A tiny readable heraldic insignia distinguishes medieval professions.
+ if(p.role==='Squire')rect(x+8,y+9,3,4,'#c8c9b7');
+ if(p.role==='Rune Scholar')dot(x+8,y+10,'#e6d39c');
+ if(p.role==='Apothecary')dot(x+8,y+9,'#c1eab5');
+ if(p.favorUntil>s.tick){rect(x+7,y-2,4,2,'#f2dc88');dot(x+5,y,'#f3e8ad');}
+}
+function updateScenery(){
+ let changed=camX!==sceneX||camY!==sceneY,k=0;
+ for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
+  const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy);
+  const tile=s.seen[n]?s.map[n]+1:0;
+  if(oldCells[k]!==tile){oldCells[k]=tile;changed=true;}k++;
+ }
+ if(!changed)return;
+ sceneX=camX;sceneY=camY;
+ ctx=sceneryCtx;
+ for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
+  const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy),x=rx*size,y=ry*size;
+  if(!s.seen[n]){drawTile(s.map[n],x,y,wx,wy);rect(x,y,size,size,'rgba(6,16,24,.72)');if(hash(wx,wy)%13===0)rect(x+7,y+7,2,2,'#425058');continue;}
+  drawTile(s.map[n],x,y,wx,wy);
+  // Light beaches and rocky shorelines make biome transitions readable.
+  if(s.map[n]!==A.T.WATER&&wy>0&&s.map[A.idx(wx,wy-1)]===A.T.WATER)
+   rect(x,y,16,2,'#b0a576');
+  if(s.map[n]!==A.T.WATER&&wx>0&&s.map[A.idx(wx-1,wy)]===A.T.WATER)
+   rect(x,y,2,16,'#918b6c');
+ }
+ ctx=screenCtx;
+}
 function positionCamera(){if(s.settings.follow){camX=Math.max(0,Math.min(A.W-VW,s.bot.x-(VW>>1)));camY=Math.max(0,Math.min(A.H-VH,s.bot.y-(VH>>1)));}}
-function draw(){positionCamera();const b=s.bot;
- for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy),x=rx*size,y=ry*size;
- if(!s.seen[n]){rect(x,y,16,16,'#141e22');if(hash(wx,wy)%13===0)rect(x+7,y+7,2,2,'#233238');continue;}
- drawTile(s.map[n],x,y,wx,wy);
- if(s.seen[n]&&((s.tick%240)>172||(s.tick%240)<42))rect(x,y,16,16,'rgba(8,23,38,.13)');
+function draw(){positionCamera();const b=s.bot;updateScenery();
+ ctx.drawImage(scenery,0,0);
+ if((s.tick%240)>172||(s.tick%240)<42)rect(0,0,canvas.width,canvas.height,'rgba(8,23,38,.18)');
+ if(s.weather==='rain'){
+  for(let i=0;i<35;i++){const x=(i*97+s.tick*3)%canvas.width,y=(i*71+s.tick*5)%canvas.height;
+   rect(x,y,1,4,'rgba(172,201,205,.36)');}
  }
  if(s.guide&&s.guide.x>=camX&&s.guide.x<camX+VW&&s.guide.y>=camY&&s.guide.y<camY+VH){const x=(s.guide.x-camX)*16,y=(s.guide.y-camY)*16;rect(x,y,16,1,'#e4d386');rect(x,y+15,16,1,'#e4d386');rect(x,y,1,16,'#e4d386');rect(x+15,y,1,16,'#e4d386');}
+ for(const p of s.npcs||[])if(p.x>=camX&&p.x<camX+VW&&p.y>=camY&&p.y<camY+VH&&s.seen[A.idx(p.x,p.y)])drawPerson((p.x-camX)*16,(p.y-camY)*16,p);
  for(const e of s.enemies)if(e.x>=camX&&e.x<camX+VW&&e.y>=camY&&e.y<camY+VH&&s.seen[A.idx(e.x,e.y)])drawEnemy((e.x-camX)*16,(e.y-camY)*16,e);
  if(b.x>=camX&&b.x<camX+VW&&b.y>=camY&&b.y<camY+VH){const px=(b.x-camX)*16,py=(b.y-camY)*16;rect(px+1,py+14,14,1,'#cfdda2');drawBot(px,py,s.tick>>1);ctx.fillStyle='#f0e0a2';ctx.font='bold 8px monospace';ctx.textAlign='center';ctx.fillText('NIM',px+8,py-3);ctx.textAlign='start';}
- for(const m of s.marks){if(m.x<camX||m.x>=camX+VW||m.y<camY||m.y>=camY+VH)continue;const xx=(m.x-camX)*16,yy=(m.y-camY)*16,c=({hit:'#e9dd88',hurt:'#ee7770',evade:'#88ccdb',parry:'#d1bb7c',bless:'#c4f7aa',gift:'#f1cb8d',bloom:'#85dbbb',guide:'#ddda92',storm:'#c6dffc'})[m.kind];rect(xx+2,yy+2,12,2,c);rect(xx+2,yy+12,12,2,c);rect(xx+2,yy+2,2,12,c);rect(xx+12,yy+2,2,12,c);}
+ for(const m of s.marks){if(m.x<camX||m.x>=camX+VW||m.y<camY||m.y>=camY+VH)continue;const xx=(m.x-camX)*16,yy=(m.y-camY)*16,c=({hit:'#e9dd88',hurt:'#ee7770',evade:'#88ccdb',parry:'#d1bb7c',bless:'#c4f7aa',gift:'#f1cb8d',bloom:'#85dbbb',guide:'#ddda92',storm:'#c6dffc',talk:'#f1c4a9',inspire:'#fff2a0'})[m.kind];rect(xx+2,yy+2,12,2,c);rect(xx+2,yy+12,12,2,c);rect(xx+2,yy+2,2,12,c);rect(xx+12,yy+2,2,12,c);}
  if(hover&&hover.x>=camX&&hover.x<camX+VW&&hover.y>=camY&&hover.y<camY+VH){const xx=(hover.x-camX)*16,yy=(hover.y-camY)*16;rect(xx,yy,16,1,'#efe2ac');rect(xx,yy+15,16,1,'#efe2ac');rect(xx,yy,1,16,'#efe2ac');rect(xx+15,yy,1,16,'#efe2ac');}
- $('coordinates').textContent=`${b.x}, ${b.y} · ${A.TILE_NAMES[s.map[A.idx(b.x,b.y)]]}`;
+ $('coordinates').textContent=`${b.x}, ${b.y} · ${A.TILE_NAMES[s.map[A.idx(b.x,b.y)]]} · ${ZOOMS[zoomIndex].name}`;
 }
 function drawMini(){const image=mctx.createImageData(A.W,A.H);for(let i=0;i<A.N;i++){const t=s.map[i],c=s.seen[i]?colors[t]:'#121c20';const k=i*4;image.data[k]=parseInt(c.slice(1,3),16);image.data[k+1]=parseInt(c.slice(3,5),16);image.data[k+2]=parseInt(c.slice(5,7),16);image.data[k+3]=255;}mctx.putImageData(image,0,0);mctx.fillStyle='#f9e6b2';mctx.fillRect(s.bot.x,s.bot.y,1,1);mctx.strokeStyle='#d9d8ab';mctx.lineWidth=.5;mctx.strokeRect(camX+.25,camY+.25,VW-.5,VH-.5);}
 function bar(label,n,max=100){const pct=Math.round(Math.max(0,Math.min(1,n/max))*100);return `<div class="stat"><div class="stathead"><span>${label}</span><b>${Math.round(n)} / ${Math.round(max)}</b></div><div class="track"><i style="width:${pct}%" class="${label.toLowerCase().split(' ')[0]}"></i></div></div>`;}
@@ -367,6 +654,8 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('skillRanks').textContent=A.SKILLS.map(k=>k.toUpperCase().slice(0,3)+' '+b.skills[k]).join(' · ');
  $('adventures').textContent=`${s.story.completed} rumors solved · ${s.story.clues.filter(q=>!q.solved).length} leads · ${b.tactics.dodge} dodges · ${b.tactics.parry} parries · ${b.tactics.trapsAvoided} traps avoided`;
  $('lead').textContent=(s.story.clues.find(q=>!q.solved)||{}).title||'No active legend';
+ $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · '+(p.activity||'Patrullando')+' · Confianza '+Math.round(p.trust)).join('  •  ')||'Sin viajeros todavía';
+ $('milestones').title=(s.shrinesVisited||[]).length+' santuarios antiguos visitados';
  $('memory').textContent=b.memory.length?b.memory.slice(-4).reverse().join('  •  '):'Learning about the world…';
  $('milestones').textContent=`${b.steps} steps · ${b.fights} wins · ${b.ruins} ruins · ${b.scars} second chances`;
  $('events').innerHTML=s.log.slice(0,9).map(e=>`<div class="event ${html(e.type)}"><span class="evt-time">D${1+Math.floor(e.tick/240)}</span><div><strong>${html(e.title)}</strong><small>${html(e.detail)}</small></div></div>`).join('');
@@ -409,12 +698,14 @@ function tileFromPointer(e){
  return ix<0||iy<0||ix>=VW||iy>=VH?{x:-1,y:-1}:{x:camX+ix,y:camY+iy};
 }
 canvas.addEventListener('pointermove',e=>{hover=tileFromPointer(e);});canvas.addEventListener('pointerleave',()=>{hover=null;});
-canvas.addEventListener('click',e=>{let {x,y}=tileFromPointer(e);if(!A.inside(x,y))return;if(mode==='inspect'){const near=s.enemies.find(z=>z.x===x&&z.y===y),t=A.TILE_NAMES[s.map[A.idx(x,y)]];let message=`(${x},${y}) ${s.seen[A.idx(x,y)]?t:'Unexplored'}`+(near?` · ${near.type} ${near.hp} HP`:'');notify(message);$('inspect').textContent=message;return;}
+canvas.addEventListener('click',e=>{let {x,y}=tileFromPointer(e);if(!A.inside(x,y))return;if(mode==='inspect'){const known=s.seen[A.idx(x,y)],near=known?s.enemies.find(z=>z.x===x&&z.y===y):null,person=known?(s.npcs||[]).find(z=>z.x===x&&z.y===y):null,t=A.TILE_NAMES[s.map[A.idx(x,y)]];let message=`(${x},${y}) ${s.seen[A.idx(x,y)]?t:'Unexplored'}`+(near?` · ${near.type} ${near.hp} HP`:'')+(person?` · ${person.name} (${person.role}) · ${person.mood} · Trust ${Math.round(person.trust)}`:'');notify(message);$('inspect').textContent=message;return;}
  const r=A.power(s,mode,x,y);notify(r.ok?`${mode.toUpperCase()} used. -${r.cost} Faith`:r.why);if(r.ok){save();hud();draw();}});
 mini.addEventListener('click',e=>{const r=mini.getBoundingClientRect(),x=Math.floor((e.clientX-r.left)*A.W/r.width),y=Math.floor((e.clientY-r.top)*A.H/r.height);s.settings.follow=false;camX=Math.max(0,Math.min(A.W-VW,x-(VW>>1)));camY=Math.max(0,Math.min(A.H-VH,y-(VH>>1)));hud();draw();});
 document.querySelectorAll('[data-power]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.power)));
 document.querySelectorAll('[data-speed]').forEach(b=>b.addEventListener('click',()=>{s.settings.speed=Number(b.dataset.speed);hud();notify(s.settings.speed===0?'Time paused.':`Time running at ${s.settings.speed}×.`);}));
 $('follow').addEventListener('click',()=>{s.settings.follow=!s.settings.follow;hud();draw();});
+$('zoom').addEventListener('click',()=>{setZoom(zoomIndex+1);hud();draw();notify('Cámara '+ZOOMS[zoomIndex].name+' · Nim sigue actuando solo.');});
+$('zoomDock').addEventListener('click',()=>$('zoom').click());
 $('save').addEventListener('click',()=>{save();notify('World saved.');});$('export').addEventListener('click',()=>backupDialog('export'));
 $('import').addEventListener('click',()=>backupDialog('import'));$('importFile').addEventListener('change',e=>{importSave(e.target.files[0]);e.target.value='';});
 $('reset').addEventListener('click',()=>{if(confirm('Create a new world? Current progress will be overwritten. Export a backup first if needed.')){s=A.create((Date.now()>>>0)^Math.floor(Math.random()*10000000));save();hud();draw();notify('A new life begins.');}});
@@ -422,9 +713,10 @@ $('step').addEventListener('click',()=>{A.tick(s);hud();draw();});
 window.addEventListener('keydown',e=>{if(e.target&&['INPUT','TEXTAREA'].includes(e.target.tagName))return;
  if(e.code==='Space'){e.preventDefault();s.settings.speed=s.settings.speed===0?1:0;hud();}
  if(e.key.toLowerCase()==='f'){$('follow').click();}
+ if(e.key.toLowerCase()==='z'){$('zoom').click();}
  if(e.key==='.'||e.key==='>'){$('step').click();}
  if(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();s.settings.follow=false;camX=Math.max(0,Math.min(A.W-VW,camX+(e.key==='ArrowLeft'?-3:e.key==='ArrowRight'?3:0)));camY=Math.max(0,Math.min(A.H-VH,camY+(e.key==='ArrowUp'?-3:e.key==='ArrowDown'?3:0)));hud();draw();}
- if(/^[0-5]$/.test(e.key)){const names=['inspect','bless','gift','bloom','guide','storm'];setMode(names[Number(e.key)]);}
+ if(/^[0-6]$/.test(e.key)){const names=['inspect','bless','gift','bloom','guide','storm','inspire'];setMode(names[Number(e.key)]);}
 });
 let active=true;document.addEventListener('visibilitychange',()=>{active=!document.hidden;frameLast=0;acc=0;if(!active)save();});window.addEventListener('beforeunload',save);
 function frame(ts){requestAnimationFrame(frame);if(!active)return;if(!frameLast)frameLast=ts;const dt=Math.min(.15,Math.max(0,(ts-frameLast)/1000));frameLast=ts;acc+=dt*4*s.settings.speed;let loops=0;while(acc>=1&&loops<32){A.tick(s);acc-=1;loops++;}if(loops===32)acc=0;
@@ -433,7 +725,7 @@ function frame(ts){requestAnimationFrame(frame);if(!active)return;if(!frameLast)
  if(ts-lastSave>16000){save();lastSave=ts;}
  if(flashUntil&&Date.now()>flashUntil){$('toast').classList.remove('show');flashUntil=0;}}
 setMode('inspect');hud();draw();requestAnimationFrame(frame);
-window.GodseedDebug={getState:()=>s,setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
+window.GodseedDebug={getState:()=>s,getCamera:()=>({x:camX,y:camY,width:VW,height:VH,zoom:ZOOMS[zoomIndex].name}),setZoom:(i)=>{setZoom(i);hud();draw();},setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
 })();
 </script>
 </body></html>
