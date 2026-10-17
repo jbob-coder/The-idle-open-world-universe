@@ -1,8 +1,8 @@
-name: GODSEED medieval Android landscape captures
+name: GODSEED sky view Android landscape captures
 on:
   push:
     branches:
-      - feat/living-world-divine-v0.3
+      - feat/skyview-zoom-v0.4
     paths:
       - 'src/**'
       - 'index.template.html'
@@ -32,7 +32,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: godseed-medieval-browser-captures
+          name: godseed-skyview-browser-captures
           path: qa-screenshots/
           if-no-files-found: warn
           retention-days: 14

@@ -4,6 +4,12 @@
 
 ![720×400 gameplay preview](assets/godseed-android-landscape-720x400.png)
 
+## GODSEED v0.4 — Cámara cenital ampliada (experimental)
+
+La nueva rama `feat/skyview-zoom-v0.4` incorpora una vista **top-down** sin ángulo 3D y cámara centrada en Nim. El zoom predeterminado muestra **24×15 casillas**; el botón táctil `Zoom` o la tecla **Z** alternan **Muy cerca (16×10)** y **Panorama (32×20)**. Nim y los viajeros aparecen como personajes 2D medievales mejor diferenciados, y el jugador sigue siendo un **dios observador**, no controla directamente a Nim.
+
+Se probó el funcionamiento del zoom y el encaje de diez controles táctiles a 640×360, 720×400 y 960×540 en Chromium. Los controles siguen siendo offline. La rama experimental construye una **APK v0.4 de depuración** que requiere todavía pruebas en un teléfono Android real. [Ver alcance, pruebas y los siguientes cinco trabajos](docs/SKYVIEW_CAMERA_V04.md).
+
 ## GODSEED en español — el jugador es el dios
 
 **Un mundo vivo. Un solo personaje. Tú observas e influyes.** GODSEED es un juego de simulación y aventura RPG de píxeles, pensado para Android antiguo, sin conexión a internet y con controles táctiles en horizontal.

@@ -30,7 +30,7 @@ with sync_playwright() as pw:
         assert page.locator("#world").is_visible(), "world canvas not visible"
         assert page.locator("#androidDock").is_visible(), "landscape touch dock not visible"
         assert page.locator("#androidDock [data-power=inspire]").is_visible(), "missing Inspire"
-        assert page.locator("#androidDock button").count() == 9, "dock must fit 9 controls"
+        assert page.locator("#androidDock button").count() == 10, "dock must fit 10 controls"
         buttons_fit = page.evaluate("""() => {
           const dock=document.querySelector('#androidDock').getBoundingClientRect();
           return [...document.querySelectorAll('#androidDock button')]
@@ -40,6 +40,17 @@ with sync_playwright() as pw:
                 r.width>=32 && r.height>=40;});
         }""")
         assert buttons_fit, f"touch controls clipped at {width}x{height}"
+        camera=page.evaluate("window.GodseedDebug.getCamera()")
+        assert (camera["width"], camera["height"]) == (24,15), camera
+        page.locator("#zoomDock").click()
+        camera=page.evaluate("window.GodseedDebug.getCamera()")
+        assert (camera["width"], camera["height"]) == (16,10), camera
+        page.locator("#zoomDock").click()
+        camera=page.evaluate("window.GodseedDebug.getCamera()")
+        assert (camera["width"], camera["height"]) == (32,20), camera
+        page.locator("#zoomDock").click()
+        camera=page.evaluate("window.GodseedDebug.getCamera()")
+        assert (camera["width"], camera["height"]) == (24,15), camera
         path = OUT / f"godseed-medieval-observacion-{width}x{height}.png"
         page.screenshot(path=str(path))
         assert path.stat().st_size > 3000, "empty screenshot"
@@ -64,10 +75,10 @@ with sync_playwright() as pw:
         coords = page.evaluate("""() => {
           const s=window.GodseedDebug.getState(), p=s.npcs[0],
             r=document.querySelector('#world').getBoundingClientRect(),
-            scale=Math.min(r.width/576,r.height/352),
-            drawnWidth=576*scale, drawnHeight=352*scale,
-            cameraX=Math.max(0,Math.min(64-36,s.bot.x-18)),
-            cameraY=Math.max(0,Math.min(48-22,s.bot.y-11));
+            world=document.querySelector('#world'),camera=window.GodseedDebug.getCamera(),
+            scale=Math.min(r.width/world.width,r.height/world.height),
+            drawnWidth=world.width*scale, drawnHeight=world.height*scale,
+            cameraX=camera.x,cameraY=camera.y;
           return {x:r.left+(r.width-drawnWidth)/2+(p.x-cameraX+0.5)*16*scale,
                   y:r.top+(r.height-drawnHeight)/2+(p.y-cameraY+0.5)*16*scale,
                   before:s.faith, target:p.name,
@@ -93,7 +104,7 @@ with sync_playwright() as pw:
         page.screenshot(path=str(path2))
         assert path2.stat().st_size > 3000
         assert not problems, f"browser runtime errors: {problems}"
-        evidence.append({"resolution": f"{width}x{height}", "buttons": 9,
+        evidence.append({"resolution": f"{width}x{height}", "buttons": 10,
                          "inspired":coords["target"],"files":[path.name,path2.name],
                          "errors":problems})
         context.close()

@@ -19,7 +19,7 @@ with sync_playwright() as pw:
         page.locator('#androidDock').wait_for(state='visible')
         dock=page.locator('#androidDock')
         buttons=dock.locator('button')
-        assert buttons.count()==9
+        assert buttons.count()==10
         for b in buttons.all():
             rect=b.bounding_box();assert rect and rect['height']>=43,f"short touch target: {rect}"
         # The fixed dock remains in view, including on small devices.
@@ -34,6 +34,8 @@ with sync_playwright() as pw:
         page.evaluate("""() => {
             const s=GodseedDebug.getState(),p=s.npcs[0];
             s.seen[GodseedSim.idx(p.x,p.y)]=1;
+            s.bot.x=p.x;s.bot.y=p.y;s.settings.follow=true;
+            GodseedDebug.step(0);
         }""")
         assert page.locator('#people').count()==1
         page.locator('#androidDock [data-power="inspire"]').click()
@@ -42,8 +44,7 @@ with sync_playwright() as pw:
         page.evaluate("""() => {
             const s=GodseedDebug.getState(),p=s.npcs[0],world=document.getElementById('world');
             const r=world.getBoundingClientRect(),scale=Math.min(r.width/world.width,r.height/world.height);
-            const camX=Math.max(0,Math.min(GodseedSim.W-36,s.bot.x-18));
-            const camY=Math.max(0,Math.min(GodseedSim.H-22,s.bot.y-11));
+            const cam=GodseedDebug.getCamera(),camX=cam.x,camY=cam.y;
             const left=r.left+(r.width-world.width*scale)/2;
             const top=r.top+(r.height-world.height*scale)/2;
             world.dispatchEvent(new MouseEvent('click',{
@@ -54,6 +55,12 @@ with sync_playwright() as pw:
         assert page.evaluate('GodseedDebug.getState().faith')==faith_before-5
         assert page.evaluate('GodseedDebug.getState().npcs[0].mood')=='hopeful'
         assert page.evaluate('() => {const b=GodseedDebug.getState().bot;return [b.x,b.y]}')==bot_before
+        page.locator('#zoomDock').click()
+        assert page.evaluate('GodseedDebug.getCamera().width')==16
+        page.locator('#zoomDock').click()
+        assert page.evaluate('GodseedDebug.getCamera().width')==32
+        page.locator('#zoomDock').click()
+        assert page.evaluate('GodseedDebug.getCamera().width')==24
         page.evaluate('()=>GodseedDebug.step(50)')
         # Save export and pasted import work without Android native file APIs.
         page.locator('#export').click()
@@ -75,6 +82,6 @@ with sync_playwright() as pw:
         page.evaluate("()=>{window.scrollTo(0,0);document.getElementById('toast').classList.remove('show');}")
         page.wait_for_timeout(100)
         page.screenshot(path=str(p/'assets'/f'godseed-android-landscape-{width}x{height}.png'),full_page=False)
-        print(f'{width}x{height}: PASS, 9 touch buttons >=44px, bless, backup restore, offline, 0 JS errors')
+        print(f'{width}x{height}: PASS, 10 touch buttons >=44px, bless, backup restore, offline, 0 JS errors')
         context.close()
     browser.close()
