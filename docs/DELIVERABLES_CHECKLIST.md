@@ -7,8 +7,8 @@
 - [x] Four pixel PNG starter sheets in repository, with deterministic generator
 - [x] Manifest / palette / sprite rect coordinates and prep concepts
 - [x] 25 machine-readable Codex work items with statuses
-- [x] Automated integrity workflow and validator **when CI results confirm**
-- [x] Dedicated PR targeting camera v0.4 for review **when created**
+- [x] Automated integrity workflow and validator — GitHub Actions verified exact atlas reproduction (successful run 39071055421)
+- [ ] Dedicated PR targeting camera v0.4 for review (create after completing the handoff)
 
 ## NOT yet implemented by the handoff
 - [ ] 32x20 default high-sky camera (v0.4 currently 24x15)
