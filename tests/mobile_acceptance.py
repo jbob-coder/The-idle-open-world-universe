@@ -7,7 +7,7 @@ import json
 p=Path(__file__).resolve().parents[1]
 source=(p/'GODSEED-Play.html').read_text()
 with sync_playwright() as pw:
-    browser=pw.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
+    browser=pw.chromium.launch(**({'executable_path':'/usr/bin/chromium'} if Path('/usr/bin/chromium').exists() else {}),headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
     for width,height in [(720,400),(640,360),(960,540)]:
         context=browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,is_mobile=True,has_touch=True)
         page=context.new_page();errors=[];outgoing=[]
