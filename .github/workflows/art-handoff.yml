@@ -34,6 +34,8 @@ jobs:
         run: node scripts/validate_storage_budget.mjs
       - name: Validate planned 2-3 GB Android device RAM requirements
         run: node scripts/validate_hardware_budget.mjs
+      - name: Validate proposed foundation and eight-region blueprint
+        run: node scripts/validate_world_blueprint.mjs
       - name: Rebuild deterministic starter art
         run: node scripts/generate_starter_assets.mjs
       - name: Assert generated art is reproducible exactly

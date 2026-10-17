@@ -21,6 +21,8 @@ The goal of Gate P is to make implementation unambiguous and reproducible. The r
 
 **Low-RAM hardware directive:** Target **2–3 GB total physical RAM phones**, with preferred app resident usage 128–192 MiB and provisional 256 MiB soft ceiling. These are unverified targets, not phone-level allocation. See `docs/LOW_RAM_HARDWARE_TARGET.md` and `config/hardware-budget.json`.
 
+**New foundation/world work:** `docs/GAMEPLAY_FOUNDATION.md` and `docs/WORLD_REGION_BLUEPRINT.md` plan 8 named functional regions, with `data/world-regions.v1.json` and 15 new `work-items/world-foundation-tasks.json` TODOs. Total 45 tasks (25 A–E + 5 S + 15 F/W). The plans are committed, **not implemented**.
+
 ## Gate I — Codex implementation complete (future)
 - [ ] Tasks A01–E05 in `work-items/codex-tasks.json` marked DONE only after source and test evidence.
 - [ ] Default high sky **32×20**, close 24×15, inspect 16×10; correct panning/follow/touch transforms.
@@ -36,6 +38,8 @@ The goal of Gate P is to make implementation unambiguous and reproducible. The r
 - [ ] S01–S05 completed with actual app-private storage accounting, optional consent, 5 GB maximum extra use, 6 GB combined nominal quota, free-space guard, safe save-preserving deletion, rollback and low-storage tests; device evidence or explicit blocker.
 
 - [ ] Android phones with **2 GB and 3 GB physical RAM** tested with real install, 20-minute autoplay, PSS/RSS/JS heap where measurable, frame times, pause/resume and optional-pack loading. Explicitly disclose if 128–192 MiB preferred/256 MiB soft target could not be met. No amount of Chromium testing substitutes for Android memory evidence.
+
+- [ ] The five foundation tasks F01–F05 are verified; world tasks W01–W10 provide stable 8-region identities, reachable landmarks, bounded enemy/resource ecology, region exploration and old-save migration (100-seed checks and long-run simulations).
 
 ## Gate R — Android release-ready (strict future gate)
 - [ ] APK installed and launched on **real low-end Android hardware**, not just Chromium and not just a structurally valid APK.

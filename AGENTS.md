@@ -5,6 +5,8 @@ Storage scope: **1 GB core target + up to 5 GB optional app-managed persistent s
 
 RAM target: **devices with 2–3 GB TOTAL physical RAM**; app should aim for **128–192 MiB resident**, provisional 256 MiB soft ceiling. These are **unverified engineering goals**, not 2–3 GB memory allocated to the game. Do not load 1–6 GB on-disk content into RAM. Read `docs/LOW_RAM_HARDWARE_TARGET.md` and `config/hardware-budget.json`; add physical-memory QA evidence to E04 and S05.
 
+World planning authority (new): `docs/GAMEPLAY_FOUNDATION.md`, `docs/WORLD_REGION_BLUEPRINT.md`, `docs/WORLD_SYSTEM_CONTRACTS.md`, `docs/WORLD_PLAYTEST_MATRIX.md`, `data/world-regions.v1.json`, and `work-items/world-foundation-tasks.json`. **Eight named regions are PROPOSED, not implemented.** Work F01–F05 for base game reliability first, then W01–W10 to add regions. These 15 tasks add to 25 original + 5 storage = **45 total TODOs**. Keep world 64×48 and tile IDs 0–10 stable; avoid modifying saves by changing region art.
+
 Read in order: `docs/CODEX_CLOUD_READY_PROMPT.md`, `docs/HANDOFF_READINESS.md`, `docs/GODSEED_INTENDED_GAME.md`, `docs/ANDROID_HTML_APK_SPEC.md`, `docs/CODEX_CLOUD_BUILD_PROMPT.md`, `docs/CODEX_HANDOFF.md`, `docs/SKYVIEW_VISION.md`, `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `docs/ARCHITECTURE_CONTRACTS.md`, `docs/DIVINE_INTERACTION_SPEC.md`, `docs/IMPLEMENTATION_SLICES.md`, `docs/TEST_PLAN.md`, `assets/asset-manifest.json`.
 
 Constraints:

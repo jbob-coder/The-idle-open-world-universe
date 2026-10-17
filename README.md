@@ -1,3 +1,11 @@
+## Basic playable world: 8 planned regions and autonomous gameplay
+
+The next Codex stage begins with **what must work** before scaling up the map: reliable seeded worlds, Nim's self-directed survival, movement, gathering, crafting, interactions, combat/recovery, six god powers, discoveries, offline save and Android controls. The first map is still **64×48 tiles**, with a safe center, two existing medieval settlements and two shrines.
+
+The new [world region blueprint](docs/WORLD_REGION_BLUEPRINT.md) defines **8 proposed named regions**: Hearthfield Clearing, Briarford Hamlet, Emberwick Hamlet, Mossveil Wildwood, Stormstone Ridge, Crownfall Ruins, Oathkeeper Grove, and Moonwell Fen. Named region boundaries and unique region mechanics **do not run in the APK yet**. [Gameplay foundation](docs/GAMEPLAY_FOUNDATION.md) · [World system contracts](docs/WORLD_SYSTEM_CONTRACTS.md) · [World validation matrix](docs/WORLD_PLAYTEST_MATRIX.md) · [World data schema](data/world-regions.v1.json) · [15 new foundation/world tasks](work-items/world-foundation-tasks.json).
+
+The planning backlog now contains **45 TODO tasks total**: 25 visual/core + 5 storage + 15 basic gameplay/world. See [final Codex prompt](docs/CODEX_CLOUD_READY_PROMPT.md).
+
 ## Android RAM compatibility — target devices with 2–3 GB
 
 GODSEED should **run on Android devices with 2 GB of RAM**, and be validated again on **3 GB devices**. That number is the phone's total RAM, **not how much the game should use**. Engineering target for GODSEED's process: **128–192 MiB resident memory preferred; 256 MiB soft ceiling**, pending measurements on real hardware. Phone storage is separate: intended 1 GB core + optional 5 GB content. [RAM specification](docs/LOW_RAM_HARDWARE_TARGET.md) · [Machine-readable hardware budget](config/hardware-budget.json).

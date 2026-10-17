@@ -18,3 +18,7 @@ A deliberately small medieval-fantasy region whose history can be discovered, no
 - God: subtle golden-green spark/rune sign at targets, never a human avatar physically walking the map.
 
 **Boundaries:** no modern technology, firearms, direct Nim control or borrowed game/film characters. Additional gods, kingdoms or NPC families are long-term possibilities, not committed gameplay.
+
+## First mapped areas (planning, not shipped)
+
+The first 64×48 region is divided conceptually into **Hearthfield Clearing**, **Briarford Hamlet**, **Emberwick Hamlet**, **Mossveil Wildwood**, **Stormstone Ridge**, **Crownfall Ruins**, **Oathkeeper Grove**, and **Moonwell Fen**. Their anchors, gameplay functions and dependencies are documented in `docs/WORLD_REGION_BLUEPRINT.md` and `data/world-regions.v1.json`. These named biome identities are planned overlays, not new map implementations or additional NPC simulation. Preserve the established small world and its current landmarks while Codex builds regional mechanics.

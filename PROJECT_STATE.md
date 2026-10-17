@@ -1,3 +1,17 @@
+## World foundation and eight-region plan — October 17, 2026
+
+OBJECTIVE: Plan core autonomous gameplay features that must work and identify meaningful areas for the initial GODSEED medieval fantasy world **before** adding bigger procedural maps.
+
+EXISTING_BASELINE_REVIEW: `src/sim.js` has 64×48 seeded terrain, Nim start (32,24), two villages (25,21),(37,27), two shrines (20,31),(42,19), three traveling NPCs, forage/craft/camp/combat/ruin/faith mechanics, JSON saves. Named regional zones, region-specific AI/ecology and road/connectivity seed-sweep tests are NOT implemented.
+
+COMMITTED_PLANNING: `docs/GAMEPLAY_FOUNDATION.md`, `docs/WORLD_REGION_BLUEPRINT.md`, `docs/WORLD_SYSTEM_CONTRACTS.md`, `docs/WORLD_PLAYTEST_MATRIX.md`, `data/world-regions.v1.json` (8 proposed named areas), `work-items/world-foundation-tasks.json` (15 TODO tasks), `scripts/validate_world_blueprint.mjs` (static plan and baseline simulator sanity). Codex prompt and handoff/CI cross-links updated.
+
+NEXT: Codex starts with F01–F05 verified functional vertical slice, then W01–W05 generation and accessibility, W06–W10 region discovery and long-run QA, while coordinating A–E visual work and S storage tasks. Total backlog 45 TODO tasks. Do not confuse plan/manifest validation with functionality added to the game.
+
+LIMITS: No changes in simulation, rendering, saves or APK in this planning update. Android physical 2–3GB device and 1 GB+5 GB storage capacity constraints remain unverified.
+
+---
+
 ## Low-RAM phone constraint — 2026-10-17
 
 REQUIREMENT: User specifies **RAM 2–3 GB max**, interpreted as **2 GB to 3 GB TOTAL RAM in target Android phones**, not a game process allowance. Godseed engine should use substantially less RAM: **128–192 MiB resident preferred**, **256 MiB provisional soft ceiling**. Distinct from planned 1 GB core + 5 GB optional DISK storage.

@@ -16,6 +16,16 @@ Treat the planned final game as **1 GB core installed content** plus **up to 5 G
 
 **Minimum device class: 2 GB TOTAL physical Android RAM; also test a 3 GB device.** This is NOT permission to use 2–3 GB for the game process. The renderer, JavaScript state and WebView host should aim for **128–192 MiB resident memory** with **256 MiB provisional soft ceiling**, measured via PSS/RSS (report metrics and uncertainties). No physical device measurements exist yet. Use `docs/LOW_RAM_HARDWARE_TARGET.md` and `config/hardware-budget.json` as source of truth. Keep decoded pixel atlases small, cache bounded, avoid full-world heavy surfaces and streaming entire 1–6 GB on-disk content into RAM. Record 2 GB and 3 GB device compatibility in tasks E04 and S05; if no device exists, report `PHYSICAL RAM QA: NOT VERIFIED`, not PASS.
 
+## New priority: make the base game function and give each world region a role
+
+Before expanding the size of the world or adding lore-only settlements, implement and verify the **basic autonomous game loop** defined in `docs/GAMEPLAY_FOUNDATION.md`: seeded start → food/wood/stone gathering → eating/resting/shelter/crafting → NPC contact → shrine/ruin progression → optional divine influence → save/resume. No direct character movement. The current simulator includes preliminary versions; audit and fix soft locks rather than cloning these systems.
+
+The world must eventually contain **eight distinct functional regions** defined in `docs/WORLD_REGION_BLUEPRINT.md` and `data/world-regions.v1.json`: Hearthfield Clearing, Briarford Hamlet, Emberwick Hamlet, Mossveil Wildwood, Stormstone Ridge, Crownfall Ruins, Oathkeeper Grove, and Moonwell Fen. Existing two villages **(25,21),(37,27)** and shrine tiles **(20,31),(42,19)** are anchor constraints; preserve their accessibility and old saves. Region metadata must not repurpose current 11 tile IDs. Assign distinct biome visuals, renewable resources, challenges, safe trails, NPC roles and finite discoveries, while keeping only three traveling NPCs and bounded wildlife. Implement/test start ↔ settlements, shrine and ruin walkable connectivity across many seeds.
+
+Read `docs/WORLD_SYSTEM_CONTRACTS.md`, `docs/WORLD_PLAYTEST_MATRIX.md` and `work-items/world-foundation-tasks.json`. Add **F01–F05 and W01–W10 (15 tasks)** to the existing **A01–E05 (25) plus S01–S05 (5): 45 tasks total**, initially all TODO. New work should begin with an **F01–F05 five-task foundation batch**, before expensive world/visual elaboration. Follow with W01–W05, W06–W10 and relevant A–E / S slices as dependencies allow; work in five-task chunks. No area is DONE merely because it has a name, anchor, sprite or documentation. Record code change and test evidence; device testing is separate.
+
+Preflight addition: `node scripts/validate_world_blueprint.mjs` validates the planning schema against the existing simulator and catches accidental tile-ID changes; its PASS is **not proof regional mechanics are implemented**.
+
 ## First: understand and verify
 Read, in this order:
 1. `AGENTS.md`
@@ -32,6 +42,7 @@ Read, in this order:
 ```bash
 node --test tests/*.test.js
 node scripts/validate_asset_manifest.mjs
+node scripts/validate_world_blueprint.mjs
 node scripts/generate_starter_assets.mjs
 git diff --exit-code -- assets/generated/
 python build.py
@@ -45,7 +56,7 @@ Prefer modular, testable Canvas rendering. Implement offline atlas loading from 
 
 **Android packaging:** first keep the existing experimental builder functioning through regression checks. Then evaluate a conventional, pinned **Gradle/Android SDK WebView host** as a *separate migration step*, not a surprise untested replacement. Implement that step only if the environment/tooling permits building and verifying it. If it doesn't, report it as deferred/blocker. If adopting `WebViewAssetLoader`, implement/test a way to preserve/export/import existing file-origin localStorage, because the storage origin changes. Restrict WebView to packaged content, keep JS/DOM storage appropriately configured, prevent network access and maintain safe application lifecycle. Do not commit a keystore or claim signed release continuity.
 
-## Implement 25 original tasks in five visual/core slices, then 5 additional storage tasks (30 total)
+## Implement F/W gameplay foundations and regions (15 tasks) plus A–E visuals (25) and S storage (5) — 45 total
 **A — Camera:** 32×20 higher default, near/inspection modes, integer transforms and follow, crisp scaling, tests/screenshots.
 
 **B — Detailed square-pixel world:** use the original 11×3 terrain starter atlas, deterministic roads/shore edges, layered props, villages/shrines/ruins/camps, cached invalidation and bounds. Improve assets where the starter is insufficient; record changes in the manifest.

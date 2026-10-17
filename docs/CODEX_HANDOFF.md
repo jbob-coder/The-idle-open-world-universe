@@ -12,6 +12,8 @@ Open PR stack when prepared: v0.2 PR #1 into main; v0.3 PR #2 into v0.2; v0.4 PR
 
 **New owner storage directive:** planned 1 GB meaningful installed core content, plus up to 5 GB extra opt-in managed persistent storage (nominal 6 GB total), **not RAM**; current APK remains tiny and quota isn't implemented. See `docs/STORAGE_BUDGET_AND_PACKS.md` / `config/storage-budget.json` and five additional S01–S05 tasks, raising work to 30 total.
 
+**World foundation extension:** Eight named regions are now specified in `data/world-regions.v1.json` and `docs/WORLD_REGION_BLUEPRINT.md`; these are future metadata and activities rather than current playable areas. `docs/GAMEPLAY_FOUNDATION.md` specifies the core vertical slice. `work-items/world-foundation-tasks.json` adds 15 TODO items (F01–F05 and W01–W10), for **45 total** planned tasks. The current map remains 64×48 and the existing two village/shrine sites must be preserved.
+
 **First five steps for Codex:** verify baseline; plan camera semantics; implement high-sky default and transforms; verify landscape touch/screenshots; commit evidence. Then perform subsequent 5-task slices per plan.
 
 **Known release blockers:** No stable production keystore in repository; CI debug signing is ephemeral; no confirmed device tests for new rendering. Keep QA reporting honest.

@@ -26,6 +26,10 @@ Check core works with zero optional content, user opt-in, correct decimal GB ver
 
 Target Android devices with **2 GB total physical RAM** and **3 GB total physical RAM** separately. Measure process PSS/RSS, WebView memory, frame time/fps, zoom, 20-minute autonomous run, NPC/divine scene, export/import and background resume. Engineering target **128–192 MiB resident** and **256 MiB provisional soft ceiling**; not yet verified. Check that optional 5 GB storage packs do **not** grow resident memory in proportion to their on-disk footprint. The `node scripts/validate_hardware_budget.mjs` CI check verifies documentation/configuration only, not runtime memory safety or a device benchmark.
 
+## Added foundation and world topology validation (F01–F05, W01–W10)
+
+Use `node scripts/validate_world_blueprint.mjs` for metadata and existing seed-map sanity, **not as proof of new regions running**. For implementation, add seeded topology and coverage tests across at least 100 seeds, walkable BFS to both villages/two shrines/one ruin, safe spawn, food/wood/stone floor, capped NPC/wildlife, meaningful regional discovery, one-time shrine rewards, 10k-tick autoplay, old-save migration and camera/god tap correctness. See `docs/WORLD_PLAYTEST_MATRIX.md`. All 15 F/W tasks are TODOs; total planned implementation work is 45 tasks.
+
 ## Evidence format per slice
 Include: commit, changed files, test command, pass/fail count, screenshot names with browser or device attribution, known blockers, performance before/after. Do not label desktop Chromium captures as phone screenshots.
 
