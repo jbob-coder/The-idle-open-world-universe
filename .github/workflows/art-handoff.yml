@@ -51,7 +51,8 @@ jobs:
               assert root.tag == '{http://www.w3.org/2000/svg}svg', name
               assert root.attrib.get('viewBox') == '0 0 960 540', name
               text = path.read_text(encoding='utf-8').lower()
-              assert 'http://' not in text and 'https://' not in text.replace('http://www.w3.org/2000/svg', ''), name
+              external = text.replace('http://www.w3.org/2000/svg', '')
+              assert 'http://' not in external and 'https://' not in external, name
               print('PASS SVG', path)
           PY
       - name: Run existing autonomous simulation regression tests
