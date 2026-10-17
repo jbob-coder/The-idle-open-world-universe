@@ -1,8 +1,8 @@
 /* GODSEED deterministic simulation. UMD: browser global + CommonJS. No external services. */
 (function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
-const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7};
-const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter'];
+const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7,ROAD:8,VILLAGE:9,SHRINE:10};
+const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter','Kingdom road','Village','Ancient shrine'];
 const DIRS=[[1,0],[-1,0],[0,1],[0,-1]];
 const ORIGINS=[
  {name:'Lost Apprentice',past:'Once helped a traveling craftsperson.',focus:'crafting',curiosity:.64,caution:.43,diligence:.70},
@@ -57,7 +57,7 @@ function initPeople(s){
    }
   }
   return {id:i+1,name:p.name,role:p.role,x,y,homeX:x,homeY:y,
-   trust:22,mood:'wary',met:false,lastTalk:-1000,favorUntil:0,encounters:0};
+   trust:22,mood:'wary',met:false,lastTalk:-1000,favorUntil:0,favorSpent:false,activity:'Patrolling',encounters:0};
  });
 }
 function nearPerson(s,x,y,max=1){return (s.npcs||[]).find(p=>Math.abs(p.x-x)+Math.abs(p.y-y)<=max)||null;}
@@ -65,14 +65,43 @@ function updatePeople(s){
  if(s.tick%12!==0)return;
  for(const p of s.npcs||[]){
   if(p.favorUntil<=s.tick&&p.mood==='hopeful')p.mood='calm';
-  // Small neighborhood walk: O(3) agents, no pathfinding and no crowd simulation.
-  const directions=[[0,0],...DIRS];
-  const [dx,dy]=directions[rint(s,directions.length)];
+  // One purposeful response per divine blessing, never direct player control.
+  if(p.favorUntil>s.tick&&!p.favorSpent){
+   p.favorSpent=true;
+   if(p.role==='Apothecary'||p.role==='Herbalist'){
+    let planted=0;
+    for(const [dx,dy] of [[1,0],[0,1],[-1,0],[0,-1]]){
+     const nx=p.x+dx,ny=p.y+dy;
+     if(inside(nx,ny)&&s.map[idx(nx,ny)]===T.GRASS){s.map[idx(nx,ny)]=T.BERRY;planted++;}
+    }
+    p.activity='Tending blessed herbs';
+    event(s,'Apothecary answered',p.name+' tended '+planted+' new enchanted herb patches.','god');
+   }else if(p.role==='Squire'){
+    const before=s.enemies.length;
+    s.enemies=s.enemies.filter(e=>Math.abs(e.x-p.x)+Math.abs(e.y-p.y)>4);
+    p.activity='Guarding the old road';
+    event(s,'Squire answered',p.name+' drove off '+(before-s.enemies.length)+' nearby beasts.','god');
+   }else{
+    // The scholar reveals one ruin without teleporting Nim or issuing orders.
+    let nearest=-1,best=1e9;
+    for(let j=0;j<N;j++)if(s.map[j]===T.RUIN&&!s.seen[j]){
+     const d=Math.abs(j%W-p.x)+Math.abs(Math.floor(j/W)-p.y);
+     if(d<best){nearest=j;best=d;}
+    }
+    if(nearest>=0)s.seen[nearest]=1;
+    p.activity='Deciphering a prophecy';
+    event(s,'Rune scholar answered',p.name+(nearest>=0?' revealed a distant ruin in a vision.':' deciphered an old prophecy.'),'god');
+   }
+   addMark(s,p.x,p.y,'inspire');
+  }
+  // Capped to three tiny local wandering agents; no global per-NPC path search.
+  const directions=[[0,0],...DIRS], [dx,dy]=directions[rint(s,directions.length)];
   const nx=p.x+dx,ny=p.y+dy;
   if(walkable(s,nx,ny)&&Math.abs(nx-p.homeX)+Math.abs(ny-p.homeY)<=9&&
-    !s.npcs.some(other=>other!==p&&other.x===nx&&other.y===ny)){
-   p.x=nx;p.y=ny;
+     !s.npcs.some(other=>other!==p&&other.x===nx&&other.y===ny)){
+    p.x=nx;p.y=ny;
   }
+  if(p.favorUntil<=s.tick)p.activity=p.role==='Apothecary'?'Collecting herbs':p.role==='Squire'?'Patrolling':'Studying runes';
  }
 }
 function meetPerson(s,p){
@@ -109,7 +138,7 @@ function event(s,title,detail,type='event'){
  if(type==='milestone'){s.faith=clamp(s.faith+3,0,50);s.milestones++;}
 }
 function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
- map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
+ map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
  bot:{name:'Nim',x:Math.floor(W/2),y:Math.floor(H/2),level:1,xp:0,hp:24,maxHp:24,hunger:86,energy:83,attack:4,defense:1,food:2,wood:0,stone:0,tool:0,
  goal:'Awakening',thought:'Where am I?',target:null,path:[],actionDelay:0,fights:0,ruins:0,scars:0,steps:0,
  personality:{curiosity:0.68,caution:0.42,diligence:0.57},memory:[]}};
@@ -120,6 +149,22 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,d
  s.map=terrain(s);for(let y=s.bot.y-3;y<=s.bot.y+3;y++)for(let x=s.bot.x-3;x<=s.bot.x+3;x++)if(inside(x,y))s.map[idx(x,y)]=T.GRASS;
  s.map[idx(s.bot.x+2,s.bot.y)]=T.BERRY;s.map[idx(s.bot.x-2,s.bot.y)]=T.FOREST;s.map[idx(s.bot.x,s.bot.y-2)]=T.STONE;
  for(let i=0;i<10;i++){const x=5+rint(s,W-10),y=5+rint(s,H-10);if(Math.abs(x-s.bot.x)+Math.abs(y-s.bot.y)>8 && s.map[idx(x,y)]!==T.WATER)s.map[idx(x,y)]=T.RUIN;}
+ // A light medieval-fantasy world: paths, villages and shrines as logical tiles.
+ const addRoad=(x1,y1,x2,y2)=>{
+  let x=x1,y=y1;
+  while(x!==x2||y!==y2){
+   if(inside(x,y)&&[T.GRASS,T.MEADOW].includes(s.map[idx(x,y)]))s.map[idx(x,y)]=T.ROAD;
+   if(x!==x2)x+=x<x2?1:-1;else y+=y<y2?1:-1;
+  }
+ };
+ const villageSites=[[s.bot.x+5,s.bot.y+3],[s.bot.x-7,s.bot.y-3]];
+ for(const [x,y] of villageSites){
+  addRoad(s.bot.x,s.bot.y,x,y);
+  s.map[idx(x,y)]=T.VILLAGE;
+ }
+ for(const [x,y] of [[s.bot.x+10,s.bot.y-5],[s.bot.x-12,s.bot.y+7]]){
+  s.map[idx(x,y)]=T.SHRINE;
+ }
  s.npcs=initPeople(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
  return s;}
 function discover(s,x,y){let count=0;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const xx=x+ox,yy=y+oy;if(!inside(xx,yy)||ox*ox+oy*oy>12)continue;const n=idx(xx,yy);if(!s.seen[n]){s.seen[n]=1;count++;}}return count;}
@@ -150,6 +195,10 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(b.hunger<78&&b.food<3){let p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','I should pack some food.',p);return;}}
  if(s.guide&&s.guide.ticks>0){const gx=s.guide.x,gy=s.guide.y;if(!walkable(s,gx,gy)){s.guide=null;}else{const p=findPath(s,(x,y)=>x===gx&&y===gy);if(p){setGoal(s,'Follow omen','Something calls to me from afar.',p);return;}s.guide=null;}}
  if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
+ if(b.hunger>55&&b.energy>55&&Array.isArray(s.shrinesVisited)){
+  const route=findPath(s,(x,y,t)=>t===T.SHRINE&&!s.shrinesVisited.includes(idx(x,y)));
+  if(route&&route.length){setGoal(s,'Study shrine','Ancient magic sleeps in these stones.',route);return;}
+ }
  // Nim may choose to socialize, but the god never steers the traveler directly.
  if(b.hunger>44&&b.energy>45){
   const npc=(s.npcs||[]).find(p=>{
@@ -193,6 +242,14 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
  if(b.goal==='Recover'||b.goal==='Rest'){b.energy=clamp(b.energy+(s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3?17:12),0,100);b.hp=clamp(b.hp+(s.camp?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
  if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First camp','Nim raised a canvas shelter and stone hearth at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
  if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');improve(s,'crafting',5);return;}
+ if(tile===T.SHRINE&&!s.shrinesVisited.includes(idx(b.x,b.y))){
+  s.shrinesVisited.push(idx(b.x,b.y));
+  improve(s,'lore',4);gain(s,9,'discovering a shrine');
+  s.faith=clamp(s.faith+4,0,50);
+  event(s,'Sacred shrine','Nim studied ancient runes and the god gained four Faith.','milestone');
+  remember(s,'Visited shrine '+s.shrinesVisited.length);
+  return;
+ }
  if(tile===T.BERRY){b.food+=2+rint(s,2);s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'foraging');improve(s,'survival',2);b.thought='These berries will last a little while.';return;}
  if(tile===T.FOREST&&b.goal==='Gather wood'){b.wood+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'woodcutting');improve(s,'survival',2);return;}
  if(tile===T.STONE&&b.goal==='Mine stone'){b.stone+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'mining');improve(s,'survival',2);return;}
@@ -273,14 +330,14 @@ function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))r
  else if(kind==='guide'){s.guide={x,y,ticks:300};event(s,'A divine whisper','Nim senses a direction in the wind.','god');addMark(s,x,y,'guide');}
  else if(kind==='inspire'){
   citizen.trust=clamp(citizen.trust+30,0,100);citizen.mood='hopeful';
-  citizen.favorUntil=s.tick+240;
+  citizen.favorUntil=s.tick+240;citizen.favorSpent=false;citizen.activity='Answering an omen';
   event(s,'Divine inspiration',citizen.name+' witnesses an omen from the heavens and may offer Nim aid at their next meeting.','god');
   addMark(s,citizen.x,citizen.y,'inspire');
  }
  else if(kind==='storm'){let struck=0;s.enemies=s.enemies.filter(e=>{const d=Math.abs(e.x-x)+Math.abs(e.y-y);if(d<=3){struck++;return false;}return true;});event(s,'Judgment',struck?struck+' nearby hostile creatures dispersed.':'Lightning struck the empty earth.','god');addMark(s,x,y,'storm');}
  return {ok:true,kind,cost:COST[kind]};}
 function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!==N||!Array.isArray(s.seen)||s.seen.length!==N||!s.bot)return false;
- const b=s.bot;return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.CAMP)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
+ const b=s.bot;return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
 function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
 function restore(raw){try{const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
  progress(s.bot);
@@ -294,8 +351,9 @@ function restore(raw){try{const s=typeof raw==='string'?JSON.parse(raw):JSON.par
   trust:clamp(Number(p.trust)||0,0,100),
   mood:['wary','calm','hopeful'].includes(p.mood)?p.mood:'calm',
   met:!!p.met,lastTalk:Number.isFinite(p.lastTalk)?p.lastTalk:-1000,
-  favorUntil:Number.isFinite(p.favorUntil)?p.favorUntil:0,encounters:clamp(Number(p.encounters)||0,0,10000)
+  favorUntil:Number.isFinite(p.favorUntil)?p.favorUntil:0,favorSpent:!!p.favorSpent,activity:String(p.activity||'Patrolling').slice(0,48),encounters:clamp(Number(p.encounters)||0,0,10000)
  }));
+ s.shrinesVisited=Array.isArray(s.shrinesVisited)?s.shrinesVisited.filter(n=>Number.isInteger(n)&&n>=0&&n<N).slice(0,8):[];
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
  s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
