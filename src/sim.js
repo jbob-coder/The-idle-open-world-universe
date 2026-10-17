@@ -231,6 +231,14 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
  if(e.hp<=0){s.enemies=s.enemies.filter(z=>z!==e);b.fights++;b.personality.caution=clamp(b.personality.caution-.006,.1,.9);improve(s,'combat',4);gain(s,10,'defeating '+e.type);if(rand(s)<.5)b.food++;event(s,'Creature defeated','Nim overcame a '+e.type+'.','event');remember(s,'Defeated a '+e.type);}
  return;}
  if(b.goal==='Escape'&&near.e){const e=near.e;let directions=DIRS.map(([dx,dy])=>[b.x+dx,b.y+dy]).filter(([x,y])=>walkable(s,x,y)&&!s.enemies.some(q=>q.x===x&&q.y===y));directions.sort((a,c)=>(Math.abs(c[0]-e.x)+Math.abs(c[1]-e.y))-(Math.abs(a[0]-e.x)+Math.abs(a[1]-e.y)));if(directions.length){botMove(s,...directions[0]);b.energy=clamp(b.energy-2,0,100);}else{b.hp-=1;} b.personality.caution=clamp(b.personality.caution+.001,.1,.9);b.path=[];return;}
+ if(s.map[idx(b.x,b.y)]===T.SHRINE&&!s.shrinesVisited.includes(idx(b.x,b.y))){
+  s.shrinesVisited.push(idx(b.x,b.y));
+  improve(s,'lore',4);gain(s,9,'discovering a shrine');
+  s.faith=clamp(s.faith+4,0,50);
+  event(s,'Sacred shrine','Nim studied ancient runes and the god gained four Faith.','milestone');
+  remember(s,'Visited shrine '+s.shrinesVisited.length);
+  return;
+ }
  if(b.path&&b.path.length){const [x,y]=b.path.shift();if(!walkable(s,x,y)){b.path=[];return;}botMove(s,x,y);return;}
  if(b.goal==='Meet traveler'){
   const npc=nearPerson(s,b.x,b.y,1);
@@ -242,14 +250,7 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
  if(b.goal==='Recover'||b.goal==='Rest'){b.energy=clamp(b.energy+(s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3?17:12),0,100);b.hp=clamp(b.hp+(s.camp?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
  if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First camp','Nim raised a canvas shelter and stone hearth at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
  if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');improve(s,'crafting',5);return;}
- if(tile===T.SHRINE&&!s.shrinesVisited.includes(idx(b.x,b.y))){
-  s.shrinesVisited.push(idx(b.x,b.y));
-  improve(s,'lore',4);gain(s,9,'discovering a shrine');
-  s.faith=clamp(s.faith+4,0,50);
-  event(s,'Sacred shrine','Nim studied ancient runes and the god gained four Faith.','milestone');
-  remember(s,'Visited shrine '+s.shrinesVisited.length);
-  return;
- }
+
  if(tile===T.BERRY){b.food+=2+rint(s,2);s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'foraging');improve(s,'survival',2);b.thought='These berries will last a little while.';return;}
  if(tile===T.FOREST&&b.goal==='Gather wood'){b.wood+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'woodcutting');improve(s,'survival',2);return;}
  if(tile===T.STONE&&b.goal==='Mine stone'){b.stone+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'mining');improve(s,'survival',2);return;}
