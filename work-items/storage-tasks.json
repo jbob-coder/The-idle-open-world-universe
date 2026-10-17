@@ -1,0 +1,45 @@
+{
+  "schema": "godseed.storage-tasks.v1",
+  "authority": "prep/codex-skyworld-v0.5",
+  "requirement": "core 1.0GB installed target; optional up to 5.0GB of app-managed data; combined nominal 6.0GB",
+  "units": "decimal bytes",
+  "status": "todo",
+  "created": "2026-10-17",
+  "tasks": [
+    {
+      "id": "S01",
+      "status": "todo",
+      "name": "Define measured core and optional footprint",
+      "acceptance": "Document accounting categories; use actual on-device APIs to distinguish APK/core, mutable user data, extra packs and OS overhead; no false 1GB installed claim.",
+      "evidence": []
+    },
+    {
+      "id": "S02",
+      "status": "todo",
+      "name": "Design safe offline optional pack manifest and storage host",
+      "acceptance": "Pack IDs, hashes, schema, compatibility, app-private installation plus user-chosen local SAF import; core playable offline without optional packs; no generic storage permission.",
+      "evidence": []
+    },
+    {
+      "id": "S03",
+      "status": "todo",
+      "name": "Implement explicit quota and low-space guards",
+      "acceptance": "Optional <=5e9 bytes, managed total <=6e9 bytes, free-after-write >= max(500MB, 10% currently free); account for temporary peak and failure rollback; never auto reserve full 5GB.",
+      "evidence": []
+    },
+    {
+      "id": "S04",
+      "status": "todo",
+      "name": "Add user-facing storage manager with safe remove/export",
+      "acceptance": "Display actual core/optional/free values, user confirmation for installing/removing packs, prevent deletion of saves, transactional update and backup safety.",
+      "evidence": []
+    },
+    {
+      "id": "S05",
+      "status": "todo",
+      "name": "Automated boundary tests and Android storage QA",
+      "acceptance": "Offline core/optional=0, GB/GiB conversions, corrupt/oversized pack, exact quotas, disk-full mid-write, migration and real device measurements or explicit hardware blocker.",
+      "evidence": []
+    }
+  ]
+}
