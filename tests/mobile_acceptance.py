@@ -71,6 +71,9 @@ with sync_playwright() as pw:
         assert saved['tick'] <= restored_tick <= saved['tick'] + 4, (saved['tick'], restored_tick)  # simulation can advance while Playwright checks
         assert not errors,errors
         assert not outgoing,outgoing
+        # Capture the actual world at the TOP rather than the form after import tests.
+        page.evaluate("()=>{window.scrollTo(0,0);document.getElementById('toast').classList.remove('show');}")
+        page.wait_for_timeout(100)
         page.screenshot(path=str(p/'assets'/f'godseed-android-landscape-{width}x{height}.png'),full_page=False)
         print(f'{width}x{height}: PASS, 9 touch buttons >=44px, bless, backup restore, offline, 0 JS errors')
         context.close()
