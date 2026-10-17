@@ -47,7 +47,11 @@ Nim wakes by a mossy path. At high sky zoom the player can see two nearby cottag
 ## 6. Acceptance demonstration
 Record a **real running browser capture** at each target viewport and three zoom modes (not mockups); show Nim walking independently, shrine/village/road recognition, one NPC encounter, a successful and rejected Inspire target, Faith change exactly once, journal feedback, touch hit mapping, a restored older save, and an offline network-disabled session. Compile debug APK and validate its structure/signature. Only physical Android video/capture and measurements can demonstrate real hardware success.
 
-## 7. Permanent constraints and deferred extensions
+## 7. Intended persistent storage (not yet implemented)
+
+The final Android game targets **1 GB meaningful installed core content** plus **up to 5 GB optional extra game-managed disk space**, nominal **6 GB total**; this does **not** mean 6 GB RAM or a 6 GB APK. Optional packs require consent and available disk; core gameplay remains offline with no optional packs. Never fill empty space artificially, automatically reserve the 5 GB, delete game saves during cleanup or consume the device's last free storage. Report measured APK/core/optional/OS sizes honestly. See `docs/STORAGE_BUDGET_AND_PACKS.md` and `work-items/storage-tasks.json`.
+
+## 8. Permanent constraints and deferred extensions
 No third-party assets without recorded license. No heavy 3D engine, LLM, login or network. No silent save wipe. No hidden automation in the background of the device. Full cities, dungeons with interiors, natural-language NPC dialogue, multiplayer, expanded factions and advanced magic are *future* priorities and are not acceptance criteria for the first visual upgrade.
 
 **Related authority:** `docs/SKYVIEW_VISION.md`, `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `docs/DIVINE_INTERACTION_SPEC.md`, `docs/ARCHITECTURE_CONTRACTS.md`, `docs/WORLD_LORE_BIBLE.md`, `work-items/codex-tasks.json`.

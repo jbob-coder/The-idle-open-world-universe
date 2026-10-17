@@ -8,6 +8,10 @@ The goal is a **finished, detailed medieval-fantasy living-world visualization**
 
 The **player is a god**, not Nim. Nim and other inhabitants stay *autonomous, deterministic, offline*, and retain their own goals, survival decisions, encounters, skills, inventory and progression. The god can inspect, bless, gift food, bloom, guide, lightning/storm and inspire travelers using Faith. No direct player movement, no attack joystick, no NPC puppeteering. Divine interactions require visible selection/validity, low-cost pixel FX, text outcomes, correct Faith accounting, and visible world/NPC consequences with no duplicate rewards.
 
+## Added owner requirement: 1 GB core + optional 5 GB
+
+Treat the planned final game as **1 GB core installed content** plus **up to 5 GB extra optional app-managed persistent storage**, nominal **6 GB total**. This is disk, **not RAM**, and is currently NOT implemented. Preserve offline core-only play and do not artificially pad the APK. Optional packs require explicit user consent, free-space margin and safe removal. Complete **S01–S05** in `work-items/storage-tasks.json` as a sixth five-task batch in addition to the original A01–E05. Total planned implementation tasks: **30**. Use `docs/STORAGE_BUDGET_AND_PACKS.md` and `config/storage-budget.json` as source of truth. Validate limits, transactional updates, backups and device storage measurements; label unsupported functions as blocked, never as done.
+
 ## First: understand and verify
 Read, in this order:
 1. `AGENTS.md`
@@ -37,7 +41,7 @@ Prefer modular, testable Canvas rendering. Implement offline atlas loading from 
 
 **Android packaging:** first keep the existing experimental builder functioning through regression checks. Then evaluate a conventional, pinned **Gradle/Android SDK WebView host** as a *separate migration step*, not a surprise untested replacement. Implement that step only if the environment/tooling permits building and verifying it. If it doesn't, report it as deferred/blocker. If adopting `WebViewAssetLoader`, implement/test a way to preserve/export/import existing file-origin localStorage, because the storage origin changes. Restrict WebView to packaged content, keep JS/DOM storage appropriately configured, prevent network access and maintain safe application lifecycle. Do not commit a keystore or claim signed release continuity.
 
-## Implement in five slices of five tasks (all 25)
+## Implement 25 original tasks in five visual/core slices, then 5 additional storage tasks (30 total)
 **A — Camera:** 32×20 higher default, near/inspection modes, integer transforms and follow, crisp scaling, tests/screenshots.
 
 **B — Detailed square-pixel world:** use the original 11×3 terrain starter atlas, deterministic roads/shore edges, layered props, villages/shrines/ruins/camps, cached invalidation and bounds. Improve assets where the starter is insufficient; record changes in the manifest.

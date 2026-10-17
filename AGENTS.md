@@ -1,6 +1,8 @@
 # GODSEED — instructions for Codex Cloud
 Repository authority: this repository. Target handoff branch: `prep/codex-skyworld-v0.5`. Integration base: `feat/skyview-zoom-v0.4`, not main (v0.2, v0.3, v0.4 are stacked experimental PRs).
 
+Storage scope: **1 GB core target + up to 5 GB optional app-managed persistent storage**, nominal 6 GB total, NOT RAM. This is a future requirement, not current APK footprint. Optional storage is opt-in, never auto-preallocated. Read `docs/STORAGE_BUDGET_AND_PACKS.md`, `config/storage-budget.json` and `work-items/storage-tasks.json` (5 additional S01–S05 tasks; 30 total). Keep core offline and protect user saves.
+
 Read in order: `docs/CODEX_CLOUD_READY_PROMPT.md`, `docs/HANDOFF_READINESS.md`, `docs/GODSEED_INTENDED_GAME.md`, `docs/ANDROID_HTML_APK_SPEC.md`, `docs/CODEX_CLOUD_BUILD_PROMPT.md`, `docs/CODEX_HANDOFF.md`, `docs/SKYVIEW_VISION.md`, `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `docs/ARCHITECTURE_CONTRACTS.md`, `docs/DIVINE_INTERACTION_SPEC.md`, `docs/IMPLEMENTATION_SLICES.md`, `docs/TEST_PLAN.md`, `assets/asset-manifest.json`.
 
 Constraints:

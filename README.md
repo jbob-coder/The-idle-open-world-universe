@@ -1,3 +1,9 @@
+## Storage requirement — 1 GB core + up to 5 GB optional (future goal)
+
+GODSEED's intended **core installed content is approximately 1 GB**, plus **up to 5 GB additional optional user-approved app-managed storage**, for a **nominal 6 GB total**. This is Android persistent **disk**, not RAM; it is not yet the actual APK size. Do **not** pad the prototype to 1 GB or preallocate optional storage. Offline core gameplay must work with zero expansion content and reserve free phone space.
+
+[Storage policy](docs/STORAGE_BUDGET_AND_PACKS.md) · [Budget configuration](config/storage-budget.json) · [Five added storage tasks](work-items/storage-tasks.json) · [Codex handoff prompt](docs/CODEX_CLOUD_READY_PROMPT.md).
+
 ## GODSEED product architecture and final Codex handoff (2026-10-17)
 
 **Canonical product and Android references:** [Intended game experience](docs/GODSEED_INTENDED_GAME.md) · [Why HTML inside the APK / Android host architecture](docs/ANDROID_HTML_APK_SPEC.md) · [Readiness gates P/I/R](docs/HANDOFF_READINESS.md) · [Final prompt to paste into Codex Cloud](docs/CODEX_CLOUD_READY_PROMPT.md).
