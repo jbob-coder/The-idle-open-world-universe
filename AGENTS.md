@@ -7,6 +7,8 @@ RAM target: **devices with 2–3 GB TOTAL physical RAM**; app should aim for **1
 
 World planning authority (new): `docs/GAMEPLAY_FOUNDATION.md`, `docs/WORLD_REGION_BLUEPRINT.md`, `docs/WORLD_SYSTEM_CONTRACTS.md`, `docs/WORLD_PLAYTEST_MATRIX.md`, `data/world-regions.v1.json`, and `work-items/world-foundation-tasks.json`. **Eight named regions are PROPOSED, not implemented.** Work F01–F05 for base game reliability first, then W01–W10 to add regions. These 15 tasks add to 25 original + 5 storage = **45 total TODOs**. Keep world 64×48 and tile IDs 0–10 stable; avoid modifying saves by changing region art.
 
+**HARD PIXEL-ART GATE** (owner instruction): GODSEED's entire world, props, actors, creatures, gods' powers **and Android HUD** must remain crisp native **square pixels**, not smooth/painted/vector or pseudo-3D visuals. Terrain is 16×16, main actor frames 16×24, nearest-neighbor scaling, 32×20 high-sky intended default. Use `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `config/pixel-art-contract.json`, `docs/PIXEL_ART_ACCEPTANCE.md` and `node scripts/validate_pixel_art_contract.mjs`. No game feature is done if its visual output is blurry, and prepared art is not proof of renderer integration. Keep original 45 tasks; this is a binding acceptance standard, not a new task batch.
+
 Read in order: `docs/CODEX_CLOUD_READY_PROMPT.md`, `docs/HANDOFF_READINESS.md`, `docs/GODSEED_INTENDED_GAME.md`, `docs/ANDROID_HTML_APK_SPEC.md`, `docs/CODEX_CLOUD_BUILD_PROMPT.md`, `docs/CODEX_HANDOFF.md`, `docs/SKYVIEW_VISION.md`, `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `docs/ARCHITECTURE_CONTRACTS.md`, `docs/DIVINE_INTERACTION_SPEC.md`, `docs/IMPLEMENTATION_SLICES.md`, `docs/TEST_PLAN.md`, `assets/asset-manifest.json`.
 
 Constraints:

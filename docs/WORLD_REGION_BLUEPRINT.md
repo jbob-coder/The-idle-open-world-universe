@@ -53,3 +53,7 @@ Multiple separate maps, settlements with populations, farming economies, trade c
 Test region ID assignment across at least 100 fixed seeds for determinism and complete tile coverage. For every seed validate safe spawn, water/road consistency, reachable mandatory destinations, source resources, and finite shrine/ruin rewards; run 10k ticks across varied seeds. Verify no game action is triggered by rendering, and old pre-region saves still restore. Device memory/FPS must be separately measured before expanding the world.
 
 **Next read:** `docs/GAMEPLAY_FOUNDATION.md`, `docs/WORLD_SYSTEM_CONTRACTS.md`, `docs/WORLD_PLAYTEST_MATRIX.md`, `work-items/world-foundation-tasks.json`.
+
+## Pixel-square consistency across all eight planned regions
+
+Each region's distinct vegetation, roads, rock, shrine, ruin and settlement styles must use **the same native 16×16 tile grid, palette rules, hard edges and 2D overhead camera**. Make visual identity through original clustered pixel motifs, not by assigning each biome a large smooth painting or introducing inconsistent perspective. The strict art and regional visual checklist is in `docs/PIXEL_WORLD_STYLE_GUIDE.md` and `docs/PIXEL_ART_ACCEPTANCE.md`. No region qualifies as implemented until **both its gameplay function and its square-pixel presentation** work in actual screenshots.

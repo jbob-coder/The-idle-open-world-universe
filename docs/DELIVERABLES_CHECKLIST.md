@@ -12,6 +12,8 @@
 - [x] Automated integrity workflow and validator — GitHub Actions verified exact atlas reproduction (successful run 39071055421)
 - [x] Dedicated [PR #4](https://github.com/jbob-coder/The-idle-open-world-universe/pull/4) targets the v0.4 camera branch for review; not merged
 
+- [x] Strict square-pixel art bible, machine-readable contract and per-system visual review matrix (source-art checks wired into CI; runtime integration still TODO)
+
 ## NOT yet implemented by the handoff
 - [ ] User-facing optional pack installer, 5 GB quota and robust low-storage/rollback enforcement; documented but not implemented
 - [ ] 32x20 default high-sky camera (v0.4 currently 24x15)

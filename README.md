@@ -1,3 +1,9 @@
+## Non-negotiable art style: hand-authored **square pixels**
+
+GODSEED is a **top-down 2D medieval-fantasy pixel-square game**. The higher sky camera uses crisp **16×16** world tiles and legible **16×24** 2D character frames. Roads, roofs, leaves, water, ruins, rune stones, god powers **and UI borders/icons** must be constructed from intentional hard-edged pixel clusters. **No blurry scaling, smooth vector sprites, painted scenes, gradients, pseudo-3D or glossy mobile-game HUD.** The style is enforced in the [strict art bible](docs/PIXEL_WORLD_STYLE_GUIDE.md), [machine-readable pixel rules](config/pixel-art-contract.json) and [visual acceptance matrix](docs/PIXEL_ART_ACCEPTANCE.md). Prepared PNGs remain starter assets and are not yet integrated into runtime.
+
+`node scripts/validate_pixel_art_contract.mjs` checks source PNG palette/alpha/native size and existing no-smoothing directives; real running-game screenshots and physical Android testing remain separate acceptance gates.
+
 ## Basic playable world: 8 planned regions and autonomous gameplay
 
 The next Codex stage begins with **what must work** before scaling up the map: reliable seeded worlds, Nim's self-directed survival, movement, gathering, crafting, interactions, combat/recovery, six god powers, discoveries, offline save and Android controls. The first map is still **64×48 tiles**, with a safe center, two existing medieval settlements and two shrines.

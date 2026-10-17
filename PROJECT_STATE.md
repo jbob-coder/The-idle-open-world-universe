@@ -1,3 +1,15 @@
+## Owner hard style rule — pixel squares — 2026-10-17
+
+REQUEST: The game art style must stay truly **PIXEL SQUARES** across all overhead medieval fantasy terrain, eight planned regions, structures, Nim/NPC/creature sprites, divinity FX and Android HUD.
+
+PREPARED: Rewrote `docs/PIXEL_WORLD_STYLE_GUIDE.md` as the binding art bible with native 16×16 tile/16×24 actor grids, accurate original palette, terrain/biome/buildings, body poses, crisp FX, UI and forbidden smooth visuals. Added `config/pixel-art-contract.json` and `docs/PIXEL_ART_ACCEPTANCE.md`. Added `scripts/validate_pixel_art_contract.mjs` and wired source-art check into `.github/workflows/art-handoff.yml`. Updated entry points and Codex final prompt.
+
+IMPLEMENTATION STATE: Documentation, machine-checkable starter PNG art and QA specification. Pixel atlas assets **not connected to current game renderer** by these changes. Validating PNG source is NOT proof runtime artwork matches. Default target 32×20 still remains Codex work, and the existing 45 TODO tasks remain TODO.
+
+NEXT: Codex integrates actual atlas graphics and demonstrates crisp square pixels via real runtime screenshots at each zoom/resolution. Physical 2–3 GB RAM Android check remains pending.
+
+---
+
 ## World foundation and eight-region plan — October 17, 2026
 
 OBJECTIVE: Plan core autonomous gameplay features that must work and identify meaningful areas for the initial GODSEED medieval fantasy world **before** adding bigger procedural maps.

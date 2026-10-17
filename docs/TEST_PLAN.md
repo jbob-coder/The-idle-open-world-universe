@@ -35,3 +35,7 @@ Include: commit, changed files, test command, pass/fail count, screenshot names 
 
 ## Exit criteria for Codex
 All relevant automated tests green, offline HTML opens, all 3 zooms pan and target correctly, autonomous Nim untouched, assets loaded entirely locally, UI readable at 640x360/720x400/960x540, APK structure valid, precise disclosure of hardware verification state, no committed keystore. Unverified physical install is a release blocker, not a reason to claim completion.
+
+## Hard pixel-art QA before accepting any visual task
+
+Run `node scripts/validate_pixel_art_contract.mjs` with `node scripts/validate_asset_manifest.mjs`; verify binary PNG alpha, exact palette, native 16×16 tile / 16×24 actor dimensions and no-smoothing UI instructions. This checks **prepared** artifacts. Separately capture integrated running-game screenshot grid at three Android resolutions × three zooms and visually reject blurry interpolation, painted terrain, pseudo-3D, under-sized characters or modern glossy HUD. See `docs/PIXEL_ART_ACCEPTANCE.md`; none of these visual effects currently counts as implementation merely because the source atlas exists.

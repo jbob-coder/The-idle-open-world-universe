@@ -1,6 +1,12 @@
 # GODSEED — FINAL COPY/PASTE PROMPT FOR CODEX CLOUD
 **Save this prompt and submit it in Codex Cloud when the preparation branch is selected.** You are to implement the unfinished game-visual/Android work, not write another general plan. Read source files and execute the plan with evidence.
 
+## Mandatory square-pixel art rule — no exceptions without owner approval
+
+The owner explicitly requires **PIXEL SQUARES**, including the terrain, buildings, roads, water, creatures, character silhouettes, divine FX and Android UI. Use `docs/PIXEL_WORLD_STYLE_GUIDE.md` as the **binding art bible**, `config/pixel-art-contract.json` for machine-readable constraints and `docs/PIXEL_ART_ACCEPTANCE.md` for visual acceptance evidence. Pixel sources must be native 16×16 terrain and 16×24 actor frames, small controlled original palettes, binary alpha edges, deliberate pixel clusters, and nearest-neighbor no-smoothing Canvas2D scaling. The higher overhead 32×20 default is NOT an isometric or painted background. Build richer medieval areas by arranging more intentionally drawn *square pixels*, not by adding smooth textures, vector assets, high-resolution backgrounds, glossy UI or anti-aliased icon sprites.
+
+Before visual changes run `node scripts/validate_pixel_art_contract.mjs`; keep the validator passing and capture real screenshots of the integrated renderer at all three zooms. Validation of a starter PNG is source evidence only, not a claim that the artwork is live. This art bible applies to all **45** existing F/W/A–E/S tasks without adding duplicate TODO counts.
+
 ## Your mission
 Work in repository `jbob-coder/The-idle-open-world-universe`, starting from **`prep/codex-skyworld-v0.5`**. Create branch **`feat/godseed-medieval-skyworld-v1`** from that exact preparation branch. Do not implement on `main`; PR chain is v0.2 (#1) → v0.3 (#2) → v0.4 (#3) → preparation (#4). Your new PR should initially target preparation, not bypass the stacked branches.
 
@@ -42,6 +48,7 @@ Read, in this order:
 ```bash
 node --test tests/*.test.js
 node scripts/validate_asset_manifest.mjs
+node scripts/validate_pixel_art_contract.mjs
 node scripts/validate_world_blueprint.mjs
 node scripts/generate_starter_assets.mjs
 git diff --exit-code -- assets/generated/

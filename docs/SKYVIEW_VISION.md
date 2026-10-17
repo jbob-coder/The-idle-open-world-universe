@@ -24,3 +24,7 @@
 **Definition of success:** At 640x360 users identify Nim, 1–2 nearby points of interest and the selected god power without zooming the page. The world texture is *constructed of pixel squares* at native 1x asset resolution, not high-resolution illustrations scaled down.
 
 **Non-goals in this implementation package:** replacing a 2D simulation with an LLM, adding background simulation after app close, network multiplayer, seamless 3D interiors, or merging the experimental PR stack automatically.
+
+## Hard user instruction: authentic pixel squares
+
+All higher-sky world art must remain **native, hard-edged square pixels**. Higher detail is implemented through **16×16 deliberately arranged pixel clusters**, not smoother textures, perspective tilt or oversized painterly images. This covers villages, all eight world regions, 2D Nim/NPCs, God FX and HUD. See the normative `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `config/pixel-art-contract.json` and `docs/PIXEL_ART_ACCEPTANCE.md` for real acceptance criteria and screenshot evidence. The current starter sheets are assets for future integration, not screenshots of implemented gameplay.

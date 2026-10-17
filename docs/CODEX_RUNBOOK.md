@@ -6,6 +6,7 @@
 git switch prep/codex-skyworld-v0.5
 git switch -c feat/godseed-medieval-skyworld-v1
 node scripts/validate_asset_manifest.mjs
+node scripts/validate_pixel_art_contract.mjs
 node scripts/validate_storage_budget.mjs
 node scripts/generate_starter_assets.mjs
 git diff --exit-code -- assets/generated/

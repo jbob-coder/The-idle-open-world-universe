@@ -54,3 +54,7 @@ Source diff + unit/visual tests + real screenshot from running compiled code + e
 
 ## Follow-on beyond v1
 NPC dialogue and trade, interior ruins, long-term memory consequences, village factions, seasons and weather patterns; defer until benchmark proves headroom. Do not expand gameplay or change schema during the core visual implementation unless isolated and migration-tested.
+
+## Strict visual QA gate (applies to A/B/C/D/E and W tasks)
+
+No tile, sprite, UI or zone task is DONE until it follows `docs/PIXEL_WORLD_STYLE_GUIDE.md` and `config/pixel-art-contract.json`, passes `node scripts/validate_pixel_art_contract.mjs` for source artifacts, and shows **crisp individual square pixels in an actual running game screenshot**. Check all three camera zooms and landscape 640×360 / 720×400 / 960×540. Source 16×16 terrain, actor 16×24, binary alpha, exact palette and nearest-neighbor raster scaling. Reference SVG mockups do not count as gameplay evidence. See `docs/PIXEL_ART_ACCEPTANCE.md`. This adds acceptance criteria, **not more TODO task IDs** (existing total 45).
