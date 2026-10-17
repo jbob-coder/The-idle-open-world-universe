@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "GODSEED Medieval Fantasy Pixel Palette",
+  "version": "0.5-prep",
+  "license": "Original work; see assets/README.md",
+  "colors": {
+    "deepOutline": "#172421",
+    "nightForest": "#183527",
+    "forest": "#254536",
+    "pine": "#31764A",
+    "grass": "#527C47",
+    "grassLight": "#6A9960",
+    "leafHighlight": "#9FC780",
+    "earth": "#977354",
+    "dirt": "#BE9269",
+    "sand": "#D9B487",
+    "stoneShadow": "#686C69",
+    "stone": "#96978A",
+    "stoneLight": "#B6AEA0",
+    "waterDark": "#24556C",
+    "water": "#376A84",
+    "waterLight": "#85B4B7",
+    "roofShadow": "#62432F",
+    "roof": "#995E40",
+    "roofLight": "#CB8D58",
+    "parchment": "#E4D7B4",
+    "candle": "#F3CD85",
+    "rune": "#8EDDD0",
+    "heal": "#A8DF9B",
+    "storm": "#D5C4F6",
+    "rose": "#DD8680"
+  },
+  "style": {
+    "tilePixels": 16,
+    "spriteFramePixels": [
+      16,
+      24
+    ],
+    "nearestNeighbor": true,
+    "alphaOverlays": true,
+    "colorPerBaseActorRecommendation": 12
+  }
+}

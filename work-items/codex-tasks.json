@@ -1,0 +1,440 @@
+{
+  "project": "GODSEED",
+  "purpose": "Codex Cloud implementation backlog; this preparation PR implements none of these tasks",
+  "branch": "feat/godseed-medieval-skyworld-v1",
+  "currentState": "ready_for_codex",
+  "date": "2026-10-17",
+  "total": 25,
+  "groupSize": 5,
+  "definitions": {
+    "todo": "Not started; specs/assets may exist",
+    "in_progress": "Claimed by one implementation agent",
+    "blocked": "Cannot proceed; record exact blocker",
+    "done": "Code tested with evidence"
+  },
+  "tasks": [
+    {
+      "id": "A01",
+      "slice": "A",
+      "area": "camera",
+      "title": "Higher sky default",
+      "description": "Set 32x20 high-sky as default while preserving 24x15 and 16x10",
+      "status": "todo",
+      "dependencies": [],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "A02",
+      "slice": "A",
+      "area": "camera",
+      "title": "Camera transforms",
+      "description": "Extract well-tested worldToCanvas/pointerToWorld with letterbox offsets",
+      "status": "todo",
+      "dependencies": [
+        "A01"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "A03",
+      "slice": "A",
+      "area": "camera",
+      "title": "Follow and pan",
+      "description": "Preserve autonomous Nim follow and free divine inspection camera",
+      "status": "todo",
+      "dependencies": [
+        "A02"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "A04",
+      "slice": "A",
+      "area": "camera",
+      "title": "Pixel clarity",
+      "description": "Enforce integer scaling, no smoothing and crisp pixel squares",
+      "status": "todo",
+      "dependencies": [
+        "A03"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "A05",
+      "slice": "A",
+      "area": "camera",
+      "title": "Viewport evidence",
+      "description": "Capture all zooms at 640x360,720x400,960x540 and validate targeting",
+      "status": "todo",
+      "dependencies": [
+        "A04"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "B01",
+      "slice": "B",
+      "area": "terrain",
+      "title": "Terrain atlas",
+      "description": "Load terrain starter or improved original tiles by semantic IDs 0–10",
+      "status": "todo",
+      "dependencies": [
+        "A05"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "B02",
+      "slice": "B",
+      "area": "terrain",
+      "title": "Roads and shores",
+      "description": "Compute four-neighbor deterministic road, water adjacency",
+      "status": "todo",
+      "dependencies": [
+        "B01"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "B03",
+      "slice": "B",
+      "area": "terrain",
+      "title": "World props",
+      "description": "Place flora, trees, fence, rocks, posts with nonblocking seeded noise",
+      "status": "todo",
+      "dependencies": [
+        "B02"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "B04",
+      "slice": "B",
+      "area": "terrain",
+      "title": "Medieval landmarks",
+      "description": "Make hamlets, ruins, shrines, camps unmistakable without fake collision",
+      "status": "todo",
+      "dependencies": [
+        "B03"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "B05",
+      "slice": "B",
+      "area": "terrain",
+      "title": "Render budget",
+      "description": "Cache scene, profile redraw and preserve old-hardware frame budget",
+      "status": "todo",
+      "dependencies": [
+        "B04"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "C01",
+      "slice": "C",
+      "area": "actors",
+      "title": "Nim directions",
+      "description": "Replace starter with 4 facing directions, idle, 2–4 step frames",
+      "status": "todo",
+      "dependencies": [
+        "B05"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "C02",
+      "slice": "C",
+      "area": "actors",
+      "title": "NPC role sprites",
+      "description": "Apothecary, Squire, Rune Scholar distinct in the world",
+      "status": "todo",
+      "dependencies": [
+        "C01"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "C03",
+      "slice": "C",
+      "area": "actors",
+      "title": "Creature sprites",
+      "description": "Represent simulated Wolf and Boar; no fictional wildlife gameplay",
+      "status": "todo",
+      "dependencies": [
+        "C02"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "C04",
+      "slice": "C",
+      "area": "actors",
+      "title": "Autonomous cues",
+      "description": "Visualize Nim intent/action state without direct control",
+      "status": "todo",
+      "dependencies": [
+        "C03"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "C05",
+      "slice": "C",
+      "area": "actors",
+      "title": "Sprite layering",
+      "description": "Sort by feet, handle canopy occlusion and actor labels",
+      "status": "todo",
+      "dependencies": [
+        "C04"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "D01",
+      "slice": "D",
+      "area": "divine",
+      "title": "Target feedback",
+      "description": "Power selected/valid/invalid highlight with zero spending on errors",
+      "status": "todo",
+      "dependencies": [
+        "C05"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "D02",
+      "slice": "D",
+      "area": "divine",
+      "title": "Five power FX",
+      "description": "Bless, Gift, Bloom, Guide, Storm compact frames",
+      "status": "todo",
+      "dependencies": [
+        "D01"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "D03",
+      "slice": "D",
+      "area": "divine",
+      "title": "Inspire response",
+      "description": "NPC profession effect and readable journal feedback",
+      "status": "todo",
+      "dependencies": [
+        "D02"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "D04",
+      "slice": "D",
+      "area": "divine",
+      "title": "One event one effect",
+      "description": "Prevent duplicate grant/FX from redraw or pause",
+      "status": "todo",
+      "dependencies": [
+        "D03"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "D05",
+      "slice": "D",
+      "area": "divine",
+      "title": "Reduced motion",
+      "description": "Static fallback and deterministic FX lifespan tests",
+      "status": "todo",
+      "dependencies": [
+        "D04"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "E01",
+      "slice": "E",
+      "area": "release",
+      "title": "Compact landscape HUD",
+      "description": "No clipped buttons on old Android, thought panel, Faith and NPC inspect",
+      "status": "todo",
+      "dependencies": [
+        "D05"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "E02",
+      "slice": "E",
+      "area": "release",
+      "title": "Save and offline QA",
+      "description": "Old save import/export, touch maps, no external network",
+      "status": "todo",
+      "dependencies": [
+        "E01"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "E03",
+      "slice": "E",
+      "area": "release",
+      "title": "Debug APK build",
+      "description": "Assemble/test experimental debug package without secret keys",
+      "status": "todo",
+      "dependencies": [
+        "E02"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "E04",
+      "slice": "E",
+      "area": "release",
+      "title": "Phone acceptance",
+      "description": "Install and measure if hardware available; else report blocker",
+      "status": "todo",
+      "dependencies": [
+        "E03"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    },
+    {
+      "id": "E05",
+      "slice": "E",
+      "area": "release",
+      "title": "Evidence and PR",
+      "description": "Source, screenshots, tests, APK sha, follow-up and review request",
+      "status": "todo",
+      "dependencies": [
+        "E04"
+      ],
+      "acceptance": [
+        "code integrated",
+        "tests pass",
+        "captured evidence from actual build",
+        "docs/hand-off updated"
+      ]
+    }
+  ]
+}

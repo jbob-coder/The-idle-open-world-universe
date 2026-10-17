@@ -1,0 +1,803 @@
+{
+  "format": 1,
+  "project": "GODSEED",
+  "branch": "prep/codex-skyworld-v0.5",
+  "description": "Source-of-truth starter assets and planned production sprites. All starter sheets are intentionally not wired into src/ui.js.",
+  "license": "original",
+  "nativeTilePx": 16,
+  "worldTiles": [
+    64,
+    48
+  ],
+  "statusDefinitions": {
+    "starter": "Committed and inspectable but not yet wired to game render",
+    "planned": "Future asset request; source does not yet exist",
+    "implemented": "Referenced by real running code and acceptance-tested"
+  },
+  "assets": [
+    {
+      "id": "terrain-starter",
+      "status": "starter",
+      "path": "assets/generated/terrain-starter.png",
+      "type": "image/png",
+      "dimensions": [
+        176,
+        48
+      ],
+      "pixelArt": true,
+      "layout": "11 columns of 16x16 tile IDs and 3 rows of deterministic visual variants",
+      "tiles": [
+        {
+          "tileId": 0,
+          "id": "GRASS",
+          "variants": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 0,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 0,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 1,
+          "id": "FOREST",
+          "variants": [
+            {
+              "x": 16,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 16,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 16,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 2,
+          "id": "WATER",
+          "variants": [
+            {
+              "x": 32,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 32,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 32,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 3,
+          "id": "STONE",
+          "variants": [
+            {
+              "x": 48,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 48,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 48,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 4,
+          "id": "BERRY",
+          "variants": [
+            {
+              "x": 64,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 64,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 64,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 5,
+          "id": "RUIN",
+          "variants": [
+            {
+              "x": 80,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 80,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 80,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 6,
+          "id": "MEADOW",
+          "variants": [
+            {
+              "x": 96,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 96,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 96,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 7,
+          "id": "CAMP",
+          "variants": [
+            {
+              "x": 112,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 112,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 112,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 8,
+          "id": "ROAD",
+          "variants": [
+            {
+              "x": 128,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 128,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 128,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 9,
+          "id": "VILLAGE",
+          "variants": [
+            {
+              "x": 144,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 144,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 144,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        },
+        {
+          "tileId": 10,
+          "id": "SHRINE",
+          "variants": [
+            {
+              "x": 160,
+              "y": 0,
+              "w": 16,
+              "h": 16,
+              "variant": 0
+            },
+            {
+              "x": 160,
+              "y": 16,
+              "w": 16,
+              "h": 16,
+              "variant": 1
+            },
+            {
+              "x": 160,
+              "y": 32,
+              "w": 16,
+              "h": 16,
+              "variant": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "actors-starter",
+      "status": "starter",
+      "path": "assets/generated/actors-starter.png",
+      "type": "image/png",
+      "dimensions": [
+        64,
+        96
+      ],
+      "pixelArt": true,
+      "layout": "Four 16x24 frames each row; rows are NIM,APOTHECARY,SQUIRE,RUNE_SCHOLAR; columns idle,stepA,stepB,action; directional views planned",
+      "actors": [
+        {
+          "role": "NIM",
+          "frames": [
+            {
+              "action": "idle",
+              "x": 0,
+              "y": 0,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "stepA",
+              "x": 16,
+              "y": 0,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "stepB",
+              "x": 32,
+              "y": 0,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "action",
+              "x": 48,
+              "y": 0,
+              "w": 16,
+              "h": 24
+            }
+          ]
+        },
+        {
+          "role": "APOTHECARY",
+          "frames": [
+            {
+              "action": "idle",
+              "x": 0,
+              "y": 24,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "stepA",
+              "x": 16,
+              "y": 24,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "stepB",
+              "x": 32,
+              "y": 24,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "action",
+              "x": 48,
+              "y": 24,
+              "w": 16,
+              "h": 24
+            }
+          ]
+        },
+        {
+          "role": "SQUIRE",
+          "frames": [
+            {
+              "action": "idle",
+              "x": 0,
+              "y": 48,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "stepA",
+              "x": 16,
+              "y": 48,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "stepB",
+              "x": 32,
+              "y": 48,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "action",
+              "x": 48,
+              "y": 48,
+              "w": 16,
+              "h": 24
+            }
+          ]
+        },
+        {
+          "role": "RUNE_SCHOLAR",
+          "frames": [
+            {
+              "action": "idle",
+              "x": 0,
+              "y": 72,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "stepA",
+              "x": 16,
+              "y": 72,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "stepB",
+              "x": 32,
+              "y": 72,
+              "w": 16,
+              "h": 24
+            },
+            {
+              "action": "action",
+              "x": 48,
+              "y": 72,
+              "w": 16,
+              "h": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fx-starter",
+      "status": "starter",
+      "path": "assets/generated/fx-starter.png",
+      "type": "image/png",
+      "dimensions": [
+        96,
+        64
+      ],
+      "pixelArt": true,
+      "layout": "Columns bless,gift,bloom,guide,storm,inspire; 4 rows representing animation phases",
+      "effects": [
+        {
+          "kind": "bless",
+          "frames": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 0,
+              "y": 16,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 0,
+              "y": 32,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 0,
+              "y": 48,
+              "w": 16,
+              "h": 16
+            }
+          ]
+        },
+        {
+          "kind": "gift",
+          "frames": [
+            {
+              "x": 16,
+              "y": 0,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 16,
+              "y": 16,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 16,
+              "y": 32,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 16,
+              "y": 48,
+              "w": 16,
+              "h": 16
+            }
+          ]
+        },
+        {
+          "kind": "bloom",
+          "frames": [
+            {
+              "x": 32,
+              "y": 0,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 32,
+              "y": 16,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 32,
+              "y": 32,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 32,
+              "y": 48,
+              "w": 16,
+              "h": 16
+            }
+          ]
+        },
+        {
+          "kind": "guide",
+          "frames": [
+            {
+              "x": 48,
+              "y": 0,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 48,
+              "y": 16,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 48,
+              "y": 32,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 48,
+              "y": 48,
+              "w": 16,
+              "h": 16
+            }
+          ]
+        },
+        {
+          "kind": "storm",
+          "frames": [
+            {
+              "x": 64,
+              "y": 0,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 64,
+              "y": 16,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 64,
+              "y": 32,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 64,
+              "y": 48,
+              "w": 16,
+              "h": 16
+            }
+          ]
+        },
+        {
+          "kind": "inspire",
+          "frames": [
+            {
+              "x": 80,
+              "y": 0,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 80,
+              "y": 16,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 80,
+              "y": 32,
+              "w": 16,
+              "h": 16
+            },
+            {
+              "x": 80,
+              "y": 48,
+              "w": 16,
+              "h": 16
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skyworld-overview",
+      "status": "starter",
+      "path": "assets/concepts/godseed-skyworld-overview.svg",
+      "type": "image/svg+xml",
+      "dimensions": [
+        920,
+        560
+      ],
+      "purpose": "Sky POV medieval world layout concept; not runtime evidence"
+    },
+    {
+      "id": "character-inspect",
+      "status": "starter",
+      "path": "assets/concepts/godseed-character-inspect.svg",
+      "type": "image/svg+xml",
+      "dimensions": [
+        920,
+        560
+      ],
+      "purpose": "Inspection zoom reference and differentiated NPCs; not runtime evidence"
+    },
+    {
+      "id": "divine-reaction",
+      "status": "starter",
+      "path": "assets/concepts/godseed-divine-reaction.svg",
+      "type": "image/svg+xml",
+      "dimensions": [
+        920,
+        560
+      ],
+      "purpose": "God power feedback target state; not runtime evidence"
+    }
+  ],
+  "planned": [
+    {
+      "id": "nim-directional-final",
+      "status": "planned",
+      "logicalFrame": [
+        16,
+        24
+      ],
+      "frames": [
+        "north-idle",
+        "south-idle",
+        "east-idle",
+        "west-idle",
+        "north-walk-0",
+        "north-walk-1",
+        "south-walk-0",
+        "south-walk-1",
+        "east-walk-0",
+        "east-walk-1",
+        "west-walk-0",
+        "west-walk-1"
+      ]
+    },
+    {
+      "id": "npc-occupation-final",
+      "status": "planned",
+      "logicalFrame": [
+        16,
+        24
+      ],
+      "roles": [
+        "APOTHECARY",
+        "SQUIRE",
+        "RUNE_SCHOLAR"
+      ]
+    },
+    {
+      "id": "wolves-boars-final",
+      "status": "planned",
+      "logicalFrame": [
+        24,
+        24
+      ],
+      "types": [
+        "Wolf",
+        "Boar"
+      ]
+    },
+    {
+      "id": "decorations-final",
+      "status": "planned",
+      "logicalFrame": [
+        16,
+        16
+      ],
+      "items": [
+        "fence",
+        "bridge",
+        "road junction",
+        "trees overlapping canopy",
+        "herb garden",
+        "cart",
+        "signpost",
+        "smoke",
+        "shore"
+      ],
+      "layeringRequired": true
+    },
+    {
+      "id": "hud-symbols-final",
+      "status": "planned",
+      "logicalFrame": [
+        16,
+        16
+      ],
+      "items": [
+        "inspect",
+        "zoom",
+        "faith",
+        "chronicle",
+        "time",
+        "save"
+      ]
+    },
+    {
+      "id": "fx-animation-polish",
+      "status": "planned",
+      "logicalFrame": [
+        16,
+        16
+      ],
+      "kinds": [
+        "bless",
+        "gift",
+        "bloom",
+        "guide",
+        "storm",
+        "inspire"
+      ]
+    }
+  ],
+  "integration": {
+    "currentRuntimeUsesTheseAssets": false,
+    "requireOfflineLoading": true,
+    "requireManifestCoverageBeforeMarkingImplemented": true
+  }
+}
