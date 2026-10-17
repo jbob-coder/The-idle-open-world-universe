@@ -1,6 +1,6 @@
 # Codex Cloud runbook — implementation start
 
-**Select repo** `jbob-coder/The-idle-open-world-universe`, **base branch** `prep/codex-skyworld-v0.5`. This is a handoff, not a runtime renderer release. Create **implementation branch** `feat/godseed-medieval-skyworld-v1`. Read `AGENTS.md` and `docs/CODEX_CLOUD_BUILD_PROMPT.md`.
+**Select repo** `jbob-coder/The-idle-open-world-universe`, **base branch** `prep/codex-skyworld-v0.5`. This is a handoff, not a runtime renderer release. Create **implementation branch** `feat/godseed-medieval-skyworld-v1`. Read `AGENTS.md`, `docs/GODSEED_INTENDED_GAME.md`, `docs/ANDROID_HTML_APK_SPEC.md`, `docs/HANDOFF_READINESS.md`, and paste `docs/CODEX_CLOUD_READY_PROMPT.md` into Codex Cloud.
 
 ```bash
 git switch prep/codex-skyworld-v0.5
