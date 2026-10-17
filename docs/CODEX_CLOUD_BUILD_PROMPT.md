@@ -9,6 +9,10 @@
 
 You are the implementation engineer. This task is to **code, run tests, render browser screenshots, build a debug APK, and submit reviewable commits/PR**, not only to propose a design.
 
+## New owner's persistent storage scope
+
+The eventual Android game targets **1 GB of meaningful core installed content**, plus **up to 5 GB extra optional app-managed storage** (nominal **6 GB disk total**, not RAM). Current APK is much smaller; do not pad. Preserve offline core play, require opt-in and enough phone space, and do not silently preallocate extra data. Complete **S01–S05** storage tasks in addition to the original A01–E05 (**30 total**), following `docs/STORAGE_BUDGET_AND_PACKS.md` and `config/storage-budget.json`.
+
 ## Product goal
 GODSEED is a lightweight offline Android medieval fantasy god-simulation in top-down pixel squares. Nim is an **autonomous, local, deterministic inhabitant** who explores, survives, learns, levels up and meets traveling NPCs. The god can inspect, heal/bless, gift food, bloom resources, guide indirectly, storm hazards, and inspire travelers. **Never add joystick or direct Nim control**. No network, LLM, heavy game engine, artificial 3D or painted terrain wallpaper.
 

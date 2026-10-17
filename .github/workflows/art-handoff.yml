@@ -30,6 +30,8 @@ jobs:
           python-version: '3.11'
       - name: Validate original atlas PNGs, JSON schema and work items
         run: node scripts/validate_asset_manifest.mjs
+      - name: Validate planned 1 GB core and 5 GB optional storage constraints
+        run: node scripts/validate_storage_budget.mjs
       - name: Rebuild deterministic starter art
         run: node scripts/generate_starter_assets.mjs
       - name: Assert generated art is reproducible exactly

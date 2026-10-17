@@ -6,13 +6,14 @@
 git switch prep/codex-skyworld-v0.5
 git switch -c feat/godseed-medieval-skyworld-v1
 node scripts/validate_asset_manifest.mjs
+node scripts/validate_storage_budget.mjs
 node scripts/generate_starter_assets.mjs
 git diff --exit-code -- assets/generated/
 node --test tests/*.test.js
 python build.py
 ```
 
-Implement work-items A01–E05 in `work-items/codex-tasks.json` as five-task batches; update status and attach tests/evidence. Make the **default camera 32×20** (v0.4 currently 24×15), preserve 24×15/16×10, and update Chromium tests to the intentional new default.
+Implement work-items A01–E05 **and additional S01–S05 persistent storage tasks (30 overall; 1 GB core + 5 GB optional, NOT RAM)** in `work-items/codex-tasks.json` as five-task batches; update status and attach tests/evidence. Make the **default camera 32×20** (v0.4 currently 24×15), preserve 24×15/16×10, and update Chromium tests to the intentional new default.
 
 `src/ui.js` currently renders via Canvas; `src/sim.js` owns autonomous rules. Modular rendering may require updates to `build.py` to include bundled local PNGs in the single HTML file and Android WebView. Do not introduce an HTTP dependency or break the `/*SIM_SOURCE*/` and `/*UI_SOURCE*/` marker replacement.
 

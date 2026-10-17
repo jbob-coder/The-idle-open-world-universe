@@ -37,6 +37,18 @@ E03 Keep SDK-free experimental debug APK build + signature/manifest validation p
 E04 Hardware QA plan executed if device access exists, otherwise mark physical test BLOCKED with exact reason.
 E05 Publish screenshots, APK artifacts, before/after metrics, migration instructions and completion evidence.
 
+## Slice S — Persistent storage and optional packs (five NEW tasks)
+
+Owner requires **1 GB core installed game** with **up to 5 GB extra opt-in persistent data**, not RAM: nominal 6 GB managed disk. These are *additional five tasks*, beyond the 25 visual/core items, for **30 tasks** overall. Review `docs/STORAGE_BUDGET_AND_PACKS.md` and `work-items/storage-tasks.json`.
+
+S01: measure installed core, optional and mutable footprint using device storage APIs.
+S02: validated original offline-compatible content pack format and app-private installer.
+S03: quota enforcement, consent, available-space reserve, staged install, rollback.
+S04: clear install/remove/usage UI without deleting worlds or auto-allocating optional 5 GB.
+S05: quota extremes, disk-full/corrupt-pack recovery, old saves, Android hardware size/usage tests.
+
+Do NOT pad the APK to 1 GB, load pack bytes into RAM at once, or mark these implementation tasks done from documentation alone.
+
 ## Definition of 'implemented'
 Source diff + unit/visual tests + real screenshot from running compiled code + explicitly labeled Android verification + documentation update. No category moves to done simply because an image or a spec exists.
 
