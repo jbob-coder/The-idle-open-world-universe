@@ -6,6 +6,14 @@
 
 **Recursos comprometidos:** 3 referencias SVG, 4 atlas PNG originales y reproducibles, paleta JSON, generador/validador de assets, 25 tareas por lotes de cinco y criterios de aceptación. Los atlas son **starter / no integrados** en el render actual. Los SVG son conceptos, **no capturas Android**. Ejecutar validación: `node scripts/validate_asset_manifest.mjs`.
 
+**Vistas conceptuales del siguiente renderer (no gameplay):**
+
+[![World skyview concept](assets/concepts/godseed-skyworld-overview.svg)](assets/concepts/godseed-skyworld-overview.svg)
+
+[Close-up 2D character concept](assets/concepts/godseed-character-inspect.svg) · [Divine interaction concept](assets/concepts/godseed-divine-reaction.svg) · [Prepared Codex runbook](docs/CODEX_RUNBOOK.md) · [Asset generator](scripts/generate_starter_assets.mjs) · [Task ledger](work-items/codex-tasks.json).
+
+
+
 # The Idle Open World Universe — GODSEED
 
 **GODSEED v0.2** is an experimental build of an **offline Android god-observation RPG/simulation** for older phones. You are the god; **Nim** is an independently acting, rule-driven pixel-world inhabitant. You cannot control Nim directly. You can watch exploration, survival, crafting, wildlife encounters, leveling and memories, and change the world indirectly using Faith-powered divine actions.
