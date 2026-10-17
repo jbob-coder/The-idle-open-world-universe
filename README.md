@@ -1,3 +1,7 @@
+## Android RAM compatibility — target devices with 2–3 GB
+
+GODSEED should **run on Android devices with 2 GB of RAM**, and be validated again on **3 GB devices**. That number is the phone's total RAM, **not how much the game should use**. Engineering target for GODSEED's process: **128–192 MiB resident memory preferred; 256 MiB soft ceiling**, pending measurements on real hardware. Phone storage is separate: intended 1 GB core + optional 5 GB content. [RAM specification](docs/LOW_RAM_HARDWARE_TARGET.md) · [Machine-readable hardware budget](config/hardware-budget.json).
+
 ## Storage requirement — 1 GB core + up to 5 GB optional (future goal)
 
 GODSEED's intended **core installed content is approximately 1 GB**, plus **up to 5 GB additional optional user-approved app-managed storage**, for a **nominal 6 GB total**. This is Android persistent **disk**, not RAM; it is not yet the actual APK size. Do **not** pad the prototype to 1 GB or preallocate optional storage. Offline core gameplay must work with zero expansion content and reserve free phone space.

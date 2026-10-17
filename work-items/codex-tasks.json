@@ -302,7 +302,7 @@
       "epic_title": "Android UI, QA and delivery",
       "status": "todo",
       "title": "Collect physical Android evidence when device available",
-      "acceptance": "FPS, memory, 20min session; mark BLOCKED otherwise.",
+      "acceptance": "FPS, memory, 20min session; mark BLOCKED otherwise. Required device targets are phones with 2GB and 3GB total RAM; measure actual game/WebView resident PSS/RSS vs preferred 128-192 MiB and soft 256 MiB cap. Record device model/OS/FPS, 20-minute autoplay, or mark hardware unavailable.",
       "evidence": [],
       "dependencies": [
         "E03"

@@ -1,3 +1,13 @@
+## Low-RAM phone constraint — 2026-10-17
+
+REQUIREMENT: User specifies **RAM 2–3 GB max**, interpreted as **2 GB to 3 GB TOTAL RAM in target Android phones**, not a game process allowance. Godseed engine should use substantially less RAM: **128–192 MiB resident preferred**, **256 MiB provisional soft ceiling**. Distinct from planned 1 GB core + 5 GB optional DISK storage.
+
+DOCUMENTED: `docs/LOW_RAM_HARDWARE_TARGET.md`, `config/hardware-budget.json` and `scripts/validate_hardware_budget.mjs`; Codex prompt, README, performance budget, Android QA checklist and E04/S05 task criteria now point to the target. These are engineering goals, NOT measured current resident memory. Real physical-device benchmarking remains blocked until device evidence is supplied.
+
+STATUS: Documentation/source prep; no APK code or compiled graphics changed by this update. Codex backlog remains 30 tasks: 25 A–E plus five S storage tasks. No added task silently marked complete.
+
+---
+
 ## Storage policy update — October 17, 2026
 
 REQUIREMENT: GODSEED's eventual game content should target **1 GB core installed persistent storage** and optionally use up to **5 GB additional free Android disk** when user consents and the device has it. Nominal app-managed limit 6 GB, NOT 6 GB RAM. Do not pad tiny APK with dummy bytes, assume 5 GB is available, silently preallocate, or make optional packs mandatory for offline play.

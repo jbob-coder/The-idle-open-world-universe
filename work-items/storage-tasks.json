@@ -38,7 +38,7 @@
       "id": "S05",
       "status": "todo",
       "name": "Automated boundary tests and Android storage QA",
-      "acceptance": "Offline core/optional=0, GB/GiB conversions, corrupt/oversized pack, exact quotas, disk-full mid-write, migration and real device measurements or explicit hardware blocker.",
+      "acceptance": "Offline core/optional=0, GB/GiB conversions, corrupt/oversized pack, exact quotas, disk-full mid-write, migration and real device measurements or explicit hardware blocker. Check with 2GB and 3GB TOTAL-RAM Android devices, and prove optional disk packs are lazy-loaded without proportionate process RAM growth; report separate RSS/PSS and storage bytes, or mark device QA blocked.",
       "evidence": []
     }
   ]

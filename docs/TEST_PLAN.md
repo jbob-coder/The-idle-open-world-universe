@@ -22,6 +22,10 @@
 
 Check core works with zero optional content, user opt-in, correct decimal GB versus GiB, accounting of APK/app data and separate RAM. Test 5 GB optional boundary, nominal 6 GB combined cap, phone with 0/300 MB free, free-space reserve, staged expansion peak usage, interrupted/oversized/corrupt pack, safe delete without wiping saves, old-save migration and measured actual Android install. `node scripts/validate_storage_budget.mjs` validates *planned policy numbers* only; runtime enforcement requires new tests and device evidence.
 
+## Low-RAM compatibility checks
+
+Target Android devices with **2 GB total physical RAM** and **3 GB total physical RAM** separately. Measure process PSS/RSS, WebView memory, frame time/fps, zoom, 20-minute autonomous run, NPC/divine scene, export/import and background resume. Engineering target **128–192 MiB resident** and **256 MiB provisional soft ceiling**; not yet verified. Check that optional 5 GB storage packs do **not** grow resident memory in proportion to their on-disk footprint. The `node scripts/validate_hardware_budget.mjs` CI check verifies documentation/configuration only, not runtime memory safety or a device benchmark.
+
 ## Evidence format per slice
 Include: commit, changed files, test command, pass/fail count, screenshot names with browser or device attribution, known blockers, performance before/after. Do not label desktop Chromium captures as phone screenshots.
 

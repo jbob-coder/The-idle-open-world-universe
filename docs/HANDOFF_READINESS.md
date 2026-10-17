@@ -19,6 +19,8 @@ The goal of Gate P is to make implementation unambiguous and reproducible. The r
 
 **Storage handoff:** Prepared requirement 1 GB core installed target + optional 5 GB app-managed data (nominal 6 GB disk, NOT RAM), with `docs/STORAGE_BUDGET_AND_PACKS.md`, `config/storage-budget.json` and 5 more TODO tasks S01–S05 (30 total). None is runtime enforced by the current prototype.
 
+**Low-RAM hardware directive:** Target **2–3 GB total physical RAM phones**, with preferred app resident usage 128–192 MiB and provisional 256 MiB soft ceiling. These are unverified targets, not phone-level allocation. See `docs/LOW_RAM_HARDWARE_TARGET.md` and `config/hardware-budget.json`.
+
 ## Gate I — Codex implementation complete (future)
 - [ ] Tasks A01–E05 in `work-items/codex-tasks.json` marked DONE only after source and test evidence.
 - [ ] Default high sky **32×20**, close 24×15, inspect 16×10; correct panning/follow/touch transforms.
@@ -32,6 +34,8 @@ The goal of Gate P is to make implementation unambiguous and reproducible. The r
 - [ ] Implementation PR with real browser captures, changes, test outputs and the unresolved issue ledger. No silent merges to main.
 
 - [ ] S01–S05 completed with actual app-private storage accounting, optional consent, 5 GB maximum extra use, 6 GB combined nominal quota, free-space guard, safe save-preserving deletion, rollback and low-storage tests; device evidence or explicit blocker.
+
+- [ ] Android phones with **2 GB and 3 GB physical RAM** tested with real install, 20-minute autoplay, PSS/RSS/JS heap where measurable, frame times, pause/resume and optional-pack loading. Explicitly disclose if 128–192 MiB preferred/256 MiB soft target could not be met. No amount of Chromium testing substitutes for Android memory evidence.
 
 ## Gate R — Android release-ready (strict future gate)
 - [ ] APK installed and launched on **real low-end Android hardware**, not just Chromium and not just a structurally valid APK.

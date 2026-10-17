@@ -12,6 +12,8 @@ GODSEED is a **fully offline, lightweight Android landscape, medieval-fantasy, t
 - **Autonomy must be observable.** A player watching for a few minutes should see meaningful self-directed progress; god intervention is optional and should change opportunities rather than substitute for the AI planner.
 - **Time model.** Pause, individual step and speed multipliers. World runs while app is foregrounded; it does not evolve on its own while closed. No cloud sync, telemetry, AI API, sign-in or internet permission.
 
+**Minimum low-end hardware design target:** Android phones with **2 GB physical RAM**, with an additional **3 GB phone** tested. The running game must use substantially less than device RAM (preferred 128–192 MiB resident, provisional 256 MiB soft ceiling) and must not load up to 5 GB of optional disk packs into memory. Hardware testing is still pending. See `docs/LOW_RAM_HARDWARE_TARGET.md`.
+
 ## 2. Setting and visual language
 **World:** a small forgotten medieval borderland with mossy royal roads, timber cottages, tiny hamlets, fields, tall forests, streams, rune shrines and collapsed masonry. Runes, divine omens and subtle magic coexist with everyday survival. Invent the art and lore for GODSEED; never copy a referenced game's visual identity.
 

@@ -12,6 +12,10 @@ The **player is a god**, not Nim. Nim and other inhabitants stay *autonomous, de
 
 Treat the planned final game as **1 GB core installed content** plus **up to 5 GB extra optional app-managed persistent storage**, nominal **6 GB total**. This is disk, **not RAM**, and is currently NOT implemented. Preserve offline core-only play and do not artificially pad the APK. Optional packs require explicit user consent, free-space margin and safe removal. Complete **S01–S05** in `work-items/storage-tasks.json` as a sixth five-task batch in addition to the original A01–E05. Total planned implementation tasks: **30**. Use `docs/STORAGE_BUDGET_AND_PACKS.md` and `config/storage-budget.json` as source of truth. Validate limits, transactional updates, backups and device storage measurements; label unsupported functions as blocked, never as done.
 
+## Mandatory low-RAM phone compatibility
+
+**Minimum device class: 2 GB TOTAL physical Android RAM; also test a 3 GB device.** This is NOT permission to use 2–3 GB for the game process. The renderer, JavaScript state and WebView host should aim for **128–192 MiB resident memory** with **256 MiB provisional soft ceiling**, measured via PSS/RSS (report metrics and uncertainties). No physical device measurements exist yet. Use `docs/LOW_RAM_HARDWARE_TARGET.md` and `config/hardware-budget.json` as source of truth. Keep decoded pixel atlases small, cache bounded, avoid full-world heavy surfaces and streaming entire 1–6 GB on-disk content into RAM. Record 2 GB and 3 GB device compatibility in tasks E04 and S05; if no device exists, report `PHYSICAL RAM QA: NOT VERIFIED`, not PASS.
+
 ## First: understand and verify
 Read, in this order:
 1. `AGENTS.md`

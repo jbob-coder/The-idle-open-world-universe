@@ -14,6 +14,10 @@ The user specifies **1 GB minimum for the game plus at most 5 GB of extra free s
 
 **Units:** GB here is decimal (`1 GB = 1,000,000,000 bytes`); `6 GB = 6,000,000,000 bytes`. Distinguish from binary GiB in Android diagnostics. The 1 GB figure is a **content capacity target**, not a requirement to pad the APK or keep the process using 1 GB of RAM. It should not be mislabeled as a measured current build size.
 
+## Separate low-end RAM requirement
+
+Target devices: **2 GB of total Android RAM minimum low-end class, 3 GB common test tier**. The application must occupy far less than this: provisional resident process target 128–192 MiB, soft ceiling 256 MiB. Optional 5 GB disk packs must be lazy-loaded and must never be resident in RAM in full. See `docs/LOW_RAM_HARDWARE_TARGET.md` and `config/hardware-budget.json`. Actual consumption and compatibility are unverified.
+
 ## Storage model and user experience
 1. **Core (required):** locally available code, sprites, UI, minimal world data and gameplay. Keep the Android APK technically reasonable. A core content pack can account for most of the 1 GB target if content warrants it. The present tiny prototype remains tiny; do not bulk it up with empty files.
 2. **Optional (0–5 GB):** higher-detail terrain variants, additional original biome atlases, lore/audio packs, larger authored exploration regions or future content collections. User-installed optional bundles, if implemented, must have explicit install/remove controls and size disclosure. Some options may not yet be supported by the simulator: labeling something planned does not make it playable.
