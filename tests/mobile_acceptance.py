@@ -19,7 +19,7 @@ with sync_playwright() as pw:
         page.locator('#androidDock').wait_for(state='visible')
         dock=page.locator('#androidDock')
         buttons=dock.locator('button')
-        assert buttons.count()==8
+        assert buttons.count()==9
         for b in buttons.all():
             rect=b.bounding_box();assert rect and rect['height']>=43,f"short touch target: {rect}"
         # The fixed dock remains in view, including on small devices.
@@ -30,6 +30,30 @@ with sync_playwright() as pw:
         rect=page.locator('#world').bounding_box()
         page.locator('#world').click(position={'x':int(rect['width']/2),'y':int(rect['height']/2)})
         assert page.evaluate('GodseedDebug.getState().faith')==before-4
+        # New divine power acts on one visible traveler, not Nim's movement.
+        page.evaluate("""() => {
+            const s=GodseedDebug.getState(),p=s.npcs[0];
+            s.seen[GodseedSim.idx(p.x,p.y)]=1;
+        }""")
+        assert page.locator('#people').count()==1
+        page.locator('#androidDock [data-power="inspire"]').click()
+        faith_before=page.evaluate('GodseedDebug.getState().faith')
+        bot_before=page.evaluate('() => {const b=GodseedDebug.getState().bot;return [b.x,b.y]}')
+        page.evaluate("""() => {
+            const s=GodseedDebug.getState(),p=s.npcs[0],world=document.getElementById('world');
+            const r=world.getBoundingClientRect(),scale=Math.min(r.width/world.width,r.height/world.height);
+            const camX=Math.max(0,Math.min(GodseedSim.W-36,s.bot.x-18));
+            const camY=Math.max(0,Math.min(GodseedSim.H-22,s.bot.y-11));
+            const left=r.left+(r.width-world.width*scale)/2;
+            const top=r.top+(r.height-world.height*scale)/2;
+            world.dispatchEvent(new MouseEvent('click',{
+                bubbles:true,clientX:left+(p.x-camX+.5)*16*scale,
+                clientY:top+(p.y-camY+.5)*16*scale
+            }));
+        }""")
+        assert page.evaluate('GodseedDebug.getState().faith')==faith_before-5
+        assert page.evaluate('GodseedDebug.getState().npcs[0].mood')=='hopeful'
+        assert page.evaluate('() => {const b=GodseedDebug.getState().bot;return [b.x,b.y]}')==bot_before
         page.evaluate('()=>GodseedDebug.step(50)')
         # Save export and pasted import work without Android native file APIs.
         page.locator('#export').click()
@@ -48,6 +72,6 @@ with sync_playwright() as pw:
         assert not errors,errors
         assert not outgoing,outgoing
         page.screenshot(path=str(p/'assets'/f'godseed-android-landscape-{width}x{height}.png'),full_page=False)
-        print(f'{width}x{height}: PASS, 8 touch buttons >=44px, bless, backup restore, offline, 0 JS errors')
+        print(f'{width}x{height}: PASS, 9 touch buttons >=44px, bless, backup restore, offline, 0 JS errors')
         context.close()
     browser.close()
