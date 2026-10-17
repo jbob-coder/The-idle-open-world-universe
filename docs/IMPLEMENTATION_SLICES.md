@@ -13,7 +13,7 @@ A05 Test 640x360/720x400/960x540×all zooms; capture browser screenshots.
 B01 Consume manifest/palette and replace repetitive rectangles with selected 16x16 atlas tiles (original art).
 B02 Add 4-neighbor roads and water shoreline variants without changing passability.
 B03 Layer nonblocking flowers, stones, herbs, posts, fence tiles and trees deterministically.
-B04 Make VILLAGE/S HRINE/RUIN/CAMP distinguishable as house/rune stones/collapsed stone/tent and preserve 1-cell world semantics. (Typo S HRINE in prose does not refer to code; actual key SHRINE.)
+B04 Make VILLAGE/SHRINE/RUIN/CAMP distinguishable as house/rune stones/collapsed stone/tent and preserve 1-cell world semantics.
 B05 Cache/invalidate terrain correctly and compare redraw cost with v0.4.
 
 ## Slice C — Character art and behavior cues (priority 3)
