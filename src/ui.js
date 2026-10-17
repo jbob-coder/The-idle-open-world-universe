@@ -13,7 +13,7 @@ const setMode=v=>{mode=v;document.querySelectorAll('[data-power]').forEach(b=>{b
 const html=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function notify(message){flashMessage=message;flashUntil=Date.now()+2700;$('toast').textContent=message;$('toast').classList.add('show');}
 function stamp(s){const hour=Math.floor((s.tick%240)/10),min=Math.floor((s.tick%10)*6);return `DAY ${s.day} · ${String(hour).padStart(2,'0')}:${String(min).padStart(2,'0')}`;}
-const colors=['#375648','#234a3b','#26536a','#62635e','#3d6846','#837458','#638653','#725338'];
+const colors=['#3c5c43','#254b3a','#26536a','#62635e','#426c49','#837458','#688b57','#725338'];
 const hash=(x,y)=>((Math.imul(x+91,374761393)^Math.imul(y+37,668265263))>>>0);
 function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
 function dot(x,y,c){rect(x,y,1,1,c);}
@@ -37,10 +37,13 @@ function drawTile(tile,x,y,wx,wy){let v=hash(wx,wy);rect(x,y,size,size,colors[ti
  if(tile===A.T.RUIN){rect(x+1,y+12,14,3,'#353c36');rect(x+2,y+9,12,6,'#454843');
   rect(x+4,y+2,9,10,'#a8a38e');rect(x+6,y+4,5,1,'#dfc9a4');
   rect(x+7,y+6,2,5,'#555f56');dot(x+12,y+10,'#c1b49c');
-  rect(x+2,y+3,2,3,'#62685a');rect(x+13,y+11,2,2,'#c4b98e');return;}
+  rect(x+2,y+3,2,3,'#62685a');rect(x+13,y+11,2,2,'#c4b98e');
+  // Rune glyph is carved into the ancient stone, not a costly animated particle.
+  dot(x+8,y+2,'#74b9aa');rect(x+8,y+3,1,2,'#74b9aa');return;}
  if(tile===A.T.CAMP){rect(x+1,y+13,14,2,'#2e2b25');rect(x+2,y+8,11,5,'#775039');
   rect(x+7,y+2,6,11,'#cb9f64');rect(x+2,y+7,12,2,'#d4b77f');
-  rect(x+4,y+10,3,3,'#332d22');dot(x+8,y+1,'#d9d4b3');return;}
+  rect(x+4,y+10,3,3,'#332d22');dot(x+8,y+1,'#d9d4b3');
+  rect(x+12,y+11,2,3,'#f4a85c');dot(x+13,y+10,'#edcf76');return;}
  if(tile===A.T.MEADOW){rect(x+2,y+11,2,3,'#a3ba77');rect(x+11,y+8,2,3,'#b1d48c');
   dot(x+8,y+6,'#eacb81');dot(x+10,y+12,'#ebd0a1');
   if(v%4===0){rect(x+4,y+6,2,3,'#b5b688');dot(x+4,y+5,'#eabca0');}return;}
@@ -49,12 +52,16 @@ function drawTile(tile,x,y,wx,wy){let v=hash(wx,wy);rect(x,y,size,size,colors[ti
 function drawBot(cx,cy,worldTime){const p=worldTime%6<3?0:1;rect(cx+4,cy+13,10,2,'#1c2926');rect(cx+5,cy+3,7,4,'#dfb482');rect(cx+6,cy+1,6,3,'#77533d');rect(cx+4,cy+7,9,5,'#e3c573');rect(cx+3,cy+8,2,3,'#af865d');rect(cx+12,cy+8,2,3,'#af865d');rect(cx+5,cy+12,3,2+p,'#453d38');rect(cx+10,cy+12,3,3-p,'#453d38');dot(cx+10,cy+4,'#302c29');}
 function drawEnemy(x,y,e){rect(x+2,y+13,13,2,'#1b2b27');if(e.type==='Boar'){rect(x+2,y+6,12,7,'#b67a57');rect(x+10,y+3,4,5,'#d1a174');rect(x+3,y+5,3,2,'#7a4c36');dot(x+12,y+7,'#292424');rect(x+2,y+12,3,2,'#6b4534');}else{rect(x+3,y+7,10,6,'#a88473');rect(x+4,y+3,3,6,'#cab096');rect(x+10,y+3,3,6,'#cab096');rect(x+5,y+7,2,2,'#edcf9b');rect(x+10,y+7,2,2,'#edcf9b');dot(x+6,y+7,'#222');dot(x+11,y+7,'#222');}}
 function drawPerson(x,y,p){
- const coat=p.role==='Herbalist'?'#8fae7a':p.role==='Lorekeeper'?'#977eb2':'#c08e63';
+ const coat=['Apothecary','Herbalist'].includes(p.role)?'#819c72':['Rune Scholar','Lorekeeper'].includes(p.role)?'#846d9c':'#9b9e96';
  rect(x+3,y+13,11,2,'#22342c');rect(x+6,y+2,7,6,'#d8aa82');
- rect(x+5,y+1,9,3,p.role==='Lorekeeper'?'#b1a0c5':'#66503b');
+ rect(x+5,y+1,9,3,['Rune Scholar','Lorekeeper'].includes(p.role)?'#b1a0c5':'#66503b');
  rect(x+4,y+8,10,5,coat);rect(x+3,y+9,2,3,'#d7b08c');
  rect(x+12,y+9,2,3,'#d7b08c');rect(x+5,y+13,3,2,'#433d34');
  rect(x+10,y+13,3,2,'#433d34');
+ // A tiny readable heraldic insignia distinguishes medieval professions.
+ if(p.role==='Squire')rect(x+8,y+9,3,4,'#c8c9b7');
+ if(p.role==='Rune Scholar')dot(x+8,y+10,'#e6d39c');
+ if(p.role==='Apothecary')dot(x+8,y+9,'#c1eab5');
  if(p.favorUntil>s.tick){rect(x+7,y-2,4,2,'#f2dc88');dot(x+5,y,'#f3e8ad');}
 }
 function updateScenery(){
@@ -107,7 +114,7 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('skillRanks').textContent=A.SKILLS.map(k=>k.toUpperCase().slice(0,3)+' '+b.skills[k]).join(' · ');
  $('adventures').textContent=`${s.story.completed} rumors solved · ${s.story.clues.filter(q=>!q.solved).length} leads · ${b.tactics.dodge} dodges · ${b.tactics.parry} parries · ${b.tactics.trapsAvoided} traps avoided`;
  $('lead').textContent=(s.story.clues.find(q=>!q.solved)||{}).title||'No active legend';
- $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · Trust '+Math.round(p.trust)).join('  •  ')||'No other travelers';
+ $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · Confianza '+Math.round(p.trust)).join('  •  ')||'Sin viajeros todavía';
  $('memory').textContent=b.memory.length?b.memory.slice(-4).reverse().join('  •  '):'Learning about the world…';
  $('milestones').textContent=`${b.steps} steps · ${b.fights} wins · ${b.ruins} ruins · ${b.scars} second chances`;
  $('events').innerHTML=s.log.slice(0,9).map(e=>`<div class="event ${html(e.type)}"><span class="evt-time">D${1+Math.floor(e.tick/240)}</span><div><strong>${html(e.title)}</strong><small>${html(e.detail)}</small></div></div>`).join('');
