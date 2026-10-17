@@ -1,0 +1,49 @@
+{
+  "schema": "godseed.hardware-budget.v1",
+  "status": "target-not-device-verified",
+  "hardware": {
+    "minimumTargetPhysicalRamGB": 2,
+    "lowEndUpperTargetPhysicalRamGB": 3,
+    "interpretation": "total installed Android device RAM, not app process allocation",
+    "minAndroidApi": 26
+  },
+  "appMemory": {
+    "preferredResidentMiBMin": 128,
+    "preferredResidentMiBMax": 192,
+    "softProcessResidentMiBCeiling": 256,
+    "metrics": [
+      "pss_kib",
+      "rss_kib",
+      "webview_processes",
+      "js_heap_bytes_when_available"
+    ],
+    "verifiedOnDevice": false
+  },
+  "rendering": {
+    "decodedAtlasMiBBudget": 4,
+    "worldTiles": [
+      64,
+      48
+    ],
+    "maxNpcBaseline": 3,
+    "nominalMinFrameRateGoal": 20,
+    "nominalTargetFrameRateGoal": 30,
+    "frameRatesVerified": false
+  },
+  "storageSeparate": {
+    "coreInstalledTargetBytes": 1000000000,
+    "optionalAdditionalCapBytes": 5000000000,
+    "ramIsNotPersistentStorage": true
+  },
+  "testing": {
+    "minimumHardwareRamTiersGB": [
+      2,
+      3
+    ],
+    "requirePhysicalDeviceEvidence": true,
+    "requiredAutoplayDurationMinutes": 20,
+    "reportMemoryBeforeAndAfter": true,
+    "reportBackgroundResume": true
+  },
+  "notes": "Engineering targets, not demonstrated performance or process-level enforcement. The prep branch remains a documentation/assets package."
+}

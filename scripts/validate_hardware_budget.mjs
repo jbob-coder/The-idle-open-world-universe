@@ -1,0 +1,22 @@
+// Offline hardware-budget contract validation (NOT physical phone benchmarking).
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const x=JSON.parse(readFileSync('config/hardware-budget.json','utf8'));
+const store=JSON.parse(readFileSync('config/storage-budget.json','utf8'));
+assert.equal(x.schema,'godseed.hardware-budget.v1');
+assert.equal(x.status,'target-not-device-verified');
+assert.equal(x.hardware.minimumTargetPhysicalRamGB,2);
+assert.equal(x.hardware.lowEndUpperTargetPhysicalRamGB,3);
+assert.deepEqual(x.testing.minimumHardwareRamTiersGB,[2,3]);
+assert.ok(x.appMemory.preferredResidentMiBMin<=x.appMemory.preferredResidentMiBMax);
+assert.ok(x.appMemory.preferredResidentMiBMax<x.appMemory.softProcessResidentMiBCeiling);
+assert.equal(x.appMemory.softProcessResidentMiBCeiling,256);
+assert.equal(x.rendering.decodedAtlasMiBBudget,4);
+assert.equal(x.rendering.maxNpcBaseline,3);
+assert.equal(x.appMemory.verifiedOnDevice,false);
+assert.equal(x.storageSeparate.coreInstalledTargetBytes,store.core.targetInstalledBytes);
+assert.equal(x.storageSeparate.optionalAdditionalCapBytes,store.optional.maxAdditionalBytes);
+assert.equal(x.storageSeparate.ramIsNotPersistentStorage,true);
+assert.equal(x.testing.requirePhysicalDeviceEvidence,true);
+console.log('PASS: 2–3 GB total device RAM target; app preferred 128–192 MiB, soft cap 256 MiB (UNVERIFIED)');
+console.log('PASS: separate 1 GB core + 5 GB optional DISK, no claim of runtime enforcement or real-device QA');
