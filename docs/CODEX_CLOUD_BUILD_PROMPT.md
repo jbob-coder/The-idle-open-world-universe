@@ -1,3 +1,5 @@
+> **Updated handoff:** The complete prompt to paste into Codex Cloud is now [CODEX_CLOUD_READY_PROMPT.md](CODEX_CLOUD_READY_PROMPT.md). This earlier prompt remains supporting implementation guidance. Treat [GODSEED_INTENDED_GAME.md](GODSEED_INTENDED_GAME.md), [ANDROID_HTML_APK_SPEC.md](ANDROID_HTML_APK_SPEC.md), and [HANDOFF_READINESS.md](HANDOFF_READINESS.md) as additional authority.
+
 # Copy/paste into Codex Cloud — implement GODSEED medieval skyworld
 
 **Repo:** `jbob-coder/The-idle-open-world-universe`
