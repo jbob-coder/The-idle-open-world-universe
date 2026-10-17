@@ -89,57 +89,77 @@
     {
       "id": "W01",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Define deterministic region ID model",
       "acceptance": "All 3072 map cells receive one of R00\u2013R07; same seed gives same result; terrain IDs unchanged.",
       "dependencies": [
         "F05"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+      ]
     },
     {
       "id": "W02",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Guarantee safe spawn, reachable starter supplies",
       "acceptance": "No enemy inside initial protection radius; berries/wood/stone reachable in seed sweeps.",
       "dependencies": [
         "W01"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+      ]
     },
     {
       "id": "W03",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Build and verify road and POI connectivity",
       "acceptance": "Start reaches two hamlets, two shrines and \u22651 ruin via BFS, visual roads match traversal.",
       "dependencies": [
         "W02"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+      ]
     },
     {
       "id": "W04",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Connect hamlet zones to existing NPC home roles",
       "acceptance": "Ira/Toren/Mera placements preserved; patrols and meetings bounded and observable.",
       "dependencies": [
         "W03"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+      ]
     },
     {
       "id": "W05",
       "group": "world_regions",
-      "status": "todo",
+      "status": "implemented_pending_visual_qa",
       "title": "Regional resource/danger weighting",
       "acceptance": "Forest/hills/fen identity meaningful; no unbounded spawns or inaccessible essentials.",
       "dependencies": [
         "W04"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+      ]
     },
     {
       "id": "W06",

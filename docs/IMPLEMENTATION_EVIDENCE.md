@@ -14,3 +14,8 @@ Five seeds run 10,000 ticks each, checking camp/tool progression, social contact
 Ruling: restoration retains version 1, tile IDs and map contents; invalid required numeric fields are rejected rather than silently creating broken characters. Renewal uses reachable land and deterministic order without consuming gameplay RNG. No rendering or movement controls were added to simulation.
 
 Physical Android device testing: NOT VERIFIED (no attached Android hardware). Browser lifecycle evidence does not establish native lifecycle correctness.
+
+## Regions
+W01–W05: manifest-backed seeded Voronoi overlay with sanctuary reservation; deterministic forest/quarry/fen ecology; walkable roads to eight anchors and existing shrines; protected starter resources and enemy exclusion radius; three original NPC homes retained. 100-seed coverage/connectivity suite passes. 35 Node tests and offline lifecycle checks pass. Visual acceptance pending A–D integration.
+
+Ruling: old saves derive an immutable worldSeed from their saved RNG seed when no original seed exists. Map, progress and positions are never regenerated. New roads replace water with semantic ROAD (dry causeway), not cosmetic bridges over blocked water.

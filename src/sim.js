@@ -1,5 +1,5 @@
 /* GODSEED deterministic simulation. UMD: browser global + CommonJS. No external services. */
-(function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./world/regions.js'):root.GodseedRegions);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Regions){
 'use strict';
 const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7,ROAD:8,VILLAGE:9,SHRINE:10};
 const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter','Kingdom road','Village','Ancient shrine'];
@@ -137,7 +137,7 @@ function event(s,title,detail,type='event'){
  const e={tick:s.tick,title:String(title),detail:String(detail),type};s.log.unshift(e);if(s.log.length>45)s.log.length=45;
  if(type==='milestone'){s.faith=clamp(s.faith+3,0,50);s.milestones++;}
 }
-function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
+function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,worldSeed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
  map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
  bot:{name:'Nim',x:Math.floor(W/2),y:Math.floor(H/2),level:1,xp:0,hp:24,maxHp:24,hunger:86,energy:83,attack:4,defense:1,food:2,wood:0,stone:0,tool:0,
  goal:'Awakening',thought:'Where am I?',target:null,path:[],actionDelay:0,fights:0,ruins:0,scars:0,steps:0,
@@ -146,7 +146,7 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,d
  s.bot.personality={curiosity:origin.curiosity,caution:origin.caution,diligence:origin.diligence};
  progress(s.bot);s.bot.skills[origin.focus]=1;
  s.story={clues:[],completed:0};
- s.map=terrain(s);for(let y=s.bot.y-3;y<=s.bot.y+3;y++)for(let x=s.bot.x-3;x<=s.bot.x+3;x++)if(inside(x,y))s.map[idx(x,y)]=T.GRASS;
+ s.map=terrain(s);Regions.shape(s,T);for(let y=s.bot.y-3;y<=s.bot.y+3;y++)for(let x=s.bot.x-3;x<=s.bot.x+3;x++)if(inside(x,y))s.map[idx(x,y)]=T.GRASS;
  s.map[idx(s.bot.x+2,s.bot.y)]=T.BERRY;s.map[idx(s.bot.x-2,s.bot.y)]=T.FOREST;s.map[idx(s.bot.x,s.bot.y-2)]=T.STONE;
  for(let i=0;i<10;i++){const x=5+rint(s,W-10),y=5+rint(s,H-10);if(Math.abs(x-s.bot.x)+Math.abs(y-s.bot.y)>8 && s.map[idx(x,y)]!==T.WATER)s.map[idx(x,y)]=T.RUIN;}
  // A light medieval-fantasy world: paths, villages and shrines as logical tiles.
@@ -165,7 +165,7 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,d
  for(const [x,y] of [[s.bot.x+10,s.bot.y-5],[s.bot.x-12,s.bot.y+7]]){
   s.map[idx(x,y)]=T.SHRINE;
  }
- s.npcs=initPeople(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
+ Regions.connect(s,T);s.npcs=initPeople(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
  return s;}
 function discover(s,x,y){let count=0;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const xx=x+ox,yy=y+oy;if(!inside(xx,yy)||ox*ox+oy*oy>12)continue;const n=idx(xx,yy);if(!s.seen[n]){s.seen[n]=1;count++;}}return count;}
 function remember(s,subject){let m=s.bot.memory;if(m[m.length-1]!==subject){m.push(subject);if(m.length>12)m.shift();}}
@@ -289,8 +289,8 @@ function revive(s){const b=s.bot;if(b.hp>0)return;
  b.scars++;b.hp=Math.max(10,Math.round(b.maxHp*.65));b.hunger=65;b.energy=65;b.x=s.camp?s.camp.x:(W>>1);b.y=s.camp?s.camp.y:(H>>1);b.path=[];s.enemies=[];discover(s,b.x,b.y);remember(s,'Survived fall #'+b.scars);event(s,'Life restored','The god returns Nim from the edge of death.','milestone');
 }
 function updateEnemies(s){const b=s.bot;
- if(s.enemies.length<5&&s.tick%53===0){for(let i=0;i<18;i++){const x=clamp(b.x+rint(s,19)-9,1,W-2),y=clamp(b.y+rint(s,17)-8,1,H-2),d=Math.abs(x-b.x)+Math.abs(y-b.y);if(d>5&&d<14&&walkable(s,x,y)&&(!s.camp||Math.abs(x-s.camp.x)+Math.abs(y-s.camp.y)>3)&&!s.enemies.some(e=>e.x===x&&e.y===y)){
- const tougher=s.day>4&&rand(s)<.35;s.enemies.push({id:s.nextEnemyId++,type:tougher?'Boar':'Wolf',x,y,hp:tougher?17:11,defense:tougher?2:0,attack:tougher?4:2,cooldown:1});break;}}}
+ if(s.enemies.length<5&&s.tick%53===0){for(let i=0;i<18;i++){const x=clamp(b.x+rint(s,19)-9,1,W-2),y=clamp(b.y+rint(s,17)-8,1,H-2),d=Math.abs(x-b.x)+Math.abs(y-b.y);if(d>5&&d<14&&Math.abs(x-32)+Math.abs(y-24)>5&&walkable(s,x,y)&&(!s.camp||Math.abs(x-s.camp.x)+Math.abs(y-s.camp.y)>3)&&!s.enemies.some(e=>e.x===x&&e.y===y)){
+ const tougher=Regions.at(s,x,y).id==='R04'||(s.day>4&&rand(s)<.35);s.enemies.push({id:s.nextEnemyId++,type:tougher?'Boar':'Wolf',x,y,hp:tougher?17:11,defense:tougher?2:0,attack:tougher?4:2,cooldown:1});break;}}}
  for(const e of s.enemies){if(e.cooldown>0){e.cooldown--;continue;}const d=Math.abs(e.x-b.x)+Math.abs(e.y-b.y);
  if(d===1){
   let dmg=Math.max(1,e.attack+rint(s,3)-b.defense);
@@ -302,7 +302,7 @@ function updateEnemies(s){const b=s.bot;
   b.hp-=dmg;e.cooldown=3;addMark(s,b.x,b.y,result);
   if(s.tick%8===0)event(s,result==='evade'?'Attack evaded':result==='parry'?'Attack parried':'Under attack',result==='evade'?'Nim dodged the '+e.type+'.':result==='parry'?'Nim blocked part of a '+e.type+' attack.':'A '+e.type+' struck Nim for '+dmg+' health.',dmg>0?'danger':'event');
  }
- else if(d<6&&s.tick%3===0){let options=DIRS.map(([dx,dy])=>[e.x+dx,e.y+dy]).filter(([x,y])=>walkable(s,x,y)&&!(x===b.x&&y===b.y)&&!s.enemies.some(o=>o!==e&&o.x===x&&o.y===y));options.sort((a,c)=>(Math.abs(a[0]-b.x)+Math.abs(a[1]-b.y))-(Math.abs(c[0]-b.x)+Math.abs(c[1]-b.y)));if(options.length){e.x=options[0][0];e.y=options[0][1];}e.cooldown=1;}
+ else if(d<6&&s.tick%3===0){let options=DIRS.map(([dx,dy])=>[e.x+dx,e.y+dy]).filter(([x,y])=>walkable(s,x,y)&&Math.abs(x-32)+Math.abs(y-24)>5&&!(x===b.x&&y===b.y)&&!s.enemies.some(o=>o!==e&&o.x===x&&o.y===y));options.sort((a,c)=>(Math.abs(a[0]-b.x)+Math.abs(a[1]-b.y))-(Math.abs(c[0]-b.x)+Math.abs(c[1]-b.y)));if(options.length){e.x=options[0][0];e.y=options[0][1];}e.cooldown=1;}
  }
  revive(s);
 }
@@ -356,7 +356,7 @@ function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!=
  if(!Array.isArray(s.enemies)||!s.enemies.every(e=>e&&Number.isInteger(e.x)&&Number.isInteger(e.y)&&inside(e.x,e.y)&&['hp','attack','defense','cooldown','id'].every(k=>Number.isFinite(e[k]))))return false;
  return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
 function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
-function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
+function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;if(!Number.isInteger(s.worldSeed))s.worldSeed=s.seed;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
  progress(s.bot);
  // Migration: v0.1/v0.2 saves had no inhabitants. Keep old save schema intact.
  s.npcs=Array.isArray(s.npcs)?s.npcs.slice(0,3):initPeople(s);
@@ -374,5 +374,5 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
  s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
-return {W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
+return {regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
 });
