@@ -14,3 +14,14 @@ The repository prep branch ships newly designed **source concepts**, palette, ma
 10. Update `assets/README.md` whenever statuses change. Avoid bloating Git history with large rendered mockups.
 
 Asset request tracking: see `docs/IMPLEMENTATION_SLICES.md` and `work-items/codex-tasks.json`. Art statuses are `starter` (exists as source/reference but not integrated), `planned` (not drawn), `implemented` (connected to runtime and tested). Current handoff makes no claim to implemented art.
+
+## Committed native atlas layout (current generated source)
+
+| Path | Dimensions | Region mapping |
+| --- | ---: | --- |
+| `assets/generated/terrain-starter.png` | 176×48 | 11 terrain IDs × 3 variants, 16×16 |
+| `assets/generated/actors-starter.png` | 128×96 | 4 actors × 2 frames across; 4 directions down; frame 16×24 |
+| `assets/generated/fx-starter.png` | 112×16 | 7 static 16×16 effect/command symbols |
+| `assets/generated/props-starter.png` | 128×32 | 8 motifs × 2 16×16 variants |
+
+Run `node scripts/generate_starter_assets.mjs` then `node scripts/validate_asset_manifest.mjs`. These are source-generated **starter** sheets, not complete final directional animations, timed FX or loaded assets in v0.4. The GitHub Actions QA workflow validates exact reproducibility using `git diff --exit-code -- assets/generated/`.

@@ -1,3 +1,11 @@
+## Preparación para Codex Cloud — pixel medieval de vista elevada
+
+**No es una nueva versión jugable.** La rama `prep/codex-skyworld-v0.5` reúne un paquete listo para implementar sin tocar el funcionamiento actual. El objetivo posterior es una vista cenital *más alta*, predeterminada **32×20 casillas**, con detalle de píxeles cuadrados, sprites 2D medievales, aldeas, caminos, santuarios, NPC autónomos e intervenciones divinas legibles.
+
+**Documentación y punto de entrada:** [Prompt de implementación Codex Cloud](docs/CODEX_CLOUD_BUILD_PROMPT.md) · [Guía de estilo](docs/PIXEL_WORLD_STYLE_GUIDE.md) · [Plan de 25 tareas](docs/IMPLEMENTATION_SLICES.md) · [Manifiesto de assets](assets/asset-manifest.json) · [Handoff](docs/CODEX_HANDOFF.md).
+
+**Recursos comprometidos:** 3 referencias SVG, 4 atlas PNG originales y reproducibles, paleta JSON, generador/validador de assets, 25 tareas por lotes de cinco y criterios de aceptación. Los atlas son **starter / no integrados** en el render actual. Los SVG son conceptos, **no capturas Android**. Ejecutar validación: `node scripts/validate_asset_manifest.mjs`.
+
 # The Idle Open World Universe — GODSEED
 
 **GODSEED v0.2** is an experimental build of an **offline Android god-observation RPG/simulation** for older phones. You are the god; **Nim** is an independently acting, rule-driven pixel-world inhabitant. You cannot control Nim directly. You can watch exploration, survival, crafting, wildlife encounters, leveling and memories, and change the world indirectly using Faith-powered divine actions.

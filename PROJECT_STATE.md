@@ -1,3 +1,16 @@
+## Handoff preparado para Codex Cloud (2026-10-17)
+
+BRANCH: `prep/codex-skyworld-v0.5`; base `feat/skyview-zoom-v0.4`. No introducir cambios en `main` hasta revisar cadena de PRs.
+
+PREPARATION DELIVERED: docs de visión, estilo, intervención divina, arquitectura, rendimiento, aceptación, cinco slices, prompt Codex, estado, AGENTS.md; recursos originales en `assets/generated/` (4 atlas PNG), tres referencias SVG en `assets/concepts/`, paleta y manifiesto JSON; ledger de 25 tareas en `work-items/codex-tasks.json`, generador y validador de atlas.
+
+NOT IMPLEMENTED IN GAME: vista elevada 32x20 como default (v0.4 usa 24x15), integración de atlas, sprites finales, efectos animados, más decoración/render, nuevas interfaces Android. Es trabajo para Codex y todas las tareas siguen pendientes.
+
+VERIFICATION: CI corre Node tests, construcción HTML y APK de depuración además de regeneración/CRC/layout de assets. Las pruebas físicas Android no están confirmadas. No afirmar rendimiento medido, ni integración del arte.
+
+NEXT ACTION: Codex Cloud lee `AGENTS.md` y `docs/CODEX_CLOUD_BUILD_PROMPT.md`; crea rama `feat/godseed-medieval-skyworld-v1` partiendo del handoff; ejecuta slices A–E con pruebas, pantallas reales de navegador y arte integrado. Evitar mezclar en main automáticamente.
+
+---
 ## GODSEED v0.4 — cámara cenital / zoom 2D — 2026-10-17
 
 CURRENT_OBJECTIVE: Primer lote de zoom para el juego autónomo medieval de Android. Implementado en `feat/skyview-zoom-v0.4`, sobre `feat/living-world-divine-v0.3`, sin cambios en `main`.

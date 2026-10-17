@@ -27,6 +27,12 @@ jobs:
           node --check src/sim.js
           node --check src/ui.js
           node --test tests/*.test.js
+      - name: Verify Codex starter-art contract and reproducibility
+        run: |
+          node scripts/validate_asset_manifest.mjs
+          node scripts/generate_starter_assets.mjs
+          git diff --exit-code -- assets/generated/
+          node scripts/validate_asset_manifest.mjs
       - name: Rebuild debug APK with temporary CI signing key
         run: python android/build_apk.py
       - name: Check APK structure and signature
