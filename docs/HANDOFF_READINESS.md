@@ -17,6 +17,8 @@ The goal of Gate P is to make implementation unambiguous and reproducible. The r
 
 **Gate P status: READY FOR CODEX IMPLEMENTATION HANDOFF** once the new documents are committed and verified. It does **not** mean finished game art.
 
+**Storage handoff:** Prepared requirement 1 GB core installed target + optional 5 GB app-managed data (nominal 6 GB disk, NOT RAM), with `docs/STORAGE_BUDGET_AND_PACKS.md`, `config/storage-budget.json` and 5 more TODO tasks S01–S05 (30 total). None is runtime enforced by the current prototype.
+
 ## Gate I — Codex implementation complete (future)
 - [ ] Tasks A01–E05 in `work-items/codex-tasks.json` marked DONE only after source and test evidence.
 - [ ] Default high sky **32×20**, close 24×15, inspect 16×10; correct panning/follow/touch transforms.
@@ -28,6 +30,8 @@ The goal of Gate P is to make implementation unambiguous and reproducible. The r
 - [ ] Long-run simulation, frame-time and memory measurements reported, including any regressions or unknowns.
 - [ ] Versioned experimental Android APK and exact build SHA/signature/ZIP checks (or honest tooling blocker).
 - [ ] Implementation PR with real browser captures, changes, test outputs and the unresolved issue ledger. No silent merges to main.
+
+- [ ] S01–S05 completed with actual app-private storage accounting, optional consent, 5 GB maximum extra use, 6 GB combined nominal quota, free-space guard, safe save-preserving deletion, rollback and low-storage tests; device evidence or explicit blocker.
 
 ## Gate R — Android release-ready (strict future gate)
 - [ ] APK installed and launched on **real low-end Android hardware**, not just Chromium and not just a structurally valid APK.

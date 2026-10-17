@@ -1,5 +1,7 @@
 # Android old-hardware performance and memory contract
 
+**Storage is not RAM.** New full-game target: 1 GB core installed content + a maximum of 5 GB optional extra app-managed disk storage (6 GB nominal total). The present APK is far smaller. No dummy padding or forced 5 GB preallocation. Runtime decoded textures still obey the small-memory budgets below, regardless of optional packs. See `docs/STORAGE_BUDGET_AND_PACKS.md` and `config/storage-budget.json`.
+
 **Target:** offline Android 8+ landscape, constrained phones with modest RAM/GPU. No FPS/energy measurements have yet been taken on physical Android for the handoff branch, so the following are engineering budgets, not achieved numbers.
 
 - Target 30 FPS for rendering on low-end phone; acceptable degradation to 20 FPS while preserving simulation accuracy. Existing UI frame loop redraw cap is ~85 ms (~12 FPS): Codex should measure and adjust according to energy/performance **instead of claiming 30 FPS now**. Step logic remains fixed and bounded.

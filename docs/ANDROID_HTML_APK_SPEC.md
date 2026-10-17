@@ -56,19 +56,25 @@ An optional `androidx.webkit.WebViewAssetLoader` can serve bundled local files u
 9. Stable application package identity and protected **release signing key** stored outside the repo; CI debug keys are not release identities. Export save before moving between incompatible signatures or storage origins.
 10. Generate a reproducible build report: tool versions, source commit, APK SHA256, min/target SDK, asset contents, signature verification and test counts; label untested hardware honestly.
 
-## 6. Asset delivery choices
+## 6. Planned persistent-storage packaging and consent
+
+The intended complete game has **1 GB installed core content target** plus **up to 5 GB extra optional app-managed storage**, nominal **6 GB total on disk**—not 6 GB RAM. The current tiny WebView APK does not yet have this data size or a pack manager. Do not pad files or reserve optional capacity. Use meaningful offline core assets and optional original content packs only with explicit opt-in and sufficient storage.
+
+Large resources must live in app-managed files rather than HTML `localStorage`. Optional packs need metadata, integrity/hash verification, compatibility checks, actual available-space measurement, staged install/rollback, size display and safe deletion without touching saves. The Android host must preserve previous file-origin saves if asset-serving origin changes. Avoid broad storage permissions and never require internet for core gameplay. See `docs/STORAGE_BUDGET_AND_PACKS.md`, `config/storage-budget.json` and S01–S05 in `work-items/storage-tasks.json`.
+
+## 7. Asset delivery choices
 Option A: embed small sprite atlas PNGs as data URLs in the self-contained HTML (simple compatibility, but bigger HTML/base64 overhead). Option B: package asset files in the APK under assets and load with a trusted local/asset-loader URL (better caching and organization); browser preview must also have its matching local directory or a build-time single-file variant. Decide explicitly and test both browser and APK flows.
 
 The current `build.py` embeds **scripts only**; committing `assets/generated/*.png` does NOT make the APK renderer use them. Codex must wire atlas loading, verify decoding and inspect browser screenshots. Never claim the atlas is in-game merely because files exist in Git.
 
-## 7. Verification and release gates
+## 8. Verification and release gates
 **Required on CI:** Node simulation tests, deterministic asset generator verification, valid manifest, browser smoke at 3 viewports × all zooms, no JavaScript errors or network requests, touch targeting, old save migration, APK package/signature checks and honest artifact metadata.
 
 **Required before claiming phone-ready:** actual install/launch on target Android hardware (preferably a low-end device), foreground/background restore, permission inspection, 20-minute unattended world run, FPS/frame pacing, RAM/CPU and battery observations, JSON backup/restore, screen recording and compatibility testing after build/signing changes. An emulator supplements but does not replace old-device profiling.
 
 **Release blockers:** no verified install, missing signing continuity, persistence loss, touch targeting errors, unlicensed art, crashes, or budget-breaking frame times. Do not ship production APK through the experimental SDK-free builder merely because structural tests pass.
 
-## 8. Migration strategy
+## 9. Migration strategy
 **Phase 0:** preserve existing browser gameplay and current debug APK as baseline; snapshot saves and test files.
 **Phase 1:** integrate 32×20 sky camera + pixel atlas art + divine FX inside existing Canvas stack; keep `src/sim.js` API stable.
 **Phase 2:** run performance and storage/backup tests on old Android; tune frame rendering and memory.

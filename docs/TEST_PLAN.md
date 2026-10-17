@@ -18,6 +18,10 @@
 9. Long run: >=10,000 deterministic ticks sampled for pathological loops, unbounded entity growth, Faith exploits, and save size.
 10. APK: reproducible dev build, sign/manifest/ZIP check, Android launch **only if device/emulator actually available**. Record model/OS/FPS/memory.
 
+## Additional storage acceptance tests (S01–S05, not yet implemented)
+
+Check core works with zero optional content, user opt-in, correct decimal GB versus GiB, accounting of APK/app data and separate RAM. Test 5 GB optional boundary, nominal 6 GB combined cap, phone with 0/300 MB free, free-space reserve, staged expansion peak usage, interrupted/oversized/corrupt pack, safe delete without wiping saves, old-save migration and measured actual Android install. `node scripts/validate_storage_budget.mjs` validates *planned policy numbers* only; runtime enforcement requires new tests and device evidence.
+
 ## Evidence format per slice
 Include: commit, changed files, test command, pass/fail count, screenshot names with browser or device attribution, known blockers, performance before/after. Do not label desktop Chromium captures as phone screenshots.
 
