@@ -97,7 +97,7 @@ function updateScenery(){
  ctx=sceneryCtx;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
   const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy),x=rx*size,y=ry*size;
-  if(!s.seen[n]){rect(x,y,size,size,'#141e22');if(hash(wx,wy)%13===0)rect(x+7,y+7,2,2,'#233238');continue;}
+  if(!s.seen[n]){drawTile(s.map[n],x,y,wx,wy);rect(x,y,size,size,'rgba(6,16,24,.72)');if(hash(wx,wy)%13===0)rect(x+7,y+7,2,2,'#425058');continue;}
   drawTile(s.map[n],x,y,wx,wy);
   // Light beaches and rocky shorelines make biome transitions readable.
   if(s.map[n]!==A.T.WATER&&wy>0&&s.map[A.idx(wx,wy-1)]===A.T.WATER)
