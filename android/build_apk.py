@@ -8,7 +8,7 @@ import hashlib, json, os, struct, subprocess, tempfile, zipfile, zlib
 from pathlib import Path
 P=Path(__file__).resolve().parents[1]
 OUT=P/'dist';OUT.mkdir(exist_ok=True)
-APK=OUT/'GODSEED-v0.2-debug.apk'
+APK=OUT/'GODSEED-v0.3-debug.apk'
 
 U16=lambda n:struct.pack('<H',n)
 U32=lambda n:struct.pack('<I',n)
@@ -155,7 +155,7 @@ class Axml:
     def build(self):
         # Collect indices up front, because pool must be first serialized XML chunk.
         chunks=[self.ns(True)]
-        chunks.append(self.start('manifest',[('package','io.godseed.one','string'),('versionCode',1,'int'),('versionName','0.1.0','string')]))
+        chunks.append(self.start('manifest',[('package','io.godseed.one','string'),('versionCode',3,'int'),('versionName','0.3.0','string')]))
         chunks.extend([self.start('uses-sdk',[('minSdkVersion',26,'int'),('targetSdkVersion',28,'int')]),self.end('uses-sdk')])
         chunks.append(self.start('application',[('label','GODSEED','string'),('theme',0x01030007,'ref'),('allowBackup',False,'bool'),('hardwareAccelerated',True,'bool'),('usesCleartextTraffic',False,'bool')]))
         chunks.append(self.start('activity',[('name','io.godseed.one.MainActivity','string'),('exported',True,'bool'),('screenOrientation',0,'int')]))
