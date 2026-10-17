@@ -40,6 +40,20 @@ jobs:
         run: |
           node --check scripts/generate_starter_assets.mjs
           node --check scripts/validate_asset_manifest.mjs
+      - name: Validate concept SVG sources are well-formed and offline
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from xml.etree import ElementTree as ET
+          for name in ('godseed-skyworld-overview', 'godseed-character-inspect', 'godseed-divine-reaction'):
+              path = Path('assets/concepts') / (name + '.svg')
+              root = ET.parse(path).getroot()
+              assert root.tag == '{http://www.w3.org/2000/svg}svg', name
+              assert root.attrib.get('viewBox') == '0 0 960 540', name
+              text = path.read_text(encoding='utf-8').lower()
+              assert 'http://' not in text and 'https://' not in text.replace('http://www.w3.org/2000/svg', ''), name
+              print('PASS SVG', path)
+          PY
       - name: Run existing autonomous simulation regression tests
         run: node --test tests/*.test.js
       - name: Verify offline HTML still builds
