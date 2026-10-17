@@ -8,7 +8,7 @@
 - [x] Manifest / palette / sprite rect coordinates and prep concepts
 - [x] 25 machine-readable Codex work items with statuses
 - [x] Automated integrity workflow and validator — GitHub Actions verified exact atlas reproduction (successful run 39071055421)
-- [ ] Dedicated PR targeting camera v0.4 for review (create after completing the handoff)
+- [x] Dedicated [PR #4](https://github.com/jbob-coder/The-idle-open-world-universe/pull/4) targets the v0.4 camera branch for review; not merged
 
 ## NOT yet implemented by the handoff
 - [ ] 32x20 default high-sky camera (v0.4 currently 24x15)
