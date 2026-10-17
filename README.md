@@ -1,3 +1,9 @@
+## GODSEED product architecture and final Codex handoff (2026-10-17)
+
+**Canonical product and Android references:** [Intended game experience](docs/GODSEED_INTENDED_GAME.md) · [Why HTML inside the APK / Android host architecture](docs/ANDROID_HTML_APK_SPEC.md) · [Readiness gates P/I/R](docs/HANDOFF_READINESS.md) · [Final prompt to paste into Codex Cloud](docs/CODEX_CLOUD_READY_PROMPT.md).
+
+This branch provides implementation documentation, original starter art and a tested preparation workflow; **the new renderer, production Android wrapper and physical-device tests are NOT complete**. Codex should begin from `prep/codex-skyworld-v0.5` and follow the final prompt rather than starting on `main`.
+
 ## Preparación para Codex Cloud — pixel medieval de vista elevada
 
 **No es una nueva versión jugable.** La rama `prep/codex-skyworld-v0.5` reúne un paquete listo para implementar sin tocar el funcionamiento actual. El objetivo posterior es una vista cenital *más alta*, predeterminada **32×20 casillas**, con detalle de píxeles cuadrados, sprites 2D medievales, aldeas, caminos, santuarios, NPC autónomos e intervenciones divinas legibles.
