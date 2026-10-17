@@ -1,0 +1,35 @@
+{
+  "schema": "godseed.storage-budget.v1",
+  "status": "planned-not-enforced-in-runtime",
+  "units": "decimal-bytes",
+  "scope": "app-managed-persistent-storage, not RAM; OS overhead separately reported",
+  "core": {
+    "targetInstalledBytes": 1000000000,
+    "meaning": "intended mature installed core content target, not a synthetic minimum for prototype"
+  },
+  "optional": {
+    "maxAdditionalBytes": 5000000000,
+    "enabledByDefault": false,
+    "userConsentRequired": true,
+    "allocateOnStartup": false,
+    "offlineLocalImportPreferred": true
+  },
+  "maximumManagedBytes": 6000000000,
+  "safety": {
+    "minimumFreeAfterWriteBytes": 500000000,
+    "reserveFractionOfCurrentlyAvailableBytes": 0.1,
+    "includePeakStagingBytes": true,
+    "rollbackOnFailure": true
+  },
+  "releaseEvidence": {
+    "measureActualInstallationOnAndroid": true,
+    "reportApkAndDataSeparately": true,
+    "trackOSOverheadSeparately": true
+  },
+  "saveCompatibility": {
+    "key": "godseed-one-small-life-v1",
+    "simulationSchemaVersion": 1,
+    "preferSmallJsonBackups": true
+  },
+  "notes": "User-reported intended final storage capacity. This JSON is a design contract, not an implemented disk quota, reservation, download, actual install-size measurement or consent UI."
+}

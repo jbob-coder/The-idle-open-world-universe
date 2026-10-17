@@ -1,0 +1,1073 @@
+{
+  "schema": "godseed.assets.v1",
+  "state": "starter-not-integrated",
+  "source": "scripts/generate_starter_assets.mjs",
+  "artSource": "original, produced for GODSEED; no third-party sprites",
+  "pixelRules": {
+    "nativeTilePixels": [
+      16,
+      16
+    ],
+    "worldCells": [
+      64,
+      48
+    ],
+    "smoothing": false,
+    "actorFootAnchor": [
+      8,
+      23
+    ],
+    "maxColorsPerActorRecommended": 12
+  },
+  "atlases": [
+    {
+      "path": "assets/generated/terrain-starter.png",
+      "status": "starter",
+      "width": 176,
+      "height": 48,
+      "channels": "RGBA8",
+      "cell": [
+        16,
+        16
+      ],
+      "tiles": [
+        {
+          "id": 0,
+          "name": "GRASS",
+          "variant": 0,
+          "rect": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 0,
+          "name": "GRASS",
+          "variant": 1,
+          "rect": [
+            0,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 0,
+          "name": "GRASS",
+          "variant": 2,
+          "rect": [
+            0,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 1,
+          "name": "FOREST",
+          "variant": 0,
+          "rect": [
+            16,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 1,
+          "name": "FOREST",
+          "variant": 1,
+          "rect": [
+            16,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 1,
+          "name": "FOREST",
+          "variant": 2,
+          "rect": [
+            16,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 2,
+          "name": "WATER",
+          "variant": 0,
+          "rect": [
+            32,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 2,
+          "name": "WATER",
+          "variant": 1,
+          "rect": [
+            32,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 2,
+          "name": "WATER",
+          "variant": 2,
+          "rect": [
+            32,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 3,
+          "name": "STONE",
+          "variant": 0,
+          "rect": [
+            48,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 3,
+          "name": "STONE",
+          "variant": 1,
+          "rect": [
+            48,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 3,
+          "name": "STONE",
+          "variant": 2,
+          "rect": [
+            48,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 4,
+          "name": "BERRY",
+          "variant": 0,
+          "rect": [
+            64,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 4,
+          "name": "BERRY",
+          "variant": 1,
+          "rect": [
+            64,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 4,
+          "name": "BERRY",
+          "variant": 2,
+          "rect": [
+            64,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 5,
+          "name": "RUIN",
+          "variant": 0,
+          "rect": [
+            80,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 5,
+          "name": "RUIN",
+          "variant": 1,
+          "rect": [
+            80,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 5,
+          "name": "RUIN",
+          "variant": 2,
+          "rect": [
+            80,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 6,
+          "name": "MEADOW",
+          "variant": 0,
+          "rect": [
+            96,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 6,
+          "name": "MEADOW",
+          "variant": 1,
+          "rect": [
+            96,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 6,
+          "name": "MEADOW",
+          "variant": 2,
+          "rect": [
+            96,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 7,
+          "name": "CAMP",
+          "variant": 0,
+          "rect": [
+            112,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 7,
+          "name": "CAMP",
+          "variant": 1,
+          "rect": [
+            112,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 7,
+          "name": "CAMP",
+          "variant": 2,
+          "rect": [
+            112,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 8,
+          "name": "ROAD",
+          "variant": 0,
+          "rect": [
+            128,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 8,
+          "name": "ROAD",
+          "variant": 1,
+          "rect": [
+            128,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 8,
+          "name": "ROAD",
+          "variant": 2,
+          "rect": [
+            128,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 9,
+          "name": "VILLAGE",
+          "variant": 0,
+          "rect": [
+            144,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 9,
+          "name": "VILLAGE",
+          "variant": 1,
+          "rect": [
+            144,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 9,
+          "name": "VILLAGE",
+          "variant": 2,
+          "rect": [
+            144,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 10,
+          "name": "SHRINE",
+          "variant": 0,
+          "rect": [
+            160,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 10,
+          "name": "SHRINE",
+          "variant": 1,
+          "rect": [
+            160,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "id": 10,
+          "name": "SHRINE",
+          "variant": 2,
+          "rect": [
+            160,
+            32,
+            16,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "path": "assets/generated/actors-starter.png",
+      "status": "starter",
+      "width": 128,
+      "height": 96,
+      "channels": "RGBA8",
+      "cell": [
+        16,
+        24
+      ],
+      "frames": [
+        {
+          "name": "Nim",
+          "direction": "south",
+          "phase": 0,
+          "rect": [
+            0,
+            0,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Nim",
+          "direction": "south",
+          "phase": 1,
+          "rect": [
+            16,
+            0,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Ira",
+          "direction": "south",
+          "phase": 0,
+          "rect": [
+            32,
+            0,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Ira",
+          "direction": "south",
+          "phase": 1,
+          "rect": [
+            48,
+            0,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Toren",
+          "direction": "south",
+          "phase": 0,
+          "rect": [
+            64,
+            0,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Toren",
+          "direction": "south",
+          "phase": 1,
+          "rect": [
+            80,
+            0,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Mera",
+          "direction": "south",
+          "phase": 0,
+          "rect": [
+            96,
+            0,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Mera",
+          "direction": "south",
+          "phase": 1,
+          "rect": [
+            112,
+            0,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Nim",
+          "direction": "east",
+          "phase": 0,
+          "rect": [
+            0,
+            24,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Nim",
+          "direction": "east",
+          "phase": 1,
+          "rect": [
+            16,
+            24,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Ira",
+          "direction": "east",
+          "phase": 0,
+          "rect": [
+            32,
+            24,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Ira",
+          "direction": "east",
+          "phase": 1,
+          "rect": [
+            48,
+            24,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Toren",
+          "direction": "east",
+          "phase": 0,
+          "rect": [
+            64,
+            24,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Toren",
+          "direction": "east",
+          "phase": 1,
+          "rect": [
+            80,
+            24,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Mera",
+          "direction": "east",
+          "phase": 0,
+          "rect": [
+            96,
+            24,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Mera",
+          "direction": "east",
+          "phase": 1,
+          "rect": [
+            112,
+            24,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Nim",
+          "direction": "north",
+          "phase": 0,
+          "rect": [
+            0,
+            48,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Nim",
+          "direction": "north",
+          "phase": 1,
+          "rect": [
+            16,
+            48,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Ira",
+          "direction": "north",
+          "phase": 0,
+          "rect": [
+            32,
+            48,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Ira",
+          "direction": "north",
+          "phase": 1,
+          "rect": [
+            48,
+            48,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Toren",
+          "direction": "north",
+          "phase": 0,
+          "rect": [
+            64,
+            48,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Toren",
+          "direction": "north",
+          "phase": 1,
+          "rect": [
+            80,
+            48,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Mera",
+          "direction": "north",
+          "phase": 0,
+          "rect": [
+            96,
+            48,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Mera",
+          "direction": "north",
+          "phase": 1,
+          "rect": [
+            112,
+            48,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Nim",
+          "direction": "west",
+          "phase": 0,
+          "rect": [
+            0,
+            72,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Nim",
+          "direction": "west",
+          "phase": 1,
+          "rect": [
+            16,
+            72,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Ira",
+          "direction": "west",
+          "phase": 0,
+          "rect": [
+            32,
+            72,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Ira",
+          "direction": "west",
+          "phase": 1,
+          "rect": [
+            48,
+            72,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Toren",
+          "direction": "west",
+          "phase": 0,
+          "rect": [
+            64,
+            72,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Toren",
+          "direction": "west",
+          "phase": 1,
+          "rect": [
+            80,
+            72,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Mera",
+          "direction": "west",
+          "phase": 0,
+          "rect": [
+            96,
+            72,
+            16,
+            24
+          ]
+        },
+        {
+          "name": "Mera",
+          "direction": "west",
+          "phase": 1,
+          "rect": [
+            112,
+            72,
+            16,
+            24
+          ]
+        }
+      ]
+    },
+    {
+      "path": "assets/generated/fx-starter.png",
+      "status": "starter",
+      "width": 112,
+      "height": 16,
+      "channels": "RGBA8",
+      "cell": [
+        16,
+        16
+      ],
+      "symbols": [
+        {
+          "name": "inspect",
+          "rect": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "bless",
+          "rect": [
+            16,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "gift",
+          "rect": [
+            32,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "bloom",
+          "rect": [
+            48,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "guide",
+          "rect": [
+            64,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "storm",
+          "rect": [
+            80,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "inspire",
+          "rect": [
+            96,
+            0,
+            16,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "path": "assets/generated/props-starter.png",
+      "status": "starter",
+      "width": 128,
+      "height": 32,
+      "channels": "RGBA8",
+      "cell": [
+        16,
+        16
+      ],
+      "items": [
+        {
+          "name": "broadleaf",
+          "variant": 0,
+          "rect": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "broadleaf",
+          "variant": 1,
+          "rect": [
+            0,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "pine",
+          "variant": 0,
+          "rect": [
+            16,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "pine",
+          "variant": 1,
+          "rect": [
+            16,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "boulder",
+          "variant": 0,
+          "rect": [
+            32,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "boulder",
+          "variant": 1,
+          "rect": [
+            32,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "flower_patch",
+          "variant": 0,
+          "rect": [
+            48,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "flower_patch",
+          "variant": 1,
+          "rect": [
+            48,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "fence",
+          "variant": 0,
+          "rect": [
+            64,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "fence",
+          "variant": 1,
+          "rect": [
+            64,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "cart",
+          "variant": 0,
+          "rect": [
+            80,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "cart",
+          "variant": 1,
+          "rect": [
+            80,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "signpost",
+          "variant": 0,
+          "rect": [
+            96,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "signpost",
+          "variant": 1,
+          "rect": [
+            96,
+            16,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "runestone",
+          "variant": 0,
+          "rect": [
+            112,
+            0,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "runestone",
+          "variant": 1,
+          "rect": [
+            112,
+            16,
+            16,
+            16
+          ]
+        }
+      ]
+    }
+  ],
+  "concepts": [
+    {
+      "path": "assets/concepts/godseed-skyworld-overview.svg",
+      "status": "concept",
+      "role": "higher-sky 32x20 UI layout, not runtime screenshot"
+    },
+    {
+      "path": "assets/concepts/godseed-character-inspect.svg",
+      "status": "concept",
+      "role": "16x10 inspection zoom, character silhouette and role"
+    },
+    {
+      "path": "assets/concepts/godseed-divine-reaction.svg",
+      "status": "concept",
+      "role": "god inspires NPC and visual feedback"
+    }
+  ],
+  "planned": [
+    {
+      "key": "full_nim_animation",
+      "status": "planned",
+      "description": "4 facing directions and at least 4-frame walk cycle including idle and action; currently only 2 starter pose variants per direction"
+    },
+    {
+      "key": "detailed_villager_animations",
+      "status": "planned",
+      "description": "animated actor poses for professions and ambient village roles beyond initial trio"
+    },
+    {
+      "key": "creature_atlas",
+      "status": "planned",
+      "description": "wolf and boar visual variants; deer/sheep/bird deferred until NPC simulation supports them"
+    },
+    {
+      "key": "animated_water",
+      "status": "planned",
+      "description": "low-frame shoreline water tile overlays respecting neighbor mask"
+    },
+    {
+      "key": "roads_autotile",
+      "status": "planned",
+      "description": "N/E/S/W road joins, crossroads, T-junctions and corners"
+    },
+    {
+      "key": "structure_atlas",
+      "status": "planned",
+      "description": "houses, mills, shrines, cottages, ruins and camp 2x2 multi-tile anchors"
+    },
+    {
+      "key": "ui_icons",
+      "status": "planned",
+      "description": "polished 10-button touchscreen icon atlas and accessible textual labels"
+    },
+    {
+      "key": "environment_seasons",
+      "status": "planned",
+      "description": "frost, rain, fall foliage only if hardware budget allows"
+    }
+  ]
+}

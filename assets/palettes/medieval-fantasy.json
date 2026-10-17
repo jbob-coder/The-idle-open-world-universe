@@ -1,0 +1,72 @@
+{
+  "schema": "godseed.palette.v1",
+  "name": "Forgotten Borderlands",
+  "license": "Original project palette",
+  "format": "#RRGGBB",
+  "colors": {
+    "dark": "#152723",
+    "moss": "#31563D",
+    "grass": "#547E48",
+    "bright": "#83A85D",
+    "light": "#B9CA83",
+    "pine": "#264734",
+    "pine2": "#397453",
+    "pine3": "#609966",
+    "bark": "#71513A",
+    "sand": "#B49060",
+    "soil": "#8B6346",
+    "stone": "#7D8074",
+    "stone2": "#B7B8A0",
+    "stoneDark": "#4B5853",
+    "water": "#335F85",
+    "waterLight": "#6FA9B7",
+    "berry": "#D67482",
+    "gold": "#EFCB76",
+    "blue": "#6589BA",
+    "skin": "#D6A17A",
+    "robe": "#966FAD",
+    "red": "#A45A44",
+    "white": "#EAE3C1",
+    "brown": "#654737",
+    "azure": "#A0DFD0",
+    "black": "#11191A",
+    "purple": "#8766AB",
+    "green": "#77B881"
+  },
+  "variants": {
+    "forested": [
+      "pine",
+      "pine2",
+      "pine3"
+    ],
+    "settlement": [
+      "soil",
+      "sand",
+      "bark",
+      "red",
+      "gold"
+    ],
+    "runes": [
+      "stone",
+      "stone2",
+      "azure"
+    ],
+    "skyWater": [
+      "water",
+      "waterLight"
+    ],
+    "actorNim": [
+      "black",
+      "skin",
+      "blue",
+      "red",
+      "gold"
+    ]
+  },
+  "rules": {
+    "terrainBaseColors": 3,
+    "edgeOutlinePixel": 1,
+    "avoidSmoothGradients": true,
+    "limitActorOpaqueColors": 12
+  }
+}

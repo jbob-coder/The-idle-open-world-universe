@@ -1,0 +1,326 @@
+{
+  "schema": "godseed.work-items.v1",
+  "title": "Codex Cloud implementation ledger",
+  "authority": "prep/codex-skyworld-v0.5",
+  "implementation_branch": "feat/godseed-medieval-skyworld-v1",
+  "status": "ready_for_implementation",
+  "created": "2026-10-17",
+  "rule": "5 tasks per slice, done requires test and evidence",
+  "entries": [
+    {
+      "id": "A01",
+      "epic": "A",
+      "epic_title": "High-sky camera",
+      "status": "todo",
+      "title": "Set 32x20 default; retain 24x15 and 16x10",
+      "acceptance": "State and UI tests assert default 32x20 and zoom cycle.",
+      "evidence": [],
+      "dependencies": [],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "A02",
+      "epic": "A",
+      "epic_title": "High-sky camera",
+      "status": "todo",
+      "title": "Extract pure world/canvas pointer transforms",
+      "acceptance": "Roundtrips correct at every zoom, with letterbox margins.",
+      "evidence": [],
+      "dependencies": [
+        "A01"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "A03",
+      "epic": "A",
+      "epic_title": "High-sky camera",
+      "status": "todo",
+      "title": "Implement integer camera follow and free pan",
+      "acceptance": "Tile coordinates remain stable; no subpixel blur.",
+      "evidence": [],
+      "dependencies": [
+        "A02"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "A04",
+      "epic": "A",
+      "epic_title": "High-sky camera",
+      "status": "todo",
+      "title": "Protect crisp pixel-square scaling and safe areas",
+      "acceptance": "Canvas remains pixelated and never clips target cells.  Visual signoff must confirm no blur/interpolation at all zooms and real 640×360/720×400/960×540 screenshots; validate source with scripts/validate_pixel_art_contract.mjs.",
+      "evidence": [],
+      "dependencies": [
+        "A03"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "A05",
+      "epic": "A",
+      "epic_title": "High-sky camera",
+      "status": "todo",
+      "title": "Capture 3 viewport sizes × zoom and verify commands",
+      "acceptance": "9 screenshots and touch tests; 10 visible controls.",
+      "evidence": [],
+      "dependencies": [
+        "A04"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "B01",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
+      "status": "todo",
+      "title": "Wire four starter PNG sheets through manifest into renderer",
+      "acceptance": "Runtime shows actual atlas pixels, all offline.  Integrate genuine native 16×16 square-pixel atlases with exact palette/binary-alpha art source. Art concepts/PNGs alone do not count as in-game use.",
+      "evidence": [],
+      "dependencies": [],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "B02",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
+      "status": "todo",
+      "title": "Draw roads and water adjacency masks",
+      "acceptance": "Test joins, bends and edges without altering collision.  Road/water joins have hard square-pixel seams and logically matching traversability, verified visually and by sim tests.",
+      "evidence": [],
+      "dependencies": [
+        "B01"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "B03",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
+      "status": "todo",
+      "title": "Add deterministic nonblocking environmental props",
+      "acceptance": "World seed yields same placements after reload.",
+      "evidence": [],
+      "dependencies": [
+        "B02"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "B04",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
+      "status": "todo",
+      "title": "Improve hamlet, shrine, ruin and camp silhouettes",
+      "acceptance": "Readable destinations at 32x20, no phantom interiors.  Timber roofs, shrines, ruins and houses assembled from aligned square-pixel clusters, not smooth vector/painted backgrounds.",
+      "evidence": [],
+      "dependencies": [
+        "B03"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "B05",
+      "epic": "B",
+      "epic_title": "Richer world terrain",
+      "status": "todo",
+      "title": "Cache/invalidate scenery and profile before/after",
+      "acceptance": "Evidence of no stale tiles and bounded redraws.",
+      "evidence": [],
+      "dependencies": [
+        "B04"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "C01",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
+      "status": "todo",
+      "title": "Draw Nim with four facings and 2–4 frame walk cycle",
+      "acceptance": "Movement animation derived from tick, not draw calls.  Nim sprites remain 16×24 native pixel frames with crisp square outlines and feet anchor (8,23); verify four directions in running screenshots.",
+      "evidence": [],
+      "dependencies": [],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "C02",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
+      "status": "todo",
+      "title": "Distinctively draw the three professions",
+      "acceptance": "Roles readable at 640x360 / 32x20.  All three travelers visually match native square-pixel palette and binary-alpha sprite art, not emoji/vector characters.",
+      "evidence": [],
+      "dependencies": [
+        "C01"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "C03",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
+      "status": "todo",
+      "title": "Add visual wolves and boars; defer unsimulated animals",
+      "acceptance": "Only existing enemy types rendered and tested.",
+      "evidence": [],
+      "dependencies": [
+        "C02"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "C04",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
+      "status": "todo",
+      "title": "Show actions/goals without control prompts",
+      "acceptance": "Why/goal UI and activity legible with time sped up.",
+      "evidence": [],
+      "dependencies": [
+        "C03"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "C05",
+      "epic": "C",
+      "epic_title": "2D actors and motion",
+      "status": "todo",
+      "title": "Correct foot-Y sorting and tree occlusion",
+      "acceptance": "No invisible Nim behind foliage; test overlay order.",
+      "evidence": [],
+      "dependencies": [
+        "C04"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "D01",
+      "epic": "D",
+      "epic_title": "God's visible influence",
+      "status": "todo",
+      "title": "Preview valid/invalid tile targeting",
+      "acceptance": "Invalid events cost no Faith; readable cursor.",
+      "evidence": [],
+      "dependencies": [],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "D02",
+      "epic": "D",
+      "epic_title": "God's visible influence",
+      "status": "todo",
+      "title": "Render finite FX for bless/gift/bloom/guide/storm",
+      "acceptance": "All effects arise from simulator events, capped cost.  Divine glyphs and effects remain pixel-square and limited-frame, with no Gaussian glow/gradients; animation must not mutate sim.",
+      "evidence": [],
+      "dependencies": [
+        "D01"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "D03",
+      "epic": "D",
+      "epic_title": "God's visible influence",
+      "status": "todo",
+      "title": "Inspire a traveler with a unique role reaction",
+      "acceptance": "One click → one favor, correct chronicle/favor marker.",
+      "evidence": [],
+      "dependencies": [
+        "D02"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "D04",
+      "epic": "D",
+      "epic_title": "God's visible influence",
+      "status": "todo",
+      "title": "Deduplicate visual effects without duplicate rewards",
+      "acceptance": "No render frame can mutate Faith or sim state.",
+      "evidence": [],
+      "dependencies": [
+        "D03"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "D05",
+      "epic": "D",
+      "epic_title": "God's visible influence",
+      "status": "todo",
+      "title": "Implement reduced-motion and textual alternatives",
+      "acceptance": "Effects understandable without animation.",
+      "evidence": [],
+      "dependencies": [
+        "D04"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "E01",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
+      "status": "todo",
+      "title": "Compact HUD and touch safe areas",
+      "acceptance": "No lost buttons or unreadable NPC info at 640x360.  Android HUD must be visually pixel-square (solid borders and icons), still readable and touch-accessible at 640×360.",
+      "evidence": [],
+      "dependencies": [],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "E02",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
+      "status": "todo",
+      "title": "Run browser smoke, save roundtrip and 10k ticks",
+      "acceptance": "All tests green, no offline network needed.",
+      "evidence": [],
+      "dependencies": [
+        "E01"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "E03",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
+      "status": "todo",
+      "title": "Build and verify v1 experimental debug APK",
+      "acceptance": "Signed ZIP manifest structurally valid; no keystore leaks.",
+      "evidence": [],
+      "dependencies": [
+        "E02"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "E04",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
+      "status": "todo",
+      "title": "Collect physical Android evidence when device available",
+      "acceptance": "FPS, memory, 20min session; mark BLOCKED otherwise. Required device targets are phones with 2GB and 3GB total RAM; measure actual game/WebView resident PSS/RSS vs preferred 128-192 MiB and soft 256 MiB cap. Record device model/OS/FPS, 20-minute autoplay, or mark hardware unavailable.",
+      "evidence": [],
+      "dependencies": [
+        "E03"
+      ],
+      "assigned_to": "Codex Cloud"
+    },
+    {
+      "id": "E05",
+      "epic": "E",
+      "epic_title": "Android UI, QA and delivery",
+      "status": "todo",
+      "title": "Publish source, screenshots, APK and verification PR",
+      "acceptance": "Evidence exact; no unverified claims or accidental main merge.",
+      "evidence": [],
+      "dependencies": [
+        "E04"
+      ],
+      "assigned_to": "Codex Cloud"
+    }
+  ]
+}

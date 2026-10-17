@@ -1,0 +1,178 @@
+{
+  "schema": "godseed.pixel-art-contract.v1",
+  "status": "binding-design-rules-not-runtime-integration",
+  "artStyle": "hand-designed hard-edged square-pixel 2D top-down medieval fantasy",
+  "visualPriority": [
+    "readable world tile",
+    "autonomous actors",
+    "god targeting feedback",
+    "region identity",
+    "decoration"
+  ],
+  "camera": {
+    "projection": "orthographic-top-down",
+    "defaultTargetWorldTiles": [
+      32,
+      20
+    ],
+    "alternativeViews": [
+      [
+        24,
+        15
+      ],
+      [
+        16,
+        10
+      ]
+    ],
+    "logicalTilePixels": [
+      16,
+      16
+    ],
+    "integerWorldCameraOffsets": true,
+    "maintainEqualAxisScale": true,
+    "preserveAspectRatio": true,
+    "allowNearestFractionalCssScaleWhenNecessary": true,
+    "noSmoothing": true,
+    "currentBaselineDefaultWorldTiles": [
+      24,
+      15
+    ]
+  },
+  "raster": {
+    "format": "PNG-RGBA-8",
+    "alphaAllowed": [
+      0,
+      255
+    ],
+    "opaqueColorsMustBeInPalette": true,
+    "paletteFile": "assets/palettes/medieval-fantasy.json",
+    "outlinePixels": 1,
+    "maximumSuggestedColorsPerSmallTile": 6,
+    "maximumSuggestedColorsPerActor": 12,
+    "minimumTerrainVariantsPerSemanticTile": 3,
+    "ban": [
+      "blur",
+      "bilinear",
+      "bicubic",
+      "antialias-edges",
+      "gradient",
+      "painted-world-background",
+      "isometric",
+      "third-person",
+      "3d",
+      "fractional-source-sprite-coordinates"
+    ]
+  },
+  "sizing": {
+    "terrain": [
+      16,
+      16
+    ],
+    "character": [
+      16,
+      24
+    ],
+    "footAnchor": [
+      8,
+      23
+    ],
+    "smallProp": [
+      16,
+      16
+    ],
+    "largePropPreferred": [
+      32,
+      32
+    ],
+    "fxGlyph": [
+      16,
+      16
+    ],
+    "uiGlyphOptions": [
+      [
+        8,
+        8
+      ],
+      [
+        16,
+        16
+      ]
+    ],
+    "maximumAtlasSourceSidePixels": 512
+  },
+  "source": {
+    "assetManifest": "assets/asset-manifest.json",
+    "generator": "scripts/generate_starter_assets.mjs",
+    "originalWorkRequired": true,
+    "sourceOfTruth": "pixel tiles and arrays, not SVG full-screen concept image"
+  },
+  "sim": {
+    "worldTiles": [
+      64,
+      48
+    ],
+    "terrainSemantics": [
+      "GRASS",
+      "FOREST",
+      "WATER",
+      "STONE",
+      "BERRY",
+      "RUIN",
+      "MEADOW",
+      "CAMP",
+      "ROAD",
+      "VILLAGE",
+      "SHRINE"
+    ],
+    "rendererChangesMayNeverMutateSim": true
+  },
+  "runtime": {
+    "mustIncludeCssPixelated": true,
+    "mustDisableCanvasImageSmoothing": true,
+    "integerSpriteAnchors": true,
+    "depthByActorFootY": true,
+    "landscapeViewports": [
+      [
+        640,
+        360
+      ],
+      [
+        720,
+        400
+      ],
+      [
+        960,
+        540
+      ]
+    ],
+    "sourceFxFramesTypical": 4,
+    "sourceFxFramesMax": 12,
+    "sourceFxFpsTarget": [
+      8,
+      12
+    ]
+  },
+  "device": {
+    "targetPhysicalRamGB": [
+      2,
+      3
+    ],
+    "appProcessPreferredMiB": [
+      128,
+      192
+    ],
+    "appProcessSoftCeilingMiB": 256,
+    "deviceMeasurementsVerified": false
+  },
+  "accessibility": {
+    "powerGlyphMustHaveText": true,
+    "validAndInvalidTargetVisible": true,
+    "reducedMotionFallback": true
+  },
+  "review": {
+    "gameScreenshotsMustBeRealRuntime": true,
+    "conceptScreenshotsAreNotProof": true,
+    "physicalAndroidQARequiredForRelease": true
+  }
+}

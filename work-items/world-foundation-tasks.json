@@ -1,0 +1,180 @@
+{
+  "schema": "godseed.world-foundation-tasks.v1",
+  "authority": "prep/codex-skyworld-v0.5",
+  "status": "planning-only-not-implemented",
+  "created": "2026-10-17",
+  "designInputs": [
+    "data/world-regions.v1.json",
+    "docs/GAMEPLAY_FOUNDATION.md",
+    "docs/WORLD_REGION_BLUEPRINT.md",
+    "docs/WORLD_SYSTEM_CONTRACTS.md",
+    "docs/WORLD_PLAYTEST_MATRIX.md"
+  ],
+  "count": 15,
+  "priority": "F01–F05 first; W01–W05 next; W06–W10 last. This adds to A01–E05 (25) and S01–S05 (5), total 45 planned tasks.",
+  "tasks": [
+    {
+      "id": "F01",
+      "group": "foundation",
+      "status": "todo",
+      "title": "Simulation boot, clock and offline baseline",
+      "acceptance": "Ensure ticks, pause/resume, game start and speed controls work with no network; no double ticker.",
+      "dependencies": [],
+      "evidence": []
+    },
+    {
+      "id": "F02",
+      "group": "foundation",
+      "status": "todo",
+      "title": "Survival needs and renewable resources",
+      "acceptance": "Multi-seed Nim obtains food/wood/stone, can rest/build camp; renewals avoid permanent depletion.",
+      "dependencies": [
+        "F01"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "F03",
+      "group": "foundation",
+      "status": "todo",
+      "title": "Pathfinding goal fallback and safe traversal",
+      "acceptance": "BFS goals have safe reachable fallback; no repeated impossible target; deterministic results.",
+      "dependencies": [
+        "F02"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "F04",
+      "group": "foundation",
+      "status": "todo",
+      "title": "NPC meetings, divine event accounting",
+      "acceptance": "Three NPC cap, natural encounter, one-time Inspire, valid/rejected power Faith consistency.",
+      "dependencies": [
+        "F03"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "F05",
+      "group": "foundation",
+      "status": "todo",
+      "title": "Save, offline UI and 10k-tick stability",
+      "acceptance": "Old saves restore with no changed tile IDs; 10k ticks and browser frame lifecycle pass.",
+      "dependencies": [
+        "F04"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W01",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Define deterministic region ID model",
+      "acceptance": "All 3072 map cells receive one of R00–R07; same seed gives same result; terrain IDs unchanged.",
+      "dependencies": [
+        "F05"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W02",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Guarantee safe spawn, reachable starter supplies",
+      "acceptance": "No enemy inside initial protection radius; berries/wood/stone reachable in seed sweeps.",
+      "dependencies": [
+        "W01"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W03",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Build and verify road and POI connectivity",
+      "acceptance": "Start reaches two hamlets, two shrines and ≥1 ruin via BFS, visual roads match traversal.",
+      "dependencies": [
+        "W02"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W04",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Connect hamlet zones to existing NPC home roles",
+      "acceptance": "Ira/Toren/Mera placements preserved; patrols and meetings bounded and observable.",
+      "dependencies": [
+        "W03"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W05",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Regional resource/danger weighting",
+      "acceptance": "Forest/hills/fen identity meaningful; no unbounded spawns or inaccessible essentials.",
+      "dependencies": [
+        "W04"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W06",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Ruin/shrine region encounters and finite rewards",
+      "acceptance": "Oathkeeper/Crownfall/Moonwell experiences have finite and save-safe discovery.",
+      "dependencies": [
+        "W05"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W07",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Region discovery, chronicle and minimap metadata",
+      "acceptance": "Unknown areas stay fogged, titles reveal correctly, inspect and divine targeting coherent.",
+      "dependencies": [
+        "W06"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W08",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Region weather and activity flavor",
+      "acceptance": "Distinct rain/wildlife/ambient cues do not alter world RNG on render or tank mobile FPS.",
+      "dependencies": [
+        "W07"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W09",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Save migration, seeded reconstruction and schema audit",
+      "acceptance": "v1 save format preserved; pre-region saves work; 100 seed region membership tests pass.",
+      "dependencies": [
+        "W08"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "W10",
+      "group": "world_regions",
+      "status": "todo",
+      "title": "Long-run QA and 2–3GB Android validation evidence",
+      "acceptance": "10k tick multi-seed suite, responsive 640x360 UI, Android 2/3GB RAM test or explicit block.",
+      "dependencies": [
+        "W09"
+      ],
+      "evidence": []
+    }
+  ]
+}

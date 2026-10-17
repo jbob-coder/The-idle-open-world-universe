@@ -1,3 +1,55 @@
+## Mandatory square-pixel visual style — Codex acceptance gate
+
+**ALL GODSEED game art must be authored as recognizable, hard-edged SQUARE PIXELS.** No painted/scaled photo background, blurred sprites, anti-aliasing, vector-style characters, isometric perspective or glossy modern HUD. The final higher-sky camera targets 32×20 logical tiles; native world tiles are 16×16 pixels; Nim and NPCs are 16×24 pixel frames with consistent feet anchors. Zoom uses nearest-neighbor pixel scaling and the terrain must remain readable at every level. The existing runtime has NOT yet been fully migrated to atlas-based art.
+
+**Required Codex references:** [Strict Pixel-Art Bible](docs/PIXEL_WORLD_STYLE_GUIDE.md) · [Machine-readable square-pixel contract](config/pixel-art-contract.json) · [Pixel-art acceptance matrix](docs/PIXEL_ART_ACCEPTANCE.md) · [Original sprite manifest](assets/asset-manifest.json) · [Automated validator](scripts/validate_pixel_art_contract.mjs). Run `node scripts/validate_pixel_art_contract.mjs`, then verify real browser screenshots before completing visual tasks.
+
+## Non-negotiable art style: hand-authored **square pixels**
+
+GODSEED is a **top-down 2D medieval-fantasy pixel-square game**. The higher sky camera uses crisp **16×16** world tiles and legible **16×24** 2D character frames. Roads, roofs, leaves, water, ruins, rune stones, god powers **and UI borders/icons** must be constructed from intentional hard-edged pixel clusters. **No blurry scaling, smooth vector sprites, painted scenes, gradients, pseudo-3D or glossy mobile-game HUD.** The style is enforced in the [strict art bible](docs/PIXEL_WORLD_STYLE_GUIDE.md), [machine-readable pixel rules](config/pixel-art-contract.json) and [visual acceptance matrix](docs/PIXEL_ART_ACCEPTANCE.md). Prepared PNGs remain starter assets and are not yet integrated into runtime.
+
+`node scripts/validate_pixel_art_contract.mjs` checks source PNG palette/alpha/native size and existing no-smoothing directives; real running-game screenshots and physical Android testing remain separate acceptance gates.
+
+## Basic playable world: 8 planned regions and autonomous gameplay
+
+The next Codex stage begins with **what must work** before scaling up the map: reliable seeded worlds, Nim's self-directed survival, movement, gathering, crafting, interactions, combat/recovery, six god powers, discoveries, offline save and Android controls. The first map is still **64×48 tiles**, with a safe center, two existing medieval settlements and two shrines.
+
+The new [world region blueprint](docs/WORLD_REGION_BLUEPRINT.md) defines **8 proposed named regions**: Hearthfield Clearing, Briarford Hamlet, Emberwick Hamlet, Mossveil Wildwood, Stormstone Ridge, Crownfall Ruins, Oathkeeper Grove, and Moonwell Fen. Named region boundaries and unique region mechanics **do not run in the APK yet**. [Gameplay foundation](docs/GAMEPLAY_FOUNDATION.md) · [World system contracts](docs/WORLD_SYSTEM_CONTRACTS.md) · [World validation matrix](docs/WORLD_PLAYTEST_MATRIX.md) · [World data schema](data/world-regions.v1.json) · [15 new foundation/world tasks](work-items/world-foundation-tasks.json).
+
+The planning backlog now contains **45 TODO tasks total**: 25 visual/core + 5 storage + 15 basic gameplay/world. See [final Codex prompt](docs/CODEX_CLOUD_READY_PROMPT.md).
+
+## Android RAM compatibility — target devices with 2–3 GB
+
+GODSEED should **run on Android devices with 2 GB of RAM**, and be validated again on **3 GB devices**. That number is the phone's total RAM, **not how much the game should use**. Engineering target for GODSEED's process: **128–192 MiB resident memory preferred; 256 MiB soft ceiling**, pending measurements on real hardware. Phone storage is separate: intended 1 GB core + optional 5 GB content. [RAM specification](docs/LOW_RAM_HARDWARE_TARGET.md) · [Machine-readable hardware budget](config/hardware-budget.json).
+
+## Storage requirement — 1 GB core + up to 5 GB optional (future goal)
+
+GODSEED's intended **core installed content is approximately 1 GB**, plus **up to 5 GB additional optional user-approved app-managed storage**, for a **nominal 6 GB total**. This is Android persistent **disk**, not RAM; it is not yet the actual APK size. Do **not** pad the prototype to 1 GB or preallocate optional storage. Offline core gameplay must work with zero expansion content and reserve free phone space.
+
+[Storage policy](docs/STORAGE_BUDGET_AND_PACKS.md) · [Budget configuration](config/storage-budget.json) · [Five added storage tasks](work-items/storage-tasks.json) · [Codex handoff prompt](docs/CODEX_CLOUD_READY_PROMPT.md).
+
+## GODSEED product architecture and final Codex handoff (2026-10-17)
+
+**Canonical product and Android references:** [Intended game experience](docs/GODSEED_INTENDED_GAME.md) · [Why HTML inside the APK / Android host architecture](docs/ANDROID_HTML_APK_SPEC.md) · [Readiness gates P/I/R](docs/HANDOFF_READINESS.md) · [Final prompt to paste into Codex Cloud](docs/CODEX_CLOUD_READY_PROMPT.md).
+
+This branch provides implementation documentation, original starter art and a tested preparation workflow; **the new renderer, production Android wrapper and physical-device tests are NOT complete**. Codex should begin from `prep/codex-skyworld-v0.5` and follow the final prompt rather than starting on `main`.
+
+## Preparación para Codex Cloud — pixel medieval de vista elevada
+
+**No es una nueva versión jugable.** La rama `prep/codex-skyworld-v0.5` reúne un paquete listo para implementar sin tocar el funcionamiento actual. El objetivo posterior es una vista cenital *más alta*, predeterminada **32×20 casillas**, con detalle de píxeles cuadrados, sprites 2D medievales, aldeas, caminos, santuarios, NPC autónomos e intervenciones divinas legibles.
+
+**Documentación y punto de entrada:** [Prompt de implementación Codex Cloud](docs/CODEX_CLOUD_BUILD_PROMPT.md) · [Guía de estilo](docs/PIXEL_WORLD_STYLE_GUIDE.md) · [Plan de 25 tareas](docs/IMPLEMENTATION_SLICES.md) · [Manifiesto de assets](assets/asset-manifest.json) · [Handoff](docs/CODEX_HANDOFF.md).
+
+**Recursos comprometidos:** 3 referencias SVG, 4 atlas PNG originales y reproducibles, paleta JSON, generador/validador de assets, 25 tareas por lotes de cinco y criterios de aceptación. Los atlas son **starter / no integrados** en el render actual. Los SVG son conceptos, **no capturas Android**. Ejecutar validación: `node scripts/validate_asset_manifest.mjs`.
+
+**Vistas conceptuales del siguiente renderer (no gameplay):**
+
+[![World skyview concept](assets/concepts/godseed-skyworld-overview.svg)](assets/concepts/godseed-skyworld-overview.svg)
+
+[Close-up 2D character concept](assets/concepts/godseed-character-inspect.svg) · [Divine interaction concept](assets/concepts/godseed-divine-reaction.svg) · [Prepared Codex runbook](docs/CODEX_RUNBOOK.md) · [Asset generator](scripts/generate_starter_assets.mjs) · [Task ledger](work-items/codex-tasks.json).
+
+
+
 # The Idle Open World Universe — GODSEED
 
 **GODSEED v0.2** is an experimental build of an **offline Android god-observation RPG/simulation** for older phones. You are the god; **Nim** is an independently acting, rule-driven pixel-world inhabitant. You cannot control Nim directly. You can watch exploration, survival, crafting, wildlife encounters, leveling and memories, and change the world indirectly using Faith-powered divine actions.

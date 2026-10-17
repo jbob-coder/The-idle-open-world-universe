@@ -1,0 +1,84 @@
+name: Codex preparation — pixel asset integrity
+on:
+  push:
+    branches:
+      - prep/codex-skyworld-v0.5
+    paths:
+      - 'AGENTS.md'
+      - 'assets/**'
+      - 'scripts/**'
+      - 'work-items/**'
+      - 'docs/**'
+      - '.github/workflows/art-handoff.yml'
+  workflow_dispatch:
+jobs:
+  asset-manifest-and-game-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Prepare Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Prepare Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate original atlas PNGs, JSON schema and work items
+        run: node scripts/validate_asset_manifest.mjs
+      - name: Validate planned 1 GB core and 5 GB optional storage constraints
+        run: node scripts/validate_storage_budget.mjs
+      - name: Validate planned 2-3 GB Android device RAM requirements
+        run: node scripts/validate_hardware_budget.mjs
+      - name: Validate proposed foundation and eight-region blueprint
+        run: node scripts/validate_world_blueprint.mjs
+      - name: Enforce hard-edged source pixel art contract
+        run: node scripts/validate_pixel_art_contract.mjs
+      - name: Rebuild deterministic starter art
+        run: node scripts/generate_starter_assets.mjs
+      - name: Assert generated art is reproducible exactly
+        run: git diff --exit-code -- assets/generated/
+      - name: Revalidate regenerated pixel atlases
+        run: node scripts/validate_asset_manifest.mjs
+      - name: Check JavaScript syntax
+        run: |
+          node --check scripts/generate_starter_assets.mjs
+          node --check scripts/validate_asset_manifest.mjs
+      - name: Validate concept SVG sources are well-formed and offline
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from xml.etree import ElementTree as ET
+          for name in ('godseed-skyworld-overview', 'godseed-character-inspect', 'godseed-divine-reaction'):
+              path = Path('assets/concepts') / (name + '.svg')
+              root = ET.parse(path).getroot()
+              assert root.tag == '{http://www.w3.org/2000/svg}svg', name
+              assert root.attrib.get('viewBox') == '0 0 960 540', name
+              text = path.read_text(encoding='utf-8').lower()
+              external = text.replace('http://www.w3.org/2000/svg', '')
+              assert 'http://' not in external and 'https://' not in external, name
+              print('PASS SVG', path)
+          PY
+      - name: Run existing autonomous simulation regression tests
+        run: node --test tests/*.test.js
+      - name: Verify offline HTML still builds
+        run: python build.py
+      - name: Publish preparation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-pixel-asset-source-reference
+          path: |
+            assets/generated/*.png
+            assets/concepts/godseed-skyworld-overview.svg
+            assets/concepts/godseed-character-inspect.svg
+            assets/concepts/godseed-divine-reaction.svg
+            assets/asset-manifest.json
+            assets/palettes/medieval-fantasy.json
+            work-items/codex-tasks.json
+          if-no-files-found: error
+          retention-days: 14
