@@ -1,3 +1,21 @@
+## GODSEED v0.4 — cámara cenital / zoom 2D — 2026-10-17
+
+CURRENT_OBJECTIVE: Primer lote de zoom para el juego autónomo medieval de Android. Implementado en `feat/skyview-zoom-v0.4`, sobre `feat/living-world-divine-v0.3`, sin cambios en `main`.
+
+COMPLETED: (1) cámara top-down y seguimiento en coordenadas enteras, (2) por defecto 24×15 casillas con 3 zooms 24×15 / 16×10 / 32×20, (3) Nim y NPC con siluetas 2D más legibles, (4) render y minimapa adaptados al viewport activo, (5) diez botones de dock Android y puntería de poderes actualizada. Sin cambios en `src/sim.js`, autonomía ni esquema save v1.
+
+TEST EVIDENCE: Chromium local a 640×360, 720×400 y 960×540, tres niveles por resolución, 10 controles visibles, 0 errores JavaScript. GitHub Actions `GODSEED offline QA` y `GODSEED sky view Android landscape captures` pasaron en el commit eb6cea11. La rama versiona el APK de depuración como v0.4, versionCode 4.
+
+ARTIFACTS: `docs/SKYVIEW_CAMERA_V04.md`, CI con PNG reales del navegador, APK experimental de depuración en artefactos de Actions, y HTML offline generado desde `src/ui.js` + `src/sim.js`.
+
+NEXT_ACTION: Completar 5 trabajos de sprites ambientales, animaciones por orientación, feedback divino, paneles compactos y prueba física Android. Antes de un lanzamiento estable: validar instalación de APK, FPS, consumo de memoria, persistencia WebView, firma compatible y restauración.
+
+RISK: Los PNG en tamaño Android son capturas de Chromium, no emulador. La APK no ha sido probada sobre hardware real y utiliza clave temporal de desarrollo. Exportar datos antes de sustituir versiones. `main` no se sustituye hasta revisión.
+
+GRAPH: `src/ui.js` → implementa → viewport y zoom · `index.template.html` → aloja → control táctil `Zoom` · `tests/mobile_acceptance.py` → verifica → targeting y guardado · `tests/capture_android_layouts.py` → genera → evidencias navegador · `android/build_apk.py` → empaqueta → APK v0.4 · `docs/SKYVIEW_CAMERA_V04.md` → explica → límites y backlog.
+
+---
+
 ## GODSEED v0.3 — 17 octubre 2026 — fantasía medieval (PR #2)
 
 CURRENT_OBJECTIVE: Integrar fantasía medieval en la simulación automática de Nim, los NPC y la interacción del dios. Rama `feat/living-world-divine-v0.3`, PR https://github.com/jbob-coder/The-idle-open-world-universe/pull/2 contra v0.2, sin tocar main.
