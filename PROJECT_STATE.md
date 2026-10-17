@@ -1,3 +1,21 @@
+## GODSEED v0.3 — 17 octubre 2026 — fantasía medieval (PR #2)
+
+CURRENT_OBJECTIVE: Integrar fantasía medieval en la simulación automática de Nim, los NPC y la interacción del dios. Rama `feat/living-world-divine-v0.3`, PR https://github.com/jbob-coder/The-idle-open-world-universe/pull/2 contra v0.2, sin tocar main.
+
+COMPLETED: Caminos, dos aldeas, santuarios rúnicos, gráficos Canvas detallados, tres viajeros de gremio, Inspira con respuestas distintas, diario de peregrinación, pruebas específicas y documento `docs/MEDIEVAL_FANTASY_V03.md`.
+
+VERIFIED_STATE: El simulador sigue offline y con esquema de guardado v1. CI ejecuta ahora `node --test tests/*.test.js`. Una primera ejecución detectó que Nim podía abandonar un santuario; se corrigió, y la ejecución asociada pasó. No hay pruebas físicas del APK v0.3.
+
+NEXT_ACTION: Revisar la PR, comprobar interfaz horizontal en navegador y Android real, reconstruir APK con firma de prueba y medir rendimiento antes de integrar o publicar; después desarrollar relaciones sociales y más escenarios, en bloques de cinco.
+
+RISKS: Maquetas no equivalen a capturas de Android real; la clave de firma CI es temporal. No prometer actualización APK compatible ni FPS sin verificar hardware.
+
+FILES_CHANGED: `src/sim.js`, `src/ui.js`, `index.template.html`, `tests/sim.test.js`, `tests/mobile_acceptance.py`, `tests/medieval_world.test.js`, `.github/workflows/qa.yml`, `docs/MEDIEVAL_FANTASY_V03.md`, además de documentación visual.
+
+GRAPH: `sim.js` → calcula → NPC/santuarios/recompensas; `ui.js` → dibuja → mundo medieval; `tests/*.test.js` → verifica → determinismo y guardados; PR #2 → propone integrar → v0.2.
+
+---
+
 ## Actualización 2026-10-17 — documentación visual Android (sin cambio de APK)
 
 CURRENT_OBJECTIVE: Documentar en español la visión del juego y proponer vistas Android horizontales coherentes con el rol de dios observador.
