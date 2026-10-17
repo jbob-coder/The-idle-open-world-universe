@@ -1,3 +1,15 @@
+# GODSEED project state — experimental v0.2
+
+CURRENT_OBJECTIVE: Adapt selected generic RPG features from user-provided WYLDHEART gameplay clip without copying visual style. Offline, low-end Android, rule-based autonomous Nim; god player only directs environment.
+
+FIRST FIVE FEATURE SLICE (LOCAL IMPLEMENTATION): Distinct seeded origins, five use-based proficiencies, automatic dodge/parry choices, ruin traps and scouting checks, legend/rumor leads to other ruins. New RPG systems show in the character panel and chronicle; saves from v0.1 receive defaults via restore().
+
+VISUAL DECISION: Keep the low-resolution 2D god-view interface. Do not implement 3D realism, third-person camera or copied WYLDHEART assets. User explicitly requested gameplay content, not that game's appearance.
+
+BOUNDARY: This is v0.2 experimental. No physical Android installation or performance test yet. Do not claim production release. CI signs with a temporary key; a new APK may not update an existing APK in place. Back up saves before uninstalling.
+
+NEXT FIVE (PLANNED): Procedural tiny dungeons, autonomous magic, stealth/lockpicking, upgraded camps, lightweight NPC rumors/trade. Multi-agent co-op/shared XP only after profiling memory and performance.
+
 # GODSEED project state — 2026-10-17
 
 CURRENT_OBJECTIVE: Establish `jbob-coder/The-idle-open-world-universe` as the source of truth for GODSEED, a lightweight offline Android god-observation game. Player influences one autonomous character (Nim) through divine powers, not manual controls.

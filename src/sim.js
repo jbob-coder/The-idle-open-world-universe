@@ -4,6 +4,36 @@
 const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7};
 const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter'];
 const DIRS=[[1,0],[-1,0],[0,1],[0,-1]];
+const ORIGINS=[
+ {name:'Lost Apprentice',past:'Once helped a traveling craftsperson.',focus:'crafting',curiosity:.64,caution:.43,diligence:.70},
+ {name:'Village Exile',past:'Banished from a village after a strange omen.',focus:'survival',curiosity:.57,caution:.61,diligence:.55},
+ {name:'Ruins Seeker',past:'Grew up collecting broken legends.',focus:'lore',curiosity:.80,caution:.31,diligence:.53},
+ {name:'Wandering Scout',past:'Traveled the borderlands without a home.',focus:'scouting',curiosity:.72,caution:.57,diligence:.60},
+ {name:'Wildland Survivor',past:'Survived seasons alone in the forest.',focus:'survival',curiosity:.53,caution:.67,diligence:.65}
+];
+const SKILLS=['survival','scouting','combat','crafting','lore'];
+const LORE=[
+ ['Fallen Observatory','A shattered lens once pointed toward a secret stonework.'],
+ ['Whispering Steps','The old roads hide a place where names are carved in stone.'],
+ ['The Mossbound Oath','Travelers once guarded a forgotten sanctuary.'],
+ ['Buried Fire','Stone scribes left signs of a hidden ember chamber.'],
+ ['The Last Cartographer','A route to lost knowledge survives among the ruins.']
+];
+function progress(b){
+ if(!b.background)b.background=ORIGINS[0].name;
+ if(!b.originStory)b.originStory='The past is mostly forgotten.';
+ if(!b.skills||typeof b.skills!=='object')b.skills={};
+ if(!b.skillXP||typeof b.skillXP!=='object')b.skillXP={};
+ for(const name of SKILLS){if(!Number.isFinite(b.skills[name])||b.skills[name]<0)b.skills[name]=0;if(!Number.isFinite(b.skillXP[name])||b.skillXP[name]<0)b.skillXP[name]=0;}
+ if(!b.tactics||typeof b.tactics!=='object')b.tactics={dodge:0,parry:0,trapsAvoided:0,trapsTriggered:0};
+}
+function improve(s,name,amount=1){const b=s.bot;progress(b);if(!SKILLS.includes(name)||amount<=0)return false;
+ b.skillXP[name]+=amount;let leveled=false,required=5+b.skills[name]*6;
+ while(b.skillXP[name]>=required&&b.skills[name]<20){b.skillXP[name]-=required;b.skills[name]++;required=5+b.skills[name]*6;leveled=true;}
+ if(leveled){event(s,name.toUpperCase()+' grew','Nim improved '+name+' through practice (rank '+b.skills[name]+').');remember(s,'Learned '+name+' '+b.skills[name]);}
+ return leveled;}
+function originForSeed(seed){return ORIGINS[(seed>>>0)%ORIGINS.length];}
+
 function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
 function idx(x,y){return y*W+x;}
 function inside(x,y){return x>=0&&x<W&&y>=0&&y<H;}
@@ -25,10 +55,14 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,d
  bot:{name:'Nim',x:Math.floor(W/2),y:Math.floor(H/2),level:1,xp:0,hp:24,maxHp:24,hunger:86,energy:83,attack:4,defense:1,food:2,wood:0,stone:0,tool:0,
  goal:'Awakening',thought:'Where am I?',target:null,path:[],actionDelay:0,fights:0,ruins:0,scars:0,steps:0,
  personality:{curiosity:0.68,caution:0.42,diligence:0.57},memory:[]}};
+ const origin=originForSeed(s.seed);s.bot.background=origin.name;s.bot.originStory=origin.past;
+ s.bot.personality={curiosity:origin.curiosity,caution:origin.caution,diligence:origin.diligence};
+ progress(s.bot);s.bot.skills[origin.focus]=1;
+ s.story={clues:[],completed:0};
  s.map=terrain(s);for(let y=s.bot.y-3;y<=s.bot.y+3;y++)for(let x=s.bot.x-3;x<=s.bot.x+3;x++)if(inside(x,y))s.map[idx(x,y)]=T.GRASS;
  s.map[idx(s.bot.x+2,s.bot.y)]=T.BERRY;s.map[idx(s.bot.x-2,s.bot.y)]=T.FOREST;s.map[idx(s.bot.x,s.bot.y-2)]=T.STONE;
  for(let i=0;i<10;i++){const x=5+rint(s,W-10),y=5+rint(s,H-10);if(Math.abs(x-s.bot.x)+Math.abs(y-s.bot.y)>8 && s.map[idx(x,y)]!==T.WATER)s.map[idx(x,y)]=T.RUIN;}
- discover(s,s.bot.x,s.bot.y);event(s,'A spark awakens','Nim opens their eyes in an unfamiliar world.','milestone');
+ discover(s,s.bot.x,s.bot.y);event(s,'A spark awakens',`Nim, a ${origin.name}, opens their eyes in an unfamiliar world. ${origin.past}`,'milestone');
  return s;}
 function discover(s,x,y){let count=0;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const xx=x+ox,yy=y+oy;if(!inside(xx,yy)||ox*ox+oy*oy>12)continue;const n=idx(xx,yy);if(!s.seen[n]){s.seen[n]=1;count++;}}return count;}
 function remember(s,subject){let m=s.bot.memory;if(m[m.length-1]!==subject){m.push(subject);if(m.length>12)m.shift();}}
@@ -60,30 +94,60 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
  // Discovered ruins are meaningful goals; pursue unseen ones as exploration grows.
  if(b.energy>45&&b.hunger>40){const p=findPath(s,(x,y,t,n)=>t===T.RUIN&&s.seen[n]);if(p){setGoal(s,'Study ruins','There is something ancient here.',p);return;}}
+ if(s.story&&Array.isArray(s.story.clues)){
+ const rumor=s.story.clues.find(q=>!q.solved);
+ if(rumor&&b.energy>45&&b.hunger>55){const path=findPath(s,(x,y)=>x===rumor.x&&y===rumor.y);if(path){setGoal(s,'Follow rumor','The '+rumor.title+' may lead to something.',path);return;}}
+ }
  const p=findPath(s,(x,y,t,n)=>!s.seen[n]);if(p){setGoal(s,'Explore','What lies beyond the known paths?',p);return;}
  const q=findPath(s,(x,y,t)=>t===T.FOREST||t===T.STONE||t===T.BERRY);setGoal(s,'Wander','I will make another journey.',q||[]);
 }
 function addMark(s,x,y,kind){s.marks.push({x,y,kind,until:s.tick+10});if(s.marks.length>12)s.marks.shift();}
 function botMove(s,x,y){const b=s.bot;if(!walkable(s,x,y))return; b.x=x;b.y=y;b.steps++;let d=discover(s,x,y);
- if(d){b._discovered=(b._discovered||0)+d;if(b._discovered>=38){b._discovered-=38;gain(s,3,'exploration');s.faith=clamp(s.faith+1,0,50);}}
+ if(d){b._discovered=(b._discovered||0)+d;if(b._discovered>=38){b._discovered-=38;gain(s,3,'exploration');s.faith=clamp(s.faith+1,0,50);improve(s,'scouting',2);}}
  if(s.guide&&x===s.guide.x&&y===s.guide.y){event(s,'Omen followed','Nim reached the place you pointed to.','milestone');s.guide=null;}
 }
 function botAct(s){const b=s.bot;const near=nearestEnemy(s);
  if(near.e&&near.dist<=1&&b.goal!=='Escape'){if(b.actionDelay>0)return;const e=near.e;const dmg=Math.max(1,b.attack+b.tool*2+rint(s,4)-e.defense);e.hp-=dmg;b.energy=clamp(b.energy-3,0,100);b.actionDelay=2;addMark(s,e.x,e.y,'hit');
  b.thought='I must survive this fight.';
- if(e.hp<=0){s.enemies=s.enemies.filter(z=>z!==e);b.fights++;b.personality.caution=clamp(b.personality.caution-.006,.1,.9);gain(s,10,'defeating '+e.type);if(rand(s)<.5)b.food++;event(s,'Creature defeated','Nim overcame a '+e.type+'.','event');remember(s,'Defeated a '+e.type);}
+ if(e.hp<=0){s.enemies=s.enemies.filter(z=>z!==e);b.fights++;b.personality.caution=clamp(b.personality.caution-.006,.1,.9);improve(s,'combat',4);gain(s,10,'defeating '+e.type);if(rand(s)<.5)b.food++;event(s,'Creature defeated','Nim overcame a '+e.type+'.','event');remember(s,'Defeated a '+e.type);}
  return;}
  if(b.goal==='Escape'&&near.e){const e=near.e;let directions=DIRS.map(([dx,dy])=>[b.x+dx,b.y+dy]).filter(([x,y])=>walkable(s,x,y)&&!s.enemies.some(q=>q.x===x&&q.y===y));directions.sort((a,c)=>(Math.abs(c[0]-e.x)+Math.abs(c[1]-e.y))-(Math.abs(a[0]-e.x)+Math.abs(a[1]-e.y)));if(directions.length){botMove(s,...directions[0]);b.energy=clamp(b.energy-2,0,100);}else{b.hp-=1;} b.personality.caution=clamp(b.personality.caution+.001,.1,.9);b.path=[];return;}
  if(b.path&&b.path.length){const [x,y]=b.path.shift();if(!walkable(s,x,y)){b.path=[];return;}botMove(s,x,y);return;}
  const tile=s.map[idx(b.x,b.y)];
- if(b.goal==='Eat'){b.food--;b.hunger=clamp(b.hunger+37,0,100);b.hp=clamp(b.hp+2,0,b.maxHp);b.thought='That was needed.';return;}
+ if(b.goal==='Eat'){b.food--;improve(s,'survival',1);b.hunger=clamp(b.hunger+37,0,100);b.hp=clamp(b.hp+2,0,b.maxHp);b.thought='That was needed.';return;}
  if(b.goal==='Recover'||b.goal==='Rest'){b.energy=clamp(b.energy+(s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3?17:12),0,100);b.hp=clamp(b.hp+(s.camp?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
- if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First shelter','Nim built a small shelter at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');return;}
- if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');return;}
- if(tile===T.BERRY){b.food+=2+rint(s,2);s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'foraging');b.thought='These berries will last a little while.';return;}
- if(tile===T.FOREST&&b.goal==='Gather wood'){b.wood+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'woodcutting');return;}
- if(tile===T.STONE&&b.goal==='Mine stone'){b.stone+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'mining');return;}
- if(tile===T.RUIN){s.map[idx(b.x,b.y)]=T.MEADOW;b.ruins++;b.personality.curiosity=clamp(b.personality.curiosity+.015,.1,.95);gain(s,18,'exploring ruins');event(s,'Ancient knowledge','Nim decoded a forgotten stone monument.','milestone');remember(s,'Found ruin #'+b.ruins);return;}
+ if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First shelter','Nim built a small shelter at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
+ if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');improve(s,'crafting',5);return;}
+ if(tile===T.BERRY){b.food+=2+rint(s,2);s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'foraging');improve(s,'survival',2);b.thought='These berries will last a little while.';return;}
+ if(tile===T.FOREST&&b.goal==='Gather wood'){b.wood+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'woodcutting');improve(s,'survival',2);return;}
+ if(tile===T.STONE&&b.goal==='Mine stone'){b.stone+=b.tool?3:2;s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'mining');improve(s,'survival',2);return;}
+ if(tile===T.RUIN){
+  // Exploration awards vary; clues lead to still-existing ruins and persist in v1 saves.
+  s.map[idx(b.x,b.y)]=T.MEADOW;b.ruins++;
+  b.personality.curiosity=clamp(b.personality.curiosity+.015,.1,.95);
+  const hazard=rand(s)<.36;
+  if(hazard){
+   const detected=rand(s)<clamp(.19+b.personality.caution*.42+b.skills.scouting*.045,0,.88);
+   if(detected){b.tactics.trapsAvoided++;improve(s,'scouting',3);event(s,'Trap spotted','Nim avoided a hidden floor snare.');}
+   else{const dmg=2+rint(s,4);b.hp-=dmg;b.tactics.trapsTriggered++;event(s,'Ruin trap','A concealed snare injured Nim for '+dmg+'.','danger');addMark(s,b.x,b.y,'hurt');}
+  }
+  if(s.story&&Array.isArray(s.story.clues)){
+    const solved=s.story.clues.find(q=>!q.solved&&q.x===b.x&&q.y===b.y);
+    if(solved){solved.solved=true;s.story.completed++;gain(s,8,'following a rumor');event(s,'Rumor confirmed',solved.title+' was true!','milestone');}
+    if(s.story.clues.length<10){
+     // Choose one reachable unvisited ruin; only a few ruin discoveries invoke BFS.
+     const target=findPath(s,(x,y,t)=>t===T.RUIN);
+     if(target&&target.length){const [tx,ty]=target[target.length-1];
+      if(!s.story.clues.some(q=>q.x===tx&&q.y===ty)){
+       const [title,detail]=LORE[(b.ruins-1)%LORE.length];s.story.clues.push({title,detail,x:tx,y:ty,solved:false});
+       event(s,'New rumor',title+': '+detail);
+      }
+     }
+    }
+  }
+  improve(s,'lore',5);gain(s,18,'exploring ruins');
+  event(s,'Ancient knowledge','Nim decoded a forgotten stone monument.','milestone');remember(s,'Found ruin #'+b.ruins);return;
+ }
  // Deterministic recovery for fully explored or depleted worlds; movement stays bounded.
  b.energy=clamp(b.energy+5,0,100);const p=findPath(s,(x,y,t)=>t===T.FOREST||t===T.BERRY||t===T.RUIN);if(p)b.path=p;
 }
@@ -94,7 +158,16 @@ function updateEnemies(s){const b=s.bot;
  if(s.enemies.length<5&&s.tick%53===0){for(let i=0;i<18;i++){const x=clamp(b.x+rint(s,19)-9,1,W-2),y=clamp(b.y+rint(s,17)-8,1,H-2),d=Math.abs(x-b.x)+Math.abs(y-b.y);if(d>5&&d<14&&walkable(s,x,y)&&(!s.camp||Math.abs(x-s.camp.x)+Math.abs(y-s.camp.y)>3)&&!s.enemies.some(e=>e.x===x&&e.y===y)){
  const tougher=s.day>4&&rand(s)<.35;s.enemies.push({id:s.nextEnemyId++,type:tougher?'Boar':'Wolf',x,y,hp:tougher?17:11,defense:tougher?2:0,attack:tougher?4:2,cooldown:1});break;}}}
  for(const e of s.enemies){if(e.cooldown>0){e.cooldown--;continue;}const d=Math.abs(e.x-b.x)+Math.abs(e.y-b.y);
- if(d===1){const dmg=Math.max(1,e.attack+rint(s,3)-b.defense);b.hp-=dmg;e.cooldown=3;addMark(s,b.x,b.y,'hurt');if(s.tick%8===0)event(s,'Under attack','A '+e.type+' struck Nim for '+dmg+' health.','danger');}
+ if(d===1){
+  let dmg=Math.max(1,e.attack+rint(s,3)-b.defense);
+  const dodgeChance=clamp(.08+b.personality.caution*.25+b.skills.scouting*.022,0,.58);
+  const parryChance=clamp(.09+b.skills.combat*.03+(b.tool?.06:0),0,.55);
+  const roll=rand(s);let result='hurt';
+  if(b.energy>=8&&roll<dodgeChance){dmg=0;b.energy-=3;b.tactics.dodge++;result='evade';improve(s,'scouting',1);b.thought='I saw the attack coming. I dodged.';}
+  else if(b.energy>=5&&roll<dodgeChance+parryChance){dmg=Math.max(0,Math.floor(dmg*.5));b.energy-=2;b.tactics.parry++;result='parry';improve(s,'combat',1);b.thought='I turned the blow aside.';}
+  b.hp-=dmg;e.cooldown=3;addMark(s,b.x,b.y,result);
+  if(s.tick%8===0)event(s,result==='evade'?'Attack evaded':result==='parry'?'Attack parried':'Under attack',result==='evade'?'Nim dodged the '+e.type+'.':result==='parry'?'Nim blocked part of a '+e.type+' attack.':'A '+e.type+' struck Nim for '+dmg+' health.',dmg>0?'danger':'event');
+ }
  else if(d<6&&s.tick%3===0){let options=DIRS.map(([dx,dy])=>[e.x+dx,e.y+dy]).filter(([x,y])=>walkable(s,x,y)&&!(x===b.x&&y===b.y)&&!s.enemies.some(o=>o!==e&&o.x===x&&o.y===y));options.sort((a,c)=>(Math.abs(a[0]-b.x)+Math.abs(a[1]-b.y))-(Math.abs(c[0]-b.x)+Math.abs(c[1]-b.y)));if(options.length){e.x=options[0][0];e.y=options[0][1];}e.cooldown=1;}
  }
  revive(s);
@@ -125,6 +198,9 @@ function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))r
 function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!==N||!Array.isArray(s.seen)||s.seen.length!==N||!s.bot)return false;
  const b=s.bot;return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.CAMP)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10;}
 function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
-function restore(raw){try{const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
-return {W,H,N,T,COST,TILE_NAMES,create,tick,power,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan};
+function restore(raw){try{const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
+ progress(s.bot);s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
+ s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
+ s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
+return {W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,create,tick,power,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve};
 });

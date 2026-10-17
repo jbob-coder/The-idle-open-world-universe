@@ -36,7 +36,7 @@ function draw(){positionCamera();const b=s.bot;
  if(s.guide&&s.guide.x>=camX&&s.guide.x<camX+VW&&s.guide.y>=camY&&s.guide.y<camY+VH){const x=(s.guide.x-camX)*16,y=(s.guide.y-camY)*16;rect(x,y,16,1,'#e4d386');rect(x,y+15,16,1,'#e4d386');rect(x,y,1,16,'#e4d386');rect(x+15,y,1,16,'#e4d386');}
  for(const e of s.enemies)if(e.x>=camX&&e.x<camX+VW&&e.y>=camY&&e.y<camY+VH&&s.seen[A.idx(e.x,e.y)])drawEnemy((e.x-camX)*16,(e.y-camY)*16,e);
  if(b.x>=camX&&b.x<camX+VW&&b.y>=camY&&b.y<camY+VH){const px=(b.x-camX)*16,py=(b.y-camY)*16;rect(px+1,py+14,14,1,'#cfdda2');drawBot(px,py,s.tick>>1);ctx.fillStyle='#f0e0a2';ctx.font='bold 8px monospace';ctx.textAlign='center';ctx.fillText('NIM',px+8,py-3);ctx.textAlign='start';}
- for(const m of s.marks){if(m.x<camX||m.x>=camX+VW||m.y<camY||m.y>=camY+VH)continue;const xx=(m.x-camX)*16,yy=(m.y-camY)*16,c=({hit:'#e9dd88',hurt:'#ee7770',bless:'#c4f7aa',gift:'#f1cb8d',bloom:'#85dbbb',guide:'#ddda92',storm:'#c6dffc'})[m.kind];rect(xx+2,yy+2,12,2,c);rect(xx+2,yy+12,12,2,c);rect(xx+2,yy+2,2,12,c);rect(xx+12,yy+2,2,12,c);}
+ for(const m of s.marks){if(m.x<camX||m.x>=camX+VW||m.y<camY||m.y>=camY+VH)continue;const xx=(m.x-camX)*16,yy=(m.y-camY)*16,c=({hit:'#e9dd88',hurt:'#ee7770',evade:'#88ccdb',parry:'#d1bb7c',bless:'#c4f7aa',gift:'#f1cb8d',bloom:'#85dbbb',guide:'#ddda92',storm:'#c6dffc'})[m.kind];rect(xx+2,yy+2,12,2,c);rect(xx+2,yy+12,12,2,c);rect(xx+2,yy+2,2,12,c);rect(xx+12,yy+2,2,12,c);}
  if(hover&&hover.x>=camX&&hover.x<camX+VW&&hover.y>=camY&&hover.y<camY+VH){const xx=(hover.x-camX)*16,yy=(hover.y-camY)*16;rect(xx,yy,16,1,'#efe2ac');rect(xx,yy+15,16,1,'#efe2ac');rect(xx,yy,1,16,'#efe2ac');rect(xx+15,yy,1,16,'#efe2ac');}
  $('coordinates').textContent=`${b.x}, ${b.y} · ${A.TILE_NAMES[s.map[A.idx(b.x,b.y)]]}`;
 }
@@ -48,7 +48,10 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('statbars').innerHTML=bar('Health',b.hp,b.maxHp)+bar('Hunger',b.hunger)+bar('Energy',b.energy)+bar('Experience',b.xp,xpNeed);
  $('goal').textContent=goal;$('thought').textContent='“'+b.thought+'”';
  $('inventory').innerHTML=`<span>🍎 Food <b>${b.food}</b></span><span>▥ Wood <b>${b.wood}</b></span><span>◆ Stone <b>${b.stone}</b></span><span>⚒ Tool <b>${b.tool?'Hatchet':'Hands'}</b></span>`;
- $('traits').textContent=`Curiosity ${Math.round(b.personality.curiosity*100)} · Caution ${Math.round(b.personality.caution*100)} · Resolve ${Math.round(b.personality.diligence*100)}`;
+ $('traits').textContent=`${b.background} · Curiosity ${Math.round(b.personality.curiosity*100)} · Caution ${Math.round(b.personality.caution*100)} · Resolve ${Math.round(b.personality.diligence*100)}`;
+ $('skillRanks').textContent=A.SKILLS.map(k=>k.toUpperCase().slice(0,3)+' '+b.skills[k]).join(' · ');
+ $('adventures').textContent=`${s.story.completed} rumors solved · ${s.story.clues.filter(q=>!q.solved).length} leads · ${b.tactics.dodge} dodges · ${b.tactics.parry} parries · ${b.tactics.trapsAvoided} traps avoided`;
+ $('lead').textContent=(s.story.clues.find(q=>!q.solved)||{}).title||'No active legend';
  $('memory').textContent=b.memory.length?b.memory.slice(-4).reverse().join('  •  '):'Learning about the world…';
  $('milestones').textContent=`${b.steps} steps · ${b.fights} wins · ${b.ruins} ruins · ${b.scars} second chances`;
  $('events').innerHTML=s.log.slice(0,9).map(e=>`<div class="event ${html(e.type)}"><span class="evt-time">D${1+Math.floor(e.tick/240)}</span><div><strong>${html(e.title)}</strong><small>${html(e.detail)}</small></div></div>`).join('');

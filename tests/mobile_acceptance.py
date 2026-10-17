@@ -43,7 +43,8 @@ with sync_playwright() as pw:
         page.locator('#import').click()
         page.locator('#saveText').fill(raw)
         page.locator('#saveApply').click()
-        assert page.evaluate('GodseedDebug.getState().tick')==saved['tick']
+        restored_tick=page.evaluate('GodseedDebug.getState().tick')
+        assert saved['tick'] <= restored_tick <= saved['tick'] + 4, (saved['tick'], restored_tick)  # simulation can advance while Playwright checks
         assert not errors,errors
         assert not outgoing,outgoing
         page.screenshot(path=str(p/'assets'/f'godseed-android-landscape-{width}x{height}.png'),full_page=False)
