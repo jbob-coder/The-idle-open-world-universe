@@ -1,0 +1,423 @@
+{
+  "schema": "godseed.world-regions.v1",
+  "status": "planning-only-not-integrated",
+  "world": {
+    "width": 64,
+    "height": 48,
+    "tileSizePixels": 16,
+    "logicalTiles": 3072,
+    "currentMapTileIDs": {
+      "GRASS": 0,
+      "FOREST": 1,
+      "WATER": 2,
+      "STONE": 3,
+      "BERRY": 4,
+      "RUIN": 5,
+      "MEADOW": 6,
+      "CAMP": 7,
+      "ROAD": 8,
+      "VILLAGE": 9,
+      "SHRINE": 10
+    },
+    "preserveSaveKey": "godseed-one-small-life-v1",
+    "preserveSaveVersion": 1
+  },
+  "method": "Named region metadata/biome overlay on existing terrain, NOT a replacement for tile IDs. Proposed anchored Voronoi influence cells derived deterministically from world seed, with a reserved safe clearing and guaranteed walkable road links. Current main map generator does NOT implement this schema.",
+  "seededGenerationRules": {
+    "start": [
+      32,
+      24
+    ],
+    "safeStartManhattanRadius": 5,
+    "maxEarlyHostileWithinRadius": 0,
+    "existingSettlementAnchors": [
+      [
+        25,
+        21
+      ],
+      [
+        37,
+        27
+      ]
+    ],
+    "existingShrineAnchors": [
+      [
+        20,
+        31
+      ],
+      [
+        42,
+        19
+      ]
+    ],
+    "currentNpcHomes": [
+      {
+        "name": "Toren",
+        "anchor": [
+          25,
+          21
+        ]
+      },
+      {
+        "name": "Ira",
+        "anchor": [
+          37,
+          27
+        ]
+      },
+      {
+        "name": "Mera",
+        "anchor": [
+          42,
+          19
+        ]
+      }
+    ],
+    "regionMembership": "One primary region ID for each cell, determined by nearest regional anchor with seed-derived low-amplitude jitter. Reserve R00 for immediate start radius; deterministic tie breaker by region ID. Do not persist 3072 redundant region IDs when derivable from seed + static region manifest.",
+    "paths": "Guarantee safe start ↔ each hamlet; supply an accessible route to each shrine and at least one ruin. Validate with BFS against actual walkable(s,x,y); WATER remains blocked until a separate tested bridge/ford feature.",
+    "resources": "At least one reachable food, wood, stone source from start and replenishable food over time; do not overwrite reserved landmarks with spawned berries.",
+    "spawning": "Existing cap 3 traveling NPC + 5 enemies; region-specific spawn constraints must not exceed global cap; no enemies inside safe start radius initially.",
+    "compatibility": "Keep source map tiles 0..10 and world 64x48 in v1. Region overlay is derived; any stored discovery IDs need optional field migration, bounds validation and old save load test."
+  },
+  "regions": [
+    {
+      "id": "R00",
+      "key": "hearthfield_clearing",
+      "name": "Hearthfield Clearing",
+      "type": "starting_sanctuary",
+      "anchor": [
+        32,
+        24
+      ],
+      "difficulty": 0,
+      "status": "planned_region_overlay",
+      "existingEvidence": "Nim spawns at (32,24) with cleared nearby 7x7 and starter berry, forest and stone tiles",
+      "features": [
+        "safe spawning",
+        "forage resources",
+        "first shelter",
+        "first camera tutorial"
+      ],
+      "resources": [
+        "berry",
+        "wood",
+        "stone"
+      ],
+      "inhabitants": [
+        "Nim"
+      ],
+      "landmarks": [
+        "awakening_stone",
+        "camp_site"
+      ],
+      "godHooks": [
+        "bless",
+        "gift",
+        "bloom",
+        "guide"
+      ],
+      "unlock": "available_immediately",
+      "minimumGameplay": "Nim can eat, recover, gather, construct first camp and leave without a scripted player command"
+    },
+    {
+      "id": "R01",
+      "key": "briarford_hamlet",
+      "name": "Briarford Hamlet",
+      "type": "settlement",
+      "anchor": [
+        25,
+        21
+      ],
+      "difficulty": 1,
+      "status": "planned_region_overlay",
+      "existingEvidence": "Existing northwest village tile (25,21) and Toren the Squire's home anchor",
+      "features": [
+        "timber cottages",
+        "village square",
+        "guard outpost",
+        "roadside farm"
+      ],
+      "resources": [
+        "food",
+        "wood"
+      ],
+      "inhabitants": [
+        "Toren"
+      ],
+      "landmarks": [
+        "western_village",
+        "guard_post"
+      ],
+      "godHooks": [
+        "inspire",
+        "guide",
+        "bloom"
+      ],
+      "unlock": "discover_via_roads",
+      "minimumGameplay": "Toren patrols nearby; Nim may meet him without direct control; roads and resources remain accessible"
+    },
+    {
+      "id": "R02",
+      "key": "emberwick_hamlet",
+      "name": "Emberwick Hamlet",
+      "type": "settlement",
+      "anchor": [
+        37,
+        27
+      ],
+      "difficulty": 1,
+      "status": "planned_region_overlay",
+      "existingEvidence": "Existing southeast village tile (37,27) and Ira the Apothecary's home anchor",
+      "features": [
+        "herbal garden",
+        "cottages",
+        "field fences",
+        "well"
+      ],
+      "resources": [
+        "herbs",
+        "berry",
+        "wood"
+      ],
+      "inhabitants": [
+        "Ira"
+      ],
+      "landmarks": [
+        "eastern_village",
+        "apothecary_garden"
+      ],
+      "godHooks": [
+        "inspire",
+        "bloom",
+        "gift"
+      ],
+      "unlock": "discover_via_roads",
+      "minimumGameplay": "Ira can tend herbs when inspired; herb spawning has a cap and cannot overwrite water or landmarks"
+    },
+    {
+      "id": "R03",
+      "key": "mossveil_wildwood",
+      "name": "Mossveil Wildwood",
+      "type": "wilderness_forest",
+      "anchor": [
+        10,
+        13
+      ],
+      "difficulty": 2,
+      "status": "planned_region_overlay",
+      "existingEvidence": "Current seed-noise forest tiles support wood/berry harvesting; this named regional identity is not coded",
+      "features": [
+        "dense pines",
+        "fallen logs",
+        "moss paths",
+        "hidden herb glades"
+      ],
+      "resources": [
+        "wood",
+        "berry",
+        "herbs"
+      ],
+      "inhabitants": [
+        "Wolf"
+      ],
+      "landmarks": [
+        "forest_waystone"
+      ],
+      "godHooks": [
+        "guide",
+        "bloom",
+        "storm"
+      ],
+      "unlock": "discover_in_fog",
+      "minimumGameplay": "Risk/reward forest with traversable clearings; Nim can harvest and safely retreat"
+    },
+    {
+      "id": "R04",
+      "key": "stormstone_ridge",
+      "name": "Stormstone Ridge",
+      "type": "rocky_highlands",
+      "anchor": [
+        52,
+        10
+      ],
+      "difficulty": 3,
+      "status": "planned_region_overlay",
+      "existingEvidence": "Existing stone terrain and boar enemy allow mining/danger, but no region-specific highlands logic exists",
+      "features": [
+        "stone outcrops",
+        "weathered cairns",
+        "ridge paths",
+        "old quarry"
+      ],
+      "resources": [
+        "stone"
+      ],
+      "inhabitants": [
+        "Boar"
+      ],
+      "landmarks": [
+        "old_quarry"
+      ],
+      "godHooks": [
+        "guide",
+        "storm"
+      ],
+      "unlock": "discover_in_fog",
+      "minimumGameplay": "Stone gathering is viable without forcing Nim through lethal bottlenecks"
+    },
+    {
+      "id": "R05",
+      "key": "crownfall_ruins",
+      "name": "Crownfall Ruins",
+      "type": "lore_ruins",
+      "anchor": [
+        31,
+        7
+      ],
+      "difficulty": 3,
+      "status": "planned_region_overlay",
+      "existingEvidence": "Existing generic RUIN tiles, rumors and trap responses; Crownfall placement/name is a future overlay",
+      "features": [
+        "broken arches",
+        "runic stones",
+        "ruin traps",
+        "royal history"
+      ],
+      "resources": [
+        "lore_clues"
+      ],
+      "inhabitants": [],
+      "landmarks": [
+        "fallen_observatory",
+        "ashen_crown_chamber_exterior"
+      ],
+      "godHooks": [
+        "guide",
+        "bless"
+      ],
+      "unlock": "rumor_or_exploration",
+      "minimumGameplay": "Ruins yield a finite clue; traps have avoidance logic; no endlessly-repeatable XP loop"
+    },
+    {
+      "id": "R06",
+      "key": "oathkeeper_grove",
+      "name": "Oathkeeper Grove",
+      "type": "sacred_forest",
+      "anchor": [
+        15,
+        38
+      ],
+      "difficulty": 2,
+      "status": "planned_region_overlay",
+      "existingEvidence": "Existing shrine at (20,31) and shrineVisited list; this area boundary and named grove are not implemented",
+      "features": [
+        "ancient trees",
+        "votive stones",
+        "forest rune shrine",
+        "quiet clearing"
+      ],
+      "resources": [
+        "wood",
+        "berry",
+        "lore_clues"
+      ],
+      "inhabitants": [],
+      "landmarks": [
+        "oathkeeper_shrine"
+      ],
+      "godHooks": [
+        "bless",
+        "guide",
+        "bloom"
+      ],
+      "unlock": "discover_in_fog",
+      "minimumGameplay": "Visiting shrine rewards once per location; god Faith increase must remain bounded"
+    },
+    {
+      "id": "R07",
+      "key": "moonwell_fen",
+      "name": "Moonwell Fen",
+      "type": "wetlands",
+      "anchor": [
+        50,
+        39
+      ],
+      "difficulty": 3,
+      "status": "planned_region_overlay",
+      "existingEvidence": "Current WATER cells are impassable and rain/Bloom exist; a distinct wetland region does not yet exist",
+      "features": [
+        "reeds",
+        "pools",
+        "stepping stones",
+        "moonlit ruins"
+      ],
+      "resources": [
+        "berry",
+        "lore_clues"
+      ],
+      "inhabitants": [
+        "Wolf"
+      ],
+      "landmarks": [
+        "moonwell"
+      ],
+      "godHooks": [
+        "guide",
+        "storm",
+        "bloom"
+      ],
+      "unlock": "discover_in_fog",
+      "minimumGameplay": "Dry route reaches at least one meaningful landmark; no permanent soft-lock in water maze"
+    }
+  ],
+  "traversalLinks": [
+    {
+      "from": "R00",
+      "to": "R01",
+      "type": "existing_royal_road",
+      "priority": "P0"
+    },
+    {
+      "from": "R00",
+      "to": "R02",
+      "type": "existing_royal_road",
+      "priority": "P0"
+    },
+    {
+      "from": "R01",
+      "to": "R03",
+      "type": "future_trail",
+      "priority": "P1"
+    },
+    {
+      "from": "R02",
+      "to": "R04",
+      "type": "future_trail",
+      "priority": "P1"
+    },
+    {
+      "from": "R00",
+      "to": "R05",
+      "type": "future_ruin_path",
+      "priority": "P1"
+    },
+    {
+      "from": "R00",
+      "to": "R06",
+      "type": "future_shrine_path",
+      "priority": "P1"
+    },
+    {
+      "from": "R02",
+      "to": "R07",
+      "type": "future_fen_path",
+      "priority": "P1"
+    }
+  ],
+  "phaseDefinitions": {
+    "vertical_slice": "R00+R01+R02 traversable and autonomous; 3 NPCs, resources, god powers, save",
+    "region_expansion": "R03–R07 fully differentiated and linked; ruins/holy sites tested",
+    "later_world": "Chunked additional maps only after hardware profiling; do not expand world to justify 1GB disk target"
+  },
+  "notes": "Anchors are design coordinates for a proposed world layout, NOT guaranteed current existing POIs except explicit evidence. Do not infer new NPCs or simulated wildlife based on planned region inhabitants. 2–3 GB target PHONE RAM; game resident 128–192MiB preferred, soft 256MiB provisional."
+}
