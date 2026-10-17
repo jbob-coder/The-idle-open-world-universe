@@ -54,3 +54,51 @@ test('old v0.1 saves migrate to new story and skill state',()=>{
  for(let i=0;i<80;i++)S.tick(migrated);
  assert.equal(S.validate(migrated),true);
 });
+
+test('medieval travelers spawn deterministically, stay on land and are capped at three',()=>{
+ const a=S.create(2026),b=S.create(2026);
+ assert.equal(a.npcs.length,3);
+ assert.deepEqual(a.npcs,b.npcs);
+ assert.deepEqual(a.npcs.map(p=>p.role),['Apothecary','Squire','Rune Scholar']);
+ assert.ok(a.npcs.every(p=>S.inside(p.x,p.y)&&S.walkable(a,p.x,p.y)));
+ for(let i=0;i<1800;i++){S.tick(a);S.tick(b);}
+ assert.equal(S.serialize(a),S.serialize(b));
+ assert.ok(a.npcs.every(p=>S.inside(p.x,p.y)&&S.walkable(a,p.x,p.y)));
+ assert.ok(a.npcs.some(p=>p.encounters>0),'Nim must meet at least one traveler independently');
+ assert.ok(a.log.length<=45,'world chronicle remains bounded');
+});
+test('divine Inspire affects a discovered traveler but does not puppet Nim',()=>{
+ const s=S.create(349),person=s.npcs[0],before=s.faith;
+ const bx=s.bot.x,by=s.bot.y;
+ assert.equal(S.power(s,'inspire',person.x,person.y).ok,false,'hidden travelers cannot be targeted');
+ assert.equal(s.faith,before,'rejected actions should not cost Faith');
+ s.seen[S.idx(person.x,person.y)]=1;
+ assert.equal(S.power(s,'inspire',person.x,person.y).ok,true);
+ assert.equal(s.faith,before-S.COST.inspire);
+ assert.equal(person.mood,'hopeful');
+ assert.ok(person.trust>22&&person.favorUntil>s.tick);
+ assert.equal(s.bot.x,bx);
+ assert.equal(s.bot.y,by);
+ const faith=s.faith;
+ assert.equal(S.power(s,'inspire',-1,-1).ok,false);
+ assert.equal(s.faith,faith);
+ assert.ok(s.log.some(e=>e.title==='Divine inspiration'));
+});
+test('existing saves without travelers migrate while retaining Nim and world progress',()=>{
+ const initial=S.create(77);
+ for(let i=0;i<60;i++)S.tick(initial);
+ const old=JSON.parse(S.serialize(initial));
+ const originalPosition=[old.bot.x,old.bot.y],originalTick=old.tick,originalFaith=old.faith;
+ delete old.npcs;
+ const restored=S.restore(old);
+ assert.ok(restored);
+ assert.equal(restored.tick,originalTick);
+ assert.equal(restored.faith,originalFaith);
+ assert.deepEqual([restored.bot.x,restored.bot.y],originalPosition);
+ assert.equal(restored.npcs.length,3);
+ assert.ok(restored.npcs.every(p=>S.walkable(restored,p.x,p.y)));
+ const again=S.restore(S.serialize(restored));
+ assert.deepEqual(again.npcs,restored.npcs);
+ for(let i=0;i<250;i++)S.tick(restored);
+ assert.ok(S.validate(restored));
+});
