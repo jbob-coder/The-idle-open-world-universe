@@ -44,7 +44,7 @@ test('tactics and trap detection happen without player controlling the bot',()=>
  s.enemies=[{id:1,type:'Wolf',x:33,y:24,hp:1000,attack:2,defense:100,cooldown:0}];
  for(let i=0;i<80;i++)S.tick(s);
  assert.ok(s.bot.tactics.dodge+s.bot.tactics.parry>=1);
- s.enemies=[];s.bot.x=32;s.bot.y=24;s.bot.hunger=100;s.bot.energy=100;s.bot.food=5;
+ s.enemies=[];s.npcs=[];s.bot.hp=s.bot.maxHp;s.bot.x=32;s.bot.y=24;s.bot.hunger=100;s.bot.energy=100;s.bot.food=5;
  s.map.fill(S.T.GRASS);s.map[S.idx(32,24)]=S.T.RUIN;s.seen.fill(1);s.seed=1;
  S.tick(s);S.tick(s);
  assert.ok(s.bot.tactics.trapsAvoided+s.bot.tactics.trapsTriggered>=1);
