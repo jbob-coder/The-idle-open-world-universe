@@ -1,3 +1,13 @@
+## Strict Square-Pixel Art Lock — October 17, 2026
+
+DIRECTION: All terrain, cottages, ruins, trees, wildlife, characters, divine abilities and Android UI must use **visible, crisp 2D square pixels**, no blurry rendering, painterly backgrounds, 3D/isometric or glossy vector app styling. High sky view target 32×20 cells; tile source 16×16px, actor source 16×24px, nearest-neighbor zoom and no smoothing.
+
+NOW COMMITTED: `docs/PIXEL_WORLD_STYLE_GUIDE.md` strict art bible, `config/pixel-art-contract.json`, `docs/PIXEL_ART_ACCEPTANCE.md`, `scripts/validate_pixel_art_contract.mjs`, GitHub Actions art gate, linked README, `AGENTS.md`, canonical Codex prompt, world blueprint and visual task acceptance. Generator/source manifests and PNG starters already exist. A CI static-art PASS verifies sources, **not** that the new game renderer or target default camera has been implemented. Visual/source tasks remain TODO until reviewed screenshots from compiled code.
+
+NEXT: Codex integrates original sprite atlases in `src/ui.js` (or tested renderer modules) with runtime screenshots across 3 zooms and 3 landscape resolutions. Preserve simulation autonomy, 2–3 GB device RAM target, 1 GB + up to 5 GB optional disk, and no merge into main without approval.
+
+---
+
 ## Owner hard style rule — pixel squares — 2026-10-17
 
 REQUEST: The game art style must stay truly **PIXEL SQUARES** across all overhead medieval fantasy terrain, eight planned regions, structures, Nim/NPC/creature sprites, divinity FX and Android HUD.

@@ -1,5 +1,7 @@
 # Codex implementation batches: do five tasks at a time
 
+**Art acceptance authority:** `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `config/pixel-art-contract.json`, `docs/PIXEL_ART_ACCEPTANCE.md`. A pixel-square look is mandatory for terrain, characters, divine effects and HUD. The validator checks original starter source: `node scripts/validate_pixel_art_contract.mjs`; Codex still must show **runtime screenshots** before marking a task done.
+
 This is a **work order**, not evidence that these items are implemented. Mark tasks complete only with tests/screenshots. Create implementation branch `feat/godseed-medieval-skyworld-v1` from this handoff and use separate commits per slice.
 
 ## Slice A — Camera and presentation (priority 1)

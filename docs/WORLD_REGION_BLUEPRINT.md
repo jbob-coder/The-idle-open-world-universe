@@ -4,6 +4,10 @@
 ## What the current game already contains
 Current `src/sim.js` generates a seeded 64×48 map, clears a safe-ish 7×7 starting area around Nim at (32,24), places berries, wood and stone, approximately 10 generic ruins, two VILLAGE tiles at **(25,21)** and **(37,27)**, and shrine tiles at **(42,19)** and **(20,31)**. Ira lives near the eastern village, Toren near the western village, and Mera near the northeastern shrine. It has roads, three autonomous NPCs, wolves/boars, skills, a Faith/power economy and saves, **but no persisted named regions, regional danger tables or regional production systems.** The eight region names below are proposals until integrated and tested.
 
+## Mandatory visual grammar for every region
+
+All eight areas must use **native square-pixel blocks** from 16×16 terrain tiles and layered 16px props. Each biome has a distinguishing **pixel palette and physical motif**, not a smoothed full-screen illustration. Houses and ruined arches use snapped 16px modules; forests use stepped canopies; pools and rivers use hard 1px ripples; all interactive actors remain 16×24 crisp sprites. Do not implement these eight zones as differently colored giant rectangles or as photo-textured backgrounds. The complete checklist is in `docs/PIXEL_WORLD_STYLE_GUIDE.md` and `docs/PIXEL_ART_ACCEPTANCE.md`, with static source specification in `config/pixel-art-contract.json`. Any art not yet integrated is only a plan.
+
 ## First playable region layout
 | ID | Region (proposed) | Anchor | Purpose | Content priorities |
 | --- | --- | --- | --- | --- |

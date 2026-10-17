@@ -32,6 +32,14 @@ Read `docs/WORLD_SYSTEM_CONTRACTS.md`, `docs/WORLD_PLAYTEST_MATRIX.md` and `work
 
 Preflight addition: `node scripts/validate_world_blueprint.mjs` validates the planning schema against the existing simulator and catches accidental tile-ID changes; its PASS is **not proof regional mechanics are implemented**.
 
+## STRICT SQUARE-PIXEL ART CONTRACT — DO NOT SUBSTITUTE ANOTHER STYLE
+
+**This is a mandatory acceptance gate for all visual and world slices, not an optional concept.** GODSEED art must be **true hard-edged square pixels**, not blurry rasterized illustrations, gradient-lit backgrounds, modern vector UI, fake 3D or isometric graphics. Use **16×16 source pixels per terrain tile**, **16×24 sprite frames for Nim/Ira/Toren/Mera**, an original constrained medieval palette, binary-alpha PNGs, integer source coordinates, and **nearest-neighbor Canvas2D rendering** (`imageSmoothingEnabled=false`, CSS `image-rendering:pixelated`). The world remains top-down from a higher sky POV (32×20 default when implemented; 24×15 and 16×10 remain selectable).
+
+Buildings, pines, marsh water, stone ruins, fences, roads, creatures and God-power symbols must all match this **pixel-square language**. Landscape Android controls must also use crisp blocky icon frames and solid pixel borders, while maintaining readable labels and touch targets.
+
+Read and follow `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `config/pixel-art-contract.json`, and `docs/PIXEL_ART_ACCEPTANCE.md`; use `assets/palettes/medieval-fantasy.json` and `assets/asset-manifest.json` as precise art sources. Baseline art-source check: `node scripts/validate_pixel_art_contract.mjs`. Source-validator PASS is **not** evidence that the game renderer has been updated; for each visual task provide actual compiled browser screenshots at **640×360, 720×400, 960×540 × all three zooms**, and manual visual inspection of pixel edges, contrast, road/water consistency and actor visibility. Concepts are not implementation evidence.
+
 ## First: understand and verify
 Read, in this order:
 1. `AGENTS.md`

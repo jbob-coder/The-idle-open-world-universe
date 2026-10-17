@@ -6,6 +6,10 @@
 `python tests/browser_smoke.py`, `python tests/mobile_acceptance.py`, `python tests/capture_android_layouts.py` — browser acceptance (requires Playwright and Chromium; may need file:// permission depending on environment).
 `python android/build_apk.py`, `python tests/test_android_package.py` — build and structure/signature tests (JDK may be required).
 
+## Strict pixel visual QA (mandatory)
+
+Run `node scripts/validate_pixel_art_contract.mjs` after any change to PNG atlases or the palette. This checks source color/alpha/dimensions, not gameplay rendering. Next require actual in-game screenshots at 32×20, 24×15 and 16×10 across 640×360, 720×400 and 960×540. Inspect blocky pixels (not interpolated), actor outlines, tile-to-collision consistency, sprite depth/occlusion, power target highlights and pixel-art UI. Refer to `docs/PIXEL_ART_ACCEPTANCE.md`. Images in `assets/concepts/` are references, never pass proof.
+
 ## New tests to add as Codex implements slices
 1. Camera high sky default 32x20; near 24x15; inspect 16x10. Existing v0.4 currently defaults to 24x15 — update tests when intentionally implementing this change.
 2. World-to-screen and screen-to-world roundtrip: center and boundary tiles, panning and Follow, all zooms, noninteger CSS scales and viewport letterbox.

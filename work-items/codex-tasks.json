@@ -50,7 +50,7 @@
       "epic_title": "High-sky camera",
       "status": "todo",
       "title": "Protect crisp pixel-square scaling and safe areas",
-      "acceptance": "Canvas remains pixelated and never clips target cells.",
+      "acceptance": "Canvas remains pixelated and never clips target cells.  Visual signoff must confirm no blur/interpolation at all zooms and real 640×360/720×400/960×540 screenshots; validate source with scripts/validate_pixel_art_contract.mjs.",
       "evidence": [],
       "dependencies": [
         "A03"
@@ -76,7 +76,7 @@
       "epic_title": "Richer world terrain",
       "status": "todo",
       "title": "Wire four starter PNG sheets through manifest into renderer",
-      "acceptance": "Runtime shows actual atlas pixels, all offline.",
+      "acceptance": "Runtime shows actual atlas pixels, all offline.  Integrate genuine native 16×16 square-pixel atlases with exact palette/binary-alpha art source. Art concepts/PNGs alone do not count as in-game use.",
       "evidence": [],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
@@ -87,7 +87,7 @@
       "epic_title": "Richer world terrain",
       "status": "todo",
       "title": "Draw roads and water adjacency masks",
-      "acceptance": "Test joins, bends and edges without altering collision.",
+      "acceptance": "Test joins, bends and edges without altering collision.  Road/water joins have hard square-pixel seams and logically matching traversability, verified visually and by sim tests.",
       "evidence": [],
       "dependencies": [
         "B01"
@@ -113,7 +113,7 @@
       "epic_title": "Richer world terrain",
       "status": "todo",
       "title": "Improve hamlet, shrine, ruin and camp silhouettes",
-      "acceptance": "Readable destinations at 32x20, no phantom interiors.",
+      "acceptance": "Readable destinations at 32x20, no phantom interiors.  Timber roofs, shrines, ruins and houses assembled from aligned square-pixel clusters, not smooth vector/painted backgrounds.",
       "evidence": [],
       "dependencies": [
         "B03"
@@ -139,7 +139,7 @@
       "epic_title": "2D actors and motion",
       "status": "todo",
       "title": "Draw Nim with four facings and 2–4 frame walk cycle",
-      "acceptance": "Movement animation derived from tick, not draw calls.",
+      "acceptance": "Movement animation derived from tick, not draw calls.  Nim sprites remain 16×24 native pixel frames with crisp square outlines and feet anchor (8,23); verify four directions in running screenshots.",
       "evidence": [],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
@@ -150,7 +150,7 @@
       "epic_title": "2D actors and motion",
       "status": "todo",
       "title": "Distinctively draw the three professions",
-      "acceptance": "Roles readable at 640x360 / 32x20.",
+      "acceptance": "Roles readable at 640x360 / 32x20.  All three travelers visually match native square-pixel palette and binary-alpha sprite art, not emoji/vector characters.",
       "evidence": [],
       "dependencies": [
         "C01"
@@ -213,7 +213,7 @@
       "epic_title": "God's visible influence",
       "status": "todo",
       "title": "Render finite FX for bless/gift/bloom/guide/storm",
-      "acceptance": "All effects arise from simulator events, capped cost.",
+      "acceptance": "All effects arise from simulator events, capped cost.  Divine glyphs and effects remain pixel-square and limited-frame, with no Gaussian glow/gradients; animation must not mutate sim.",
       "evidence": [],
       "dependencies": [
         "D01"
@@ -265,7 +265,7 @@
       "epic_title": "Android UI, QA and delivery",
       "status": "todo",
       "title": "Compact HUD and touch safe areas",
-      "acceptance": "No lost buttons or unreadable NPC info at 640x360.",
+      "acceptance": "No lost buttons or unreadable NPC info at 640x360.  Android HUD must be visually pixel-square (solid borders and icons), still readable and touch-accessible at 640×360.",
       "evidence": [],
       "dependencies": [],
       "assigned_to": "Codex Cloud"

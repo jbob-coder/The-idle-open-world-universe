@@ -1,3 +1,9 @@
+## Mandatory square-pixel visual style — Codex acceptance gate
+
+**ALL GODSEED game art must be authored as recognizable, hard-edged SQUARE PIXELS.** No painted/scaled photo background, blurred sprites, anti-aliasing, vector-style characters, isometric perspective or glossy modern HUD. The final higher-sky camera targets 32×20 logical tiles; native world tiles are 16×16 pixels; Nim and NPCs are 16×24 pixel frames with consistent feet anchors. Zoom uses nearest-neighbor pixel scaling and the terrain must remain readable at every level. The existing runtime has NOT yet been fully migrated to atlas-based art.
+
+**Required Codex references:** [Strict Pixel-Art Bible](docs/PIXEL_WORLD_STYLE_GUIDE.md) · [Machine-readable square-pixel contract](config/pixel-art-contract.json) · [Pixel-art acceptance matrix](docs/PIXEL_ART_ACCEPTANCE.md) · [Original sprite manifest](assets/asset-manifest.json) · [Automated validator](scripts/validate_pixel_art_contract.mjs). Run `node scripts/validate_pixel_art_contract.mjs`, then verify real browser screenshots before completing visual tasks.
+
 ## Non-negotiable art style: hand-authored **square pixels**
 
 GODSEED is a **top-down 2D medieval-fantasy pixel-square game**. The higher sky camera uses crisp **16×16** world tiles and legible **16×24** 2D character frames. Roads, roofs, leaves, water, ruins, rune stones, god powers **and UI borders/icons** must be constructed from intentional hard-edged pixel clusters. **No blurry scaling, smooth vector sprites, painted scenes, gradients, pseudo-3D or glossy mobile-game HUD.** The style is enforced in the [strict art bible](docs/PIXEL_WORLD_STYLE_GUIDE.md), [machine-readable pixel rules](config/pixel-art-contract.json) and [visual acceptance matrix](docs/PIXEL_ART_ACCEPTANCE.md). Prepared PNGs remain starter assets and are not yet integrated into runtime.

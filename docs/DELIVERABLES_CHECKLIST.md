@@ -1,5 +1,11 @@
 # Handoff completion criteria
 
+## Art-source gate before Codex implements visuals
+
+- [x] Strict square-pixel art bible, machine-readable contract, acceptance matrix and source validator.
+- [x] GitHub Actions runs square-pixel source checks alongside normal simulation tests.
+- [ ] Codex runtime proves terrain/characters/effects/UI match style at three zooms and landscape sizes; no final renderer delivered yet.
+
 ## Prepared in this branch
 - [x] Codex instructions in `AGENTS.md`
 - [x] Full game product spec, detailed HTML-in-APK architecture, staged P/I/R readiness gates, and a final copy-paste Codex Cloud prompt
