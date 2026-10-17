@@ -102,3 +102,56 @@ test('existing saves without travelers migrate while retaining Nim and world pro
  for(let i=0;i<250;i++)S.tick(restored);
  assert.ok(S.validate(restored));
 });
+
+test('medieval fantasy terrain includes paths, villages and persistent shrines',()=>{
+ const a=S.create(2026),b=S.create(2026);
+ assert.deepEqual(a.map,b.map);
+ assert.equal(a.map.filter(t=>t===S.T.VILLAGE).length,2);
+ assert.equal(a.map.filter(t=>t===S.T.SHRINE).length,2);
+ assert.ok(a.map.some(t=>t===S.T.ROAD));
+ assert.ok(a.npcs.every(p=>S.walkable(a,p.homeX,p.homeY)));
+ assert.deepEqual(a.shrinesVisited,[]);
+ const saved=S.restore(S.serialize(a));
+ assert.deepEqual(saved.shrinesVisited,[]);
+ assert.ok(S.validate(saved));
+});
+test('apothecary responds to divine inspiration with a bounded autonomous harvest',()=>{
+ const s=S.create(42),p=s.npcs.find(p=>p.role==='Apothecary');
+ s.seen[S.idx(p.x,p.y)]=1;s.faith=50;
+ const before=s.map.filter(t=>t===S.T.BERRY).length;
+ assert.equal(S.power(s,'inspire',p.x,p.y).ok,true);
+ for(let i=0;i<12;i++)S.tick(s);
+ assert.equal(p.favorSpent,true);
+ assert.equal(p.activity,'Tending blessed herbs');
+ assert.ok(s.map.filter(t=>t===S.T.BERRY).length>=before);
+ assert.ok(s.log.some(x=>x.title==='Apothecary answered'));
+ const logs=s.log.filter(x=>x.title==='Apothecary answered').length;
+ for(let i=0;i<24;i++)S.tick(s);
+ assert.equal(s.log.filter(x=>x.title==='Apothecary answered').length,logs,'one autonomous act per blessing');
+});
+test('inspired squire and rune scholar perform role-specific actions',()=>{
+ for(const role of ['Squire','Rune Scholar']){
+  const s=S.create(56),p=s.npcs.find(p=>p.role===role);
+  s.seen[S.idx(p.x,p.y)]=1;s.faith=50;
+  assert.equal(S.power(s,'inspire',p.x,p.y).ok,true);
+  for(let i=0;i<12;i++)S.tick(s);
+  assert.equal(p.favorSpent,true,role);
+  assert.ok(s.log.some(x=>x.title===(role==='Squire'?'Squire answered':'Rune scholar answered')));
+  assert.ok(p.activity.length>5);
+ }
+});
+test('v0.2 saves migrate without new world features and preserve old progress',()=>{
+ const s=S.create(89);
+ for(let i=0;i<15;i++)S.tick(s);
+ const old=JSON.parse(S.serialize(s));
+ delete old.shrinesVisited;
+ for(const p of old.npcs){delete p.favorSpent;delete p.activity;}
+ const restored=S.restore(old);
+ assert.ok(restored);
+ assert.deepEqual(restored.shrinesVisited,[]);
+ assert.ok(restored.npcs.every(p=>p.favorSpent===false&&p.activity.length));
+ assert.equal(restored.tick,s.tick);
+ assert.equal(restored.bot.level,s.bot.level);
+ for(let i=0;i<400;i++)S.tick(restored);
+ assert.equal(S.validate(restored),true);
+});
