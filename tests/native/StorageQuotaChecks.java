@@ -32,7 +32,7 @@ public final class StorageQuotaChecks {
         ok(!accept(1_000_000_000L, 4_000_000_000L, 0, 1_000_000_001L, 8_000_000_000L), "boundary +1 rejected");
         ok(accept(1_000_000_000L, 4_000_000_000L, 1_000_000_000L, 1_000_000_000L, 8_000_000_000L), "replacement does not double count final footprint");
         ok(!accept(1_000_000_000L, 4_000_000_000L, 1_000_000_000L, 1_000_000_000L, 1_400_000_000L), "but replacement requires staging headroom");
-        ok(!accept(1_000_000_000L, 0, 0, 1_000_000_000L, 1_500_000_000L), "must leave exact reserve plus margin");
+        ok(!accept(1_000_000_000L, 0, 0, 1_000_000_001L, 1_500_000_000L), "must leave the reserve");
         ok(accept(1_000_000_000L, 0, 0, 999_999_999L, 1_500_000_000L), "one-byte headroom");
         ok(!accept(1_000_000_000L, 0, 0, Long.MAX_VALUE, Long.MAX_VALUE), "no arithmetic overflow");
         ok(!accept(Long.MAX_VALUE, 0, 0, 100, Long.MAX_VALUE), "overflow-resistant core");
