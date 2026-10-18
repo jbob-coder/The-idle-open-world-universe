@@ -27,6 +27,9 @@ function seedState(s){
   stock:{wood:4,stone:3,food:5},decisions:[],letters:[],residents:{},
   community:0,lastConstruction:0};
 }
+function occupied(s,x,y){
+ return !!s.life&&s.life.buildings.some(b=>x>=b.x&&x<b.x+2&&y>=b.y&&y<b.y+2);
+}
 function zone(s,x,y,type){
  if(!inside(x,y)||!inside(x+1,y+1))return false;
  for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){
@@ -165,6 +168,10 @@ function direction(s,p,x,y,walkable){
 function stepPerson(s,p,T,walkable,random){
  const l=s.life;if(!l)return;
  const r=l.residents[p.name];if(!r)return;
+ // An immediate supernatural favor is a distinct life event; do not replace
+ // its visible outcome with the ordinary work/sleep label in the same period.
+ if(p.favorUntil>s.tick&&p.favorSpent&&
+    /^(Tending blessed herbs|Guarding the old road|Deciphering a prophecy)$/.test(p.activity))return;
  const town=p.name==='Toren'?TOWNS[0]:TOWNS[1],d=dist(p,town);
  // Residents never stand motionless for days; scheduled work, social, sleep.
  const period=s.tick%240,night=period>=190||period<30;
@@ -260,5 +267,5 @@ function nimDirective(s,findPath,setGoal){
  }
  letter.status='declined';letter.reason='No suitable safe action found';return false;
 }
-return {TOWNS,BLUEPRINTS,init,repair,issue,stepPerson,advance,nimDirective,zone};
+return {TOWNS,BLUEPRINTS,init,repair,issue,stepPerson,advance,nimDirective,zone,occupied};
 });
