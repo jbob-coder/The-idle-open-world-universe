@@ -1,0 +1,64 @@
+name: GODSEED native Android evaluation
+on:
+  push:
+    branches:
+      - feat/godseed-android-storage-host
+  pull_request:
+    paths:
+      - 'android/gradle/**'
+      - 'tests/native/**'
+      - 'assets/packs/**'
+      - 'scripts/make_sample_lore_pack.py'
+      - 'index.template.html'
+      - '.github/workflows/native-android.yml'
+  workflow_dispatch:
+jobs:
+  gradle-webview-and-storage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify opt-in storage boundaries and deterministic offline pack
+        run: sh tests/native/run-storage-checks.sh
+      - name: Build offline HTML bundle (keep file-origin save identity)
+        run: python build.py
+      - uses: android-actions/setup-android@v3
+      - name: Install Android API 35 toolchain
+        run: sdkmanager --install 'platforms;android-35' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Build separate debug Gradle/WebView host
+        run: gradle -p android/gradle :app:assembleDebug --no-daemon --stacktrace
+      - name: Verify local asset content and avoid INTERNET/broad storage permissions
+        run: |
+          python - <<'PY'
+          import zipfile
+          from pathlib import Path
+          apk=Path('android/gradle/app/build/outputs/apk/debug/app-debug.apk')
+          assert apk.is_file(),apk
+          with zipfile.ZipFile(apk) as z:
+              assert z.testzip() is None
+              assert 'assets/index.html' in z.namelist()
+              assert z.read('assets/index.html')==Path('GODSEED-Play.html').read_bytes()
+              assert any(n.startswith('classes') and n.endswith('.dex') for n in z.namelist())
+          print('PASS Gradle APK embeds exact offline HTML',apk.stat().st_size,'bytes')
+          PY
+          ! grep -RiE 'android.permission.(INTERNET|READ_EXTERNAL_STORAGE|WRITE_EXTERNAL_STORAGE|MANAGE_EXTERNAL_STORAGE)' android/gradle/app/src/main/AndroidManifest.xml
+      - name: Publish separate native evaluation APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: godseed-gradle-webview-native-evaluation
+          path: android/gradle/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14
+          if-no-files-found: error
