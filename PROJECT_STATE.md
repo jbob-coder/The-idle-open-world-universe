@@ -1,3 +1,17 @@
+## Completed Android emulator vertical-slice milestone — October 18, 2026
+
+BRANCH: `feat/godseed-android-storage-host` (PR #6, based on PR #5), still unmerged. Native Gradle/WebView host packages the offline GODSEED simulation and square-pixel renderer without modifying `main` or the SDK-free APK.
+
+VERIFIED: GitHub Actions [39119312080](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39119312080) built release-independent DEBUG APK + AndroidTest APK; installed/launched the application in an **Android API29 emulator**; PASSED **five instrumentation tests** (valid/invalid optional lore import, secure integrity constraints and duplications, offline skyworld startup, and persistence after Activity recreate). Generated real emulator screenshot, logcat, process meminfo and downloadable APK artifact. Previous JS/Node tests remain passing on workflow.
+
+LIMITS: Emulator ≠ physical Android test. No FPS/PSS battery claim for 2GB/3GB real phones; no production keystore or seamless signer upgrades. 1 GB core and 5 GB optional remain disk *budgets*, not filled files, and current lore pack support is deliberately limited to 8 MiB ZIP / 2 MiB text per pack. Native SAF document picker needs manual phone QA. Do not claim complete AAA world/game or all 45 tasks DONE.
+
+EVIDENCE: `docs/ANDROID_OFFLINE_MILESTONE.md` and `docs/ANDROID_NATIVE_HOST_IMPLEMENTATION.md`, plus PR #6.
+
+NEXT: Physical 2GB/3GB phone testing, 20min autonomous stability and detailed UI touch QA, stable signing/release management; optional new pack categories only after measurements.
+
+---
+
 ## Implementation checkpoint — 2026-10-18
 
 Branch: `feat/godseed-medieval-skyworld-v1`, based on prep commit `ff38045`. Existing stacked PRs remain unmerged.

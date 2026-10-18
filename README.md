@@ -1,3 +1,11 @@
+## Playable Android Gradle milestone — emulator verified
+
+The GODSEED offline **Android Gradle/WebView evaluation APK** now installs and runs on an Android API 29 emulator. Five native instrumentation checks pass, including **saved Nim world restoration after Activity recreation** and secure optional offline lore-pack import/removal. Original autonomous world, 8 regions, 32×20 sky camera and square-pixel sprites remain in the bundled HTML game.
+
+[Native offline milestone report](docs/ANDROID_OFFLINE_MILESTONE.md) · [APK + test package](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39119312080/artifacts/12133262674) · [Android emulator screenshot and logs](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39119312080/artifacts/12133722030) · [Passing Android run](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39119312080).
+
+**Not a final Android production release.** Physical 2–3 GB RAM phone profiling, long autoplay, stable release signing and large optional pack streaming remain unverified. Existing SDK-free APK and `main` are unchanged; new Android host is for PR review.
+
 ## Implementation checkpoint — 2026-10-18
 
 Branch: `feat/godseed-medieval-skyworld-v1`, based on prep commit `ff38045`. Existing stacked PRs remain unmerged.

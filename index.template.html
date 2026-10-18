@@ -69,6 +69,18 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:
 }
 canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:block;margin:auto}#portrait{width:16px;height:24px;image-rendering:pixelated}button{transition:none}#toast{transition:none}#quickStatus{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #confirmDialog[hidden]{display:none}#confirmDialog{position:fixed;inset:0;z-index:30;background:#11191acc;display:grid;place-items:center;padding:12px}#confirmDialog>div{max-width:440px;background:#152723;border:2px solid #EFCB76;padding:16px}#confirmDialog button{margin:6px;min-height:44px}
+
+/* Native-only offline lore manager. Kept hidden in browser/SDK-free APK. */
+#nativeStoragePanel[hidden],#nativeStorageBody[hidden]{display:none!important}
+#nativeStoragePanel{position:fixed;right:8px;top:8px;z-index:15;max-width:min(370px,95vw);font:11px/1.35 monospace;color:#f1e7ca}
+#nativeStorageToggle{min-height:30px;background:#1b302f;color:#f0dba4;border:2px solid #9d9468;padding:3px 9px}
+#nativeStorageBody{background:#152723;border:2px solid #9d9468;padding:9px;max-height:70vh;overflow:auto}
+#nativeStorageBody button,#nativeStorageBody select{border-radius:0;background:#304535;color:#f0e6d0;border:1px solid #b3a37c;padding:6px;min-height:36px}
+#nativeStorageBody button{margin:4px 3px 4px 0}
+#nativeStoragePacks li{padding:3px 0}
+#nativeStorageLore{white-space:pre-wrap;max-height:110px;overflow:auto;border-top:1px solid #6a8269;padding-top:6px}
+@media(max-width:700px){#nativeStoragePanel{top:3px;right:3px}#nativeStorageBody{max-height:60vh}}
+
 </style>
 </head><body><div class="site">
 <header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">A FORGOTTEN KINGDOM LIVES WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ CRÓNICAS DEL REINO OLVIDADO</span></h1><p>Fantasía medieval · Observa una vida. Inspira a un reino.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v1 experimental</span></div></header>
@@ -123,7 +135,86 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
     <button data-speed="0"><span class="ico">Ⅱ</span>Pause</button>
     <button data-speed="3"><span class="ico">»</span>3× Time</button>
   </div>
-</div><div id="toast" role="status"></div>
+</div>
+<div id="nativeStoragePanel" hidden>
+<button id="nativeStorageToggle" aria-expanded="false" aria-controls="nativeStorageBody">▣ Local packs</button>
+<div id="nativeStorageBody" hidden role="region" aria-label="Offline optional content">
+<strong>Optional offline lore</strong>
+<p>Core GODSEED stays playable without extra packs. No internet or automatic allocation.</p>
+<p id="nativeStorageMetrics" aria-live="polite">Checking private storage…</p>
+<button id="nativeStorageInstall">Import a .gspack file</button>
+<button id="nativeStorageRefresh">Refresh</button>
+<ul id="nativeStoragePacks"></ul>
+<label for="nativeStorageRegion">Discovered region lore</label>
+<select id="nativeStorageRegion"><option value="">Select a discovered region</option></select>
+<button id="nativeStorageShowLore">Read lore</button>
+<div id="nativeStorageLore" aria-live="polite"></div>
+<p id="nativeStorageNotice" role="status"></p>
+</div></div>
+<div id="toast" role="status"></div>
 <script>/*SIM_SOURCE*/</script>
 <script>/*UI_SOURCE*/</script>
+
+<script id="godseed-native-storage-ui">
+(function(){'use strict';
+ if(!window.GodseedStorage)return;
+ const byId=id=>document.getElementById(id);
+ const panel=byId('nativeStoragePanel'),body=byId('nativeStorageBody'),status=byId('nativeStorageNotice');
+ panel.hidden=false;
+ const toGB=bytes=>(Number(bytes)/1e9).toFixed(3)+' GB';
+ const showError=e=>{status.textContent='Storage error: '+String(e.message||e);};
+ function refresh(){
+  try{
+   const info=JSON.parse(GodseedStorage.status());
+   if(info.error)throw new Error(info.error);
+   byId('nativeStorageMetrics').textContent='APK estimate: '+toGB(info.core_bytes_estimate)+
+     ' · Optional: '+toGB(info.optional_used_bytes)+' / '+toGB(info.optional_limit_bytes)+
+     ' · Phone free: '+toGB(info.phone_free_bytes);
+   const list=byId('nativeStoragePacks');list.replaceChildren();
+   for(const pack of info.packs){
+    const item=document.createElement('li');
+    const label=document.createElement('span');
+    label.textContent=pack.pack_id+' ('+toGB(pack.bytes)+') ';
+    const remove=document.createElement('button');
+    remove.textContent='Remove';remove.setAttribute('aria-label','Remove '+pack.pack_id);
+    remove.addEventListener('click',()=>GodseedStorage.removeLorePack(pack.pack_id));
+    item.append(label,remove);list.appendChild(item);
+   }
+   if(!info.packs.length){const item=document.createElement('li');item.textContent='No optional packs installed';list.appendChild(item);}
+   const select=byId('nativeStorageRegion'),selected=select.value;
+   select.replaceChildren();const empty=document.createElement('option');empty.value='';empty.textContent='Select discovered region';select.appendChild(empty);
+   const world=window.GodseedDebug&&window.GodseedDebug.getState();
+   const discovered=world&&world.regions&&Array.isArray(world.regions.discovered)?world.regions.discovered:[];
+   for(const id of discovered){
+    if(!/^R0[0-7]$/.test(id))continue;
+    const option=document.createElement('option');option.value=id;option.textContent=id;select.appendChild(option);
+   }
+   if(discovered.includes(selected))select.value=selected;
+  }catch(e){showError(e);}
+ }
+ byId('nativeStorageToggle').addEventListener('click',()=>{
+  body.hidden=!body.hidden;byId('nativeStorageToggle').setAttribute('aria-expanded',String(!body.hidden));
+  if(!body.hidden)refresh();
+ });
+ byId('nativeStorageInstall').addEventListener('click',()=>GodseedStorage.chooseLorePack());
+ byId('nativeStorageRefresh').addEventListener('click',refresh);
+ byId('nativeStorageShowLore').addEventListener('click',()=>{
+  try{
+   const region=byId('nativeStorageRegion').value;
+   const world=window.GodseedDebug&&window.GodseedDebug.getState();
+   if(!world||!world.regions||!world.regions.discovered.includes(region)){
+    byId('nativeStorageLore').textContent='Discover this region through Nim first.';return;
+   }
+   const items=JSON.parse(GodseedStorage.loreForRegion(region));
+   byId('nativeStorageLore').textContent=items.length?
+      items.map(item=>item.title+'\n'+item.text).join('\n\n'):
+      'No extra lore installed for this region.';
+  }catch(e){showError(e);}
+ });
+ window.addEventListener('godseed:storage',event=>{
+  status.textContent=event.detail.message||'Storage changed';
+  refresh();
+ });
+})();
+</script>
 </body></html>

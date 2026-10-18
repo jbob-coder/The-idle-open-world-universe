@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "region_id": "R03",
+      "title": "The Mossbound Oath",
+      "text": "An old cedar bears six square-cut marks. Travelers say a promise was made here before the border roads were built."
+    },
+    {
+      "region_id": "R06",
+      "title": "Under the Oathkeeper Stones",
+      "text": "A runestone remembers the first wardens of the grove. The vow is older than any surviving map."
+    }
+  ]
+}
