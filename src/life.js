@@ -25,6 +25,7 @@ function journal(s,person,action,why){
 function seedState(s){
  return {version:1,age:0,buildings:[],nextId:1,revision:0,
   stock:{wood:4,stone:3,food:5},decisions:[],letters:[],residents:{},
+  heritage:s.map.flatMap((t,i)=>t===5?[i]:[]),
   community:0,lastConstruction:0};
 }
 function occupied(s,x,y){
@@ -35,6 +36,7 @@ function zone(s,x,y,type){
  for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){
   const tx=x+dx,ty=y+dy,t=at(s,tx,ty);
   if(t!==0&&t!==6)return false;
+  if(s.life.heritage.includes(ty*W+tx))return false;
   if(s.camp&&Math.abs(tx-s.camp.x)+Math.abs(ty-s.camp.y)<=1)return false;
   if((s.npcs||[]).some(p=>Math.abs(tx-p.homeX)+Math.abs(ty-p.homeY)<1))return false;
   for(const q of s.life.buildings)
@@ -85,6 +87,7 @@ function init(s){
 function repair(s){
  if(!s.life||s.life.version!==1||!Array.isArray(s.life.buildings)||!Array.isArray(s.life.letters))return init(s);
  const l=s.life;
+ l.heritage=Array.isArray(l.heritage)?l.heritage.filter(n=>Number.isInteger(n)&&n>=0&&n<W*H).slice(0,48):[];
  l.stock=l.stock&&typeof l.stock==='object'?l.stock:{};
  for(const k of ['wood','stone','food'])l.stock[k]=clamp(Number.isFinite(l.stock[k])?l.stock[k]:0,0,99);
  l.age=Number.isInteger(l.age)?clamp(l.age,0,2):0;
