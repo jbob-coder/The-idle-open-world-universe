@@ -24,6 +24,8 @@ test('residents perform professions, form relationships and their towns build an
  for(const t of s.living.towns){
   assert.ok(t.buildings.length>=6,t.name+' did not grow real structures');
   assert.ok(['Village','Township'].includes(t.age),t.name+' failed to develop');
+  assert.equal(t.technology.era,'Trade Age','earned age requires skilled workers, buildings and trade');
+  assert.equal(t.technology.level,3);
   assert.ok(t.buildings.some(b=>b.type==='workshop'),'shared craft building is meaningful');
  }
  assert.ok(s.living.citizens.every(c=>c.actions>=20&&c.skill>1&&c.skillXP>=0));
