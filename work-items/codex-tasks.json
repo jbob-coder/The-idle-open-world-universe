@@ -418,10 +418,13 @@
       "id": "E05",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "done",
       "title": "Publish source, screenshots, APK and verification PR",
       "acceptance": "Evidence exact; no unverified claims or accidental main merge.",
-      "evidence": [],
+      "evidence": [
+        "https://github.com/jbob-coder/The-idle-open-world-universe/pull/5",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ],
       "dependencies": [
         "E04"
       ],

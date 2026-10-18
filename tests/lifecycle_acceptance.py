@@ -28,7 +28,7 @@ with sync_playwright() as pw:
     page.evaluate('GodseedDebug.setSpeed(0)')
     raw=page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')
     page.evaluate("()=>{Storage.prototype.setItem=function(){throw new DOMException('Full','QuotaExceededError')}}")
-    page.locator('#import').click();page.locator('#saveText').fill(old);page.locator('#saveApply').click()
+    page.locator('#import').click();page.locator('#saveText').fill(old);page.locator('#saveApply').click();page.locator('#confirmApply').click()
     assert page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')==raw
     assert 'Current world preserved' in page.locator('#toast').inner_text()
     assert not errors,errors

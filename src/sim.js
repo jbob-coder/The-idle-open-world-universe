@@ -225,7 +225,11 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(rumor&&b.energy>45&&b.hunger>55){const path=findPath(s,(x,y)=>x===rumor.x&&y===rumor.y);if(path){setGoal(s,'Follow rumor','The '+rumor.title+' may lead to something.',path);return;}}
  }
  const p=findPath(s,(x,y,t,n)=>!s.seen[n]);if(p){setGoal(s,'Explore','What lies beyond the known paths?',p);return;}
- const q=findPath(s,(x,y,t)=>t===T.FOREST||t===T.STONE||t===T.BERRY);setGoal(s,'Wander','I will make another journey.',q||[]);
+ // Keep a chosen journey until arrival; recomputing nearest resources at every
+ // step can select the occupied tile forever once the world is explored.
+ if(b.goal==='Wander'&&b.path.length&&walkable(s,...b.path[0]))return;
+ const q=findPath(s,(x,y)=>Math.abs(x-b.x)+Math.abs(y-b.y)>=8)||findPath(s,(x,y)=>x!==b.x||y!==b.y);
+ setGoal(s,'Wander','I will revisit the paths and watch for travelers.',q||[]);
 }
 function addMark(s,x,y,kind){s.eventSerial=(s.eventSerial||0)+1;s.marks.push({id:s.eventSerial,x,y,kind,tick:s.tick,until:s.tick+10});if(s.marks.length>12)s.marks.shift();}
 function botMove(s,x,y){const b=s.bot;if(!walkable(s,x,y))return; b.facing=x>b.x?'east':x<b.x?'west':y>b.y?'south':'north';b.movedAt=s.tick;b.x=x;b.y=y;b.steps++;let d=discover(s,x,y);

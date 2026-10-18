@@ -68,6 +68,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:
  #toast{bottom:78px}
 }
 canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:block;margin:auto}#portrait{width:16px;height:24px;image-rendering:pixelated}button{transition:none}#toast{transition:none}#quickStatus{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#confirmDialog[hidden]{display:none}#confirmDialog{position:fixed;inset:0;z-index:30;background:#11191acc;display:grid;place-items:center;padding:12px}#confirmDialog>div{max-width:440px;background:#152723;border:2px solid #EFCB76;padding:16px}#confirmDialog button{margin:6px;min-height:44px}
 </style>
 </head><body><div class="site">
 <header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">A FORGOTTEN KINGDOM LIVES WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ CRÓNICAS DEL REINO OLVIDADO</span></h1><p>Fantasía medieval · Observa una vida. Inspira a un reino.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v1 experimental</span></div></header>
@@ -107,6 +108,7 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
   <textarea id="saveText" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
   <div class="backup-actions"><button id="saveCopy">Copy text</button><button id="saveApply" hidden>Import pasted save</button><button id="saveDownload">Download JSON</button><button id="saveClose">Close</button></div>
   </div></div>
+<div id="confirmDialog" hidden role="dialog" aria-modal="true" aria-labelledby="confirmMessage"><div><p id="confirmMessage"></p><button id="confirmApply">Confirm</button><button id="confirmCancel">Cancel</button></div></div>
 <div id="androidDock" aria-label="Quick god powers and time controls">
   <div class="docktop"><strong id="quickStatus">NIM · LEVEL 1</strong><span>SELECT POWER → TAP WORLD</span></div>
   <div class="dockrow">
@@ -383,7 +385,11 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(rumor&&b.energy>45&&b.hunger>55){const path=findPath(s,(x,y)=>x===rumor.x&&y===rumor.y);if(path){setGoal(s,'Follow rumor','The '+rumor.title+' may lead to something.',path);return;}}
  }
  const p=findPath(s,(x,y,t,n)=>!s.seen[n]);if(p){setGoal(s,'Explore','What lies beyond the known paths?',p);return;}
- const q=findPath(s,(x,y,t)=>t===T.FOREST||t===T.STONE||t===T.BERRY);setGoal(s,'Wander','I will make another journey.',q||[]);
+ // Keep a chosen journey until arrival; recomputing nearest resources at every
+ // step can select the occupied tile forever once the world is explored.
+ if(b.goal==='Wander'&&b.path.length&&walkable(s,...b.path[0]))return;
+ const q=findPath(s,(x,y)=>Math.abs(x-b.x)+Math.abs(y-b.y)>=8)||findPath(s,(x,y)=>x!==b.x||y!==b.y);
+ setGoal(s,'Wander','I will revisit the paths and watch for travelers.',q||[]);
 }
 function addMark(s,x,y,kind){s.eventSerial=(s.eventSerial||0)+1;s.marks.push({id:s.eventSerial,x,y,kind,tick:s.tick,until:s.tick+10});if(s.marks.length>12)s.marks.shift();}
 function botMove(s,x,y){const b=s.bot;if(!walkable(s,x,y))return; b.facing=x>b.x?'east':x<b.x?'west':y>b.y?'south':'north';b.movedAt=s.tick;b.x=x;b.y=y;b.steps++;let d=discover(s,x,y);
@@ -726,10 +732,13 @@ $('saveCopy').addEventListener('click',()=>{
  if(copied)notify('World backup copied.');else notify('Select the text and copy it manually.');
 });
 $('saveDownload').addEventListener('click',exportSave);
+let pendingConfirmation=null;
+function confirmAction(message,action){pendingConfirmation=action;$('confirmMessage').textContent=message;$('confirmDialog').hidden=false;$('confirmApply').focus();}
+$('confirmCancel').addEventListener('click',()=>{pendingConfirmation=null;$('confirmDialog').hidden=true;});
+$('confirmApply').addEventListener('click',()=>{const action=pendingConfirmation;pendingConfirmation=null;$('confirmDialog').hidden=true;if(action)action();});
 $('saveApply').addEventListener('click',()=>{
  const restored=A.restore($('saveText').value);if(!restored){notify('Invalid world backup.');return;}
- if(!confirm('Replace current world with the pasted backup?'))return;
- if(!commitRestored(restored))return;hud();draw();$('saveDialog').hidden=true;notify('World backup restored.');
+ confirmAction('Replace current world with the pasted backup?',()=>{if(!commitRestored(restored))return;hud();draw();$('saveDialog').hidden=true;notify('World backup restored.');});
 });
 function commitRestored(data){try{localStorage.setItem(SAVE_KEY,A.serialize(data));}catch(e){notify('Storage full or unavailable. Current world preserved.');return false;}s=data;acc=0;frameLast=0;oldCells.fill(-99);return true;}
 function importSave(file){if(!file||file.size>1000000){notify('Invalid or oversized save file.');return;}const reader=new FileReader();reader.onload=()=>{const data=A.restore(reader.result);if(!data){notify('Save rejected: incompatible world.');return;}if(!commitRestored(data))return;hud();draw();notify('World restored.');};reader.readAsText(file);}
@@ -751,9 +760,9 @@ $('zoom').addEventListener('click',()=>{setZoom(zoomIndex+1);hud();draw();notify
 $('zoomDock').addEventListener('click',()=>$('zoom').click());
 $('save').addEventListener('click',()=>{save();notify('World saved.');});$('export').addEventListener('click',()=>backupDialog('export'));
 $('import').addEventListener('click',()=>backupDialog('import'));$('importFile').addEventListener('change',e=>{importSave(e.target.files[0]);e.target.value='';});
-$('reset').addEventListener('click',()=>{if(confirm('Create a new world? Current progress will be overwritten. Export a backup first if needed.')){s=A.create((Date.now()>>>0)^Math.floor(Math.random()*10000000));save();hud();draw();notify('A new life begins.');}});
+$('reset').addEventListener('click',()=>{confirmAction('Create a new world? Export a backup first to keep current progress.',()=>{const next=A.create((Date.now()>>>0)^Math.floor(Math.random()*10000000));if(!commitRestored(next))return;hud();draw();notify('A new life begins.');});});
 $('step').addEventListener('click',()=>{A.tick(s);hud();draw();});
-window.addEventListener('keydown',e=>{if(e.target&&['INPUT','TEXTAREA'].includes(e.target.tagName))return;
+window.addEventListener('keydown',e=>{if(e.key==='Escape'){pendingConfirmation=null;$('confirmDialog').hidden=true;$('saveDialog').hidden=true;return;}if(e.target&&['INPUT','TEXTAREA'].includes(e.target.tagName))return;
  if(e.code==='Space'){e.preventDefault();s.settings.speed=s.settings.speed===0?1:0;hud();}
  if(e.key.toLowerCase()==='f'){$('follow').click();}
  if(e.key.toLowerCase()==='z'){$('zoom').click();}

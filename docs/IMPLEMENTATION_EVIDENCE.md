@@ -39,3 +39,10 @@ D01–D05: pure simulator target preview; unseen terrain powers rejected (Bless/
 Workspace restart preserved all eight commits, all source and captures. Re-ran 45 Node tests and five validators. Updated obsolete preparation-only ledger assertions to require evidence for completed tasks. Compact HUD now has square borders and atlas glyphs. Save imports persist before replacing the live world; quota failure preserves current state, covered by lifecycle acceptance on a real persistent (intercepted, offline) browser origin.
 
 Experimental APK: built with JDK 21.0.2, 44,126 bytes, JAR-v1 debug signature verified. SHA256 recorded in dist/manifest.json. APK embedded HTML equals the current generated file. No private signing material tracked. Native Android lifecycle, phone installation, FPS/PSS/RSS: NOT VERIFIED. Android SDK/Gradle were downloaded outside the repository for a separate packaging evaluation; no large storage feature was started before publishing this checkpoint.
+
+## Independent review fixes
+Review found no Critical and two Important issues. Fixed inherited late-world Wander stall: retain a reachable journey and choose a destination away from the occupied resource tile. New test failed for seed 7 before the fix; seeds 7/41/2026 now continue moving for 1,000 ticks after their first 10,000. Suite: 46/46.
+
+Replaced native JavaScript confirm() with accessible DOM confirmation for import/reset. Browser acceptance deliberately makes window.confirm throw; backup restore still passes at all three landscape sizes. Quota failure preserves the current world. Updated experimental APK and screenshots pass again. Native device execution still NOT VERIFIED.
+
+Published checkpoint: https://github.com/jbob-coder/The-idle-open-world-universe/pull/5 (draft, against prep branch). Conventional Gradle/AGP host now compiles separately, but storage work and device validation remain in progress.

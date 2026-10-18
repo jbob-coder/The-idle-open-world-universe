@@ -68,6 +68,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:16px;margin-top:
  #toast{bottom:78px}
 }
 canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:block;margin:auto}#portrait{width:16px;height:24px;image-rendering:pixelated}button{transition:none}#toast{transition:none}#quickStatus{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#confirmDialog[hidden]{display:none}#confirmDialog{position:fixed;inset:0;z-index:30;background:#11191acc;display:grid;place-items:center;padding:12px}#confirmDialog>div{max-width:440px;background:#152723;border:2px solid #EFCB76;padding:16px}#confirmDialog button{margin:6px;min-height:44px}
 </style>
 </head><body><div class="site">
 <header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">A FORGOTTEN KINGDOM LIVES WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ CRÓNICAS DEL REINO OLVIDADO</span></h1><p>Fantasía medieval · Observa una vida. Inspira a un reino.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v1 experimental</span></div></header>
@@ -107,6 +108,7 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
   <textarea id="saveText" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
   <div class="backup-actions"><button id="saveCopy">Copy text</button><button id="saveApply" hidden>Import pasted save</button><button id="saveDownload">Download JSON</button><button id="saveClose">Close</button></div>
   </div></div>
+<div id="confirmDialog" hidden role="dialog" aria-modal="true" aria-labelledby="confirmMessage"><div><p id="confirmMessage"></p><button id="confirmApply">Confirm</button><button id="confirmCancel">Cancel</button></div></div>
 <div id="androidDock" aria-label="Quick god powers and time controls">
   <div class="docktop"><strong id="quickStatus">NIM · LEVEL 1</strong><span>SELECT POWER → TAP WORLD</span></div>
   <div class="dockrow">

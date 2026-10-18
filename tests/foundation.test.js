@@ -26,3 +26,6 @@ test('five autonomous 10000 tick runs remain bounded, progress, and restore',()=
  for(const seed of [1,7,41,2026,987654]){const s=S.create(seed);for(let i=0;i<10000;i++)S.tick(s);
  assert.ok(S.validate(s));assert.ok(s.bot.steps>100);assert.ok(s.camp);assert.equal(s.bot.tool,1);assert.ok(s.npcs.some(p=>p.met));assert.ok(s.enemies.length<=5);assert.ok(S.serialize(s).length<100000);assert.ok(S.restore(S.serialize(s)));}
 });
+test('fully explored late worlds keep making journeys after 10000 ticks',()=>{
+ for(const seed of [7,41,2026]){const s=S.create(seed);for(let i=0;i<10000;i++)S.tick(s);const before=s.bot.steps;for(let i=0;i<1000;i++)S.tick(s);assert.ok(s.bot.steps>before+10,'seed '+seed+' stops wandering');}
+});

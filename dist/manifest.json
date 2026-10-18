@@ -1,7 +1,7 @@
 {
   "apk": "GODSEED-v1-experimental.apk",
-  "size": 44126,
-  "sha256": "72ad212c7290d850410db0f0ab71045082ccc318da0ef6e32ea9e2b6f8c3150c",
+  "size": 44477,
+  "sha256": "f0145807ef5f6b1967bae090679946959e01e2ac7ed54ed55e116015d26fb5ce",
   "dex_sha1": "271f7674c3e8223b09532e4f9998927ea6ec5e46",
   "min_sdk": 26,
   "target_sdk": 28,

@@ -118,10 +118,13 @@ $('saveCopy').addEventListener('click',()=>{
  if(copied)notify('World backup copied.');else notify('Select the text and copy it manually.');
 });
 $('saveDownload').addEventListener('click',exportSave);
+let pendingConfirmation=null;
+function confirmAction(message,action){pendingConfirmation=action;$('confirmMessage').textContent=message;$('confirmDialog').hidden=false;$('confirmApply').focus();}
+$('confirmCancel').addEventListener('click',()=>{pendingConfirmation=null;$('confirmDialog').hidden=true;});
+$('confirmApply').addEventListener('click',()=>{const action=pendingConfirmation;pendingConfirmation=null;$('confirmDialog').hidden=true;if(action)action();});
 $('saveApply').addEventListener('click',()=>{
  const restored=A.restore($('saveText').value);if(!restored){notify('Invalid world backup.');return;}
- if(!confirm('Replace current world with the pasted backup?'))return;
- if(!commitRestored(restored))return;hud();draw();$('saveDialog').hidden=true;notify('World backup restored.');
+ confirmAction('Replace current world with the pasted backup?',()=>{if(!commitRestored(restored))return;hud();draw();$('saveDialog').hidden=true;notify('World backup restored.');});
 });
 function commitRestored(data){try{localStorage.setItem(SAVE_KEY,A.serialize(data));}catch(e){notify('Storage full or unavailable. Current world preserved.');return false;}s=data;acc=0;frameLast=0;oldCells.fill(-99);return true;}
 function importSave(file){if(!file||file.size>1000000){notify('Invalid or oversized save file.');return;}const reader=new FileReader();reader.onload=()=>{const data=A.restore(reader.result);if(!data){notify('Save rejected: incompatible world.');return;}if(!commitRestored(data))return;hud();draw();notify('World restored.');};reader.readAsText(file);}
@@ -143,9 +146,9 @@ $('zoom').addEventListener('click',()=>{setZoom(zoomIndex+1);hud();draw();notify
 $('zoomDock').addEventListener('click',()=>$('zoom').click());
 $('save').addEventListener('click',()=>{save();notify('World saved.');});$('export').addEventListener('click',()=>backupDialog('export'));
 $('import').addEventListener('click',()=>backupDialog('import'));$('importFile').addEventListener('change',e=>{importSave(e.target.files[0]);e.target.value='';});
-$('reset').addEventListener('click',()=>{if(confirm('Create a new world? Current progress will be overwritten. Export a backup first if needed.')){s=A.create((Date.now()>>>0)^Math.floor(Math.random()*10000000));save();hud();draw();notify('A new life begins.');}});
+$('reset').addEventListener('click',()=>{confirmAction('Create a new world? Export a backup first to keep current progress.',()=>{const next=A.create((Date.now()>>>0)^Math.floor(Math.random()*10000000));if(!commitRestored(next))return;hud();draw();notify('A new life begins.');});});
 $('step').addEventListener('click',()=>{A.tick(s);hud();draw();});
-window.addEventListener('keydown',e=>{if(e.target&&['INPUT','TEXTAREA'].includes(e.target.tagName))return;
+window.addEventListener('keydown',e=>{if(e.key==='Escape'){pendingConfirmation=null;$('confirmDialog').hidden=true;$('saveDialog').hidden=true;return;}if(e.target&&['INPUT','TEXTAREA'].includes(e.target.tagName))return;
  if(e.code==='Space'){e.preventDefault();s.settings.speed=s.settings.speed===0?1:0;hud();}
  if(e.key.toLowerCase()==='f'){$('follow').click();}
  if(e.key.toLowerCase()==='z'){$('zoom').click();}

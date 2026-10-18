@@ -75,7 +75,9 @@ with sync_playwright() as pw:
         assert page.evaluate('GodseedDebug.getState().tick')==0
         page.locator('#import').click()
         page.locator('#saveText').fill(raw)
+        page.evaluate('()=>{window.confirm=()=>{throw Error("Native JS dialogs unavailable")}}')
         page.locator('#saveApply').click()
+        page.locator('#confirmApply').click()
         restored_tick=page.evaluate('GodseedDebug.getState().tick')
         assert saved['tick'] <= restored_tick <= saved['tick'] + 4, (saved['tick'], restored_tick)  # simulation can advance while Playwright checks
         assert not errors,errors
