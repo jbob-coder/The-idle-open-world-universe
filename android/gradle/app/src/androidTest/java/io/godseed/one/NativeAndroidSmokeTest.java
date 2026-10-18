@@ -237,9 +237,11 @@ public class NativeAndroidSmokeTest {
         try (ActivityScenario<MainActivity> next = ActivityScenario.launch(MainActivity.class)) {
             boolean recovered = false;
             for (int i = 0; i < 30; i++) {
-                String tick = evaluate(next,
-                    "typeof window.GodseedDebug==='object' ? GodseedDebug.getState().tick : -1");
-                if ("23".equals(tick)) {
+                String recoveredWorld = evaluate(next,
+                    "(function(){if(typeof window.GodseedDebug!=='object')return false;" +
+                    "GodseedDebug.setSpeed(0);var world=GodseedDebug.getState();" +
+                    "return world.worldSeed===17017 && world.tick>=23;})()");
+                if ("true".equals(recoveredWorld)) {
                     recovered = true;
                     break;
                 }
