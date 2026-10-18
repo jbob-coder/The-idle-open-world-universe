@@ -318,6 +318,16 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(b.stone<2){const p=findPath(s,(x,y,t)=>t===T.STONE);if(p){setGoal(s,'Mine stone','Now I need stone for a tool.',p);return;}}
  if(b.wood>=2&&b.stone>=2){setGoal(s,'Craft','A better tool will help me.');return;}}
  if(b.hunger<78&&b.food<3){let p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','I should pack some food.',p);return;}}
+ // An established camp is a real place of recovery, not a global healing aura.
+ // Travel there only for moderate wounds: danger, hunger and emergency rest win first.
+ if(s.camp&&b.hp<b.maxHp*.7&&b.hp>=b.maxHp*.35&&b.hunger>=60&&b.food>=1&&b.energy>35){
+  const distance=Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y);
+  if(distance<=2){setGoal(s,'Rest','A short rest by my hearth will mend these wounds.');return;}
+  if(distance<=8){
+   const home=findPath(s,(x,y)=>x===s.camp.x&&y===s.camp.y);
+   if(home&&home.length<=8){setGoal(s,'Return to camp','I should recover at the shelter I built.',home);return;}
+  }
+ }
  if(s.guide&&s.guide.ticks>0){const gx=s.guide.x,gy=s.guide.y;if(!walkable(s,gx,gy)){s.guide=null;}else{const p=findPath(s,(x,y)=>x===gx&&y===gy);if(p){setGoal(s,'Follow omen','Something calls to me from afar.',p);return;}s.guide=null;}}
  if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
  if(chooseRoadJourney(s))return;
@@ -378,7 +388,7 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
  }
  const tile=s.map[idx(b.x,b.y)];
  if(b.goal==='Eat'){b.food--;improve(s,'survival',1);b.hunger=clamp(b.hunger+37,0,100);b.hp=clamp(b.hp+2,0,b.maxHp);b.thought='That was needed.';return;}
- if(b.goal==='Recover'||b.goal==='Rest'){b.energy=clamp(b.energy+(s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3?17:12),0,100);b.hp=clamp(b.hp+(s.camp?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
+ if(b.goal==='Recover'||b.goal==='Rest'){const sheltered=!!s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3;b.energy=clamp(b.energy+(sheltered?17:12),0,100);b.hp=clamp(b.hp+(sheltered?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
  if(b.goal==='Build'&&(tile===T.GRASS||tile===T.MEADOW)){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First camp','Nim raised a canvas shelter and stone hearth at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
  if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');improve(s,'crafting',5);return;}
 
