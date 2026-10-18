@@ -41,10 +41,13 @@ test('God messages interpret English and Spanish while unknown text is refused h
  assert.equal(L.interpret('Construyan un taller').intent,'craft');
  assert.equal(L.interpret('Por favor proteger la villa contra lobos').intent,'defense');
  assert.equal(L.interpret('explore the wilds').intent,'explore');
+ assert.equal(L.interpret('Renovar los techos de las casas').intent,'housing');
+ assert.equal(L.interpret('remodel the rooftops').intent,'remodel');
  assert.equal(L.interpret('Create cosmic code for android').intent,'unknown');
  const s=S.create(17),before=S.serialize(s);
  assert.equal(S.whisper(s,'undecipherable cosmic protocol').ok,false);
  assert.equal(S.serialize(s),before,'unrecognized message cannot pretend an instruction was obeyed');
+ assert.equal(S.whisper(s,"Don't build any houses").ok,false,'negated instructions cannot be interpreted as positive construction');
  const result=S.whisper(s,'Cultiven más comida');
  assert.equal(result.ok,true);assert.equal(result.entry.intent,'food');
  assert.equal(result.entry.decisions.length,2);
