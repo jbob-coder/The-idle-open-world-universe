@@ -31,9 +31,14 @@ jobs:
         run: sh tests/native/run-storage-checks.sh
       - name: Build offline HTML bundle (keep file-origin save identity)
         run: python build.py
-      - uses: android-actions/setup-android@v3
-      - name: Install Android API 35 toolchain
-        run: sdkmanager --install 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Install Android API 35 without legacy sdkmanager tools package
+        shell: bash
+        run: |
+          SDKROOT="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDKMANAGER="$(command -v sdkmanager || find "$SDKROOT/cmdline-tools" -name sdkmanager -type f | sort -V | tail -1)"
+          test -n "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" --install 'platforms;android-35' 'build-tools;35.0.0'
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
