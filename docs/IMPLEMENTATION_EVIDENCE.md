@@ -28,3 +28,6 @@ A01–A05: 32×20 default, 24×15 and 16×10 alternatives; pure roundtrip transf
 
 ## Terrain
 B01–B05: all four manifest atlases bundled as data URLs and drawn; terrain variants, cardinal roads, water edges and deterministic regional props. Actor and power starter frames integrated for subsequent animation slices. Fog conceals unknown terrain. Native atlas decode: 106,496 bytes. Cache invalidation covers topology/fog/camera/zoom and asset decode; 100 unchanged draws rebuild scenery zero times. Desktop before/after timing in qa-screenshots/render-metrics.json is a microbenchmark, not Android FPS. 40 tests pass; nine viewport/zoom screenshots plus regional QA scenes captured.
+
+## Actors
+C01–C05: four cardinal facings and two walking poses from simulation movement timestamps; explicit idle pose; distinctive herbalist satchel, guard shield, scholar staff/book. Original palette-limited wolf/boar frames added to existing props atlas (no extra texture). Foot anchor (8,23) mapped to cell bottom, actors sorted by feet; ground/canopy motifs render behind inhabitants so interactive characters remain visible. Current autonomous goal shown in the mobile dock. 42 Node tests passed and four-facing group scenes captured at each viewport. Source art regenerated and both raster validators passed.

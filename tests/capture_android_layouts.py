@@ -29,6 +29,9 @@ with sync_playwright() as pw:
         for region,x,y in [('village',25,21),('forest',10,13),('ruins',31,7),('grove',20,31),('fen',50,39)]:
             page.evaluate('([x,y])=>{const s=GodseedDebug.getState();s.seen.fill(1);s.bot.x=x;s.bot.y=y;GodseedDebug.setZoom(1);GodseedDebug.step(0)}',[x,y])
             page.screenshot(path=str(OUT/f'chromium-{width}x{height}-{region}.png'))
+        for direction in ['north','east','south','west']:
+            page.evaluate("(dir)=>{const s=GodseedDebug.getState();s.bot.x=10;s.bot.y=13;s.bot.facing=dir;s.bot.movedAt=s.tick;s.npcs.forEach((p,i)=>{p.x=9+i;p.y=14;p.facing=dir});s.enemies=[{id:100,type:'Wolf',x:8,y:13,hp:11,attack:2,defense:0,cooldown:1},{id:101,type:'Boar',x:12,y:13,hp:17,attack:4,defense:2,cooldown:1}];GodseedDebug.setZoom(2);GodseedDebug.draw();document.querySelector('#toast').classList.remove('show')}",direction)
+            page.screenshot(path=str(OUT/f'chromium-{width}x{height}-actors-{direction}.png'))
         assert not errors,errors
         evidence.append({'viewport':[width,height],'zooms':3,'touch_targets':10,'errors':errors})
         context.close()

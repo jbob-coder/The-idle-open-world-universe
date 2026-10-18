@@ -5,7 +5,7 @@ import {inflateSync} from 'node:zlib';
 const manifest=JSON.parse(readFileSync('assets/asset-manifest.json','utf8'));
 const tasks=JSON.parse(readFileSync('work-items/codex-tasks.json','utf8'));
 assert.equal(manifest.schema,'godseed.assets.v1');
-assert.equal(manifest.state,'starter-not-integrated');
+assert.equal(manifest.state,'integrated-runtime');
 assert.equal(manifest.atlases.length,4);
 assert.equal(tasks.entries.length,25);
 assert.equal(new Set(tasks.entries.map(t=>t.id)).size,25);

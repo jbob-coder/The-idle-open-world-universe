@@ -26,6 +26,8 @@ const LORE=[
  ['The Last Cartographer','The royal mapmaker hid a path to lost knowledge.']
 ];
 function progress(b){
+ if(!['north','south','east','west'].includes(b.facing))b.facing='south';
+ if(!Number.isInteger(b.movedAt))b.movedAt=-100;
  if(!b.background)b.background=ORIGINS[0].name;
  if(!b.originStory)b.originStory='The past is mostly forgotten.';
  if(!b.skills||typeof b.skills!=='object')b.skills={};
@@ -57,7 +59,7 @@ function initPeople(s){
    }
   }
   return {id:i+1,name:p.name,role:p.role,x,y,homeX:x,homeY:y,
-   trust:22,mood:'wary',met:false,lastTalk:-1000,favorUntil:0,favorSpent:false,activity:'Patrolling',encounters:0};
+   facing:'south',movedAt:-100,trust:22,mood:'wary',met:false,lastTalk:-1000,favorUntil:0,favorSpent:false,activity:'Patrolling',encounters:0};
  });
 }
 function nearPerson(s,x,y,max=1){return (s.npcs||[]).find(p=>Math.abs(p.x-x)+Math.abs(p.y-y)<=max)||null;}
@@ -99,7 +101,7 @@ function updatePeople(s){
   const nx=p.x+dx,ny=p.y+dy;
   if(walkable(s,nx,ny)&&Math.abs(nx-p.homeX)+Math.abs(ny-p.homeY)<=9&&
      !s.npcs.some(other=>other!==p&&other.x===nx&&other.y===ny)){
-    p.x=nx;p.y=ny;
+    if(nx!==p.x||ny!==p.y){p.facing=nx>p.x?'east':nx<p.x?'west':ny>p.y?'south':'north';p.movedAt=s.tick;}p.x=nx;p.y=ny;
   }
   if(p.favorUntil<=s.tick)p.activity=p.role==='Apothecary'?'Collecting herbs':p.role==='Squire'?'Patrolling':'Studying runes';
  }
@@ -226,7 +228,7 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  const q=findPath(s,(x,y,t)=>t===T.FOREST||t===T.STONE||t===T.BERRY);setGoal(s,'Wander','I will make another journey.',q||[]);
 }
 function addMark(s,x,y,kind){s.marks.push({x,y,kind,until:s.tick+10});if(s.marks.length>12)s.marks.shift();}
-function botMove(s,x,y){const b=s.bot;if(!walkable(s,x,y))return; b.x=x;b.y=y;b.steps++;let d=discover(s,x,y);
+function botMove(s,x,y){const b=s.bot;if(!walkable(s,x,y))return; b.facing=x>b.x?'east':x<b.x?'west':y>b.y?'south':'north';b.movedAt=s.tick;b.x=x;b.y=y;b.steps++;let d=discover(s,x,y);
  if(d){b._discovered=(b._discovered||0)+d;if(b._discovered>=38){b._discovered-=38;gain(s,3,'exploration');s.faith=clamp(s.faith+1,0,50);improve(s,'scouting',2);}}
  if(s.guide&&x===s.guide.x&&y===s.guide.y){event(s,'Omen followed','Nim reached the place you pointed to.','milestone');s.guide=null;}
 }
@@ -306,7 +308,7 @@ function updateEnemies(s){const b=s.bot;
   b.hp-=dmg;e.cooldown=3;addMark(s,b.x,b.y,result);
   if(s.tick%8===0)event(s,result==='evade'?'Attack evaded':result==='parry'?'Attack parried':'Under attack',result==='evade'?'Nim dodged the '+e.type+'.':result==='parry'?'Nim blocked part of a '+e.type+' attack.':'A '+e.type+' struck Nim for '+dmg+' health.',dmg>0?'danger':'event');
  }
- else if(d<6&&s.tick%3===0){let options=DIRS.map(([dx,dy])=>[e.x+dx,e.y+dy]).filter(([x,y])=>walkable(s,x,y)&&Math.abs(x-32)+Math.abs(y-24)>5&&!(x===b.x&&y===b.y)&&!s.enemies.some(o=>o!==e&&o.x===x&&o.y===y));options.sort((a,c)=>(Math.abs(a[0]-b.x)+Math.abs(a[1]-b.y))-(Math.abs(c[0]-b.x)+Math.abs(c[1]-b.y)));if(options.length){e.x=options[0][0];e.y=options[0][1];}e.cooldown=1;}
+ else if(d<6&&s.tick%3===0){let options=DIRS.map(([dx,dy])=>[e.x+dx,e.y+dy]).filter(([x,y])=>walkable(s,x,y)&&Math.abs(x-32)+Math.abs(y-24)>5&&!(x===b.x&&y===b.y)&&!s.enemies.some(o=>o!==e&&o.x===x&&o.y===y));options.sort((a,c)=>(Math.abs(a[0]-b.x)+Math.abs(a[1]-b.y))-(Math.abs(c[0]-b.x)+Math.abs(c[1]-b.y)));if(options.length){e.x=options[0][0];e.y=options[0][1];e.movedAt=s.tick;}e.cooldown=1;}
  }
  revive(s);
 }
@@ -366,7 +368,7 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
  s.npcs=Array.isArray(s.npcs)?s.npcs.slice(0,3):initPeople(s);
  s.npcs=s.npcs.filter(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&walkable(s,p.x,p.y)).map(p=>({
   id:clamp(Number(p.id)||1,1,3),name:String(p.name||'Traveler').slice(0,32),
-  role:String(p.role||'Wanderer').slice(0,32),x:p.x,y:p.y,
+  role:String(p.role||'Wanderer').slice(0,32),x:p.x,y:p.y,facing:['north','south','east','west'].includes(p.facing)?p.facing:'south',movedAt:Number.isInteger(p.movedAt)?p.movedAt:-100,
   homeX:inside(p.homeX,p.homeY)?p.homeX:p.x,
   homeY:inside(p.homeX,p.homeY)?p.homeY:p.y,
   trust:clamp(Number(p.trust)||0,0,100),

@@ -182,10 +182,14 @@
       "id": "C01",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
+      "status": "done",
       "title": "Draw Nim with four facings and 2\u20134 frame walk cycle",
       "acceptance": "Movement animation derived from tick, not draw calls.  Nim sprites remain 16\u00d724 native pixel frames with crisp square outlines and feet anchor (8,23); verify four directions in running screenshots.",
-      "evidence": [],
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -193,10 +197,14 @@
       "id": "C02",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
+      "status": "done",
       "title": "Distinctively draw the three professions",
       "acceptance": "Roles readable at 640x360 / 32x20.  All three travelers visually match native square-pixel palette and binary-alpha sprite art, not emoji/vector characters.",
-      "evidence": [],
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "C01"
       ],
@@ -206,10 +214,14 @@
       "id": "C03",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
+      "status": "done",
       "title": "Add visual wolves and boars; defer unsimulated animals",
       "acceptance": "Only existing enemy types rendered and tested.",
-      "evidence": [],
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "C02"
       ],
@@ -219,10 +231,14 @@
       "id": "C04",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
+      "status": "done",
       "title": "Show actions/goals without control prompts",
       "acceptance": "Why/goal UI and activity legible with time sped up.",
-      "evidence": [],
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "C03"
       ],
@@ -232,10 +248,14 @@
       "id": "C05",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
+      "status": "done",
       "title": "Correct foot-Y sorting and tree occlusion",
       "acceptance": "No invisible Nim behind foliage; test overlay order.",
-      "evidence": [],
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "C04"
       ],

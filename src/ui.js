@@ -34,9 +34,6 @@ function dot(x,y,c){rect(x,y,1,1,c);}
 const assets=window.GodseedAssets,terrain=window.GodseedTerrain;
 assets.loaded.then(()=>{oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
 function drawTile(tile,x,y,wx,wy){if(assets.ready)terrain.draw(ctx,assets,s,tile,x,y,wx,wy);else rect(x,y,16,16,'#152723');}
-function drawBot(cx,cy){const f=assets.manifest.atlases[1].frames.find(f=>f.name==='Nim'&&f.direction==='south'&&f.phase===0);assets.blit(ctx,1,f.rect,cx,cy-8);}
-function drawEnemy(x,y,e){rect(x+2,y+13,13,2,'#1b2b27');if(e.type==='Boar'){rect(x+2,y+6,12,7,'#b67a57');rect(x+10,y+3,4,5,'#d1a174');rect(x+3,y+5,3,2,'#7a4c36');dot(x+12,y+7,'#292424');rect(x+2,y+12,3,2,'#6b4534');}else{rect(x+3,y+7,10,6,'#a88473');rect(x+4,y+3,3,6,'#cab096');rect(x+10,y+3,3,6,'#cab096');rect(x+5,y+7,2,2,'#edcf9b');rect(x+10,y+7,2,2,'#edcf9b');dot(x+6,y+7,'#222');dot(x+11,y+7,'#222');}}
-function drawPerson(x,y,p){const f=assets.manifest.atlases[1].frames.find(f=>f.name===p.name&&f.direction==='south'&&f.phase===0);if(f)assets.blit(ctx,1,f.rect,x,y-8);}
 function updateScenery(){
  let changed=camX!==sceneX||camY!==sceneY,k=0;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
@@ -64,9 +61,13 @@ function draw(){positionCamera();const b=s.bot;updateScenery();
    rect(x,y,1,4,'rgba(172,201,205,.36)');}
  }
  if(s.guide&&s.guide.x>=camX&&s.guide.x<camX+VW&&s.guide.y>=camY&&s.guide.y<camY+VH){const x=(s.guide.x-camX)*16,y=(s.guide.y-camY)*16;rect(x,y,16,1,'#e4d386');rect(x,y+15,16,1,'#e4d386');rect(x,y,1,16,'#e4d386');rect(x+15,y,1,16,'#e4d386');}
- for(const p of s.npcs||[])if(p.x>=camX&&p.x<camX+VW&&p.y>=camY&&p.y<camY+VH&&s.seen[A.idx(p.x,p.y)])drawPerson((p.x-camX)*16,(p.y-camY)*16,p);
- for(const e of s.enemies)if(e.x>=camX&&e.x<camX+VW&&e.y>=camY&&e.y<camY+VH&&s.seen[A.idx(e.x,e.y)])drawEnemy((e.x-camX)*16,(e.y-camY)*16,e);
- if(b.x>=camX&&b.x<camX+VW&&b.y>=camY&&b.y<camY+VH){const px=(b.x-camX)*16,py=(b.y-camY)*16;rect(px+1,py+14,14,1,'#cfdda2');drawBot(px,py,s.tick>>1);ctx.fillStyle='#f0e0a2';ctx.font='bold 8px monospace';ctx.textAlign='center';ctx.fillText('NIM',px+8,py-3);ctx.textAlign='start';}
+ const actors=window.GodseedActors.sorted([...(s.npcs||[]),...s.enemies,b]);
+ for(const actor of actors){if(actor.x<camX||actor.x>=camX+VW||actor.y<camY||actor.y>=camY+VH||!s.seen[A.idx(actor.x,actor.y)])continue;
+  const px=(actor.x-camX)*16,py=(actor.y-camY)*16;
+  if(actor===b){rect(px+1,py+15,14,1,'#EFCB76');}
+  window.GodseedActors.draw(ctx,assets,actor,s.tick,px,py);
+  if(actor===b){ctx.fillStyle='#EAE3C1';ctx.font='bold 8px monospace';ctx.textAlign='center';ctx.fillText('NIM',px+8,py-10);ctx.textAlign='start';}
+ }
  for(const m of s.marks){const glyph=assets.manifest.atlases[2].symbols.find(f=>f.name===m.kind);if(glyph){assets.blit(ctx,2,glyph.rect,(m.x-camX)*16,(m.y-camY)*16-8);continue;}if(m.x<camX||m.x>=camX+VW||m.y<camY||m.y>=camY+VH)continue;const xx=(m.x-camX)*16,yy=(m.y-camY)*16,c=({hit:'#e9dd88',hurt:'#ee7770',evade:'#88ccdb',parry:'#d1bb7c',bless:'#c4f7aa',gift:'#f1cb8d',bloom:'#85dbbb',guide:'#ddda92',storm:'#c6dffc',talk:'#f1c4a9',inspire:'#fff2a0'})[m.kind];rect(xx+2,yy+2,12,2,c);rect(xx+2,yy+12,12,2,c);rect(xx+2,yy+2,2,12,c);rect(xx+12,yy+2,2,12,c);}
  if(hover&&hover.x>=camX&&hover.x<camX+VW&&hover.y>=camY&&hover.y<camY+VH){const xx=(hover.x-camX)*16,yy=(hover.y-camY)*16;rect(xx,yy,16,1,'#efe2ac');rect(xx,yy+15,16,1,'#efe2ac');rect(xx,yy,1,16,'#efe2ac');rect(xx+15,yy,1,16,'#efe2ac');}
  $('coordinates').textContent=`${b.x}, ${b.y} · ${A.regionAt(s,b.x,b.y).name} · ${ZOOMS[zoomIndex].name}`;
@@ -74,7 +75,7 @@ function draw(){positionCamera();const b=s.bot;updateScenery();
 function drawMini(){const image=mctx.createImageData(A.W,A.H);for(let i=0;i<A.N;i++){const t=s.map[i],c=s.seen[i]?colors[t]:'#121c20';const k=i*4;image.data[k]=parseInt(c.slice(1,3),16);image.data[k+1]=parseInt(c.slice(3,5),16);image.data[k+2]=parseInt(c.slice(5,7),16);image.data[k+3]=255;}mctx.putImageData(image,0,0);mctx.fillStyle='#f9e6b2';mctx.fillRect(s.bot.x,s.bot.y,1,1);mctx.strokeStyle='#d9d8ab';mctx.lineWidth=.5;mctx.strokeRect(camX+.25,camY+.25,VW-.5,VH-.5);}
 function bar(label,n,max=100){const pct=Math.round(Math.max(0,Math.min(1,n/max))*100);return `<div class="stat"><div class="stathead"><span>${label}</span><b>${Math.round(n)} / ${Math.round(max)}</b></div><div class="track"><i style="width:${pct}%" class="${label.toLowerCase().split(' ')[0]}"></i></div></div>`;}
 function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
- $('quickStatus').textContent=`NIM L${b.level} · HP ${Math.ceil(b.hp)}/${b.maxHp} · ✧ ${s.faith} · ${stamp(s)}`;
+ $('quickStatus').textContent=`NIM L${b.level} · HP ${Math.ceil(b.hp)}/${b.maxHp} · Faith ${s.faith} · ${b.goal}`;
  $('clock').textContent=stamp(s);$('weather').textContent=s.weather.toUpperCase()+' · '+({R03:'WOODLAND',R04:'RIDGE WINDS',R06:'SACRED GROVE',R07:'FEN MIST'}[A.regionAt(s,b.x,b.y).id]||'BORDERLANDS');$('faith').textContent=s.faith;$('heroName').textContent=b.name;$('level').textContent=`LEVEL ${b.level}`;
  $('statbars').innerHTML=bar('Health',b.hp,b.maxHp)+bar('Hunger',b.hunger)+bar('Energy',b.energy)+bar('Experience',b.xp,xpNeed);
  $('goal').textContent=goal;$('thought').textContent='“'+b.thought+'”';

@@ -47,6 +47,9 @@ function actorArt(im,ox,oy,actor,dir,frame){
  else if(dir===1){b(10,9,2,2,C.black);b(7,15,3,2,trim);} // right
  else if(dir===2){b(5,6,7,7,robe);b(4,4,8,4,C.brown);b(7,15,2,3,trim);} // back
  else {b(5,9,2,2,C.black);b(10,15,2,2,trim);} // left
+ if(actor===1){b(11,15,4,6,C.brown);b(12,16,2,2,C.bright);}
+ if(actor===2){b(0,13,4,7,C.stoneDark);b(1,14,2,5,C.stone2);p(2,16,C.gold);}
+ if(actor===3){b(14,7,1,16,C.bark);b(13,6,3,3,C.azure);b(2,16,3,4,C.white);}
  if(frame===1){p(4,18,trim);p(12,17,trim);}
 }
 
@@ -96,7 +99,14 @@ function buildSheets(){
  const actors=raster(128,96);
  for(let dir=0;dir<4;dir++)for(let a=0;a<4;a++)for(let f=0;f<2;f++)actorArt(actors,(a*2+f)*16,dir*24,a,dir,f);
  const fx=raster(112,16);for(let i=0;i<7;i++)fxArt(fx,i*16,0,i);
- const props=raster(128,32);for(let v=0;v<2;v++)for(let i=0;i<8;i++)propArt(props,i*16,v*16,i,v);
+ const props=raster(128,48);for(let v=0;v<2;v++)for(let i=0;i<8;i++)propArt(props,i*16,v*16,i,v);
+ for(let type=0;type<2;type++)for(let f=0;f<2;f++){
+  const x=(type*2+f)*16,y=32,b=(xx,yy,w,h,c)=>box(props,x+xx,y+yy,w,h,c);
+  b(2,6,12,7,C.dark);b(3,7,10,5,type?C.brown:C.stone);b(10,3,4,7,type?C.soil:C.stone2);
+  b(10,2,1,3,C.black);b(13,2,1,3,C.black);b(12,5,1,1,C.black);
+  b(3,12,2,2+f,C.black);b(10,12,2,3-f,C.black);b(1,5,3,2,type?C.brown:C.stone);
+  if(type)b(13,9,2,1,C.white);
+ }
  return [
  {path:"assets/generated/terrain-starter.png",image:terrain},
  {path:"assets/generated/actors-starter.png",image:actors},

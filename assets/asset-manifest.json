@@ -1,6 +1,6 @@
 {
   "schema": "godseed.assets.v1",
-  "state": "starter-not-integrated",
+  "state": "integrated-runtime",
   "source": "scripts/generate_starter_assets.mjs",
   "artSource": "original, produced for GODSEED; no third-party sprites",
   "pixelRules": {
@@ -841,7 +841,7 @@
       "path": "assets/generated/props-starter.png",
       "status": "starter",
       "width": 128,
-      "height": 32,
+      "height": 48,
       "channels": "RGBA8",
       "cell": [
         16,
@@ -1004,6 +1004,46 @@
           "rect": [
             112,
             16,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "Wolf",
+          "variant": 0,
+          "rect": [
+            0,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "Wolf",
+          "variant": 1,
+          "rect": [
+            16,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "Boar",
+          "variant": 0,
+          "rect": [
+            32,
+            32,
+            16,
+            16
+          ]
+        },
+        {
+          "name": "Boar",
+          "variant": 1,
+          "rect": [
+            48,
+            32,
             16,
             16
           ]
