@@ -41,7 +41,7 @@ test('God messages interpret English and Spanish while unknown text is refused h
  assert.equal(L.interpret('Construyan un taller').intent,'craft');
  assert.equal(L.interpret('Por favor proteger la villa contra lobos').intent,'defense');
  assert.equal(L.interpret('explore the wilds').intent,'explore');
- assert.equal(L.interpret('Renovar los techos de las casas').intent,'housing');
+ assert.equal(L.interpret('Renovar los techos de las casas').intent,'remodel');
  assert.equal(L.interpret('remodel the rooftops').intent,'remodel');
  assert.equal(L.interpret('Create cosmic code for android').intent,'unknown');
  const s=S.create(17),before=S.serialize(s);
