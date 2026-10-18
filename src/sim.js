@@ -200,11 +200,15 @@ const ROAD_STEPS=[
  {title:'Crownfall Traces',objective:'Nim reaches Crownfall and studies at least two ruins.',complete:'Crownfall revealed the path of the lost cartographer.'},
  {title:'The Scholar’s Route',objective:'Nim meets Mera and visits two ancient shrines.',complete:'The scholar and the waystones reveal the last path.'}
 ];
+// Only actual, distinct shrine tiles count toward Chapter II; tolerate incomplete legacy saves.
+function visitedShrines(s){
+ return new Set((Array.isArray(s.shrinesVisited)?s.shrinesVisited:[]).filter(n=>Number.isInteger(n)&&n>=0&&n<N&&s.map[n]===T.SHRINE));
+}
 function roadReady(s,i){
  const d=s.regions&&Array.isArray(s.regions.discovered)?s.regions.discovered:[];
  return i===0?d.includes('R01')&&d.includes('R02'):
   i===1?d.includes('R05')&&s.bot.ruins>=2:
-  i===2?s.shrinesVisited.length>=2&&(s.npcs||[]).some(p=>p.name==='Mera'&&p.met):false;
+  i===2?visitedShrines(s).size>=2&&(s.npcs||[]).some(p=>p.name==='Mera'&&p.met):false;
 }
 function freshRoad(){return {version:1,stage:0,completedAt:null,rewarded:false};}
 function roadFromLegacy(s){
@@ -243,8 +247,9 @@ function chooseRoadJourney(s){
  }else if(q.stage===1){
   if(!known.includes('R05'))p=findPath(s,(x,y)=>Regions.at(s,x,y).id==='R05');
   else if(b.ruins<2)p=findPath(s,(x,y,t)=>t===T.RUIN);
- }else if(s.shrinesVisited.length<2){
-  p=findPath(s,(x,y,t)=>t===T.SHRINE&&!s.shrinesVisited.includes(idx(x,y)));
+ }else if(visitedShrines(s).size<2){
+  const visited=visitedShrines(s);
+  p=findPath(s,(x,y,t)=>t===T.SHRINE&&!visited.has(idx(x,y)));
  }else{
   const npc=s.npcs.find(n=>n.name==='Mera'&&!n.met);
   if(npc)p=findPath(s,(x,y)=>Math.abs(x-npc.x)+Math.abs(y-npc.y)<=1);
@@ -486,7 +491,7 @@ function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!=
  if(!Array.isArray(s.enemies)||!s.enemies.every(e=>e&&Number.isInteger(e.x)&&Number.isInteger(e.y)&&inside(e.x,e.y)&&['hp','attack','defense','cooldown','id'].every(k=>Number.isFinite(e[k]))))return false;
  return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
 function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
-function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;if(!Number.isInteger(s.worldSeed))s.worldSeed=s.seed;s.regions={version:1,discovered:[...new Set(s.regions&&Array.isArray(s.regions.discovered)?s.regions.discovered.filter(id=>Regions.data.regions.some(r=>r.id===id)):[])]};if(!s.chapter||s.chapter.version!==1||!Number.isInteger(s.chapter.stage)||s.chapter.stage<0||s.chapter.stage>CHAPTER_STEPS.length){
+function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;if(!Number.isInteger(s.worldSeed))s.worldSeed=s.seed;s.regions={version:1,discovered:[...new Set(s.regions&&Array.isArray(s.regions.discovered)?s.regions.discovered.filter(id=>Regions.data.regions.some(r=>r.id===id)):[])]};s.shrinesVisited=[...visitedShrines(s)].slice(0,8);if(!s.chapter||s.chapter.version!==1||!Number.isInteger(s.chapter.stage)||s.chapter.stage<0||s.chapter.stage>CHAPTER_STEPS.length){
   s.chapter=chapterFromLegacy(s);
  }else{
   s.chapter={version:1,stage:s.chapter.stage,completedAt:s.chapter.stage===CHAPTER_STEPS.length?
@@ -515,7 +520,7 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
   met:!!p.met,lastTalk:Number.isFinite(p.lastTalk)?p.lastTalk:-1000,
   favorUntil:Number.isFinite(p.favorUntil)?p.favorUntil:0,favorSpent:!!p.favorSpent,activity:String(p.activity||'Patrolling').slice(0,48),encounters:clamp(Number(p.encounters)||0,0,10000)
  }));
- s.shrinesVisited=Array.isArray(s.shrinesVisited)?s.shrinesVisited.filter(n=>Number.isInteger(n)&&n>=0&&n<N).slice(0,8):[];
+ // Shrine evidence is sanitized before chapter migration.
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
  s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
