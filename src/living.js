@@ -222,13 +222,13 @@ function personTick(s,p){
  return true;
 }
 const COMMANDS=[
+ {intent:'remodel',re:/\b(renovat|redesign|rebuild|remodel|appearance|roof|rediseñar|remodel|renovar|tejado|techos?|apariencia)\w*/i,label:'consider redesigning homes'},
  {intent:'housing',re:/\b(hous(?:e|ing)|shelter|home|casas?|viviendas?|edificios?)\b/i,label:'build homes'},
  {intent:'food',re:/\b(farm|crop|food|harvest|grain|cultivar|granja|comida|agricultur|alimento|cosecha)\w*/i,label:'grow food'},
  {intent:'defense',re:/\b(defend|protect|guard|wolves|wolf|wall|defender|proteger|lobos?|vigil|muralla)\w*/i,label:'protect residents'},
  {intent:'craft',re:/\b(craft|tool|workshop|smith|invent|forge|herramient|taller|forja|investig)\w*/i,label:'develop crafts'},
  {intent:'trade',re:/\b(trade|market|commerce|exchange|mercado|comercio|intercambi)\w*/i,label:'develop trade'},
  {intent:'explore',re:/\b(explore|travel|discover|journey|wander|explorar|viajar|descubri|aventura)\w*/i,label:'explore freely'},
- {intent:'remodel',re:/\b(renovat|redesign|rebuild|remodel|appearance|roof|rediseñar|remodel|renovar|tejado|techos?|apariencia)\w*/i,label:'consider redesigning homes'},
  {intent:'housing',re:/\b(build|construct|construir)\w*/i,label:'build homes'},
  {intent:'rest',re:/\b(rest|sleep|recover|descansa|dormir|dorm|repos|curar)\w*/i,label:'rest'}
 ];
