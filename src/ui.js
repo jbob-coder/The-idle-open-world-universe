@@ -100,6 +100,10 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('lead').textContent=(s.story.clues.find(q=>!q.solved)||{}).title||'No active legend';
  $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · '+(p.activity||'Patrullando')).join('  •  ')||'No travelers yet';
  if(s.living){
+  const life=s.bot.life;
+  if(life){$('lifeStatus').textContent='Age '+life.age.toFixed(1)+' · '+life.occupation+' · Friends: '+(life.friends.join(', ')||'Still meeting people');
+    $('lifeTimeline').textContent=life.events.slice(-4).map(e=>'Day '+(1+Math.floor(e.tick/240))+': '+e.text).join(' • ');
+  }
   $('townStatus').textContent=s.living.towns.map(t=>t.name+' · '+t.age+' · '+t.buildings.length+' buildings · '+t.stock.food+' food · '+t.stock.wood+' wood · '+t.stock.stone+' stone').join(' | ');
   $('citizenLives').textContent=s.living.citizens.map(p=>p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity).join(' • ');
   const recent=s.living.whispers[s.living.whispers.length-1];
