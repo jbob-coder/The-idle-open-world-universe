@@ -175,7 +175,8 @@ function tick(s){
   }else t.nextBuild=s.tick+48;
   // Once land is occupied, inhabitants can choose a new look rather than
   // expanding indefinitely or ignoring their community's built environment.
-  if(t.age==='Township'&&s.tick%1200===0&&t.stock.wood>=4&&t.stock.stone>=2){
+  if(t.age==='Township'&&(s.tick%1200===0||(Number.isInteger(t.renovateAfter)&&t.renovateAfter>0&&s.tick>=t.renovateAfter))&&t.stock.wood>=4&&t.stock.stone>=2){
+   t.renovateAfter=0;
    const b=t.buildings.find(q=>q.type==='house');
    if(b){const styles=['oak','reed','stone'];b.roof=styles[(styles.indexOf(b.roof)+1)%styles.length];
     b.updatedAt=s.tick;t.stock.wood-=2;t.stock.stone-=1;
@@ -227,11 +228,15 @@ const COMMANDS=[
  {intent:'craft',re:/\b(craft|tool|workshop|smith|invent|forge|herramient|taller|forja|investig)\w*/i,label:'develop crafts'},
  {intent:'trade',re:/\b(trade|market|commerce|exchange|mercado|comercio|intercambi)\w*/i,label:'develop trade'},
  {intent:'explore',re:/\b(explore|travel|discover|journey|wander|explorar|viajar|descubri|aventura)\w*/i,label:'explore freely'},
+ {intent:'remodel',re:/\b(renovat|redesign|rebuild|remodel|appearance|roof|rediseñar|remodel|renovar|tejado|techos?|apariencia)\w*/i,label:'consider redesigning homes'},
  {intent:'housing',re:/\b(build|construct|construir)\w*/i,label:'build homes'},
  {intent:'rest',re:/\b(rest|sleep|recover|descansa|dormir|dorm|repos|curar)\w*/i,label:'rest'}
 ];
 function interpret(message){
- const text=String(message||'').trim().slice(0,220),match=COMMANDS.find(a=>a.re.test(text));
+ const text=String(message||'').trim().slice(0,220);
+ // A limited offline parser must never invert a negative instruction into a positive command.
+ const denied=/\b(don.t|do not|never|avoid|no construy|no edifi|no hag|nunca|eviten|prohibi)\w*/i.test(text);
+ const match=denied?null:COMMANDS.find(a=>a.re.test(text));
  return {text,intent:match?match.intent:'unknown',label:match?match.label:'unrecognized request'};
 }
 function whisper(s,message){
@@ -247,6 +252,7 @@ function whisper(s,message){
   const urgent=t.stock.food<3;
   const agree=!urgent||m.intent==='food'?independence<.75||hash(s.tick,t.x,m.text.length)%4!==0:m.intent==='food';
   if(agree&&['housing','food','defense','craft','trade'].includes(m.intent))t.agenda=m.intent;
+  if(agree&&m.intent==='remodel')t.renovateAfter=s.tick+48;
   decisions.push({name:t.name,agree,reason:agree?'Residents will consider this within their needs and supplies.':'Residents are prioritizing survival or independence.'});
  }
  const nimAgree=s.bot.hunger>=30&&s.bot.energy>=25&&
