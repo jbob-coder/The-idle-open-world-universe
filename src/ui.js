@@ -104,7 +104,7 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
   if(life){$('lifeStatus').textContent='Age '+life.age.toFixed(1)+' · '+life.occupation+' · Friends: '+(life.friends.join(', ')||'Still meeting people');
     $('lifeTimeline').textContent=life.events.slice(-4).map(e=>'Day '+(1+Math.floor(e.tick/240))+': '+e.text).join(' • ');
   }
-  $('townStatus').textContent=s.living.towns.map(t=>t.name+' · '+t.age+' · '+t.buildings.length+' buildings · '+t.stock.food+' food · '+t.stock.wood+' wood · '+t.stock.stone+' stone').join(' | ');
+  $('townStatus').textContent=s.living.towns.map(t=>t.name+' · '+t.age+' / '+(t.technology?t.technology.era:'Founding Age')+' · '+t.buildings.length+' buildings · '+t.stock.food+' food · '+t.stock.wood+' wood · '+t.stock.stone+' stone').join(' | ');
   $('citizenLives').textContent=s.living.citizens.map(p=>p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity).join(' • ');
   const recent=s.living.whispers[s.living.whispers.length-1];
   $('godFeedback').textContent=recent?('Interpreted as: '+recent.label+'. '+recent.decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join('; ')+(recent.nimAgree?'; Nim is considering it.':'')):'Speak your intention; residents decide how to respond.';
