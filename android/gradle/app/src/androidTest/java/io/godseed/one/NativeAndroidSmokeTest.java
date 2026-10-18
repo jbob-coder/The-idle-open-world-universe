@@ -184,14 +184,19 @@ public class NativeAndroidSmokeTest {
                 "return JSON.parse(localStorage.getItem('godseed-one-small-life-v1')).tick;})()");
             assertEquals("13", before);
             activity.recreate();
+            // Restore deliberately resumes at speed 1, so the simulation may
+            // advance beyond tick 13 before the first instrumentation callback.
+            // Stop it and verify the saved world identity plus monotonic progress.
             boolean restored = false;
             for (int i = 0; i < 30; i++) {
                 String value = evaluate(activity,
-                    "typeof window.GodseedDebug==='object' ? GodseedDebug.getState().tick : -1");
-                if ("13".equals(value)) { restored = true; break; }
+                    "(function(){if(typeof window.GodseedDebug!=='object')return false;" +
+                    "GodseedDebug.setSpeed(0);var world=GodseedDebug.getState();" +
+                    "return world.worldSeed===9817 && world.tick>=13;})()");
+                if ("true".equals(value)) { restored = true; break; }
                 Thread.sleep(500);
             }
-            assertTrue("Saved world tick not restored after native Activity recreation", restored);
+            assertTrue("Saved seed and progress not restored after native Activity recreation", restored);
         }
     }
 
