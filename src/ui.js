@@ -175,7 +175,7 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape'){pendingConfirmation=n
  if(/^[0-6]$/.test(e.key)){const names=['inspect','bless','gift','bloom','guide','storm','inspire'];setMode(names[Number(e.key)]);}
 });
 let active=true;document.addEventListener('visibilitychange',()=>{active=!document.hidden;frameLast=0;acc=0;if(!active)save();});window.addEventListener('beforeunload',save);window.addEventListener('pagehide',()=>{active=false;acc=0;frameLast=0;save();});window.addEventListener('pageshow',()=>{active=!document.hidden;acc=0;frameLast=0;});
-window.GodseedHostLifecycle={pause:()=>{active=false;acc=0;frameLast=0;save();},resume:()=>{active=true;acc=0;frameLast=0;}};
+window.GodseedHostLifecycle={pause:()=>{active=false;acc=0;frameLast=0;return save();},resume:()=>{active=true;acc=0;frameLast=0;}};
 function frame(ts){requestAnimationFrame(frame);if(!active)return;if(!frameLast)frameLast=ts;const dt=Math.min(.15,Math.max(0,(ts-frameLast)/1000));frameLast=ts;acc+=dt*4*s.settings.speed;let loops=0;while(acc>=1&&loops<32){A.tick(s);acc-=1;loops++;}if(loops===32)acc=0;
  if(ts-lastDraw>50){draw();lastDraw=ts;}
  if(ts-lastHUD>450){hud();lastHUD=ts;}
