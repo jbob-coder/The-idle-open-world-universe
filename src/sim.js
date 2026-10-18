@@ -401,6 +401,20 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  }
  if(s.guide&&s.guide.ticks>0){const gx=s.guide.x,gy=s.guide.y;if(!walkable(s,gx,gy)){s.guide=null;}else{const p=findPath(s,(x,y)=>x===gx&&y===gy);if(p){setGoal(s,'Follow omen','Something calls to me from afar.',p);return;}s.guide=null;}}
  if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
+ // A god's free-text whisper is *advice*, not a movement command. Nim only
+ // considers it when her own needs are met, and abandons it when it expires.
+ if(s.living&&s.living.nimWish){
+  const wish=s.living.nimWish;
+  if(s.tick>=wish.until)s.living.nimWish=null;
+  else if(b.hunger>55&&b.energy>50){
+   let trail=null;
+   if(wish.intent==='food')trail=findPath(s,(x,y,t)=>t===T.BERRY);
+   if(wish.intent==='explore')trail=findPath(s,(x,y,t,n)=>!s.seen[n]);
+   if(wish.intent==='rest'&&s.camp)trail=findPath(s,(x,y)=>x===s.camp.x&&y===s.camp.y);
+   if(trail&&trail.length){setGoal(s,'Consider a whisper','I will follow this idea for now, if it still makes sense.',trail);return;}
+   if(wish.intent==='rest'&&s.camp){setGoal(s,'Rest','A quiet evening sounds sensible.');return;}
+  }
+ }
  if(chooseRoadJourney(s))return;
  if(chooseFinaleJourney(s))return;
  if(s.map[idx(b.x,b.y)]===T.RUIN){setGoal(s,'Study ruins','I have reached the ancient stones.');return;}
