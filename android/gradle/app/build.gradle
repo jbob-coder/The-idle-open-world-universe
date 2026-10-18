@@ -1,0 +1,24 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'io.godseed.one'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'io.godseed.one'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0-experimental'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets { main { assets.srcDirs += ["$buildDir/generated/godseedAssets"] } }
+}
+tasks.register('copyOfflineGame', Copy) {
+    from file('../../../GODSEED-Play.html')
+    into layout.buildDirectory.dir('generated/godseedAssets')
+    rename { ignored -> 'index.html' }
+}
+tasks.named('preBuild') { dependsOn tasks.named('copyOfflineGame') }
