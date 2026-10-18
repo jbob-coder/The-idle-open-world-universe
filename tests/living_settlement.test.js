@@ -53,7 +53,11 @@ test('resident town development uses resource budgets and distinct legal bluepri
   assert.ok(l.buildings.some(b=>b.type==='workshop'));
   assert.ok(new Set(l.buildings.map(b=>b.x+','+b.y)).size===l.buildings.length);
   for(const b of l.buildings)for(let y=b.y;y<b.y+2;y++)for(let x=b.x;x<b.x+2;x++){
-   assert.ok(tiles[S.idx(x,y)]===S.T.GRASS||tiles[S.idx(x,y)]===S.T.MEADOW);
+   const earlier=tiles[S.idx(x,y)],now=s.map[S.idx(x,y)];
+   assert.ok(![S.T.WATER,S.T.SHRINE,S.T.RUIN,S.T.ROAD,S.T.VILLAGE].includes(earlier),
+     'buildings cannot overwrite terrain landmarks');
+   assert.ok([S.T.GRASS,S.T.MEADOW].includes(now),
+     'food and timber cannot respawn inside completed structures');
   }
   assert.equal(s.map[S.idx(50,39)],S.T.MEADOW,'Moonwell ruin is studied, never replaced by buildings');
   for(const k of ['wood','stone','food'])assert.ok(l.stock[k]>=0&&l.stock[k]<=99);
