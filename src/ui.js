@@ -7,7 +7,7 @@ let zoomIndex=0,VW=ZOOMS[0].w,VH=ZOOMS[0].h;
 const canvas=$('world'),screenCtx=canvas.getContext('2d',{alpha:false}),mini=$('minimap'),mctx=mini.getContext('2d',{alpha:false});
 const scenery=document.createElement('canvas');scenery.width=canvas.width;scenery.height=canvas.height;
 const sceneryCtx=scenery.getContext('2d',{alpha:false});let ctx=screenCtx,sceneX=-1,sceneY=-1;
-let sceneryRedraws=0,screenRedraws=0;
+let sceneryRedraws=0,screenRedraws=0,sceneryRevision=-1;
 let oldCells=new Int16Array(VW*VH);oldCells.fill(-99);
 screenCtx.imageSmoothingEnabled=false;sceneryCtx.imageSmoothingEnabled=false;mctx.imageSmoothingEnabled=false;
 const SAVE_KEY='godseed-one-small-life-v1';let s,mode='inspect',camX=0,camY=0,lastDraw=0,lastHUD=0,lastSave=0,acc=0,frameLast=0,hover=null,flashMessage='',flashUntil=0;
@@ -37,20 +37,26 @@ $('reduceMotion').checked=reducedMotion;$('reduceMotion').addEventListener('chan
 assets.loaded.then(()=>{document.querySelectorAll('[data-power]').forEach(button=>{const slot=button.querySelector('.ico,.power-icon');if(!slot)return;slot.textContent='';const c=document.createElement('canvas');c.width=c.height=16;c.className='power-pixel';c.setAttribute('aria-hidden','true');slot.appendChild(c);const f=assets.manifest.atlases[2].symbols.find(f=>f.name===button.dataset.power);if(f)assets.blit(c.getContext('2d'),2,f.rect,0,0);});const portrait=$('portrait');const f=assets.manifest.atlases[1].frames[0];assets.blit(portrait.getContext('2d'),1,f.rect,0,0);oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
 function drawTile(tile,x,y,wx,wy){if(assets.ready)terrain.draw(ctx,assets,s,tile,x,y,wx,wy);else rect(x,y,16,16,'#152723');}
 function updateScenery(){
- let changed=camX!==sceneX||camY!==sceneY,k=0;
+ let changed=camX!==sceneX||camY!==sceneY||(s.life&&s.life.revision!==sceneryRevision),k=0;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
   const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy);
   const tile=s.seen[n]?(s.map[n]+1)*32+((s.map[n]===8||s.map[n]===2)?terrain.mask(s,wx,wy,s.map[n]):0):0;
   if(oldCells[k]!==tile){oldCells[k]=tile;changed=true;}k++;
  }
  if(!changed)return;
- sceneX=camX;sceneY=camY;sceneryRedraws++;
+ sceneX=camX;sceneY=camY;sceneryRevision=s.life?s.life.revision:0;sceneryRedraws++;
  ctx=sceneryCtx;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
   const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy),x=rx*size,y=ry*size;
   if(!s.seen[n]){rect(x,y,size,size,'#11191A');continue;}
   drawTile(s.map[n],x,y,wx,wy);
 
+ }
+ // Structures have separate 2x2 footprints, never overwrite landmark tiles.
+ for(const b of s.life?.buildings||[]){
+  if(b.x+1<camX||b.y+1<camY||b.x>=camX+VW||b.y>=camY+VH)continue;
+  if(!s.seen[A.idx(b.x,b.y)])continue;
+  window.GodseedSettlements.draw(ctx,b,(b.x-camX)*16,(b.y-camY)*16);
  }
  ctx=screenCtx;
 }
@@ -79,7 +85,7 @@ function draw(){screenRedraws++;positionCamera();const b=s.bot;updateScenery();
  }
  $('coordinates').textContent=`${b.x}, ${b.y} · ${A.regionAt(s,b.x,b.y).name} · ${ZOOMS[zoomIndex].name}`;
 }
-function drawMini(){const image=mctx.createImageData(A.W,A.H);for(let i=0;i<A.N;i++){const t=s.map[i],c=s.seen[i]?colors[t]:'#121c20';const k=i*4;image.data[k]=parseInt(c.slice(1,3),16);image.data[k+1]=parseInt(c.slice(3,5),16);image.data[k+2]=parseInt(c.slice(5,7),16);image.data[k+3]=255;}mctx.putImageData(image,0,0);mctx.fillStyle='#f9e6b2';mctx.fillRect(s.bot.x,s.bot.y,1,1);mctx.strokeStyle='#d9d8ab';mctx.lineWidth=.5;mctx.strokeRect(camX+.25,camY+.25,VW-.5,VH-.5);}
+function drawMini(){const image=mctx.createImageData(A.W,A.H);for(let i=0;i<A.N;i++){const t=s.map[i],c=s.seen[i]?colors[t]:'#121c20';const k=i*4;image.data[k]=parseInt(c.slice(1,3),16);image.data[k+1]=parseInt(c.slice(3,5),16);image.data[k+2]=parseInt(c.slice(5,7),16);image.data[k+3]=255;}mctx.putImageData(image,0,0);for(const b of s.life?.buildings||[]){if(s.seen[A.idx(b.x,b.y)]){mctx.fillStyle='#e2c284';mctx.fillRect(b.x,b.y,2,2);}}mctx.fillStyle='#f9e6b2';mctx.fillRect(s.bot.x,s.bot.y,1,1);mctx.strokeStyle='#d9d8ab';mctx.lineWidth=.5;mctx.strokeRect(camX+.25,camY+.25,VW-.5,VH-.5);}
 function bar(label,n,max=100){const pct=Math.round(Math.max(0,Math.min(1,n/max))*100);return `<div class="stat"><div class="stathead"><span>${label}</span><b>${Math.round(n)} / ${Math.round(max)}</b></div><div class="track"><i style="width:${pct}%" class="${label.toLowerCase().split(' ')[0]}"></i></div></div>`;}
 function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('quickStatus').textContent=`NIM L${b.level} · HP ${Math.ceil(b.hp)}/${b.maxHp} · Faith ${s.faith} · ${b.goal}`;
@@ -91,7 +97,19 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('skillRanks').textContent=A.SKILLS.map(k=>k.toUpperCase().slice(0,3)+' '+b.skills[k]).join(' · ');
  $('adventures').textContent=`${s.story.completed} rumors solved · ${s.story.clues.filter(q=>!q.solved).length} leads · ${b.tactics.dodge} dodges · ${b.tactics.parry} parries · ${b.tactics.trapsAvoided} traps avoided`;
  $('lead').textContent=(s.story.clues.find(q=>!q.solved)||{}).title||'No active legend';
- $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · '+(p.activity||'Patrullando')+' · Confianza '+Math.round(p.trust)).join('  •  ')||'Sin viajeros todavía';
+ $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · '+(p.activity||'Sin actividad')+' · Confianza '+Math.round(p.trust)).join('  •  ')||'Sin viajeros todavía';
+ const lives=s.life;
+ if(lives){
+  $('townStatus').textContent=['Campamentos fundados: '+lives.buildings.length,
+   'Era: '+['Fundación','Aldea','Artesanos'][lives.age],
+   'Madera '+lives.stock.wood+' · Piedra '+lives.stock.stone+' · Comida '+lives.stock.food].join(' · ');
+  $('townBuildings').textContent=lives.buildings.slice(-5).reverse().map(b=>
+   b.town+' · '+b.type+' ('+b.style+') · '+b.owner).join('  •  ');
+  $('lifeDiary').textContent=lives.decisions.slice(0,5).map(q=>
+   'D'+(1+Math.floor(q.tick/240))+' '+q.person+': '+q.action+' — '+q.why).join('  •  ')||'Las primeras decisiones aparecerán aquí.';
+  $('lettersStatus').textContent=lives.letters.slice(0,3).map(q=>
+   q.to+' · '+q.intent+' · '+q.status+' — '+q.reason).join('  •  ')||'No hay sugerencias divinas todavía.';
+ }
  $('milestones').title=(s.shrinesVisited||[]).length+' santuarios antiguos visitados';
  $('memory').textContent=b.memory.length?b.memory.slice(-4).reverse().join('  •  '):'Learning about the world…';
  $('milestones').textContent=`${b.steps} steps · ${b.fights} wins · ${b.ruins} ruins · ${b.scars} second chances`;
@@ -173,6 +191,12 @@ document.querySelectorAll('[data-speed]').forEach(b=>b.addEventListener('click',
 $('follow').addEventListener('click',()=>{s.settings.follow=!s.settings.follow;hud();draw();});
 $('zoom').addEventListener('click',()=>{setZoom(zoomIndex+1);hud();draw();notify('Cámara '+ZOOMS[zoomIndex].name+' · Nim sigue actuando solo.');});
 $('zoomDock').addEventListener('click',()=>$('zoom').click());
+$('sendGuidance').addEventListener('click',()=>{
+ const to=$('divineTarget').value,words=$('divineMessage').value;
+ const result=A.issueGuidance(s,to,words);
+ notify(result.ok?(result.accepted?to+' escuchó el mensaje y decidirá cómo actuar.':to+' decidió no seguir esa sugerencia.'):result.reason);
+ if(result.ok){$('divineMessage').value='';save();hud();draw();}
+});
 $('save').addEventListener('click',()=>{notify(save()?'World saved.':'Save failed. Export a backup.');});$('export').addEventListener('click',()=>backupDialog('export'));
 $('import').addEventListener('click',()=>backupDialog('import'));$('importFile').addEventListener('change',e=>{importSave(e.target.files[0]);e.target.value='';});
 $('reset').addEventListener('click',()=>{confirmAction('Create a new world? Export a backup first to keep current progress.',()=>{const next=A.create((Date.now()>>>0)^Math.floor(Math.random()*10000000));if(!commitRestored(next))return;hud();draw();notify('A new life begins.');});});
