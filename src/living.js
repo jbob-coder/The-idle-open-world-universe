@@ -40,8 +40,8 @@ function site(s,town,type){
   }
   if(!clear)continue;
   const nearby=s.living.towns.flatMap(t=>t.buildings);
-  if(nearby.some(b=>x<=b.x+(b.w||1)&&x+2>=b.x-1&&
-    y<=b.y+(b.h||1)&&y+2>=b.y-1))continue;
+  if(nearby.some(b=>x<b.x+(b.w||1)&&x+2>b.x&&
+    y<b.y+(b.h||1)&&y+2>b.y))continue;
   let nearestRoad=4;
   for(let yy=y-2;yy<=y+3;yy++)for(let xx=x-2;xx<=x+3;xx++){
    if(xx<0||xx>=W||yy<0||yy>=H)continue;
