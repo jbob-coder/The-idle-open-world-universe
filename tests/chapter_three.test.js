@@ -31,7 +31,7 @@ test('final ritual requires three region echoes and a real autonomous return',()
  const s=S.create(41);unlock(s);ancientEvidence(s);
  S.tick(s);assert.equal(s.finale.stage,1);
  S.tick(s);assert.equal(s.finale.stage,2);
- const beforeFaith=s.faith,oldHp=s.bot.maxHp,oldMilestones=s.milestones;
+ const beforeFaith=s.faith,oldHp=s.bot.maxHp,oldLevel=s.bot.level,oldMilestones=s.milestones;
  assert.equal(s.finale.ritualDone,false);
  s.bot.x=49;s.bot.y=39;
  // The action is at the actual Moonwell, never unlocked by a remote UI command.
@@ -39,7 +39,7 @@ test('final ritual requires three region echoes and a real autonomous return',()
  for(let i=0;i<6&&s.finale.stage!==3;i++)S.tick(s);
  assert.equal(s.finale.stage,3,'Nim must reach Moonwell herself');
  assert.equal(s.finale.rewarded,true);assert.equal(s.finale.ritualDone,true);
- assert.equal(s.bot.maxHp,oldHp+3);
+ assert.equal(s.bot.maxHp-oldHp-4*(s.bot.level-oldLevel),3,'finale rewards +3 max HP in addition to normal level-ups');
  assert.ok(s.faith>=beforeFaith+5||s.faith===50);
  assert.ok(s.milestones>=oldMilestones+1);
  assert.ok(s.log.some(e=>e.title==='THE END · The Moonwell Dawn'));
