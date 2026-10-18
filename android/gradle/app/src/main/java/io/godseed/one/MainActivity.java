@@ -181,14 +181,38 @@ public final class MainActivity extends Activity {
             web.evaluateJavascript("if(window.GodseedHostLifecycle)GodseedHostLifecycle.resume()", null);
         }
     }
+    /**
+     * WebView.evaluateJavascript is asynchronous. Finish only after the
+     * JavaScript lifecycle handler confirms that localStorage was written.
+     * A failed save must leave the user a chance to export a backup.
+     */
+    void saveAndExit() {
+        if (web == null) { finish(); return; }
+        web.evaluateJavascript(
+            "(function(){return !!(window.GodseedHostLifecycle && GodseedHostLifecycle.pause())})()",
+            result -> {
+                if (isFinishing() || isDestroyed()) return;
+                if ("true".equals(result)) {
+                    finish();
+                } else {
+                    new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("World not saved")
+                        .setMessage("Local storage could not confirm the save. Export a backup before leaving.")
+                        .setNegativeButton("Keep playing", (dialog, which) -> {
+                            if (web != null) web.evaluateJavascript(
+                                "if(window.GodseedHostLifecycle)GodseedHostLifecycle.resume()", null);
+                        })
+                        .setPositiveButton("Exit without saving", (dialog, which) -> finish())
+                        .show();
+                }
+            });
+    }
     @Override public void onBackPressed() {
         new AlertDialog.Builder(this).setTitle("Leave GODSEED?")
             .setMessage("The world is saved locally. Export a backup before uninstalling.")
             .setNegativeButton("Continue playing", null)
             .setPositiveButton("Save and exit", (dialog, which) -> {
-                if (web != null) web.evaluateJavascript(
-                    "if(window.GodseedHostLifecycle)GodseedHostLifecycle.pause()", null);
-                finish();
+                saveAndExit();
             }).show();
     }
     @Override protected void onDestroy() {
