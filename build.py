@@ -7,7 +7,7 @@ h=h.replace('/*SIM_SOURCE*/',region_data+(p/'src/world/regions.js').read_text()+
 manifest=json.loads((p/'assets/asset-manifest.json').read_text())
 bundle={'manifest':manifest,'images':['data:image/png;base64,'+base64.b64encode((p/a['path']).read_bytes()).decode() for a in manifest['atlases']]}
 render='window.GodseedAssetBundle='+json.dumps(bundle,separators=(',',':'))+';\n'
-for name in ['camera','assets','terrain','actors','fx']:
+for name in ['camera','assets','terrain','actors','fx','settlements']:
     render+=(p/('src/render/'+name+'.js')).read_text()+'\n'
 h=h.replace('/*UI_SOURCE*/',render+(p/'src/ui.js').read_text())
 
