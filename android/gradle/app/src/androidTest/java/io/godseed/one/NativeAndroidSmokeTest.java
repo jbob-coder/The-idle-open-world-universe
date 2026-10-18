@@ -184,14 +184,70 @@ public class NativeAndroidSmokeTest {
                 "return JSON.parse(localStorage.getItem('godseed-one-small-life-v1')).tick;})()");
             assertEquals("13", before);
             activity.recreate();
+            // Restore deliberately resumes at speed 1, so the simulation may
+            // advance beyond tick 13 before the first instrumentation callback.
+            // Stop it and verify the saved world identity plus monotonic progress.
             boolean restored = false;
             for (int i = 0; i < 30; i++) {
                 String value = evaluate(activity,
-                    "typeof window.GodseedDebug==='object' ? GodseedDebug.getState().tick : -1");
-                if ("13".equals(value)) { restored = true; break; }
+                    "(function(){if(typeof window.GodseedDebug!=='object')return false;" +
+                    "GodseedDebug.setSpeed(0);var world=GodseedDebug.getState();" +
+                    "return world.worldSeed===9817 && world.tick>=13;})()");
+                if ("true".equals(value)) { restored = true; break; }
                 Thread.sleep(500);
             }
-            assertTrue("Saved world tick not restored after native Activity recreation", restored);
+            assertTrue("Saved seed and progress not restored after native Activity recreation", restored);
+        }
+    }
+
+    /**
+     * The user may exit before the regular autosave timer fires.
+     * Exercise actual WebView persistence without clicking the manual Save button.
+     */
+    @Test public void savesUnsavedWorldBeforeNativeExit() throws Exception {
+        try (ActivityScenario<MainActivity> activity = ActivityScenario.launch(MainActivity.class)) {
+            boolean ready = false;
+            for (int i = 0; i < 30; i++) {
+                if ("true".equals(evaluate(activity,
+                    "typeof window.GodseedDebug==='object' && document.readyState==='complete'"))) {
+                    ready = true;
+                    break;
+                }
+                Thread.sleep(500);
+            }
+            assertTrue("Game not ready for exit test", ready);
+            String before = evaluate(activity,
+                "(function(){GodseedDebug.newWorld(17017);GodseedDebug.setSpeed(0);" +
+                "GodseedDebug.step(23);localStorage.removeItem('godseed-one-small-life-v1');" +
+                "return GodseedDebug.getState().tick;})()");
+            assertEquals("23", before);
+            assertEquals("true", evaluate(activity,
+                "localStorage.getItem('godseed-one-small-life-v1')===null"));
+            activity.onActivity(MainActivity::saveAndExit);
+            boolean destroyed = false;
+            for (int i = 0; i < 40; i++) {
+                if ("DESTROYED".equals(activity.getState().name())) {
+                    destroyed = true;
+                    break;
+                }
+                Thread.sleep(150);
+            }
+            assertTrue("Save callback must finish native Activity", destroyed);
+        }
+        try (ActivityScenario<MainActivity> next = ActivityScenario.launch(MainActivity.class)) {
+            boolean recovered = false;
+            for (int i = 0; i < 30; i++) {
+                String recoveredWorld = evaluate(next,
+                    "(function(){if(typeof window.GodseedDebug!=='object')return false;" +
+                    "GodseedDebug.setSpeed(0);var world=GodseedDebug.getState();" +
+                    "return world.worldSeed===17017 && world.tick>=23;})()");
+                if ("true".equals(recoveredWorld)) {
+                    recovered = true;
+                    break;
+                }
+                Thread.sleep(500);
+            }
+            assertTrue("Unsaved world changes must survive confirmed native exit", recovered);
         }
     }
 
