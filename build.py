@@ -3,7 +3,7 @@ import json, base64
 p=Path(__file__).parent
 h=(p/'index.template.html').read_text()
 region_data='window.GodseedRegionData='+json.dumps(json.loads((p/'data/world-regions.v1.json').read_text()),separators=(',',':'))+';\n'
-h=h.replace('/*SIM_SOURCE*/',region_data+(p/'src/world/regions.js').read_text()+'\n'+(p/'src/sim.js').read_text())
+h=h.replace('/*SIM_SOURCE*/',region_data+(p/'src/world/regions.js').read_text()+'\n'+(p/'src/living.js').read_text()+'\n'+(p/'src/sim.js').read_text())
 manifest=json.loads((p/'assets/asset-manifest.json').read_text())
 bundle={'manifest':manifest,'images':['data:image/png;base64,'+base64.b64encode((p/a['path']).read_bytes()).decode() for a in manifest['atlases']]}
 render='window.GodseedAssetBundle='+json.dumps(bundle,separators=(',',':'))+';\n'
