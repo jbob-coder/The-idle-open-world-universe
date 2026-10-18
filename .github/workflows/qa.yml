@@ -51,6 +51,7 @@ jobs:
           python tests/browser_smoke.py
           python tests/mobile_acceptance.py
           python tests/lifecycle_acceptance.py
+          python tests/paused_render_budget.py
           python tests/chapter_browser_acceptance.py
           python tests/chapter_two_browser_acceptance.py
           python tests/capture_android_layouts.py
