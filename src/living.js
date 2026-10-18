@@ -92,8 +92,10 @@ function restore(s){
   for(const k of ['food','wood','stone'])t.stock[k]=Math.max(0,Math.min(999,Number(t.stock[k])||0));
   t.buildings=Array.isArray(t.buildings)?t.buildings.slice(0,MAX_BUILDINGS).filter(b=>b&&BLUEPRINTS[b.type]&&
    Number.isInteger(b.x)&&Number.isInteger(b.y)&&b.x>1&&b.x<W-2&&b.y>1&&b.y<H-2):[];
-  t.agenda=BLUEPRINTS[t.agenda]||['housing','food','defense','trade'].includes(t.agenda)?t.agenda:'housing';
-  const level=Number.isInteger(t.technology&&t.technology.level)?Math.max(0,Math.min(3,t.technology.level)):0;
+  t.agenda=BLUEPRINTS[t.agenda]||['housing','food','defense','craft','trade'].includes(t.agenda)?t.agenda:'housing';
+  const built=kind=>t.buildings.some(b=>b.type===kind);
+  const inferred=t.buildings.length>=9&&built('market')?3:t.buildings.length>=7&&built('workshop')?2:t.buildings.length>=4?1:0;
+  const level=Number.isInteger(t.technology&&t.technology.level)?Math.max(0,Math.min(3,t.technology.level)):inferred;
   t.technology={level,era:['Founding Age','Farming Age','Craft Age','Trade Age'][level]};
  }
  for(const c of l.citizens){
