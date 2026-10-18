@@ -66,3 +66,28 @@ test('immediate threats still override autonomous camp recovery',()=>{
  S.plan(s);
  assert.equal(b.goal,'Defend','escaping or defending is more urgent than going home');
 });
+
+test('explicit pause survives v1 save and restore without resuming autonomous ticks',()=>{
+ const s=S.create(41),original=S.serialize(s);
+ s.settings.speed=0;s.settings.follow=false;
+ const paused=S.restore(S.serialize(s));
+ assert.ok(paused);
+ assert.equal(paused.settings.speed,0,'manual pause should not silently become autoplay');
+ assert.equal(paused.settings.follow,true,'camera follow safely resets without saved viewport');
+ const at=paused.tick;
+ assert.equal(at,s.tick);
+ assert.equal(S.serialize(s)!==original,true,'save includes current pause metadata');
+});
+
+test('accelerated and invalid legacy playback rates restart at safe default speed',()=>{
+ const s=S.create(41);
+ for(const value of [1,3,8,999,-2,'0',null]){
+  s.settings={speed:value,follow:false};
+  const loaded=S.restore(S.serialize(s));
+  assert.ok(loaded);
+  assert.equal(loaded.settings.speed,1,'unexpected speed: '+String(value));
+  assert.equal(loaded.settings.follow,true);
+ }
+ delete s.settings;
+ assert.equal(S.restore(S.serialize(s)).settings.speed,1);
+});
