@@ -53,6 +53,7 @@ function create(s){
  ];
  const living={version:1,towns,citizens:[],chronicle:[],whispers:[],nextWhisper:1};
  s.living=living;
+ s.bot.life={age:19,occupation:'Wanderer',friends:[],events:[{tick:s.tick,text:'Awoke in the forgotten kingdom'}],lastCareerTick:-300};
  for(const t of towns){build(s,t,'house',true);build(s,t,'farm',true);}
  const identities=[
   ['Elin','Builder','briarford',.80,.46,.62],
@@ -76,6 +77,12 @@ function compatible(s){
 function restore(s){
  if(!compatible(s)){create(s);return;}
  const l=s.living;l.chronicle=Array.isArray(l.chronicle)?l.chronicle.slice(0,16):[];
+ if(!s.bot.life||typeof s.bot.life!=='object')s.bot.life={age:19,occupation:'Wanderer',friends:[],events:[],lastCareerTick:-300};
+ s.bot.life.age=Math.max(19,Math.min(120,Number(s.bot.life.age)||19));
+ s.bot.life.events=Array.isArray(s.bot.life.events)?s.bot.life.events.slice(-10):[];
+ s.bot.life.friends=Array.isArray(s.bot.life.friends)?s.bot.life.friends.slice(0,7).filter(n=>typeof n==='string'):[];
+ s.bot.life.occupation=String(s.bot.life.occupation||'Wanderer').slice(0,32);
+ s.bot.life.lastCareerTick=Number(s.bot.life.lastCareerTick)||-300;
  l.whispers=Array.isArray(l.whispers)?l.whispers.slice(-12):[];
  l.nextWhisper=Number.isInteger(l.nextWhisper)?l.nextWhisper:1;
  const townSeeds={briarford:{x:25,y:21},emberwick:{x:37,y:27}};
@@ -147,6 +154,7 @@ function blueprintFor(t){
 }
 function tick(s){
  if(!s.living||s.tick%12!==0)return;
+ if(s.tick%240===0)advanceLife(s);
  for(const p of s.living.citizens){
   const task=goalFor(s,p);p.activity=task.activity;walk(s,p,task);
   if(s.tick%240<90)work(s,p);
@@ -175,6 +183,28 @@ function tick(s){
    }
   }
  }
+}
+function advanceLife(s){
+ const b=s.bot,life=b.life;
+ if(!life)return;
+ life.age=Math.min(120,life.age+1/12);
+ const careers=[['scouting','Wayfinder'],['lore','Chronicler'],['survival','Forager'],['crafting','Maker'],['combat','Guardian']];
+ const choice=careers.slice().sort((a,c)=>{
+  const bscore=(b.skills[c[0]]||0)+(c[0]==='lore'?b.personality.curiosity*.3:0);
+  const ascore=(b.skills[a[0]]||0)+(a[0]==='lore'?b.personality.curiosity*.3:0);
+  return bscore-ascore;
+ })[0];
+ if(choice&&b.skills[choice[0]]>=3&&choice[1]!==life.occupation&&s.tick-life.lastCareerTick>=240){
+  life.occupation=choice[1];life.lastCareerTick=s.tick;
+  life.events.push({tick:s.tick,text:'Chose to become a '+choice[1]});
+  log(s,'Nim chooses a path','Through '+choice[0]+' experience, Nim chose a life as a '+choice[1]+'.');
+ }
+ for(const p of s.npcs){
+  if(!p.met||p.trust<27||life.friends.includes(p.name))continue;
+  life.friends.push(p.name);life.events.push({tick:s.tick,text:'Became friends with '+p.name});
+  log(s,'A friendship takes root','Nim and '+p.name+' have built trust over repeated encounters.');
+ }
+ life.events=life.events.slice(-10);
 }
 function personTick(s,p){
  if(!s.living||s.tick%12!==0)return false;
