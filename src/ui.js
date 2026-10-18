@@ -102,6 +102,16 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('chapterObjective').textContent=chapter.objective;
  $('chapterProgress').setAttribute('aria-valuenow',String(chapter.stage));
  $('chapterProgressFill').style.width=Math.round(100*chapter.stage/chapter.total)+'%';
+ const chapterTwo=A.roadStatus(s),panelTwo=$('chapterTwoPanel');
+ panelTwo.hidden=!chapterTwo.unlocked;
+ if(chapterTwo.unlocked){
+  $('chapterTwoTitle').textContent=chapterTwo.name.toUpperCase();
+  $('chapterTwoStep').textContent=chapterTwo.completed?'3 / 3 · COMPLETED':
+   (chapterTwo.stage+1)+' / '+chapterTwo.total+' · '+chapterTwo.title;
+  $('chapterTwoObjective').textContent=chapterTwo.objective;
+  $('chapterTwoProgress').setAttribute('aria-valuenow',String(chapterTwo.stage));
+  $('chapterTwoProgressFill').style.width=Math.round(100*chapterTwo.stage/chapterTwo.total)+'%';
+ }
 
  $('events').innerHTML=s.log.slice(0,9).map(e=>`<div class="event ${html(e.type)}"><span class="evt-time">D${1+Math.floor(e.tick/240)}</span><div><strong>${html(e.title)}</strong><small>${html(e.detail)}</small></div></div>`).join('');
  $('powers').querySelectorAll('[data-power]').forEach(el=>{const c=A.COST[el.dataset.power];if(c!==undefined)el.classList.toggle('unaffordable',c>s.faith);});
