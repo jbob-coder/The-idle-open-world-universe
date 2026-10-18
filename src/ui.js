@@ -112,6 +112,17 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
   $('chapterTwoProgress').setAttribute('aria-valuenow',String(chapterTwo.stage));
   $('chapterTwoProgressFill').style.width=Math.round(100*chapterTwo.stage/chapterTwo.total)+'%';
  }
+ const finale=A.finaleStatus(s),finalePanel=$('finalePanel');
+ finalePanel.hidden=!finale.unlocked;
+ finalePanel.classList.toggle('complete',finale.completed);
+ if(finale.unlocked){
+  $('finaleTitle').textContent=finale.name.toUpperCase();
+  $('finaleStep').textContent=finale.completed?'THE END · COMPLETED':
+   (finale.stage+1)+' / '+finale.total+' · '+finale.title;
+  $('finaleObjective').textContent=finale.objective;
+  $('finaleProgress').setAttribute('aria-valuenow',String(finale.stage));
+  $('finaleProgressFill').style.width=Math.round(100*finale.stage/finale.total)+'%';
+ }
 
  $('events').innerHTML=s.log.slice(0,9).map(e=>`<div class="event ${html(e.type)}"><span class="evt-time">D${1+Math.floor(e.tick/240)}</span><div><strong>${html(e.title)}</strong><small>${html(e.detail)}</small></div></div>`).join('');
  $('powers').querySelectorAll('[data-power]').forEach(el=>{const c=A.COST[el.dataset.power];if(c!==undefined)el.classList.toggle('unaffordable',c>s.faith);});

@@ -258,8 +258,77 @@ function chooseRoadJourney(s){
  return false;
 }
 
+/* Final chapter: real Moonwell Fen ruin and a finite autonomous epilogue. */
+const MOONWELL_X=50,MOONWELL_Y=39;
+const FINALE_STEPS=[
+ {title:'The Moonwell Secret',objective:'Nim must find Moonwell Fen and decipher its ancient ruin.',complete:'The Moonwell revealed the kingdom’s last secret.'},
+ {title:'Echoes of the Realm',objective:'Nim must discover Mossveil, Stormstone Ridge and Oathkeeper Grove.',complete:'The wildwood, highlands and sacred grove answered the call.'},
+ {title:'The Last Dawn',objective:'Nim must return to the Moonwell after gathering the echoes.',complete:'Nim awakened the Moonwell and gave the borderlands a new dawn.'}
+];
+function finaleReady(s,i){
+ const known=s.regions&&Array.isArray(s.regions.discovered)?s.regions.discovered:[];
+ if(i===0)return known.includes('R07')&&s.seen[idx(MOONWELL_X,MOONWELL_Y)]===1&&s.map[idx(MOONWELL_X,MOONWELL_Y)]!==T.RUIN;
+ if(i===1)return ['R03','R04','R06'].every(id=>known.includes(id));
+ if(i===2)return !!s.finale&&s.finale.ritualDone===true;
+ return false;
+}
+function freshFinale(){return {version:1,stage:0,completedAt:null,rewarded:false,ritualDone:false};}
+function finaleFromLegacy(s){
+ const f=freshFinale();
+ if(!s.chapterTwo||s.chapterTwo.stage!==ROAD_STEPS.length)return f;
+ // Crediting visited places is safe; v1 games lacked the final Moonwell ritual.
+ while(f.stage<2&&finaleReady(s,f.stage))f.stage++;
+ return f;
+}
+function finaleStatus(s){
+ const f=s.finale||freshFinale(),unlocked=!!s.chapterTwo&&s.chapterTwo.stage===ROAD_STEPS.length;
+ const done=unlocked&&f.stage===FINALE_STEPS.length;
+ const i=done?FINALE_STEPS.length-1:Math.min(f.stage,FINALE_STEPS.length-1);
+ return {id:'chapter-3',name:'Chapter III · The Moonwell Dawn',unlocked,
+  stage:f.stage,total:FINALE_STEPS.length,completed:done,completedAt:f.completedAt,
+  title:!unlocked?'Awaiting the Last Cartographer':done?'A World Reawakened':FINALE_STEPS[i].title,
+  objective:!unlocked?'Complete Chapter II first.':done?'THE END · The world remains alive and Nim continues choosing a life.':FINALE_STEPS[i].objective};
+}
+function advanceFinale(s){
+ const f=s.finale;
+ if(!f||!s.chapterTwo||s.chapterTwo.stage!==ROAD_STEPS.length||f.stage>=FINALE_STEPS.length||!finaleReady(s,f.stage))return false;
+ const i=f.stage++;
+ if(i===FINALE_STEPS.length-1){
+  f.completedAt=s.tick;f.rewarded=true;
+  s.bot.maxHp+=3;s.bot.hp=Math.min(s.bot.maxHp,s.bot.hp+3);
+  s.faith=clamp(s.faith+5,0,50);gain(s,20,'awakening the Moonwell');
+  event(s,'THE END · The Moonwell Dawn','Nim restored the last light of the forgotten kingdom. The living world continues. +3 max health and five Faith.','milestone');
+  remember(s,'Awakened the Moonwell · The End');
+ }else event(s,'Chapter III: '+FINALE_STEPS[i].title,FINALE_STEPS[i].complete,'milestone');
+ return true;
+}
+function chooseFinaleJourney(s){
+ const f=s.finale,b=s.bot;
+ if(!s.chapterTwo||s.chapterTwo.stage!==ROAD_STEPS.length||!f||f.stage>=FINALE_STEPS.length)return false;
+ let path=null;
+ if(f.stage===0){
+  path=findPath(s,(x,y)=>x===MOONWELL_X&&y===MOONWELL_Y);
+  if(path&&path.length){setGoal(s,'Seek Moonwell','The final clue rests in Moonwell Fen.',path);return true;}
+  return false;
+ }
+ if(f.stage===1){
+  const missing=['R03','R04','R06'].find(id=>!s.regions.discovered.includes(id));
+  if(missing)path=findPath(s,(x,y)=>Regions.at(s,x,y).id===missing);
+  if(path&&path.length){setGoal(s,'Gather echoes','The old regions still hold pieces of the oath.',path);return true;}
+  return false;
+ }
+ if(f.stage===2){
+  if(b.x===MOONWELL_X&&b.y===MOONWELL_Y){
+   setGoal(s,'Wake Moonwell','The scattered echoes have returned to their source.');return true;
+  }
+  path=findPath(s,(x,y)=>x===MOONWELL_X&&y===MOONWELL_Y);
+  if(path&&path.length){setGoal(s,'Return to Moonwell','One last journey to the heart of the fen.',path);return true;}
+ }
+ return false;
+}
+
 function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,worldSeed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
- map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],regions:{version:1,discovered:[]},chapter:freshChapter(),chapterTwo:freshRoad(),shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
+ map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],regions:{version:1,discovered:[]},chapter:freshChapter(),chapterTwo:freshRoad(),finale:freshFinale(),shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
  bot:{name:'Nim',x:Math.floor(W/2),y:Math.floor(H/2),level:1,xp:0,hp:24,maxHp:24,hunger:86,energy:83,attack:4,defense:1,food:2,wood:0,stone:0,tool:0,
  goal:'Awakening',thought:'Where am I?',target:null,path:[],actionDelay:0,fights:0,ruins:0,scars:0,steps:0,
  personality:{curiosity:0.68,caution:0.42,diligence:0.57},memory:[]}};
@@ -331,6 +400,7 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(s.guide&&s.guide.ticks>0){const gx=s.guide.x,gy=s.guide.y;if(!walkable(s,gx,gy)){s.guide=null;}else{const p=findPath(s,(x,y)=>x===gx&&y===gy);if(p){setGoal(s,'Follow omen','Something calls to me from afar.',p);return;}s.guide=null;}}
  if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
  if(chooseRoadJourney(s))return;
+ if(chooseFinaleJourney(s))return;
  if(s.map[idx(b.x,b.y)]===T.RUIN){setGoal(s,'Study ruins','I have reached the ancient stones.');return;}
  if(b.hunger>55&&b.energy>55&&Array.isArray(s.shrinesVisited)){
   const route=findPath(s,(x,y,t)=>t===T.SHRINE&&!s.shrinesVisited.includes(idx(x,y)));
@@ -378,6 +448,14 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
   s.faith=clamp(s.faith+4,0,50);
   event(s,'Sacred shrine','Nim studied ancient runes and the god gained four Faith.','milestone');
   remember(s,'Visited shrine '+s.shrinesVisited.length);
+  return;
+ }
+ if(b.goal==='Wake Moonwell'&&s.finale&&s.finale.stage===2&&
+    b.x===MOONWELL_X&&b.y===MOONWELL_Y&&s.chapterTwo&&
+    s.chapterTwo.stage===ROAD_STEPS.length&&finaleReady(s,1)){
+  s.finale.ritualDone=true;b.thought='The old kingdom breathes again.';
+  addMark(s,b.x,b.y,'bless');b.path=[];
+  event(s,'The Moonwell awakens','Nim joined the three old echoes and called the dawn home.','milestone');
   return;
  }
  if(b.path&&b.path.length){const [x,y]=b.path.shift();if(!walkable(s,x,y)){b.path=[];return;}botMove(s,x,y);return;}
@@ -469,6 +547,7 @@ function tick(s){s.tick++;discoverRegion(s,s.bot.x,s.bot.y);revive(s);if(s.tick%
  updatePeople(s);
  advanceChapter(s);
  advanceRoad(s);
+ advanceFinale(s);
  return s;}
 const COST={bless:4,gift:5,bloom:6,guide:3,storm:8,inspire:5};
 function previewPower(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))return {ok:false,why:'Unknown power'};
@@ -516,6 +595,17 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
    completedAt:s.chapterTwo.stage===ROAD_STEPS.length?
      (Number.isInteger(s.chapterTwo.completedAt)&&s.chapterTwo.completedAt>=0&&s.chapterTwo.completedAt<=s.tick?s.chapterTwo.completedAt:s.tick):null,
    rewarded:s.chapterTwo.stage===ROAD_STEPS.length};
+ if(!s.finale||s.finale.version!==1||!Number.isInteger(s.finale.stage)||
+    s.finale.stage<0||s.finale.stage>FINALE_STEPS.length||
+    (s.finale.stage===FINALE_STEPS.length&&s.finale.ritualDone!==true)){
+   s.finale=finaleFromLegacy(s);
+ }else{
+   const stage=s.chapterTwo.stage===ROAD_STEPS.length?s.finale.stage:0;
+   const ritualDone=stage===FINALE_STEPS.length||stage===2&&s.finale.ritualDone===true;
+   s.finale={version:1,stage,ritualDone,completedAt:stage===FINALE_STEPS.length?
+     (Number.isInteger(s.finale.completedAt)&&s.finale.completedAt>=0&&s.finale.completedAt<=s.tick?s.finale.completedAt:s.tick):null,
+     rewarded:stage===FINALE_STEPS.length};
+ }
  s.bot.path=[];s.bot.actionDelay=0;s.marks=[];
   // Persist an explicitly paused world. Accelerated clocks normalize to 1x on reload
   // to avoid surprising background-speed play on low-memory Android devices.
@@ -537,5 +627,5 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
  s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
-return {chapterStatus,roadStatus,regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
+return {chapterStatus,roadStatus,finaleStatus,regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
 });
