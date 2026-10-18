@@ -22,7 +22,10 @@ with sync_playwright() as pw:
     page.evaluate('GodseedDebug.setSpeed(0)')
     old=page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')
     page.evaluate("localStorage.setItem('godseed-one-small-life-v1',GodseedSim.serialize(GodseedDebug.getState()))")
-    page.reload();page.evaluate('GodseedDebug.setSpeed(0)');assert tick()>=stopped
+    page.reload()
+    assert page.evaluate('GodseedDebug.getState().settings.speed')==0,'paused save must stay paused after reload'
+    paused_tick=tick();page.wait_for_timeout(600);assert tick()==paused_tick,'reloading a paused world must not advance time'
+    assert tick()>=stopped
     # A failed persistent import must leave the active world and its old save intact.
     page.on('dialog',lambda d:d.accept())
     page.evaluate('GodseedDebug.setSpeed(0)')
