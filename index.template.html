@@ -105,6 +105,14 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 #finaleObjective{font-size:10px;line-height:1.45;margin:5px 0 0;color:#e1d7ba}
 #finalePanel.complete{border-color:#e8cb83}
 
+/* Living settlements / God messages: compact square-pixel, touch-first controls. */
+#godWhisper{margin-top:12px;border:2px solid #829e87;background:#172b29;padding:12px}
+#godWhisper h2{font-size:15px;color:#ead6a1;margin:0 0 6px}
+#godWhisper .whisper-note,#godFeedback{color:#c6d6cb;font-size:11px;line-height:1.45}
+#godMessage{box-sizing:border-box;display:block;width:100%;min-height:54px;max-height:95px;resize:vertical;background:#102122;color:#e9e5d0;padding:9px;border:2px solid #647a69;font:12px/1.45 monospace;margin:9px 0}
+#godSubmit{min-height:44px;padding:7px 17px;background:#526d58;color:#fff5da;border:2px solid #c7b783}
+#godFeedback{margin-top:9px;white-space:pre-wrap}
+#townStatus,#citizenLives{color:#d0dabc;font-size:10px;line-height:1.55;margin:5px 0}
 </style>
 </head><body><div class="site">
 <header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">A FORGOTTEN KINGDOM LIVES WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ CRÓNICAS DEL REINO OLVIDADO</span></h1><p>Fantasía medieval · Observa una vida. Inspira a un reino.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v1 experimental</span></div></header>
@@ -113,6 +121,14 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 <div class="worldframe"><div class="worldtop"><span>THE FORGOTTEN BORDERLANDS <span style="color:#819f97">/ 64 × 48</span></span><span class="right">WEATHER <b id="weather">CLEAR</b> · <span id="zoomStatus">Panorama · 32 × 20 casillas</span></span></div>
 <canvas id="world" width="512" height="320" aria-label="Low resolution pixel world; click to inspect or use god powers"></canvas>
 <div class="underworld"><span id="coordinates">32,24</span><span><span class="key">CLICK</span> interact with world · <span class="key">F</span> follow</span></div></div></div>
+<section id="godWhisper" aria-label="Write a message to the living world">
+ <h2>GOD'S WHISPER · Your voice, their choices</h2>
+ <p class="whisper-note">Diles qué deseas: «Construyan casas», «Cultiven más comida», «Protejan el pueblo». Los habitantes pueden aceptar, cambiar los planos o negarse. No controlas sus movimientos.</p>
+ <label for="godMessage" class="tiny muted">Your intention to the living world</label>
+ <textarea id="godMessage" maxlength="220" placeholder="Write an intention for the people of this world..."></textarea>
+ <button id="godSubmit" type="button">Whisper to the world</button>
+ <p id="godFeedback" role="status" aria-live="polite">The residents decide whether to listen.</p>
+</section>
 <div class="panel" style="margin-top:14px"><div class="panelhead"><h2>02 / Divine Influence • Omens</h2><span style="font-size:12px;color:#e9cb85">✧ <b id="faith">18</b> FAITH</span></div>
 <div class="powers" id="powers"><div class="tiny muted">Elige un poder y toca el mapa. Inspirar requiere un viajero descubierto; Nim actúa por sí mismo.</div>
 <div class="powers-grid">
@@ -134,7 +150,9 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 <div class="section-title">PERSONALITY / ADAPTATION</div><p class="tiny muted" id="traits"></p>
 <div class="section-title">SKILLS — LEARNED BY DOING</div><div class="memory" id="skillRanks"></div><div class="section-title">TALES &amp; SURVIVAL</div><p class="tiny muted" id="adventures"></p><p class="tiny muted">Current rumor: <strong id="lead">No active legend</strong></p>
 <label class="tiny"><input type="checkbox" id="reduceMotion"> Reduce motion</label><div class="section-title">HABITANTES DEL REINO</div><p class="tiny muted" id="people" aria-live="off">The world is waking…</p>
-  <div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
+  <div class="section-title">GROWING SETTLEMENTS</div><p id="townStatus">The people are establishing their homes.</p>
+ <div class="section-title">LIVES &amp; OCCUPATIONS</div><p id="citizenLives">Residents have begun work.</p>
+ <div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
 <div class="divider"></div><div class="tiny muted" id="milestones"></div><section id="chapterPanel" aria-label="Autonomous story chapter">
  <div id="chapterTitle">CHAPTER I · THE MOSSBOUND OATH</div>
  <div id="chapterStep">1 / 3 — The First Hearth</div>
