@@ -89,6 +89,13 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 #chapterProgress{height:7px;background:#142521;border:1px solid #71826c;overflow:hidden}
 #chapterProgressFill{height:100%;width:0;background:#d3b87c;image-rendering:pixelated;transition:none}
 #chapterObjective{font-size:10px;line-height:1.45;margin:5px 0 0;color:#d9dec8}
+#chapterTwoPanel{margin-top:9px;padding:8px 10px;background:#182b2c;border:2px solid #71958f;border-left:4px solid #70c4b9;color:#eee1bf}
+#chapterTwoPanel[hidden]{display:none}
+#chapterTwoTitle{font-size:11px;font-weight:bold;color:#a6ddd0}
+#chapterTwoStep{font-size:10px;color:#b8cba9;margin:3px 0}
+#chapterTwoProgress{height:7px;background:#102122;border:1px solid #618e87;overflow:hidden}
+#chapterTwoProgressFill{height:100%;width:0;background:#70c4b9;image-rendering:pixelated;transition:none}
+#chapterTwoObjective{font-size:10px;line-height:1.45;margin:5px 0 0;color:#d9dec8}
 
 </style>
 </head><body><div class="site">
@@ -125,6 +132,12 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
  <div id="chapterStep">1 / 3 — The First Hearth</div>
  <div id="chapterProgress" role="progressbar" aria-label="Chapter I progress" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div id="chapterProgressFill"></div></div>
  <p id="chapterObjective">Nim will discover the chapter through autonomous actions.</p>
+ </section>
+ <section id="chapterTwoPanel" hidden aria-label="Autonomous second chapter">
+ <div id="chapterTwoTitle">CHAPTER II · THE LAST CARTOGRAPHER</div>
+ <div id="chapterTwoStep">1 / 3 — The Two Lanterns</div>
+ <div id="chapterTwoProgress" role="progressbar" aria-label="Chapter II progress" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div id="chapterTwoProgressFill"></div></div>
+ <p id="chapterTwoObjective">Nim follows frontier routes without direct control.</p>
  </section>
 </div></div>
 <div class="panel" style="margin-top:14px"><div class="panelhead"><h2>World atlas</h2><span class="tiny muted">Tap to pan</span></div><div class="side-lower"><div class="minigroup"><canvas id="minimap" width="64" height="48" aria-label="Small world map. Tap to pan the camera."></canvas><div class="tiny muted">The dark areas are unknown to Nim. Travelers can be inspected and inspired.<p style="margin:7px 0">Time moves only while the page is open.</p><p style="margin:7px 0">You are observing one life, not controlling it.</p></div></div></div></div>

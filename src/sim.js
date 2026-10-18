@@ -193,8 +193,68 @@ function advanceChapter(s){
  return true;
 }
 
+
+/* Chapter II: autonomous frontier cartography, with once-only, saved progress. */
+const ROAD_STEPS=[
+ {title:'The Two Lanterns',objective:'Nim discovers both Briarford and Emberwick.',complete:'Nim mapped the two frontier hamlets.'},
+ {title:'Crownfall Traces',objective:'Nim reaches Crownfall and studies at least two ruins.',complete:'Crownfall revealed the path of the lost cartographer.'},
+ {title:'The Scholar’s Route',objective:'Nim meets Mera and visits two ancient shrines.',complete:'The scholar and the waystones reveal the last path.'}
+];
+function roadReady(s,i){
+ const d=s.regions&&Array.isArray(s.regions.discovered)?s.regions.discovered:[];
+ return i===0?d.includes('R01')&&d.includes('R02'):
+  i===1?d.includes('R05')&&s.bot.ruins>=2:
+  i===2?s.shrinesVisited.length>=2&&(s.npcs||[]).some(p=>p.name==='Mera'&&p.met):false;
+}
+function freshRoad(){return {version:1,stage:0,completedAt:null,rewarded:false};}
+function roadFromLegacy(s){
+ const q=freshRoad();if(!s.chapter||s.chapter.stage!==3)return q;
+ while(q.stage<ROAD_STEPS.length&&roadReady(s,q.stage))q.stage++;
+ if(q.stage===ROAD_STEPS.length){q.completedAt=s.tick;q.rewarded=true;}
+ return q;
+}
+function roadStatus(s){
+ const q=s.chapterTwo||freshRoad(),unlocked=!!s.chapter&&s.chapter.stage===3;
+ const done=q.stage===ROAD_STEPS.length,i=done?ROAD_STEPS.length-1:q.stage;
+ return {id:'chapter-2',name:'Chapter II · The Last Cartographer',unlocked,
+  stage:q.stage,total:ROAD_STEPS.length,completed:unlocked&&done,completedAt:q.completedAt,
+  title:!unlocked?'Awaiting the Mossbound Oath':done?'The Roads Remember':ROAD_STEPS[i].title,
+  objective:!unlocked?'Complete Chapter I first.':done?'Completed. Nim continues roaming the restored roads.':ROAD_STEPS[i].objective};
+}
+function advanceRoad(s){
+ const q=s.chapterTwo;
+ if(!q||!s.chapter||s.chapter.stage!==3||q.stage===ROAD_STEPS.length||!roadReady(s,q.stage))return false;
+ const i=q.stage++;
+ if(i===ROAD_STEPS.length-1){
+  q.completedAt=s.tick;q.rewarded=true;s.bot.food+=2;s.faith=clamp(s.faith+4,0,50);
+  gain(s,14,'reconstructing the Last Cartographer’s route');
+  event(s,'Chapter II complete','Nim restored the ancient road: two rations and four Faith earned.','milestone');
+  remember(s,'Restored the Last Cartographer’s route');
+ }else event(s,'Chapter II: '+ROAD_STEPS[i].title,ROAD_STEPS[i].complete,'milestone');
+ return true;
+}
+function chooseRoadJourney(s){
+ const q=s.chapterTwo,b=s.bot;
+ if(!s.chapter||s.chapter.stage!==3||!q||q.stage>=ROAD_STEPS.length)return false;
+ const known=s.regions.discovered;let p=null;
+ if(q.stage===0){
+  const target=!known.includes('R01')?'R01':!known.includes('R02')?'R02':null;
+  if(target)p=findPath(s,(x,y)=>Regions.at(s,x,y).id===target);
+ }else if(q.stage===1){
+  if(!known.includes('R05'))p=findPath(s,(x,y)=>Regions.at(s,x,y).id==='R05');
+  else if(b.ruins<2)p=findPath(s,(x,y,t)=>t===T.RUIN);
+ }else if(s.shrinesVisited.length<2){
+  p=findPath(s,(x,y,t)=>t===T.SHRINE&&!s.shrinesVisited.includes(idx(x,y)));
+ }else{
+  const npc=s.npcs.find(n=>n.name==='Mera'&&!n.met);
+  if(npc)p=findPath(s,(x,y)=>Math.abs(x-npc.x)+Math.abs(y-npc.y)<=1);
+ }
+ if(p&&p.length){setGoal(s,'Trace lost road','I can follow the ancient cartographer’s marks.',p);return true;}
+ return false;
+}
+
 function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,worldSeed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
- map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],regions:{version:1,discovered:[]},chapter:freshChapter(),shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
+ map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],regions:{version:1,discovered:[]},chapter:freshChapter(),chapterTwo:freshRoad(),shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
  bot:{name:'Nim',x:Math.floor(W/2),y:Math.floor(H/2),level:1,xp:0,hp:24,maxHp:24,hunger:86,energy:83,attack:4,defense:1,food:2,wood:0,stone:0,tool:0,
  goal:'Awakening',thought:'Where am I?',target:null,path:[],actionDelay:0,fights:0,ruins:0,scars:0,steps:0,
  personality:{curiosity:0.68,caution:0.42,diligence:0.57},memory:[]}};
@@ -255,6 +315,7 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(b.hunger<78&&b.food<3){let p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','I should pack some food.',p);return;}}
  if(s.guide&&s.guide.ticks>0){const gx=s.guide.x,gy=s.guide.y;if(!walkable(s,gx,gy)){s.guide=null;}else{const p=findPath(s,(x,y)=>x===gx&&y===gy);if(p){setGoal(s,'Follow omen','Something calls to me from afar.',p);return;}s.guide=null;}}
  if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
+ if(chooseRoadJourney(s))return;
  if(s.map[idx(b.x,b.y)]===T.RUIN){setGoal(s,'Study ruins','I have reached the ancient stones.');return;}
  if(b.hunger>55&&b.energy>55&&Array.isArray(s.shrinesVisited)){
   const route=findPath(s,(x,y,t)=>t===T.SHRINE&&!s.shrinesVisited.includes(idx(x,y)));
@@ -392,6 +453,7 @@ function tick(s){s.tick++;discoverRegion(s,s.bot.x,s.bot.y);revive(s);if(s.tick%
  if(s.tick%2===0){plan(s);botAct(s);updateEnemies(s);}
  updatePeople(s);
  advanceChapter(s);
+ advanceRoad(s);
  return s;}
 const COST={bless:4,gift:5,bloom:6,guide:3,storm:8,inspire:5};
 function previewPower(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))return {ok:false,why:'Unknown power'};
@@ -431,6 +493,14 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
     (Number.isInteger(s.chapter.completedAt)&&s.chapter.completedAt>=0&&s.chapter.completedAt<=s.tick?s.chapter.completedAt:s.tick):null,
     rewarded:s.chapter.stage===CHAPTER_STEPS.length};
  }
+ // V1 migration: count prior achievements, but never mint retroactive rewards.
+ if(!s.chapterTwo||s.chapterTwo.version!==1||!Number.isInteger(s.chapterTwo.stage)||
+    s.chapterTwo.stage<0||s.chapterTwo.stage>ROAD_STEPS.length){
+   s.chapterTwo=roadFromLegacy(s);
+ }else s.chapterTwo={version:1,stage:s.chapterTwo.stage,
+   completedAt:s.chapterTwo.stage===ROAD_STEPS.length?
+     (Number.isInteger(s.chapterTwo.completedAt)&&s.chapterTwo.completedAt>=0&&s.chapterTwo.completedAt<=s.tick?s.chapterTwo.completedAt:s.tick):null,
+   rewarded:s.chapterTwo.stage===ROAD_STEPS.length};
  s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
  progress(s.bot);
  // Migration: v0.1/v0.2 saves had no inhabitants. Keep old save schema intact.
@@ -449,5 +519,5 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
  s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
-return {chapterStatus,regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
+return {chapterStatus,roadStatus,regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
 });
