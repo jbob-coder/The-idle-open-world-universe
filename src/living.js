@@ -53,7 +53,10 @@ function create(s){
  ];
  const living={version:1,towns,citizens:[],chronicle:[],whispers:[],nextWhisper:1};
  s.living=living;
- for(const t of towns){build(s,t,'house',true);build(s,t,'farm',true);}
+ for(const t of towns){build(s,t,'house',true);build(s,t,'farm',true);
+  // The god can see populated hamlet centers; Nim's region milestones still require a visit.
+  for(let dy=-3;dy<=3;dy++)for(let dx=-3;dx<=3;dx++)if(t.x+dx>=0&&t.x+dx<W&&t.y+dy>=0&&t.y+dy<H)s.seen[(t.y+dy)*W+t.x+dx]=1;
+ }
  const identities=[
   ['Elin','Builder','briarford',.80,.46,.62],
   ['Rowan','Forager','briarford',.66,.78,.35],
@@ -121,7 +124,8 @@ function walk(s,p,goal){
 }
 function work(s,p){
  const t=townOf(s,p.townId);if(!t)return;
- let gainType=p.role==='Farmer'||p.role==='Forager'?'food':p.role==='Mason'?'stone':'wood';
+ let gainType=t.stock.food<5?'food':t.stock.wood<6?'wood':t.stock.stone<6?'stone':
+  p.role==='Farmer'||p.role==='Forager'?'food':p.role==='Mason'?'stone':'wood';
  t.stock[gainType]=Math.min(999,t.stock[gainType]+1+(p.skill>=4&&s.tick%48===0?1:0));
  p.skillXP++;p.actions++;
  if(p.skillXP>=12+p.skill*4&&p.skill<12){p.skillXP=0;p.skill++;p.life.push('Became a level '+p.skill+' '+p.role);p.life=p.life.slice(-6);log(s,p.name+' improves at '+p.role,p.name+' learned by working, not by combat.');}
@@ -151,6 +155,11 @@ function tick(s){
   if(s.tick%240<90)work(s,p);
   if(s.tick%240===0){p.age+=1/12;p.mood=p.actions%5===0?'content':'calm';}
  }
+ // Villages exchange surplus instead of waiting forever for absent professions.
+ if(s.tick%120===0){const [west,east]=s.living.towns;
+  if(west.stock.wood>=8&&east.stock.stone>=8){west.stock.wood-=3;east.stock.wood+=3;east.stock.stone-=3;west.stock.stone+=3;
+   if(s.tick%480===0)log(s,'Trading caravan','Briarford timber and Emberwick stone crossed the old road.');}
+ }
  for(const t of s.living.towns){
   t.stock.food=Math.max(0,t.stock.food-Math.max(1,Math.floor(s.living.citizens.filter(p=>p.townId===t.id).length/2))*(s.tick%96===0?1:0));
   if(s.tick<t.nextBuild)continue;
@@ -174,12 +183,13 @@ function personTick(s,p){
  return true;
 }
 const COMMANDS=[
- {intent:'housing',re:/\b(hous(?:e|ing)|shelter|home|build|construct|casas?|construir|viviendas?|edificios?)\b/i,label:'build homes'},
+ {intent:'housing',re:/\b(hous(?:e|ing)|shelter|home|casas?|viviendas?|edificios?)\b/i,label:'build homes'},
  {intent:'food',re:/\b(farm|crop|food|harvest|grain|cultivar|granja|comida|agricultur|alimento|cosecha)\w*/i,label:'grow food'},
  {intent:'defense',re:/\b(defend|protect|guard|wolves|wolf|wall|defender|proteger|lobos?|vigil|muralla)\w*/i,label:'protect residents'},
  {intent:'craft',re:/\b(craft|tool|workshop|smith|invent|forge|herramient|taller|forja|investig)\w*/i,label:'develop crafts'},
  {intent:'trade',re:/\b(trade|market|commerce|exchange|mercado|comercio|intercambi)\w*/i,label:'develop trade'},
  {intent:'explore',re:/\b(explore|travel|discover|journey|wander|explorar|viajar|descubri|aventura)\w*/i,label:'explore freely'},
+ {intent:'housing',re:/\b(build|construct|construir)\w*/i,label:'build homes'},
  {intent:'rest',re:/\b(rest|sleep|recover|descansa|dormir|dorm|repos|curar)\w*/i,label:'rest'}
 ];
 function interpret(message){
