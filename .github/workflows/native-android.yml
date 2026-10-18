@@ -5,6 +5,14 @@ on:
       - feat/godseed-android-storage-host
   pull_request:
     paths:
+      # The native APK embeds the built offline simulator and pixel atlases.
+      # Gameplay-only changes must also exercise the actual Gradle/WebView host.
+      - 'src/**'
+      - 'data/**'
+      - 'assets/generated/**'
+      - 'assets/asset-manifest.json'
+      - 'build.py'
+      - 'scripts/generate_starter_assets.mjs'
       - 'android/gradle/**'
       - 'tests/native/**'
       - 'assets/packs/**'

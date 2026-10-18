@@ -126,3 +126,33 @@ test('Chapter II can conclude in a long fully autonomous seeded playthrough',()=
   ' shrines='+s.shrinesVisited.length+' mera='+s.npcs.find(p=>p.name==='Mera').met);
  assert.ok(S.restore(S.serialize(s)));
 });
+
+test('Legacy save with incomplete shrine metadata restores after the first two cartography goals',()=>{
+ const s=S.create(41);completedFirst(s);
+ s.regions.discovered=['R00','R01','R02','R05'];s.bot.ruins=2;
+ delete s.chapterTwo;delete s.shrinesVisited;
+ const restored=S.restore(S.serialize(s));
+ assert.ok(restored,'Missing optional shrine metadata must not discard the saved world');
+ assert.deepEqual(restored.shrinesVisited,[]);
+ assert.equal(S.roadStatus(restored).stage,2);
+ S.tick(restored);
+ assert.equal(S.roadStatus(restored).completed,false);
+});
+
+test('Chapter II requires two distinct real shrines and sanitizes legacy visit evidence',()=>{
+ const s=S.create(41);advanceToSecondFinal(s);
+ s.npcs.find(p=>p.name==='Mera').met=true;
+ const first=S.idx(20,31),second=S.idx(42,19),notAShrine=S.idx(32,24);
+ assert.equal(s.map[first],S.T.SHRINE);assert.equal(s.map[second],S.T.SHRINE);
+ assert.notEqual(s.map[notAShrine],S.T.SHRINE);
+ s.shrinesVisited=[first,first,notAShrine,-1,'invalid'];
+ S.tick(s);
+ assert.equal(S.roadStatus(s).stage,2,'Duplicate and invented visits cannot finish the chapter');
+ const loaded=S.restore(S.serialize(s));
+ assert.ok(loaded);
+ assert.deepEqual(loaded.shrinesVisited,[first]);
+ assert.equal(S.roadStatus(loaded).completed,false);
+ loaded.shrinesVisited.push(second);
+ S.tick(loaded);
+ assert.equal(S.roadStatus(loaded).completed,true,'A second distinct real shrine completes the chapter');
+});
