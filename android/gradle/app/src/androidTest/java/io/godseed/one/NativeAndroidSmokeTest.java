@@ -162,6 +162,55 @@ public class NativeAndroidSmokeTest {
         }
     }
 
+
+    /**
+     * Real Android WebView persistence regression. Saving a deterministic Nim
+     * world in the Gradle host must survive Activity/WebView recreation.
+     * This test deliberately does not use the browser mock bridge.
+     */
+    @Test public void saveRestoresAcrossNativeActivityRecreation() throws Exception {
+        try (ActivityScenario<MainActivity> activity = ActivityScenario.launch(MainActivity.class)) {
+            boolean ready = false;
+            for (int i = 0; i < 30; i++) {
+                String value = evaluate(activity,
+                    "typeof window.GodseedDebug==='object' && document.readyState==='complete'");
+                if ("true".equals(value)) { ready = true; break; }
+                Thread.sleep(500);
+            }
+            assertTrue("Game JavaScript not ready", ready);
+            String before = evaluate(activity,
+                "(function(){GodseedDebug.newWorld(9817);GodseedDebug.setSpeed(0);" +
+                "GodseedDebug.step(13);document.getElementById('save').click();" +
+                "return JSON.parse(localStorage.getItem('godseed-one-small-life-v1')).tick;})()");
+            assertEquals("13", before);
+            activity.recreate();
+            boolean restored = false;
+            for (int i = 0; i < 30; i++) {
+                String value = evaluate(activity,
+                    "typeof window.GodseedDebug==='object' ? GodseedDebug.getState().tick : -1");
+                if ("13".equals(value)) { restored = true; break; }
+                Thread.sleep(500);
+            }
+            assertTrue("Saved world tick not restored after native Activity recreation", restored);
+        }
+    }
+
+    private static String evaluate(ActivityScenario<MainActivity> activity, String js)
+            throws InterruptedException {
+        CountDownLatch done = new CountDownLatch(1);
+        final String[] response = {null};
+        activity.onActivity(a -> {
+            WebView web = findWebView(a.findViewById(android.R.id.content));
+            assertNotNull(web);
+            web.evaluateJavascript(js, result -> {
+                response[0] = result;
+                done.countDown();
+            });
+        });
+        assertTrue("Native WebView evaluateJavascript timeout", done.await(15, TimeUnit.SECONDS));
+        return response[0];
+    }
+
     private static WebView findWebView(View view) {
         if (view instanceof WebView) return (WebView) view;
         if (!(view instanceof ViewGroup)) return null;
