@@ -107,9 +107,12 @@ function goalFor(s,p){
  if(phase>=185)return {x:p.homeX,y:p.homeY,activity:'Resting at home'};
  if(phase>=140)return {x:t.x,y:t.y,activity:'Sharing evening stories'};
  if(phase>=90)return {x:t.x+(p.id%3)-1,y:t.y+1,activity:'Talking to neighbors'};
- if(p.role==='Builder'||p.role==='Mason')return {x:t.x+2,y:t.y,activity:'Working on the settlement'};
- if(p.role==='Farmer')return {x:t.x-2,y:t.y+1,activity:'Tending fields'};
- return {x:t.x-3,y:t.y,activity:'Gathering supplies'};
+ // Occupations refer to REAL installed structures instead of abstract offsets.
+ const workType=p.role==='Farmer'||p.role==='Forager'?'farm':p.role==='Mason'?'workshop':'house';
+ const building=t.buildings.find(b=>b.type===workType)||t.buildings[0];
+ return {x:building?building.x:t.x,y:building?building.y:t.y,
+  activity:p.role==='Farmer'?'Tending fields':p.role==='Forager'?'Foraging near the farms':
+   p.role==='Mason'?'Working at the workshop':'Building and maintaining homes'};
 }
 function walk(s,p,goal){
  if(!goal)return;
@@ -128,6 +131,9 @@ function walk(s,p,goal){
 }
 function work(s,p){
  const t=townOf(s,p.townId);if(!t)return;
+ // Supplies are earned only by people who actually arrived at their work sites.
+ const workspace=goalFor(s,p);
+ if(distance(p.x,p.y,workspace.x,workspace.y)>2)return;
  let gainType=t.stock.food<5?'food':t.stock.wood<6?'wood':t.stock.stone<6?'stone':
   p.role==='Farmer'||p.role==='Forager'?'food':p.role==='Mason'?'stone':'wood';
  t.stock[gainType]=Math.min(999,t.stock[gainType]+1+(p.skill>=4&&s.tick%48===0?1:0));
