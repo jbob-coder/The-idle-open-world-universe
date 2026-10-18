@@ -95,6 +95,14 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('milestones').title=(s.shrinesVisited||[]).length+' santuarios antiguos visitados';
  $('memory').textContent=b.memory.length?b.memory.slice(-4).reverse().join('  •  '):'Learning about the world…';
  $('milestones').textContent=`${b.steps} steps · ${b.fights} wins · ${b.ruins} ruins · ${b.scars} second chances`;
+
+ const chapter=A.chapterStatus(s);
+ $('chapterTitle').textContent=chapter.name.toUpperCase();
+ $('chapterStep').textContent=chapter.completed?'3 / 3 · COMPLETED':(chapter.stage+1)+' / '+chapter.total+' · '+chapter.title;
+ $('chapterObjective').textContent=chapter.objective;
+ $('chapterProgress').setAttribute('aria-valuenow',String(chapter.stage));
+ $('chapterProgressFill').style.width=Math.round(100*chapter.stage/chapter.total)+'%';
+
  $('events').innerHTML=s.log.slice(0,9).map(e=>`<div class="event ${html(e.type)}"><span class="evt-time">D${1+Math.floor(e.tick/240)}</span><div><strong>${html(e.title)}</strong><small>${html(e.detail)}</small></div></div>`).join('');
  $('powers').querySelectorAll('[data-power]').forEach(el=>{const c=A.COST[el.dataset.power];if(c!==undefined)el.classList.toggle('unaffordable',c>s.faith);});
  document.querySelectorAll('[data-speed]').forEach(el=>{const n=Number(el.dataset.speed);el.classList.toggle('active',s.settings.speed===n);el.setAttribute('aria-pressed',String(s.settings.speed===n));});
