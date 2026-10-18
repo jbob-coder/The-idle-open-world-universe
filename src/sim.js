@@ -516,7 +516,10 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
    completedAt:s.chapterTwo.stage===ROAD_STEPS.length?
      (Number.isInteger(s.chapterTwo.completedAt)&&s.chapterTwo.completedAt>=0&&s.chapterTwo.completedAt<=s.tick?s.chapterTwo.completedAt:s.tick):null,
    rewarded:s.chapterTwo.stage===ROAD_STEPS.length};
- s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
+ s.bot.path=[];s.bot.actionDelay=0;s.marks=[];
+  // Persist an explicitly paused world. Accelerated clocks normalize to 1x on reload
+  // to avoid surprising background-speed play on low-memory Android devices.
+  s.settings={speed:s.settings&&s.settings.speed===0?0:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
  progress(s.bot);
  // Migration: v0.1/v0.2 saves had no inhabitants. Keep old save schema intact.
  s.npcs=Array.isArray(s.npcs)?s.npcs.slice(0,3):initPeople(s);
