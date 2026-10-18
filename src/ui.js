@@ -162,7 +162,7 @@ document.querySelectorAll('[data-speed]').forEach(b=>b.addEventListener('click',
 $('follow').addEventListener('click',()=>{s.settings.follow=!s.settings.follow;hud();draw();});
 $('zoom').addEventListener('click',()=>{setZoom(zoomIndex+1);hud();draw();notify('Cámara '+ZOOMS[zoomIndex].name+' · Nim sigue actuando solo.');});
 $('zoomDock').addEventListener('click',()=>$('zoom').click());
-$('save').addEventListener('click',()=>{save();notify('World saved.');});$('export').addEventListener('click',()=>backupDialog('export'));
+$('save').addEventListener('click',()=>{notify(save()?'World saved.':'Save failed. Export a backup.');});$('export').addEventListener('click',()=>backupDialog('export'));
 $('import').addEventListener('click',()=>backupDialog('import'));$('importFile').addEventListener('change',e=>{importSave(e.target.files[0]);e.target.value='';});
 $('reset').addEventListener('click',()=>{confirmAction('Create a new world? Export a backup first to keep current progress.',()=>{const next=A.create((Date.now()>>>0)^Math.floor(Math.random()*10000000));if(!commitRestored(next))return;hud();draw();notify('A new life begins.');});});
 $('step').addEventListener('click',()=>{A.tick(s);hud();draw();});
