@@ -184,7 +184,7 @@ function personTick(s,p){
  const t=(p.name==='Ira'?s.living.towns[1]:s.living.towns[0]);
  const phase=s.tick%240;
  let target={x:p.homeX,y:p.homeY};
- if(phase>55&&phase<166){target=p.role==='Rune Scholar'?{x:31,y:7}:p.role==='Apothecary'?{x:t.x-1,y:t.y+1}:{x:t.x+2,y:t.y};}
+ if(phase>55&&phase<166){target=p.role==='Rune Scholar'?{x:p.homeX-2,y:p.homeY+1}:p.role==='Apothecary'?{x:t.x-1,y:t.y+1}:{x:t.x+2,y:t.y};}
  if(phase>=166&&phase<205)target={x:t.x,y:t.y};
  walk(s,p,target);
  p.activity=phase>=205||phase<55?'Sleeping at home':phase>=166?'Discussing the day':
