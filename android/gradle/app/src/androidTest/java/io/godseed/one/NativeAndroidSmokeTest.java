@@ -184,15 +184,14 @@ public class NativeAndroidSmokeTest {
                 "return JSON.parse(localStorage.getItem('godseed-one-small-life-v1')).tick;})()");
             assertEquals("13", before);
             activity.recreate();
-            // Restore deliberately resumes at speed 1, so the simulation may
-            // advance beyond tick 13 before the first instrumentation callback.
-            // Stop it and verify the saved world identity plus monotonic progress.
+            // A paused save must stay paused after Activity recreation.
+            // Validate world identity and progress without mutating playback speed.
             boolean restored = false;
             for (int i = 0; i < 30; i++) {
                 String value = evaluate(activity,
                     "(function(){if(typeof window.GodseedDebug!=='object')return false;" +
-                    "GodseedDebug.setSpeed(0);var world=GodseedDebug.getState();" +
-                    "return world.worldSeed===9817 && world.tick>=13;})()");
+                    "var world=GodseedDebug.getState();" +
+                    "return world.worldSeed===9817 && world.tick>=13 && world.settings.speed===0;})()");
                 if ("true".equals(value)) { restored = true; break; }
                 Thread.sleep(500);
             }
@@ -239,8 +238,8 @@ public class NativeAndroidSmokeTest {
             for (int i = 0; i < 30; i++) {
                 String recoveredWorld = evaluate(next,
                     "(function(){if(typeof window.GodseedDebug!=='object')return false;" +
-                    "GodseedDebug.setSpeed(0);var world=GodseedDebug.getState();" +
-                    "return world.worldSeed===17017 && world.tick>=23;})()");
+                    "var world=GodseedDebug.getState();" +
+                    "return world.worldSeed===17017 && world.tick>=23 && world.settings.speed===0;})()");
                 if ("true".equals(recoveredWorld)) {
                     recovered = true;
                     break;
