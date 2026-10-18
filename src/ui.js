@@ -31,16 +31,17 @@ const colors=['#3c5c43','#254b3a','#26536a','#62635e','#426c49','#837458','#688b
 const hash=(x,y)=>((Math.imul(x+91,374761393)^Math.imul(y+37,668265263))>>>0);
 function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
 function dot(x,y,c){rect(x,y,1,1,c);}
-const assets=window.GodseedAssets,terrain=window.GodseedTerrain,visualFx=window.GodseedFX.create();
+const assets=window.GodseedAssets,terrain=window.GodseedTerrain,visualFx=window.GodseedFX.create(),Living=window.GodseedLiving;
 const motionQuery=window.matchMedia('(prefers-reduced-motion: reduce)');let reducedMotion=motionQuery.matches;
 $('reduceMotion').checked=reducedMotion;$('reduceMotion').addEventListener('change',e=>{reducedMotion=e.target.checked;if(s.settings.speed===0)draw();});
 assets.loaded.then(()=>{document.querySelectorAll('[data-power]').forEach(button=>{const slot=button.querySelector('.ico,.power-icon');if(!slot)return;slot.textContent='';const c=document.createElement('canvas');c.width=c.height=16;c.className='power-pixel';c.setAttribute('aria-hidden','true');slot.appendChild(c);const f=assets.manifest.atlases[2].symbols.find(f=>f.name===button.dataset.power);if(f)assets.blit(c.getContext('2d'),2,f.rect,0,0);});const portrait=$('portrait');const f=assets.manifest.atlases[1].frames[0];assets.blit(portrait.getContext('2d'),1,f.rect,0,0);oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
+function godSeesTown(x,y){return !!s.living&&s.living.towns.some(t=>Math.abs(t.x-x)<=3&&Math.abs(t.y-y)<=3);}
 function drawTile(tile,x,y,wx,wy){if(assets.ready)terrain.draw(ctx,assets,s,tile,x,y,wx,wy);else rect(x,y,16,16,'#152723');}
 function updateScenery(){
  let changed=camX!==sceneX||camY!==sceneY,k=0;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
   const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy);
-  const tile=s.seen[n]?(s.map[n]+1)*32+((s.map[n]===8||s.map[n]===2)?terrain.mask(s,wx,wy,s.map[n]):0):0;
+  const tile=(s.seen[n]||godSeesTown(wx,wy))?(s.map[n]+1)*32+((s.map[n]===8||s.map[n]===2)?terrain.mask(s,wx,wy,s.map[n]):0):0;
   if(oldCells[k]!==tile){oldCells[k]=tile;changed=true;}k++;
  }
  if(!changed)return;
@@ -48,7 +49,7 @@ function updateScenery(){
  ctx=sceneryCtx;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
   const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy),x=rx*size,y=ry*size;
-  if(!s.seen[n]){rect(x,y,size,size,'#11191A');continue;}
+  if(!s.seen[n]&&!godSeesTown(wx,wy)){rect(x,y,size,size,'#11191A');continue;}
   drawTile(s.map[n],x,y,wx,wy);
 
  }
@@ -57,17 +58,23 @@ function updateScenery(){
 function positionCamera(){if(s.settings.follow){camX=Math.max(0,Math.min(A.W-VW,s.bot.x-(VW>>1)));camY=Math.max(0,Math.min(A.H-VH,s.bot.y-(VH>>1)));}}
 function draw(){screenRedraws++;positionCamera();const b=s.bot;updateScenery();
  ctx.drawImage(scenery,0,0);
+ // Physical settlements are persistent Canvas actors, not symbolic village tiles.
+ if(s.living)for(const town of s.living.towns)for(const building of town.buildings){
+  if(building.x>=camX&&building.x<camX+VW&&building.y>=camY&&building.y<camY+VH&&godSeesTown(building.x,building.y)){
+   Living.drawBuilding(ctx,building,(building.x-camX)*16,(building.y-camY)*16);
+  }
+ }
  if((s.tick%240)>172||(s.tick%240)<42)rect(0,0,canvas.width,canvas.height,'rgba(8,23,38,.18)');
  if(s.weather==='rain'&&!reducedMotion){
   for(let i=0;i<35;i++){const x=(i*97+s.tick*3)%canvas.width,y=(i*71+s.tick*5)%canvas.height;
    rect(x,y,1,4,'rgba(172,201,205,.36)');}
  }
  if(s.guide&&s.guide.x>=camX&&s.guide.x<camX+VW&&s.guide.y>=camY&&s.guide.y<camY+VH){const x=(s.guide.x-camX)*16,y=(s.guide.y-camY)*16;rect(x,y,16,1,'#e4d386');rect(x,y+15,16,1,'#e4d386');rect(x,y,1,16,'#e4d386');rect(x+15,y,1,16,'#e4d386');}
- const actors=window.GodseedActors.sorted([...(s.npcs||[]),...s.enemies,b]);
- for(const actor of actors){if(actor.x<camX||actor.x>=camX+VW||actor.y<camY||actor.y>=camY+VH||!s.seen[A.idx(actor.x,actor.y)])continue;
+ const actors=window.GodseedActors.sorted([...(s.npcs||[]),...(s.living?s.living.citizens:[]),...s.enemies,b]);
+ for(const actor of actors){if(actor.x<camX||actor.x>=camX+VW||actor.y<camY||actor.y>=camY+VH||(!s.seen[A.idx(actor.x,actor.y)]&&!godSeesTown(actor.x,actor.y)))continue;
   const px=(actor.x-camX)*16,py=(actor.y-camY)*16;
   if(actor===b){rect(px+1,py+15,14,1,'#EFCB76');}
-  window.GodseedActors.draw(ctx,assets,actor,s.tick,px,py);
+  if(s.living&&s.living.citizens.includes(actor))Living.drawCitizen(ctx,actor,px,py,s.tick);else window.GodseedActors.draw(ctx,assets,actor,s.tick,px,py);
   if(actor===b){ctx.fillStyle='#EAE3C1';ctx.font='bold 8px monospace';ctx.textAlign='center';ctx.fillText('NIM',px+8,py-10);ctx.textAlign='start';}
  }
  visualFx.sync(s,performance.now());visualFx.draw(ctx,assets,{x:camX,y:camY,width:VW,height:VH},performance.now(),reducedMotion);
@@ -91,7 +98,18 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('skillRanks').textContent=A.SKILLS.map(k=>k.toUpperCase().slice(0,3)+' '+b.skills[k]).join(' · ');
  $('adventures').textContent=`${s.story.completed} rumors solved · ${s.story.clues.filter(q=>!q.solved).length} leads · ${b.tactics.dodge} dodges · ${b.tactics.parry} parries · ${b.tactics.trapsAvoided} traps avoided`;
  $('lead').textContent=(s.story.clues.find(q=>!q.solved)||{}).title||'No active legend';
- $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · '+(p.activity||'Patrullando')+' · Confianza '+Math.round(p.trust)).join('  •  ')||'Sin viajeros todavía';
+ $('people').textContent=(s.npcs||[]).map(p=>p.name+' · '+p.role+' · '+p.mood+' · '+(p.activity||'Patrullando')).join('  •  ')||'No travelers yet';
+ if(s.living){
+  const life=s.bot.life;
+  if(life){$('lifeStatus').textContent='Age '+life.age.toFixed(1)+' · '+life.occupation+' · Friends: '+(life.friends.join(', ')||'Still meeting people');
+    $('lifeTimeline').textContent=life.events.slice(-4).map(e=>'Day '+(1+Math.floor(e.tick/240))+': '+e.text).join(' • ');
+  }
+  $('townStatus').textContent=s.living.towns.map(t=>t.name+' · '+t.age+' / '+(t.technology?t.technology.era:'Founding Age')+' · '+t.buildings.length+' buildings · '+t.stock.food+' food · '+t.stock.wood+' wood · '+t.stock.stone+' stone').join(' | ');
+  $('citizenLives').textContent=s.living.citizens.map(p=>p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity).join(' • ');
+  const recent=s.living.whispers[s.living.whispers.length-1];
+  $('godFeedback').textContent=recent?('Interpreted as: '+recent.label+'. '+recent.decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join('; ')+(recent.nimAgree?'; Nim is considering it.':'')):'Speak your intention; residents decide how to respond.';
+ }
+
  $('milestones').title=(s.shrinesVisited||[]).length+' santuarios antiguos visitados';
  $('memory').textContent=b.memory.length?b.memory.slice(-4).reverse().join('  •  '):'Learning about the world…';
  $('milestones').textContent=`${b.steps} steps · ${b.fights} wins · ${b.ruins} ruins · ${b.scars} second chances`;
@@ -173,7 +191,13 @@ document.querySelectorAll('[data-speed]').forEach(b=>b.addEventListener('click',
 $('follow').addEventListener('click',()=>{s.settings.follow=!s.settings.follow;hud();draw();});
 $('zoom').addEventListener('click',()=>{setZoom(zoomIndex+1);hud();draw();notify('Cámara '+ZOOMS[zoomIndex].name+' · Nim sigue actuando solo.');});
 $('zoomDock').addEventListener('click',()=>$('zoom').click());
-$('save').addEventListener('click',()=>{notify(save()?'World saved.':'Save failed. Export a backup.');});$('export').addEventListener('click',()=>backupDialog('export'));
+$('godSubmit').addEventListener('click',()=>{
+  const field=$('godMessage'),result=A.whisper(s,field.value);
+  if(!result.ok){$('godFeedback').textContent=result.reason;notify(result.reason);return;}
+  field.value='';hud();draw();save();notify('The world heard your whisper. The residents decide.');
+ });
+ $('godMessage').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('godSubmit').click();}});
+ $('save').addEventListener('click',()=>{notify(save()?'World saved.':'Save failed. Export a backup.');});$('export').addEventListener('click',()=>backupDialog('export'));
 $('import').addEventListener('click',()=>backupDialog('import'));$('importFile').addEventListener('change',e=>{importSave(e.target.files[0]);e.target.value='';});
 $('reset').addEventListener('click',()=>{confirmAction('Create a new world? Export a backup first to keep current progress.',()=>{const next=A.create((Date.now()>>>0)^Math.floor(Math.random()*10000000));if(!commitRestored(next))return;hud();draw();notify('A new life begins.');});});
 $('step').addEventListener('click',()=>{A.tick(s);hud();draw();});
