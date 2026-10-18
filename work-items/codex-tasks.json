@@ -348,10 +348,16 @@
       "id": "E01",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "done",
       "title": "Compact HUD and touch safe areas",
       "acceptance": "No lost buttons or unreadable NPC info at 640x360.  Android HUD must be visually pixel-square (solid borders and icons), still readable and touch-accessible at 640\u00d7360.",
-      "evidence": [],
+      "evidence": [
+        "tests/mobile_acceptance.py",
+        "tests/lifecycle_acceptance.py",
+        "tests/test_android_package.py",
+        "dist/manifest.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -359,10 +365,16 @@
       "id": "E02",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "done",
       "title": "Run browser smoke, save roundtrip and 10k ticks",
       "acceptance": "All tests green, no offline network needed.",
-      "evidence": [],
+      "evidence": [
+        "tests/mobile_acceptance.py",
+        "tests/lifecycle_acceptance.py",
+        "tests/test_android_package.py",
+        "dist/manifest.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "E01"
       ],
@@ -372,10 +384,16 @@
       "id": "E03",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "done",
       "title": "Build and verify v1 experimental debug APK",
       "acceptance": "Signed ZIP manifest structurally valid; no keystore leaks.",
-      "evidence": [],
+      "evidence": [
+        "tests/mobile_acceptance.py",
+        "tests/lifecycle_acceptance.py",
+        "tests/test_android_package.py",
+        "dist/manifest.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "E02"
       ],
@@ -385,10 +403,12 @@
       "id": "E04",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "blocked",
       "title": "Collect physical Android evidence when device available",
       "acceptance": "FPS, memory, 20min session; mark BLOCKED otherwise. Required device targets are phones with 2GB and 3GB total RAM; measure actual game/WebView resident PSS/RSS vs preferred 128-192 MiB and soft 256 MiB cap. Record device model/OS/FPS, 20-minute autoplay, or mark hardware unavailable.",
-      "evidence": [],
+      "evidence": [
+        "No attached physical Android device or emulator; PSS/RSS/FPS and install/launch NOT VERIFIED."
+      ],
       "dependencies": [
         "E03"
       ],

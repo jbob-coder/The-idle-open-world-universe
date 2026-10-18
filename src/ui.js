@@ -34,7 +34,7 @@ function dot(x,y,c){rect(x,y,1,1,c);}
 const assets=window.GodseedAssets,terrain=window.GodseedTerrain,visualFx=window.GodseedFX.create();
 const motionQuery=window.matchMedia('(prefers-reduced-motion: reduce)');let reducedMotion=motionQuery.matches;
 $('reduceMotion').checked=reducedMotion;$('reduceMotion').addEventListener('change',e=>{reducedMotion=e.target.checked;});
-assets.loaded.then(()=>{oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
+assets.loaded.then(()=>{document.querySelectorAll('[data-power]').forEach(button=>{const slot=button.querySelector('.ico,.power-icon');if(!slot)return;slot.textContent='';const c=document.createElement('canvas');c.width=c.height=16;c.className='power-pixel';c.setAttribute('aria-hidden','true');slot.appendChild(c);const f=assets.manifest.atlases[2].symbols.find(f=>f.name===button.dataset.power);if(f)assets.blit(c.getContext('2d'),2,f.rect,0,0);});const portrait=$('portrait');const f=assets.manifest.atlases[1].frames[0];assets.blit(portrait.getContext('2d'),1,f.rect,0,0);oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
 function drawTile(tile,x,y,wx,wy){if(assets.ready)terrain.draw(ctx,assets,s,tile,x,y,wx,wy);else rect(x,y,16,16,'#152723');}
 function updateScenery(){
  let changed=camX!==sceneX||camY!==sceneY,k=0;
@@ -86,7 +86,7 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('clock').textContent=stamp(s);$('weather').textContent=s.weather.toUpperCase()+' · '+({R03:'WOODLAND',R04:'RIDGE WINDS',R06:'SACRED GROVE',R07:'FEN MIST'}[A.regionAt(s,b.x,b.y).id]||'BORDERLANDS');$('faith').textContent=s.faith;$('heroName').textContent=b.name;$('level').textContent=`LEVEL ${b.level}`;
  $('statbars').innerHTML=bar('Health',b.hp,b.maxHp)+bar('Hunger',b.hunger)+bar('Energy',b.energy)+bar('Experience',b.xp,xpNeed);
  $('goal').textContent=goal;$('thought').textContent='“'+b.thought+'”';
- $('inventory').innerHTML=`<span>🍎 Food <b>${b.food}</b></span><span>▥ Wood <b>${b.wood}</b></span><span>◆ Stone <b>${b.stone}</b></span><span>⚒ Tool <b>${b.tool?'Hatchet':'Hands'}</b></span>`;
+ $('inventory').innerHTML=`<span>Food <b>${b.food}</b></span><span>Wood <b>${b.wood}</b></span><span>Stone <b>${b.stone}</b></span><span>Tool <b>${b.tool?'Hatchet':'Hands'}</b></span>`;
  $('traits').textContent=`${b.background} · Curiosity ${Math.round(b.personality.curiosity*100)} · Caution ${Math.round(b.personality.caution*100)} · Resolve ${Math.round(b.personality.diligence*100)}`;
  $('skillRanks').textContent=A.SKILLS.map(k=>k.toUpperCase().slice(0,3)+' '+b.skills[k]).join(' · ');
  $('adventures').textContent=`${s.story.completed} rumors solved · ${s.story.clues.filter(q=>!q.solved).length} leads · ${b.tactics.dodge} dodges · ${b.tactics.parry} parries · ${b.tactics.trapsAvoided} traps avoided`;
@@ -121,9 +121,10 @@ $('saveDownload').addEventListener('click',exportSave);
 $('saveApply').addEventListener('click',()=>{
  const restored=A.restore($('saveText').value);if(!restored){notify('Invalid world backup.');return;}
  if(!confirm('Replace current world with the pasted backup?'))return;
- s=restored;save();hud();draw();$('saveDialog').hidden=true;notify('World backup restored.');
+ if(!commitRestored(restored))return;hud();draw();$('saveDialog').hidden=true;notify('World backup restored.');
 });
-function importSave(file){if(!file||file.size>1000000){notify('Invalid or oversized save file.');return;}const reader=new FileReader();reader.onload=()=>{const data=A.restore(reader.result);if(!data){notify('Save rejected: incompatible world.');return;}s=data;save();hud();draw();notify('World restored.');};reader.readAsText(file);}
+function commitRestored(data){try{localStorage.setItem(SAVE_KEY,A.serialize(data));}catch(e){notify('Storage full or unavailable. Current world preserved.');return false;}s=data;acc=0;frameLast=0;oldCells.fill(-99);return true;}
+function importSave(file){if(!file||file.size>1000000){notify('Invalid or oversized save file.');return;}const reader=new FileReader();reader.onload=()=>{const data=A.restore(reader.result);if(!data){notify('Save rejected: incompatible world.');return;}if(!commitRestored(data))return;hud();draw();notify('World restored.');};reader.readAsText(file);}
 function tileFromPointer(e){return window.GodseedCamera.pointerToWorld({x:camX,y:camY,width:VW,height:VH},canvas.getBoundingClientRect(),e.clientX,e.clientY);}
 let drag=null,suppressClick=false;
 canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,cx:camX,cy:camY};suppressClick=false;canvas.setPointerCapture(e.pointerId);});
@@ -152,7 +153,8 @@ window.addEventListener('keydown',e=>{if(e.target&&['INPUT','TEXTAREA'].includes
  if(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();s.settings.follow=false;camX=Math.max(0,Math.min(A.W-VW,camX+(e.key==='ArrowLeft'?-3:e.key==='ArrowRight'?3:0)));camY=Math.max(0,Math.min(A.H-VH,camY+(e.key==='ArrowUp'?-3:e.key==='ArrowDown'?3:0)));hud();draw();}
  if(/^[0-6]$/.test(e.key)){const names=['inspect','bless','gift','bloom','guide','storm','inspire'];setMode(names[Number(e.key)]);}
 });
-let active=true;document.addEventListener('visibilitychange',()=>{active=!document.hidden;frameLast=0;acc=0;if(!active)save();});window.addEventListener('beforeunload',save);
+let active=true;document.addEventListener('visibilitychange',()=>{active=!document.hidden;frameLast=0;acc=0;if(!active)save();});window.addEventListener('beforeunload',save);window.addEventListener('pagehide',()=>{active=false;acc=0;frameLast=0;save();});window.addEventListener('pageshow',()=>{active=!document.hidden;acc=0;frameLast=0;});
+window.GodseedHostLifecycle={pause:()=>{active=false;acc=0;frameLast=0;save();},resume:()=>{active=true;acc=0;frameLast=0;}};
 function frame(ts){requestAnimationFrame(frame);if(!active)return;if(!frameLast)frameLast=ts;const dt=Math.min(.15,Math.max(0,(ts-frameLast)/1000));frameLast=ts;acc+=dt*4*s.settings.speed;let loops=0;while(acc>=1&&loops<32){A.tick(s);acc-=1;loops++;}if(loops===32)acc=0;
  if(ts-lastDraw>50){draw();lastDraw=ts;}
  if(ts-lastHUD>450){hud();lastHUD=ts;}

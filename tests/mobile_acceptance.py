@@ -12,9 +12,11 @@ with sync_playwright() as pw:
         context=browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,is_mobile=True,has_touch=True)
         page=context.new_page();errors=[];outgoing=[]
         page.on('pageerror',lambda e:errors.append(str(e)))
-        page.on('request',lambda r:outgoing.append(r.url) if r.url.startswith(('http://','https://')) else None)
+        page.on('request',lambda r:outgoing.append(r.url) if r.url.startswith(('http://','https://')) and r.url!='http://godseed.test/' else None)
         page.on('dialog',lambda d:d.accept())
-        page.set_content(source,wait_until='load')
+        page.route('http://godseed.test/',lambda r:r.fulfill(content_type='text/html',body=source))
+        context.set_offline(True)
+        page.goto('http://godseed.test/',wait_until='load')
         page.evaluate('()=>GodseedDebug.setSpeed(0)')
         page.locator('#androidDock').wait_for(state='visible')
         dock=page.locator('#androidDock')

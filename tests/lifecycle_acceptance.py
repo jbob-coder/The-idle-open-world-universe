@@ -23,6 +23,14 @@ with sync_playwright() as pw:
     old=page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')
     page.evaluate("localStorage.setItem('godseed-one-small-life-v1',GodseedSim.serialize(GodseedDebug.getState()))")
     page.reload();page.evaluate('GodseedDebug.setSpeed(0)');assert tick()>=stopped
+    # A failed persistent import must leave the active world and its old save intact.
+    page.on('dialog',lambda d:d.accept())
+    page.evaluate('GodseedDebug.setSpeed(0)')
+    raw=page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')
+    page.evaluate("()=>{Storage.prototype.setItem=function(){throw new DOMException('Full','QuotaExceededError')}}")
+    page.locator('#import').click();page.locator('#saveText').fill(old);page.locator('#saveApply').click()
+    assert page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')==raw
+    assert 'Current world preserved' in page.locator('#toast').inner_text()
     assert not errors,errors
     browser.close()
 print('PASS offline clock: pause, 8x, background save, repeated resume, reload; 0 JS errors')

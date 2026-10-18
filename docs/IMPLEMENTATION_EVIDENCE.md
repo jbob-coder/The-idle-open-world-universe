@@ -34,3 +34,8 @@ C01–C05: four cardinal facings and two walking poses from simulation movement 
 
 ## Divine interaction
 D01–D05: pure simulator target preview; unseen terrain powers rejected (Bless/Gift retain their established global Nim effect); hidden travelers cannot be targeted through an adjacent revealed tile. Pending favors reject duplicate purchase. Marks have authoritative IDs; visual-only queue deduplicates and caps at 12, expires after 1 second even while paused, resets on world change. Native glyphs animate in eight bounded phases; reduced-motion checkbox/system preference gives a static glyph and text chronicle. Render cap adjusted to 20Hz (target cadence, not hardware measurement). 45 Node tests and full mobile captures pass; 100 render calls leave simulation byte-for-byte unchanged.
+
+## Preservation and packaging checkpoint
+Workspace restart preserved all eight commits, all source and captures. Re-ran 45 Node tests and five validators. Updated obsolete preparation-only ledger assertions to require evidence for completed tasks. Compact HUD now has square borders and atlas glyphs. Save imports persist before replacing the live world; quota failure preserves current state, covered by lifecycle acceptance on a real persistent (intercepted, offline) browser origin.
+
+Experimental APK: built with JDK 21.0.2, 44,126 bytes, JAR-v1 debug signature verified. SHA256 recorded in dist/manifest.json. APK embedded HTML equals the current generated file. No private signing material tracked. Native Android lifecycle, phone installation, FPS/PSS/RSS: NOT VERIFIED. Android SDK/Gradle were downloaded outside the repository for a separate packaging evaluation; no large storage feature was started before publishing this checkpoint.

@@ -1,3 +1,17 @@
+## Implementation checkpoint — 2026-10-18
+
+Branch: `feat/godseed-medieval-skyworld-v1`, based on prep commit `ff38045`. Existing stacked PRs remain unmerged.
+
+Implemented: F01–F05 foundation, W01–W10 connected regional gameplay and migration, A01–D05 camera/atlas/actor/divine rendering, E01–E03 compact pixel HUD and experimental packaging. The task ledgers and [implementation evidence](docs/IMPLEMENTATION_EVIDENCE.md) distinguish code, browser evidence and hardware limits.
+
+Verification: **45 Node tests pass**, including 100 generated seeds and five independent 10,000-tick runs. Offline browser smoke and mobile acceptance cover 640×360, 720×400 and 960×540; camera captures cover all three zooms. Source/policy validators pass. See `qa-screenshots/` for actual running desktop Chromium captures, not Android screenshots.
+
+APK: `dist/GODSEED-v1-experimental.apk` is SDK-free experimental WebView packaging, signed with a local debug identity and structurally checked. **Physical Android install/launch, resident RAM, FPS and 20-minute device testing are NOT VERIFIED.** Back up saves before any APK/signing change. Existing v0.1/v0.2 artifacts are preserved. Save key, version 1 and terrain IDs 0–10 remain unchanged; old maps are not regenerated.
+
+Remaining: E04 physical hardware QA; S01–S05 native storage management. Conventional Gradle packaging is being evaluated separately; no switch of save origin or replacement of the existing builder. No 1GB padding or optional storage allocation exists.
+
+---
+
 ## Strict Square-Pixel Art Lock — October 17, 2026
 
 DIRECTION: All terrain, cottages, ruins, trees, wildlife, characters, divine abilities and Android UI must use **visible, crisp 2D square pixels**, no blurry rendering, painterly backgrounds, 3D/isometric or glossy vector app styling. High sky view target 32×20 cells; tile source 16×16px, actor source 16×24px, nearest-neighbor zoom and no smoothing.

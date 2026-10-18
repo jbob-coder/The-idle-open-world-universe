@@ -1,7 +1,7 @@
 {
   "schema": "godseed.world-foundation-tasks.v1",
   "authority": "prep/codex-skyworld-v0.5",
-  "status": "implementation-in-progress",
+  "status": "implemented-with-physical-device-qa-unverified",
   "created": "2026-10-17",
   "designInputs": [
     "data/world-regions.v1.json",
@@ -89,7 +89,7 @@
     {
       "id": "W01",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Define deterministic region ID model",
       "acceptance": "All 3072 map cells receive one of R00\u2013R07; same seed gives same result; terrain IDs unchanged.",
       "dependencies": [
@@ -98,13 +98,15 @@
       "evidence": [
         "tests/regions.test.js",
         "src/world/regions.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     },
     {
       "id": "W02",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Guarantee safe spawn, reachable starter supplies",
       "acceptance": "No enemy inside initial protection radius; berries/wood/stone reachable in seed sweeps.",
       "dependencies": [
@@ -113,13 +115,15 @@
       "evidence": [
         "tests/regions.test.js",
         "src/world/regions.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     },
     {
       "id": "W03",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Build and verify road and POI connectivity",
       "acceptance": "Start reaches two hamlets, two shrines and \u22651 ruin via BFS, visual roads match traversal.",
       "dependencies": [
@@ -128,13 +132,15 @@
       "evidence": [
         "tests/regions.test.js",
         "src/world/regions.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     },
     {
       "id": "W04",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Connect hamlet zones to existing NPC home roles",
       "acceptance": "Ira/Toren/Mera placements preserved; patrols and meetings bounded and observable.",
       "dependencies": [
@@ -143,13 +149,15 @@
       "evidence": [
         "tests/regions.test.js",
         "src/world/regions.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     },
     {
       "id": "W05",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Regional resource/danger weighting",
       "acceptance": "Forest/hills/fen identity meaningful; no unbounded spawns or inaccessible essentials.",
       "dependencies": [
@@ -158,13 +166,15 @@
       "evidence": [
         "tests/regions.test.js",
         "src/world/regions.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#regions"
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     },
     {
       "id": "W06",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Ruin/shrine region encounters and finite rewards",
       "acceptance": "Oathkeeper/Crownfall/Moonwell experiences have finite and save-safe discovery.",
       "dependencies": [
@@ -173,13 +183,15 @@
       "evidence": [
         "tests/regions.test.js",
         "tests/foundation.test.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     },
     {
       "id": "W07",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Region discovery, chronicle and minimap metadata",
       "acceptance": "Unknown areas stay fogged, titles reveal correctly, inspect and divine targeting coherent.",
       "dependencies": [
@@ -188,13 +200,15 @@
       "evidence": [
         "tests/regions.test.js",
         "tests/foundation.test.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     },
     {
       "id": "W08",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Region weather and activity flavor",
       "acceptance": "Distinct rain/wildlife/ambient cues do not alter world RNG on render or tank mobile FPS.",
       "dependencies": [
@@ -203,13 +217,15 @@
       "evidence": [
         "tests/regions.test.js",
         "tests/foundation.test.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     },
     {
       "id": "W09",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Save migration, seeded reconstruction and schema audit",
       "acceptance": "v1 save format preserved; pre-region saves work; 100 seed region membership tests pass.",
       "dependencies": [
@@ -218,13 +234,15 @@
       "evidence": [
         "tests/regions.test.js",
         "tests/foundation.test.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     },
     {
       "id": "W10",
       "group": "world_regions",
-      "status": "implemented_pending_visual_qa",
+      "status": "done",
       "title": "Long-run QA and 2\u20133GB Android validation evidence",
       "acceptance": "10k tick multi-seed suite, responsive 640x360 UI, Android 2/3GB RAM test or explicit block.",
       "dependencies": [
@@ -233,7 +251,9 @@
       "evidence": [
         "tests/regions.test.js",
         "tests/foundation.test.js",
-        "docs/IMPLEMENTATION_EVIDENCE.md#discovery"
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
       ]
     }
   ]

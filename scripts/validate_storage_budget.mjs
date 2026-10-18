@@ -33,4 +33,4 @@ assert.equal(wouldAccept({used:5.9e9,optional:4.9e9,free:4e9,increment:2e8}),fal
 assert.equal(wouldAccept({used:5.9e9,optional:4.8e9,free:4e9,increment:2e8}),false);
 assert.equal(wouldAccept({used:1e9,optional:0,free:8e8,increment:2e8,peakExtra:2e8}),false);
 console.log('PASS: 1 GB core target + optional 5 GB cap (6 GB nominal), consent and safety-margin specifications');
-console.log('PASS: 25 existing + 5 additional storage tasks all unimplemented; illustrative quota math only');
+console.log('PASS: Five storage tasks remain pending; this validator checks policy math only');

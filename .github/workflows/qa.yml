@@ -30,6 +30,10 @@ jobs:
       - name: Verify Codex starter-art contract and reproducibility
         run: |
           node scripts/validate_asset_manifest.mjs
+          node scripts/validate_pixel_art_contract.mjs
+          node scripts/validate_world_blueprint.mjs
+          node scripts/validate_hardware_budget.mjs
+          node scripts/validate_storage_budget.mjs
           node scripts/generate_starter_assets.mjs
           git diff --exit-code -- assets/generated/
           node scripts/validate_asset_manifest.mjs
@@ -46,16 +50,19 @@ jobs:
         run: |
           python tests/browser_smoke.py
           python tests/mobile_acceptance.py
-      - name: Preserve v0.4 APK and actual browser screenshots
+          python tests/lifecycle_acceptance.py
+          python tests/capture_android_layouts.py
+      - name: Preserve v1 APK and actual browser screenshots
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: godseed-v0.4-skyview-android-prototype
+          name: godseed-v1-skyview-android-prototype
           if-no-files-found: error
           retention-days: 30
           path: |
-            dist/GODSEED-v0.4-debug.apk
+            dist/GODSEED-v1-experimental.apk
             dist/manifest.json
+            qa-screenshots/
             assets/screenshot-720x400.png
             assets/godseed-android-landscape-640x360.png
             assets/godseed-android-landscape-720x400.png
