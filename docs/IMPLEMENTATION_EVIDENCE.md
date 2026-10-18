@@ -22,3 +22,6 @@ Ruling: old saves derive an immutable worldSeed from their saved RNG seed when n
 
 ## Discovery
 W06–W10: finite Crownfall/Moonwell ruin rewards, Oathkeeper shrine preserved, one-time region chronicle/memory, region inspection and local atmospheric labels. Metadata migration preserves old maps and restores discovered IDs. 37 simulation tests pass, including 100 seeds and five 10k runs. Visual QA pending atlas integration. W10 physical 2/3GB-device evidence NOT VERIFIED: no adb, emulator or attached phone.
+
+## Camera
+A01–A05: 32×20 default, 24×15 and 16×10 alternatives; pure roundtrip transforms, integer follow, keyboard/minimap/touch drag panning. Browser test found the old dock covered the center target at 640×360; compact header and bounded canvas height fix that. Nine running Chromium captures, successful actual NPC clicks at each zoom/size, ten controls, zero errors. Pixel source validator passes. Screenshots are desktop Chromium, never Android hardware.

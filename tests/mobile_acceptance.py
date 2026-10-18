@@ -56,11 +56,11 @@ with sync_playwright() as pw:
         assert page.evaluate('GodseedDebug.getState().npcs[0].mood')=='hopeful'
         assert page.evaluate('() => {const b=GodseedDebug.getState().bot;return [b.x,b.y]}')==bot_before
         page.locator('#zoomDock').click()
+        assert page.evaluate('GodseedDebug.getCamera().width')==24
+        page.locator('#zoomDock').click()
         assert page.evaluate('GodseedDebug.getCamera().width')==16
         page.locator('#zoomDock').click()
         assert page.evaluate('GodseedDebug.getCamera().width')==32
-        page.locator('#zoomDock').click()
-        assert page.evaluate('GodseedDebug.getCamera().width')==24
         page.evaluate('()=>GodseedDebug.step(50)')
         # Save export and pasted import work without Android native file APIs.
         page.locator('#export').click()

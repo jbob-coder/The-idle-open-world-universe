@@ -2,7 +2,7 @@
 (function(){'use strict';
 const A=window.GodseedSim; if(!A)throw new Error('GODSEED simulation missing');
 const $=id=>document.getElementById(id),size=16;
-const ZOOMS=[{name:'Cerca',w:24,h:15},{name:'Muy cerca',w:16,h:10},{name:'Panorama',w:32,h:20}];
+const ZOOMS=[{name:'Panorama',w:32,h:20},{name:'Cerca',w:24,h:15},{name:'Inspección',w:16,h:10}];
 let zoomIndex=0,VW=ZOOMS[0].w,VH=ZOOMS[0].h;
 const canvas=$('world'),screenCtx=canvas.getContext('2d',{alpha:false}),mini=$('minimap'),mctx=mini.getContext('2d',{alpha:false});
 const scenery=document.createElement('canvas');scenery.width=canvas.width;scenery.height=canvas.height;
@@ -196,18 +196,15 @@ $('saveApply').addEventListener('click',()=>{
  s=restored;save();hud();draw();$('saveDialog').hidden=true;notify('World backup restored.');
 });
 function importSave(file){if(!file||file.size>1000000){notify('Invalid or oversized save file.');return;}const reader=new FileReader();reader.onload=()=>{const data=A.restore(reader.result);if(!data){notify('Save rejected: incompatible world.');return;}s=data;save();hud();draw();notify('World restored.');};reader.readAsText(file);}
-function tileFromPointer(e){
- const r=canvas.getBoundingClientRect();
- // CSS object-fit:contain can letterbox the canvas on short landscape displays.
- // Account for those margins or divine interventions hit the wrong tile.
- const scale=Math.min(r.width/canvas.width,r.height/canvas.height);
- const renderedW=canvas.width*scale,renderedH=canvas.height*scale;
- const px=e.clientX-r.left-(r.width-renderedW)/2,py=e.clientY-r.top-(r.height-renderedH)/2;
- const ix=Math.floor(px*VW/renderedW),iy=Math.floor(py*VH/renderedH);
- return ix<0||iy<0||ix>=VW||iy>=VH?{x:-1,y:-1}:{x:camX+ix,y:camY+iy};
-}
+function tileFromPointer(e){return window.GodseedCamera.pointerToWorld({x:camX,y:camY,width:VW,height:VH},canvas.getBoundingClientRect(),e.clientX,e.clientY);}
+let drag=null,suppressClick=false;
+canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,cx:camX,cy:camY};suppressClick=false;canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener('pointermove',e=>{if(!drag)return;const scale=window.GodseedCamera.bounds({width:VW,height:VH},canvas.getBoundingClientRect()).scale;
+ const dx=Math.round((e.clientX-drag.x)/(size*scale)),dy=Math.round((e.clientY-drag.y)/(size*scale));
+ if(dx||dy){suppressClick=true;s.settings.follow=false;camX=Math.max(0,Math.min(A.W-VW,drag.cx-dx));camY=Math.max(0,Math.min(A.H-VH,drag.cy-dy));draw();}});
+canvas.addEventListener('pointerup',()=>{drag=null;});canvas.addEventListener('pointercancel',()=>{drag=null;suppressClick=true;});
 canvas.addEventListener('pointermove',e=>{hover=tileFromPointer(e);});canvas.addEventListener('pointerleave',()=>{hover=null;});
-canvas.addEventListener('click',e=>{let {x,y}=tileFromPointer(e);if(!A.inside(x,y))return;if(mode==='inspect'){const known=s.seen[A.idx(x,y)],near=known?s.enemies.find(z=>z.x===x&&z.y===y):null,person=known?(s.npcs||[]).find(z=>z.x===x&&z.y===y):null,t=A.TILE_NAMES[s.map[A.idx(x,y)]];let message=`(${x},${y}) ${s.seen[A.idx(x,y)]?t+' · '+A.regionAt(s,x,y).name:'Unexplored'}`+(near?` · ${near.type} ${near.hp} HP`:'')+(person?` · ${person.name} (${person.role}) · ${person.mood} · Trust ${Math.round(person.trust)}`:'');notify(message);$('inspect').textContent=message;return;}
+canvas.addEventListener('click',e=>{if(suppressClick){suppressClick=false;return;}let {x,y}=tileFromPointer(e);if(!A.inside(x,y))return;if(mode==='inspect'){const known=s.seen[A.idx(x,y)],near=known?s.enemies.find(z=>z.x===x&&z.y===y):null,person=known?(s.npcs||[]).find(z=>z.x===x&&z.y===y):null,t=A.TILE_NAMES[s.map[A.idx(x,y)]];let message=`(${x},${y}) ${s.seen[A.idx(x,y)]?t+' · '+A.regionAt(s,x,y).name:'Unexplored'}`+(near?` · ${near.type} ${near.hp} HP`:'')+(person?` · ${person.name} (${person.role}) · ${person.mood} · Trust ${Math.round(person.trust)}`:'');notify(message);$('inspect').textContent=message;return;}
  const r=A.power(s,mode,x,y);notify(r.ok?`${mode.toUpperCase()} used. -${r.cost} Faith`:r.why);if(r.ok){save();hud();draw();}});
 mini.addEventListener('click',e=>{const r=mini.getBoundingClientRect(),x=Math.floor((e.clientX-r.left)*A.W/r.width),y=Math.floor((e.clientY-r.top)*A.H/r.height);s.settings.follow=false;camX=Math.max(0,Math.min(A.W-VW,x-(VW>>1)));camY=Math.max(0,Math.min(A.H-VH,y-(VH>>1)));hud();draw();});
 document.querySelectorAll('[data-power]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.power)));

@@ -1,0 +1,32 @@
+{
+  "source": "Running desktop Chromium, not Android; regional scenes reveal fog for QA",
+  "checks": [
+    {
+      "viewport": [
+        640,
+        360
+      ],
+      "zooms": 3,
+      "touch_targets": 10,
+      "errors": []
+    },
+    {
+      "viewport": [
+        720,
+        400
+      ],
+      "zooms": 3,
+      "touch_targets": 10,
+      "errors": []
+    },
+    {
+      "viewport": [
+        960,
+        540
+      ],
+      "zooms": 3,
+      "touch_targets": 10,
+      "errors": []
+    }
+  ]
+}

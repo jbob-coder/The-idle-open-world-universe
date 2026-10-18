@@ -3,7 +3,7 @@
   "title": "Codex Cloud implementation ledger",
   "authority": "prep/codex-skyworld-v0.5",
   "implementation_branch": "feat/godseed-medieval-skyworld-v1",
-  "status": "ready_for_implementation",
+  "status": "implementation-in-progress",
   "created": "2026-10-17",
   "rule": "5 tasks per slice, done requires test and evidence",
   "entries": [
@@ -11,10 +11,14 @@
       "id": "A01",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
+      "status": "done",
       "title": "Set 32x20 default; retain 24x15 and 16x10",
       "acceptance": "State and UI tests assert default 32x20 and zoom cycle.",
-      "evidence": [],
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -22,10 +26,14 @@
       "id": "A02",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
+      "status": "done",
       "title": "Extract pure world/canvas pointer transforms",
       "acceptance": "Roundtrips correct at every zoom, with letterbox margins.",
-      "evidence": [],
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "A01"
       ],
@@ -35,10 +43,14 @@
       "id": "A03",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
+      "status": "done",
       "title": "Implement integer camera follow and free pan",
       "acceptance": "Tile coordinates remain stable; no subpixel blur.",
-      "evidence": [],
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "A02"
       ],
@@ -48,10 +60,14 @@
       "id": "A04",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
+      "status": "done",
       "title": "Protect crisp pixel-square scaling and safe areas",
-      "acceptance": "Canvas remains pixelated and never clips target cells.  Visual signoff must confirm no blur/interpolation at all zooms and real 640×360/720×400/960×540 screenshots; validate source with scripts/validate_pixel_art_contract.mjs.",
-      "evidence": [],
+      "acceptance": "Canvas remains pixelated and never clips target cells.  Visual signoff must confirm no blur/interpolation at all zooms and real 640\u00d7360/720\u00d7400/960\u00d7540 screenshots; validate source with scripts/validate_pixel_art_contract.mjs.",
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "A03"
       ],
@@ -61,10 +77,14 @@
       "id": "A05",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
-      "title": "Capture 3 viewport sizes × zoom and verify commands",
+      "status": "done",
+      "title": "Capture 3 viewport sizes \u00d7 zoom and verify commands",
       "acceptance": "9 screenshots and touch tests; 10 visible controls.",
-      "evidence": [],
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "A04"
       ],
@@ -76,7 +96,7 @@
       "epic_title": "Richer world terrain",
       "status": "todo",
       "title": "Wire four starter PNG sheets through manifest into renderer",
-      "acceptance": "Runtime shows actual atlas pixels, all offline.  Integrate genuine native 16×16 square-pixel atlases with exact palette/binary-alpha art source. Art concepts/PNGs alone do not count as in-game use.",
+      "acceptance": "Runtime shows actual atlas pixels, all offline.  Integrate genuine native 16\u00d716 square-pixel atlases with exact palette/binary-alpha art source. Art concepts/PNGs alone do not count as in-game use.",
       "evidence": [],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
@@ -138,8 +158,8 @@
       "epic": "C",
       "epic_title": "2D actors and motion",
       "status": "todo",
-      "title": "Draw Nim with four facings and 2–4 frame walk cycle",
-      "acceptance": "Movement animation derived from tick, not draw calls.  Nim sprites remain 16×24 native pixel frames with crisp square outlines and feet anchor (8,23); verify four directions in running screenshots.",
+      "title": "Draw Nim with four facings and 2\u20134 frame walk cycle",
+      "acceptance": "Movement animation derived from tick, not draw calls.  Nim sprites remain 16\u00d724 native pixel frames with crisp square outlines and feet anchor (8,23); verify four directions in running screenshots.",
       "evidence": [],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
@@ -226,7 +246,7 @@
       "epic_title": "God's visible influence",
       "status": "todo",
       "title": "Inspire a traveler with a unique role reaction",
-      "acceptance": "One click → one favor, correct chronicle/favor marker.",
+      "acceptance": "One click \u2192 one favor, correct chronicle/favor marker.",
       "evidence": [],
       "dependencies": [
         "D02"
@@ -265,7 +285,7 @@
       "epic_title": "Android UI, QA and delivery",
       "status": "todo",
       "title": "Compact HUD and touch safe areas",
-      "acceptance": "No lost buttons or unreadable NPC info at 640x360.  Android HUD must be visually pixel-square (solid borders and icons), still readable and touch-accessible at 640×360.",
+      "acceptance": "No lost buttons or unreadable NPC info at 640x360.  Android HUD must be visually pixel-square (solid borders and icons), still readable and touch-accessible at 640\u00d7360.",
       "evidence": [],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
