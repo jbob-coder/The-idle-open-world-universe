@@ -195,6 +195,55 @@ public class NativeAndroidSmokeTest {
         }
     }
 
+    /**
+     * The user may exit before the regular autosave timer fires.
+     * Exercise actual WebView persistence without clicking the manual Save button.
+     */
+    @Test public void savesUnsavedWorldBeforeNativeExit() throws Exception {
+        try (ActivityScenario<MainActivity> activity = ActivityScenario.launch(MainActivity.class)) {
+            boolean ready = false;
+            for (int i = 0; i < 30; i++) {
+                if ("true".equals(evaluate(activity,
+                    "typeof window.GodseedDebug==='object' && document.readyState==='complete'"))) {
+                    ready = true;
+                    break;
+                }
+                Thread.sleep(500);
+            }
+            assertTrue("Game not ready for exit test", ready);
+            String before = evaluate(activity,
+                "(function(){GodseedDebug.newWorld(17017);GodseedDebug.setSpeed(0);" +
+                "GodseedDebug.step(23);localStorage.removeItem('godseed-one-small-life-v1');" +
+                "return GodseedDebug.getState().tick;})()");
+            assertEquals("23", before);
+            assertEquals("true", evaluate(activity,
+                "localStorage.getItem('godseed-one-small-life-v1')===null"));
+            activity.onActivity(MainActivity::saveAndExit);
+            boolean destroyed = false;
+            for (int i = 0; i < 40; i++) {
+                if ("DESTROYED".equals(activity.getState().name())) {
+                    destroyed = true;
+                    break;
+                }
+                Thread.sleep(150);
+            }
+            assertTrue("Save callback must finish native Activity", destroyed);
+        }
+        try (ActivityScenario<MainActivity> next = ActivityScenario.launch(MainActivity.class)) {
+            boolean recovered = false;
+            for (int i = 0; i < 30; i++) {
+                String tick = evaluate(next,
+                    "typeof window.GodseedDebug==='object' ? GodseedDebug.getState().tick : -1");
+                if ("23".equals(tick)) {
+                    recovered = true;
+                    break;
+                }
+                Thread.sleep(500);
+            }
+            assertTrue("Unsaved world changes must survive confirmed native exit", recovered);
+        }
+    }
+
     private static String evaluate(ActivityScenario<MainActivity> activity, String js)
             throws InterruptedException {
         CountDownLatch done = new CountDownLatch(1);
