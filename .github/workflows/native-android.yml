@@ -43,7 +43,7 @@ jobs:
         with:
           gradle-version: '8.9'
       - name: Build separate debug Gradle/WebView host
-        run: gradle -p android/gradle :app:assembleDebug --no-daemon --stacktrace
+        run: gradle -p android/gradle :app:assembleDebug :app:assembleAndroidTest --no-daemon --stacktrace
       - name: Verify local asset content and avoid INTERNET/broad storage permissions
         run: |
           python - <<'PY'
@@ -64,6 +64,60 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: godseed-gradle-webview-native-evaluation
-          path: android/gradle/app/build/outputs/apk/debug/app-debug.apk
+          path: |
+            android/gradle/app/build/outputs/apk/debug/app-debug.apk
+            android/gradle/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
           retention-days: 14
           if-no-files-found: error
+
+  emulator-launch-and-pack-install:
+    needs: gradle-webview-and-storage
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: godseed-gradle-webview-native-evaluation
+          path: android/gradle/app/build/outputs/apk
+      - name: Move downloaded APKs to their normal relative locations
+        shell: bash
+        run: |
+          mkdir -p android/gradle/app/build/outputs/apk/debug
+          mkdir -p android/gradle/app/build/outputs/apk/androidTest/debug
+          find android/gradle/app/build/outputs/apk -maxdepth 4 -type f -name '*.apk' -print
+          if [ -f android/gradle/app/build/outputs/apk/app-debug.apk ]; then
+            mv android/gradle/app/build/outputs/apk/app-debug.apk android/gradle/app/build/outputs/apk/debug/
+          fi
+          if [ -f android/gradle/app/build/outputs/apk/app-debug-androidTest.apk ]; then
+            mv android/gradle/app/build/outputs/apk/app-debug-androidTest.apk android/gradle/app/build/outputs/apk/androidTest/debug/
+          fi
+          test -s android/gradle/app/build/outputs/apk/debug/app-debug.apk
+          test -s android/gradle/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+      - name: Enable KVM on GitHub-hosted Linux runner when available
+        run: |
+          if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          force-avd-creation: true
+          emulator-boot-timeout: 900
+          disable-animations: true
+          script: bash tests/native/run-emulator-acceptance.sh
+      - name: Publish emulator-only install, screenshot and test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: godseed-native-android-emulator-smoke
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            qa-screenshots/android-emulator-instrumentation.txt
+            qa-screenshots/android-emulator-skyworld.png
+            qa-screenshots/android-emulator-memory.txt
+            qa-screenshots/android-emulator-logcat.txt
