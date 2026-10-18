@@ -168,6 +168,15 @@ function tick(s){
    const next=n>=8?'Township':n>=5?'Village':'Hamlet';
    if(t.age!==next){t.age=next;log(s,t.name+' becomes a '+next,'Residents chose to expand their settlement.');}
   }else t.nextBuild=s.tick+48;
+  // Once land is occupied, inhabitants can choose a new look rather than
+  // expanding indefinitely or ignoring their community's built environment.
+  if(t.age==='Township'&&s.tick%1200===0&&t.stock.wood>=4&&t.stock.stone>=2){
+   const b=t.buildings.find(q=>q.type==='house');
+   if(b){const styles=['oak','reed','stone'];b.roof=styles[(styles.indexOf(b.roof)+1)%styles.length];
+    b.updatedAt=s.tick;t.stock.wood-=2;t.stock.stone-=1;
+    log(s,t.name+' renovates a home','The residents chose '+b.roof+' roofing as their village matures.');
+   }
+  }
  }
 }
 function personTick(s,p){
