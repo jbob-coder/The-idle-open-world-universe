@@ -13,7 +13,7 @@ adb shell am instrument -w -r io.godseed.one.test/androidx.test.runner.AndroidJU
 res=${PIPESTATUS[0]}
 set -e
 test "$res" -eq 0
-grep -q 'OK (4 tests)' qa-screenshots/android-emulator-instrumentation.txt
+grep -q 'OK (5 tests)' qa-screenshots/android-emulator-instrumentation.txt
 adb shell am force-stop io.godseed.one || true
 adb shell am start -n io.godseed.one/.MainActivity
 sleep 12
@@ -26,5 +26,5 @@ if grep -F 'FATAL EXCEPTION' qa-screenshots/android-emulator-logcat.txt | grep -
   echo "Detected app crash in emulator logcat"
   exit 1
 fi
-echo "PASS: Android emulator installed and launched APK; 4 instrumentation tests; screenshot captured"
+echo "PASS: Android emulator installed and launched APK; 5 instrumentation tests; screenshot captured"
 echo "EMULATOR ONLY: physical 2 GB/3 GB Android phone QA remains NOT VERIFIED"
