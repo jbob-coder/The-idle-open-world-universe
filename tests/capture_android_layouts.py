@@ -25,6 +25,15 @@ with sync_playwright() as pw:
             page.locator('#androidDock [data-power=inspire]').click()
             pos=page.evaluate("()=>{const p=GodseedDebug.getState().npcs[0];return GodseedCamera.worldToPointer(GodseedDebug.getCamera(),document.querySelector('#world').getBoundingClientRect(),p.x,p.y)}")
             page.mouse.click(pos['x'],pos['y']);assert page.evaluate('GodseedDebug.getState().faith')==45,(width,height,zoom,pos,page.locator('#toast').inner_text(),page.evaluate('(p)=>document.elementFromPoint(p.x,p.y)?.id',pos))
+        page.screenshot(path=str(OUT/f'chromium-{width}x{height}-inspire-success.png'))
+        invalid=page.evaluate("()=>{const c=GodseedDebug.getCamera(),s=GodseedDebug.getState(),x=c.x+2,y=c.y+2;s.seen[GodseedSim.idx(x,y)]=1;return GodseedCamera.worldToPointer(c,document.querySelector('#world').getBoundingClientRect(),x,y)}")
+        faith=page.evaluate('GodseedDebug.getState().faith');page.mouse.move(invalid['x'],invalid['y']);page.mouse.click(invalid['x'],invalid['y']);page.wait_for_timeout(80)
+        assert page.evaluate('GodseedDebug.getState().faith')==faith
+        page.screenshot(path=str(OUT/f'chromium-{width}x{height}-inspire-invalid.png'))
+        before=page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')
+        page.evaluate('()=>{for(let i=0;i<100;i++)GodseedDebug.draw()}')
+        assert page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')==before
+        page.wait_for_timeout(1100);assert page.evaluate('GodseedDebug.getRenderStats().activeEffects')==0
         # Regional scenes use revealed QA setup; gameplay itself still uses fog.
         for region,x,y in [('village',25,21),('forest',10,13),('ruins',31,7),('grove',20,31),('fen',50,39)]:
             page.evaluate('([x,y])=>{const s=GodseedDebug.getState();s.seen.fill(1);s.bot.x=x;s.bot.y=y;GodseedDebug.setZoom(1);GodseedDebug.step(0)}',[x,y])

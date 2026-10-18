@@ -265,10 +265,14 @@
       "id": "D01",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Preview valid/invalid tile targeting",
       "acceptance": "Invalid events cost no Faith; readable cursor.",
-      "evidence": [],
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -276,10 +280,14 @@
       "id": "D02",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Render finite FX for bless/gift/bloom/guide/storm",
       "acceptance": "All effects arise from simulator events, capped cost.  Divine glyphs and effects remain pixel-square and limited-frame, with no Gaussian glow/gradients; animation must not mutate sim.",
-      "evidence": [],
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [
         "D01"
       ],
@@ -289,10 +297,14 @@
       "id": "D03",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Inspire a traveler with a unique role reaction",
       "acceptance": "One click \u2192 one favor, correct chronicle/favor marker.",
-      "evidence": [],
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [
         "D02"
       ],
@@ -302,10 +314,14 @@
       "id": "D04",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Deduplicate visual effects without duplicate rewards",
       "acceptance": "No render frame can mutate Faith or sim state.",
-      "evidence": [],
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [
         "D03"
       ],
@@ -315,10 +331,14 @@
       "id": "D05",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Implement reduced-motion and textual alternatives",
       "acceptance": "Effects understandable without animation.",
-      "evidence": [],
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [
         "D04"
       ],

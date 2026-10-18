@@ -227,7 +227,7 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  const p=findPath(s,(x,y,t,n)=>!s.seen[n]);if(p){setGoal(s,'Explore','What lies beyond the known paths?',p);return;}
  const q=findPath(s,(x,y,t)=>t===T.FOREST||t===T.STONE||t===T.BERRY);setGoal(s,'Wander','I will make another journey.',q||[]);
 }
-function addMark(s,x,y,kind){s.marks.push({x,y,kind,until:s.tick+10});if(s.marks.length>12)s.marks.shift();}
+function addMark(s,x,y,kind){s.eventSerial=(s.eventSerial||0)+1;s.marks.push({id:s.eventSerial,x,y,kind,tick:s.tick,until:s.tick+10});if(s.marks.length>12)s.marks.shift();}
 function botMove(s,x,y){const b=s.bot;if(!walkable(s,x,y))return; b.facing=x>b.x?'east':x<b.x?'west':y>b.y?'south':'north';b.movedAt=s.tick;b.x=x;b.y=y;b.steps++;let d=discover(s,x,y);
  if(d){b._discovered=(b._discovered||0)+d;if(b._discovered>=38){b._discovered-=38;gain(s,3,'exploration');s.faith=clamp(s.faith+1,0,50);improve(s,'scouting',2);}}
  if(s.guide&&x===s.guide.x&&y===s.guide.y){event(s,'Omen followed','Nim reached the place you pointed to.','milestone');s.guide=null;}
@@ -335,13 +335,16 @@ function tick(s){s.tick++;discoverRegion(s,s.bot.x,s.bot.y);revive(s);if(s.tick%
  updatePeople(s);
  return s;}
 const COST={bless:4,gift:5,bloom:6,guide:3,storm:8,inspire:5};
-function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))return {ok:false,why:'Unknown power'};
+function previewPower(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))return {ok:false,why:'Unknown power'};
  x=Math.floor(Number(x));y=Math.floor(Number(y));if(!inside(x,y))return {ok:false,why:'Choose a place on the map'};
  if(s.faith<COST[kind])return {ok:false,why:'Not enough Faith'};
- const b=s.bot;if(kind==='guide'&&!walkable(s,x,y))return {ok:false,why:'Nim cannot walk on water'};
- const citizen=kind==='inspire'&&s.seen[idx(x,y)]?nearPerson(s,x,y,1):null;
+ if(!s.seen[idx(x,y)]&&kind!=='bless'&&kind!=='gift')return {ok:false,why:'Explore this place first'};
+ if(kind==='guide'&&!walkable(s,x,y))return {ok:false,why:'Nim cannot walk on water'};
+ const citizen=kind==='inspire'&&s.seen[idx(x,y)]?(s.npcs||[]).find(p=>s.seen[idx(p.x,p.y)]&&Math.abs(p.x-x)+Math.abs(p.y-y)<=1):null;
  if(kind==='inspire'&&citizen&&citizen.favorUntil>s.tick&&!citizen.favorSpent)return {ok:false,why:'Traveler is already answering an omen'};
  if(kind==='inspire'&&!citizen)return {ok:false,why:'Choose a revealed traveler nearby'};
+ return {ok:true,kind,cost:COST[kind],x,y};}
+function power(s,kind,x,y){const check=previewPower(s,kind,x,y);if(!check.ok)return check;x=check.x;y=check.y;const b=s.bot,citizen=kind==='inspire'?(s.npcs||[]).find(p=>s.seen[idx(p.x,p.y)]&&Math.abs(p.x-x)+Math.abs(p.y-y)<=1):null;
  s.faith-=COST[kind];if(kind==='bless'){b.hp=clamp(b.hp+12,0,b.maxHp);b.energy=clamp(b.energy+28,0,100);event(s,'Divine blessing','A warm light restores Nim.','god');addMark(s,b.x,b.y,'bless');}
  else if(kind==='gift'){b.food+=3;b.hunger=clamp(b.hunger+10,0,100);event(s,'Gift of sustenance','Three portions appear in Nim’s pack.','god');addMark(s,b.x,b.y,'gift');}
  else if(kind==='bloom'){let grows=0;for(let i=0;i<55&&grows<9;i++){let nx=x+rint(s,11)-5,ny=y+rint(s,11)-5;if(inside(nx,ny)&&s.map[idx(nx,ny)]===T.GRASS){s.map[idx(nx,ny)]=T.BERRY;grows++;}}
@@ -380,5 +383,5 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
  s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
-return {regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
+return {regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
 });

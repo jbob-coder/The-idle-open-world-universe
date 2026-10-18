@@ -31,7 +31,9 @@ const colors=['#3c5c43','#254b3a','#26536a','#62635e','#426c49','#837458','#688b
 const hash=(x,y)=>((Math.imul(x+91,374761393)^Math.imul(y+37,668265263))>>>0);
 function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
 function dot(x,y,c){rect(x,y,1,1,c);}
-const assets=window.GodseedAssets,terrain=window.GodseedTerrain;
+const assets=window.GodseedAssets,terrain=window.GodseedTerrain,visualFx=window.GodseedFX.create();
+const motionQuery=window.matchMedia('(prefers-reduced-motion: reduce)');let reducedMotion=motionQuery.matches;
+$('reduceMotion').checked=reducedMotion;$('reduceMotion').addEventListener('change',e=>{reducedMotion=e.target.checked;});
 assets.loaded.then(()=>{oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
 function drawTile(tile,x,y,wx,wy){if(assets.ready)terrain.draw(ctx,assets,s,tile,x,y,wx,wy);else rect(x,y,16,16,'#152723');}
 function updateScenery(){
@@ -56,7 +58,7 @@ function positionCamera(){if(s.settings.follow){camX=Math.max(0,Math.min(A.W-VW,
 function draw(){positionCamera();const b=s.bot;updateScenery();
  ctx.drawImage(scenery,0,0);
  if((s.tick%240)>172||(s.tick%240)<42)rect(0,0,canvas.width,canvas.height,'rgba(8,23,38,.18)');
- if(s.weather==='rain'){
+ if(s.weather==='rain'&&!reducedMotion){
   for(let i=0;i<35;i++){const x=(i*97+s.tick*3)%canvas.width,y=(i*71+s.tick*5)%canvas.height;
    rect(x,y,1,4,'rgba(172,201,205,.36)');}
  }
@@ -68,8 +70,13 @@ function draw(){positionCamera();const b=s.bot;updateScenery();
   window.GodseedActors.draw(ctx,assets,actor,s.tick,px,py);
   if(actor===b){ctx.fillStyle='#EAE3C1';ctx.font='bold 8px monospace';ctx.textAlign='center';ctx.fillText('NIM',px+8,py-10);ctx.textAlign='start';}
  }
- for(const m of s.marks){const glyph=assets.manifest.atlases[2].symbols.find(f=>f.name===m.kind);if(glyph){assets.blit(ctx,2,glyph.rect,(m.x-camX)*16,(m.y-camY)*16-8);continue;}if(m.x<camX||m.x>=camX+VW||m.y<camY||m.y>=camY+VH)continue;const xx=(m.x-camX)*16,yy=(m.y-camY)*16,c=({hit:'#e9dd88',hurt:'#ee7770',evade:'#88ccdb',parry:'#d1bb7c',bless:'#c4f7aa',gift:'#f1cb8d',bloom:'#85dbbb',guide:'#ddda92',storm:'#c6dffc',talk:'#f1c4a9',inspire:'#fff2a0'})[m.kind];rect(xx+2,yy+2,12,2,c);rect(xx+2,yy+12,12,2,c);rect(xx+2,yy+2,2,12,c);rect(xx+12,yy+2,2,12,c);}
- if(hover&&hover.x>=camX&&hover.x<camX+VW&&hover.y>=camY&&hover.y<camY+VH){const xx=(hover.x-camX)*16,yy=(hover.y-camY)*16;rect(xx,yy,16,1,'#efe2ac');rect(xx,yy+15,16,1,'#efe2ac');rect(xx,yy,1,16,'#efe2ac');rect(xx+15,yy,1,16,'#efe2ac');}
+ visualFx.sync(s,performance.now());visualFx.draw(ctx,assets,{x:camX,y:camY,width:VW,height:VH},performance.now(),reducedMotion);
+ if(hover&&hover.x>=camX&&hover.x<camX+VW&&hover.y>=camY&&hover.y<camY+VH){const xx=(hover.x-camX)*16,yy=(hover.y-camY)*16;
+  const result=mode==='inspect'?{ok:!!s.seen[A.idx(hover.x,hover.y)],why:'Unexplored'}:A.previewPower(s,mode,hover.x,hover.y);
+  const c=result.ok?'#EFCB76':'#A45A44';rect(xx,yy,16,1,c);rect(xx,yy+15,16,1,c);rect(xx,yy,1,16,c);rect(xx+15,yy,1,16,c);
+  if(!result.ok){rect(xx+7,yy+4,2,5,c);rect(xx+7,yy+11,2,2,c);}
+  canvas.title=result.ok?(mode==='inspect'?'Inspect':mode+' · '+A.COST[mode]+' Faith'):result.why;
+ }
  $('coordinates').textContent=`${b.x}, ${b.y} · ${A.regionAt(s,b.x,b.y).name} · ${ZOOMS[zoomIndex].name}`;
 }
 function drawMini(){const image=mctx.createImageData(A.W,A.H);for(let i=0;i<A.N;i++){const t=s.map[i],c=s.seen[i]?colors[t]:'#121c20';const k=i*4;image.data[k]=parseInt(c.slice(1,3),16);image.data[k+1]=parseInt(c.slice(3,5),16);image.data[k+2]=parseInt(c.slice(5,7),16);image.data[k+3]=255;}mctx.putImageData(image,0,0);mctx.fillStyle='#f9e6b2';mctx.fillRect(s.bot.x,s.bot.y,1,1);mctx.strokeStyle='#d9d8ab';mctx.lineWidth=.5;mctx.strokeRect(camX+.25,camY+.25,VW-.5,VH-.5);}
@@ -147,10 +154,10 @@ window.addEventListener('keydown',e=>{if(e.target&&['INPUT','TEXTAREA'].includes
 });
 let active=true;document.addEventListener('visibilitychange',()=>{active=!document.hidden;frameLast=0;acc=0;if(!active)save();});window.addEventListener('beforeunload',save);
 function frame(ts){requestAnimationFrame(frame);if(!active)return;if(!frameLast)frameLast=ts;const dt=Math.min(.15,Math.max(0,(ts-frameLast)/1000));frameLast=ts;acc+=dt*4*s.settings.speed;let loops=0;while(acc>=1&&loops<32){A.tick(s);acc-=1;loops++;}if(loops===32)acc=0;
- if(ts-lastDraw>85){draw();lastDraw=ts;}
+ if(ts-lastDraw>50){draw();lastDraw=ts;}
  if(ts-lastHUD>450){hud();lastHUD=ts;}
  if(ts-lastSave>16000){save();lastSave=ts;}
  if(flashUntil&&Date.now()>flashUntil){$('toast').classList.remove('show');flashUntil=0;}}
 setMode('inspect');hud();draw();requestAnimationFrame(frame);
-window.GodseedDebug={getState:()=>s,getRenderStats:()=>({sceneryRedraws,atlasesReady:assets.ready,decodedBytes:assets.decodedBytes}),draw,getCamera:()=>({x:camX,y:camY,width:VW,height:VH,zoom:ZOOMS[zoomIndex].name}),setZoom:(i)=>{setZoom(i);hud();draw();},setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
+window.GodseedDebug={getState:()=>s,getRenderStats:()=>({sceneryRedraws,atlasesReady:assets.ready,decodedBytes:assets.decodedBytes,activeEffects:visualFx.list(performance.now()).length,reducedMotion}),draw,getCamera:()=>({x:camX,y:camY,width:VW,height:VH,zoom:ZOOMS[zoomIndex].name}),setZoom:(i)=>{setZoom(i);hud();draw();},setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
 })();
