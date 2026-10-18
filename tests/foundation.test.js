@@ -29,3 +29,40 @@ test('five autonomous 10000 tick runs remain bounded, progress, and restore',()=
 test('fully explored late worlds keep making journeys after 10000 ticks',()=>{
  for(const seed of [7,41,2026]){const s=S.create(seed);for(let i=0;i<10000;i++)S.tick(s);const before=s.bot.steps;for(let i=0;i<1000;i++)S.tick(s);assert.ok(s.bot.steps>before+10,'seed '+seed+' stops wandering');}
 });
+
+test('a distant camp does not grant remote healing during emergency recovery',()=>{
+ const s=S.create(41),b=s.bot;
+ s.camp={x:32,y:24};s.map[S.idx(32,24)]=S.T.CAMP;
+ b.tool=1;b.x=50;b.y=39;b.hp=5;b.energy=90;b.hunger=100;b.food=10;
+ s.enemies=[];s.npcs=[];
+ S.plan(s);assert.equal(b.goal,'Recover');
+ S.tick(s);S.tick(s);
+ assert.equal(b.hp,7,'emergency recovery away from camp heals only two health');
+ assert.ok(S.validate(s));
+});
+
+test('moderately wounded Nim returns autonomously to nearby camp for stronger recovery',()=>{
+ const s=S.create(41),b=s.bot;
+ s.camp={x:32,y:24};s.map[S.idx(32,24)]=S.T.CAMP;
+ b.tool=1;b.x=36;b.y=24;b.hp=14;b.energy=90;b.hunger=100;b.food=10;
+ s.enemies=[];s.npcs=[];
+ S.plan(s);
+ assert.equal(b.goal,'Return to camp');
+ assert.ok(b.path.length>0&&b.path.length<=8);
+ for(let i=0;i<6;i++)S.tick(s);
+ assert.equal(b.hp,17,'Nim rests after returning within range of her hearth');
+ assert.ok(Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<=2);
+ const loaded=S.restore(S.serialize(s));
+ assert.ok(loaded);
+ assert.equal(loaded.bot.hp,b.hp);
+ assert.ok(S.validate(loaded));
+});
+
+test('immediate threats still override autonomous camp recovery',()=>{
+ const s=S.create(41),b=s.bot;
+ s.camp={x:32,y:24};s.map[S.idx(32,24)]=S.T.CAMP;
+ b.tool=1;b.x=36;b.y=24;b.hp=14;b.energy=90;b.hunger=100;b.food=10;
+ s.enemies=[{id:1,type:'Wolf',x:37,y:24,hp:11,attack:2,defense:0,cooldown:1}];
+ S.plan(s);
+ assert.equal(b.goal,'Defend','escaping or defending is more urgent than going home');
+});
