@@ -48,8 +48,8 @@ function build(s,town,type,starting=false){
 }
 function create(s){
  const towns=[
-  {id:'briarford',name:'Briarford',x:25,y:21,seed:s.worldSeed^113,age:'Outpost',stock:{food:6,wood:2,stone:1},buildings:[],agenda:'housing',nextBuild:120},
-  {id:'emberwick',name:'Emberwick',x:37,y:27,seed:s.worldSeed^771,age:'Outpost',stock:{food:5,wood:3,stone:1},buildings:[],agenda:'food',nextBuild:160}
+  {id:'briarford',name:'Briarford',x:25,y:21,seed:s.worldSeed^113,age:'Outpost',stock:{food:6,wood:2,stone:1},buildings:[],agenda:'housing',technology:{level:0,era:'Founding Age'},nextBuild:120},
+  {id:'emberwick',name:'Emberwick',x:37,y:27,seed:s.worldSeed^771,age:'Outpost',stock:{food:5,wood:3,stone:1},buildings:[],agenda:'food',technology:{level:0,era:'Founding Age'},nextBuild:160}
  ];
  const living={version:1,towns,citizens:[],chronicle:[],whispers:[],nextWhisper:1};
  s.living=living;
@@ -93,6 +93,8 @@ function restore(s){
   t.buildings=Array.isArray(t.buildings)?t.buildings.slice(0,MAX_BUILDINGS).filter(b=>b&&BLUEPRINTS[b.type]&&
    Number.isInteger(b.x)&&Number.isInteger(b.y)&&b.x>1&&b.x<W-2&&b.y>1&&b.y<H-2):[];
   t.agenda=BLUEPRINTS[t.agenda]||['housing','food','defense','trade'].includes(t.agenda)?t.agenda:'housing';
+  const level=Number.isInteger(t.technology&&t.technology.level)?Math.max(0,Math.min(3,t.technology.level)):0;
+  t.technology={level,era:['Founding Age','Farming Age','Craft Age','Trade Age'][level]};
  }
  for(const c of l.citizens){
   const t=townOf(s,c.townId)||l.towns[0];
@@ -153,9 +155,9 @@ function blueprintFor(t){
  if(agenda==='craft'&&!count('workshop'))return 'workshop';
  if(agenda==='trade'&&!count('market'))return 'market';
  if(!count('well'))return 'well';
- if(!count('workshop'))return 'workshop';
- if(!count('market'))return 'market';
- if(!count('watchtower'))return 'watchtower';
+ if(!count('workshop')&&t.technology.level>=1)return 'workshop';
+ if(!count('market')&&t.technology.level>=2)return 'market';
+ if(!count('watchtower')&&t.technology.level>=1)return 'watchtower';
  return count('house')<4?'house':count('farm')<3?'farm':null;
 }
 function tick(s){
@@ -172,6 +174,19 @@ function tick(s){
    if(s.tick%480===0)log(s,'Trading caravan','Briarford timber and Emberwick stone crossed the old road.');}
  }
  for(const t of s.living.towns){
+  if(s.tick%120===0){
+   const citizens=s.living.citizens.filter(c=>c.townId===t.id);
+   const craftSkill=citizens.reduce((n,c)=>n+c.skill,0)/Math.max(1,citizens.length);
+   const built=type=>t.buildings.some(b=>b.type===type);
+   const tech=t.technology;
+   let next=tech.level;
+   if(next===0&&t.buildings.length>=4&&t.stock.food>=5&&craftSkill>=1.5)next=1;
+   else if(next===1&&t.buildings.length>=7&&built('workshop')&&craftSkill>=2)next=2;
+   else if(next===2&&t.buildings.length>=9&&built('market')&&craftSkill>=3)next=3;
+   if(next!==tech.level){tech.level=next;tech.era=['Founding Age','Farming Age','Craft Age','Trade Age'][next];
+    log(s,t.name+' enters the '+tech.era,'New skills, infrastructure and supplies made a new generation of blueprints possible.');
+   }
+  }
   t.stock.food=Math.max(0,t.stock.food-Math.max(1,Math.floor(s.living.citizens.filter(p=>p.townId===t.id).length/2))*(s.tick%96===0?1:0));
   if(s.tick<t.nextBuild)continue;
   const type=blueprintFor(t);
