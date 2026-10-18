@@ -53,10 +53,7 @@ function create(s){
  ];
  const living={version:1,towns,citizens:[],chronicle:[],whispers:[],nextWhisper:1};
  s.living=living;
- for(const t of towns){build(s,t,'house',true);build(s,t,'farm',true);
-  // The god can see populated hamlet centers; Nim's region milestones still require a visit.
-  for(let dy=-3;dy<=3;dy++)for(let dx=-3;dx<=3;dx++)if(t.x+dx>=0&&t.x+dx<W&&t.y+dy>=0&&t.y+dy<H)s.seen[(t.y+dy)*W+t.x+dx]=1;
- }
+ for(const t of towns){build(s,t,'house',true);build(s,t,'farm',true);}
  const identities=[
   ['Elin','Builder','briarford',.80,.46,.62],
   ['Rowan','Forager','briarford',.66,.78,.35],
@@ -181,6 +178,8 @@ function tick(s){
 }
 function personTick(s,p){
  if(!s.living||s.tick%12!==0)return false;
+ // Do not overwrite a character's earned, currently active divine-favor response.
+ if(p.favorUntil>s.tick&&p.favorSpent)return true;
  const t=(p.name==='Ira'?s.living.towns[1]:s.living.towns[0]);
  const phase=s.tick%240;
  let target={x:p.homeX,y:p.homeY};
