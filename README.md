@@ -1,3 +1,9 @@
+## Playable story milestone — Chapter I: The Mossbound Oath
+
+GODSEED now has an autonomous first chapter with **three actual objectives**: Nim independently builds a camp and hatchet, meets a traveler, then explores a ruin and visits a shrine. A compact native pixel-square HUD panel shows objective/progress and marks the chapter **COMPLETED**. Finite +2 max HP, +5 Faith and +12 XP end rewards happen **once**, are save-safe and never depend on rendering. Older saves migrate from their actual accomplishment state without retroactive resource farming.
+
+[Chapter I implementation and acceptance](docs/CHAPTER_ONE_PLAYABLE_MILESTONE.md) · [Chapter source tests](tests/chapter.test.js) · [Actual offline Chromium screenshot test](tests/chapter_browser_acceptance.py). This is a complete **small playable milestone**, not the complete game or physical Android release. The eight-region skyworld, offline browser preview, pixel atlases and separate emulator-tested Gradle Android host are preserved.
+
 ## Playable Android Gradle milestone — emulator verified
 
 The GODSEED offline **Android Gradle/WebView evaluation APK** now installs and runs on an Android API 29 emulator. Five native instrumentation checks pass, including **saved Nim world restoration after Activity recreation** and secure optional offline lore-pack import/removal. Original autonomous world, 8 regions, 32×20 sky camera and square-pixel sprites remain in the bundled HTML game.

@@ -81,6 +81,15 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 #nativeStorageLore{white-space:pre-wrap;max-height:110px;overflow:auto;border-top:1px solid #6a8269;padding-top:6px}
 @media(max-width:700px){#nativeStoragePanel{top:3px;right:3px}#nativeStorageBody{max-height:60vh}}
 
+
+/* Chapter I: in-world pixel-square milestones, not an intrusive new HUD. */
+#chapterPanel{margin-top:11px;padding:8px 10px;background:#1b3029;border:2px solid #8e9870;border-left:4px solid #e1bd7a;color:#eee1bf}
+#chapterTitle{font-size:11px;font-weight:bold;letter-spacing:.035em;color:#f0d39a}
+#chapterStep{font-size:10px;color:#b8cba9;margin:3px 0}
+#chapterProgress{height:7px;background:#142521;border:1px solid #71826c;overflow:hidden}
+#chapterProgressFill{height:100%;width:0;background:#d3b87c;image-rendering:pixelated;transition:none}
+#chapterObjective{font-size:10px;line-height:1.45;margin:5px 0 0;color:#d9dec8}
+
 </style>
 </head><body><div class="site">
 <header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">A FORGOTTEN KINGDOM LIVES WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ CRÓNICAS DEL REINO OLVIDADO</span></h1><p>Fantasía medieval · Observa una vida. Inspira a un reino.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v1 experimental</span></div></header>
@@ -111,7 +120,12 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 <div class="section-title">SKILLS — LEARNED BY DOING</div><div class="memory" id="skillRanks"></div><div class="section-title">TALES &amp; SURVIVAL</div><p class="tiny muted" id="adventures"></p><p class="tiny muted">Current rumor: <strong id="lead">No active legend</strong></p>
 <label class="tiny"><input type="checkbox" id="reduceMotion"> Reduce motion</label><div class="section-title">HABITANTES DEL REINO</div><p class="tiny muted" id="people" aria-live="off">The world is waking…</p>
   <div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
-<div class="divider"></div><div class="tiny muted" id="milestones"></div>
+<div class="divider"></div><div class="tiny muted" id="milestones"></div><section id="chapterPanel" aria-label="Autonomous story chapter">
+ <div id="chapterTitle">CHAPTER I · THE MOSSBOUND OATH</div>
+ <div id="chapterStep">1 / 3 — The First Hearth</div>
+ <div id="chapterProgress" role="progressbar" aria-label="Chapter I progress" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div id="chapterProgressFill"></div></div>
+ <p id="chapterObjective">Nim will discover the chapter through autonomous actions.</p>
+ </section>
 </div></div>
 <div class="panel" style="margin-top:14px"><div class="panelhead"><h2>World atlas</h2><span class="tiny muted">Tap to pan</span></div><div class="side-lower"><div class="minigroup"><canvas id="minimap" width="64" height="48" aria-label="Small world map. Tap to pan the camera."></canvas><div class="tiny muted">The dark areas are unknown to Nim. Travelers can be inspected and inspired.<p style="margin:7px 0">Time moves only while the page is open.</p><p style="margin:7px 0">You are observing one life, not controlling it.</p></div></div></div></div>
 <div class="panel logpanel"><div class="panelhead"><h2>World chronicle</h2><span class="tiny muted">Events as they happen</span></div><div class="events" id="events" aria-live="polite"></div></div>

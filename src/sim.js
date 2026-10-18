@@ -139,8 +139,62 @@ function event(s,title,detail,type='event'){
  const e={tick:s.tick,title:String(title),detail:String(detail),type};s.log.unshift(e);if(s.log.length>45)s.log.length=45;
  if(type==='milestone'){s.faith=clamp(s.faith+3,0,50);s.milestones++;}
 }
+
+/** Chapter I is earned by Nim's own actions; the player may only influence conditions.
+ * Chapter checkpoints are retained in version-1 saves and have no random draws.
+ */
+const CHAPTER_STEPS=[
+ {title:'The First Hearth',objective:'Nim must establish a camp and craft a useful tool.',complete:'Nim has found shelter and learned to make tools.'},
+ {title:'Voices of the Borderlands',objective:'Nim must meet one of the three autonomous travelers.',complete:'A traveler now knows Nim by name.'},
+ {title:'The Mossbound Oath',objective:'Nim must explore a ruin and visit an ancient shrine.',complete:'The forgotten borderlands have revealed their first oath.'}
+];
+function chapterReady(s,step){
+ if(step===0)return !!s.camp&&s.bot.tool>=1;
+ if(step===1)return (s.npcs||[]).some(p=>p.met);
+ if(step===2)return s.bot.ruins>=1&&(s.shrinesVisited||[]).length>=1;
+ return false;
+}
+function freshChapter(){return {version:1,stage:0,completedAt:null,rewarded:false};}
+function chapterFromLegacy(s){
+ const chapter=freshChapter();
+ while(chapter.stage<CHAPTER_STEPS.length&&chapterReady(s,chapter.stage))chapter.stage++;
+ if(chapter.stage===CHAPTER_STEPS.length){
+  // Previously earned achievements are credited, never awarded twice.
+  chapter.completedAt=s.tick;chapter.rewarded=true;
+ }
+ return chapter;
+}
+function chapterStatus(s){
+ const state=s.chapter||freshChapter();
+ const finished=state.stage===CHAPTER_STEPS.length;
+ const step=finished?CHAPTER_STEPS.length-1:state.stage;
+ return {id:'chapter-1',name:'Chapter I · The Mossbound Oath',
+   stage:state.stage,total:CHAPTER_STEPS.length,
+   completed:finished,completedAt:state.completedAt,
+   title:finished?'Oathkeeper of the Borderlands':CHAPTER_STEPS[step].title,
+   objective:finished?'Completed. Nim continues exploring the living world.':CHAPTER_STEPS[step].objective};
+}
+function advanceChapter(s){
+ const state=s.chapter;if(!state||state.stage>=CHAPTER_STEPS.length)return false;
+ if(!chapterReady(s,state.stage))return false;
+ const step=state.stage++;
+ if(step===CHAPTER_STEPS.length-1){
+  state.completedAt=s.tick;
+  state.rewarded=true;
+  // A finite tangible boon, once per lifetime, not per frame or save reload.
+  s.bot.maxHp+=2;s.bot.hp=Math.min(s.bot.maxHp,s.bot.hp+2);
+  s.faith=clamp(s.faith+5,0,50);
+  gain(s,12,'fulfilling the Mossbound Oath');
+  event(s,'Chapter I complete','Nim uncovered the Mossbound Oath. Oathkeeper token: +2 maximum health and five Faith.','milestone');
+  remember(s,'Fulfilled the Mossbound Oath');
+ }else{
+  event(s,'Chapter I: '+CHAPTER_STEPS[step].title,CHAPTER_STEPS[step].complete,'milestone');
+ }
+ return true;
+}
+
 function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,worldSeed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
- map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],regions:{version:1,discovered:[]},shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
+ map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],regions:{version:1,discovered:[]},chapter:freshChapter(),shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
  bot:{name:'Nim',x:Math.floor(W/2),y:Math.floor(H/2),level:1,xp:0,hp:24,maxHp:24,hunger:86,energy:83,attack:4,defense:1,food:2,wood:0,stone:0,tool:0,
  goal:'Awakening',thought:'Where am I?',target:null,path:[],actionDelay:0,fights:0,ruins:0,scars:0,steps:0,
  personality:{curiosity:0.68,caution:0.42,diligence:0.57},memory:[]}};
@@ -337,6 +391,7 @@ function tick(s){s.tick++;discoverRegion(s,s.bot.x,s.bot.y);revive(s);if(s.tick%
  const b=s.bot;if(b.actionDelay>0)b.actionDelay--;
  if(s.tick%2===0){plan(s);botAct(s);updateEnemies(s);}
  updatePeople(s);
+ advanceChapter(s);
  return s;}
 const COST={bless:4,gift:5,bloom:6,guide:3,storm:8,inspire:5};
 function previewPower(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))return {ok:false,why:'Unknown power'};
@@ -369,7 +424,14 @@ function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!=
  if(!Array.isArray(s.enemies)||!s.enemies.every(e=>e&&Number.isInteger(e.x)&&Number.isInteger(e.y)&&inside(e.x,e.y)&&['hp','attack','defense','cooldown','id'].every(k=>Number.isFinite(e[k]))))return false;
  return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
 function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
-function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;if(!Number.isInteger(s.worldSeed))s.worldSeed=s.seed;s.regions={version:1,discovered:[...new Set(s.regions&&Array.isArray(s.regions.discovered)?s.regions.discovered.filter(id=>Regions.data.regions.some(r=>r.id===id)):[])]};s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
+function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;if(!Number.isInteger(s.worldSeed))s.worldSeed=s.seed;s.regions={version:1,discovered:[...new Set(s.regions&&Array.isArray(s.regions.discovered)?s.regions.discovered.filter(id=>Regions.data.regions.some(r=>r.id===id)):[])]};if(!s.chapter||s.chapter.version!==1||!Number.isInteger(s.chapter.stage)||s.chapter.stage<0||s.chapter.stage>CHAPTER_STEPS.length){
+  s.chapter=chapterFromLegacy(s);
+ }else{
+  s.chapter={version:1,stage:s.chapter.stage,completedAt:s.chapter.stage===CHAPTER_STEPS.length?
+    (Number.isInteger(s.chapter.completedAt)&&s.chapter.completedAt>=0&&s.chapter.completedAt<=s.tick?s.chapter.completedAt:s.tick):null,
+    rewarded:s.chapter.stage===CHAPTER_STEPS.length};
+ }
+ s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
  progress(s.bot);
  // Migration: v0.1/v0.2 saves had no inhabitants. Keep old save schema intact.
  s.npcs=Array.isArray(s.npcs)?s.npcs.slice(0,3):initPeople(s);
@@ -387,5 +449,5 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
  s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
-return {regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
+return {chapterStatus,regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
 });

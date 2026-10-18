@@ -1,3 +1,21 @@
+## Chapter I autonomous playable milestone — 2026-10-18
+
+BRANCH: `feat/godseed-chapter-one-complete`, based on `feat/godseed-android-storage-host` (PR #6), based on GODSEED v1 PR #5. No merge to `main`.
+
+IMPLEMENTED: Deterministic three-stage "Mossbound Oath" progression in `src/sim.js` with camp + crafted tool, actual NPC encounter, ruin + shrine completion. One-time chapter reward (+2 max HP, +5 Faith, +12 XP; existing milestone bonus separately applied), explicit completed state; no direct player movement or rendering-based state mutation.
+
+UI: `index.template.html` and `src/ui.js` add compact square-pixel Chapter I panel with current objective and accessible 0/3–3/3 progress. Android offline HTML bundles it through unchanged `build.py`.
+
+MIGRATION: `version:1` and localStorage key unchanged. Old saves with no `chapter` derive progress from actual achievements and cannot receive retroactive duplicated rewards; corrupt optional chapter state is reconstructed.
+
+EVIDENCE: `node --test tests/*.test.js` includes six new chapter tests, including 10k ticks without direct control; offline Chromium `tests/chapter_browser_acceptance.py` verifies all stages, one-time reward, no runtime network and captures `qa-screenshots/chapter-one-completed-640x360.png`. GitHub CI run [39162328096](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39162328096) completed successfully on the implementation commit (documentation changes afterward require separate CI check).
+
+LIMITS: Complete intro chapter ≠ completed whole game. The Gradle Android emulator host was previously verified, but physical low-RAM phone FPS/PSS/RSS remains unverified. Versioned APK is experimental, not production signed. More chapters/world behaviors are deferred.
+
+NEXT: review Chapter I PR into PR #6, then extend with Chapter II only after owner review; preserve skyworld/render/Android regression tests.
+
+---
+
 ## Completed Android emulator vertical-slice milestone — October 18, 2026
 
 BRANCH: `feat/godseed-android-storage-host` (PR #6, based on PR #5), still unmerged. Native Gradle/WebView host packages the offline GODSEED simulation and square-pixel renderer without modifying `main` or the SDK-free APK.
