@@ -103,7 +103,7 @@ function restore(s){
 }
 function goalFor(s,p){
  const t=townOf(s,p.townId)||s.living.towns[0];
- const phase=s.tick%240;
+ const phase=(s.tick+p.id*23)%240;
  if(phase>=185)return {x:p.homeX,y:p.homeY,activity:'Resting at home'};
  if(phase>=140)return {x:t.x,y:t.y,activity:'Sharing evening stories'};
  if(phase>=90)return {x:t.x+(p.id%3)-1,y:t.y+1,activity:'Talking to neighbors'};
@@ -157,7 +157,7 @@ function tick(s){
  if(s.tick%240===0)advanceLife(s);
  for(const p of s.living.citizens){
   const task=goalFor(s,p);p.activity=task.activity;walk(s,p,task);
-  if(s.tick%240<90)work(s,p);
+  if((s.tick+p.id*23)%240<90)work(s,p);
   if(s.tick%240===0){p.age+=1/12;p.mood=p.actions%5===0?'content':'calm';}
  }
  // Villages exchange surplus instead of waiting forever for absent professions.
@@ -212,7 +212,7 @@ function personTick(s,p){
  // Do not overwrite a character's earned, currently active divine-favor response.
  if(p.favorUntil>s.tick&&p.favorSpent)return true;
  const t=(p.name==='Ira'?s.living.towns[1]:s.living.towns[0]);
- const phase=s.tick%240;
+ const phase=(s.tick+p.id*19)%240;
  let target={x:p.homeX,y:p.homeY};
  if(phase>55&&phase<166){target=p.role==='Rune Scholar'?{x:p.homeX-2,y:p.homeY+1}:p.role==='Apothecary'?{x:t.x-1,y:t.y+1}:{x:t.x+2,y:t.y};}
  if(phase>=166&&phase<205)target={x:t.x,y:t.y};
