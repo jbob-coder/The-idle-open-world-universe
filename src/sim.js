@@ -544,7 +544,7 @@ function updateEnemies(s){const b=s.bot;
 // A depleted island must recover without rewriting water, landmarks or old saves.
 function renewResources(s){
  const land=[],counts={[T.BERRY]:0,[T.FOREST]:0,[T.STONE]:0};
- findPath(s,(x,y,t,n)=>{if(t in counts)counts[t]++;if(t===T.GRASS||t===T.MEADOW)land.push(n);return false;});
+ findPath(s,(x,y,t,n)=>{if(t in counts)counts[t]++;if((t===T.GRASS||t===T.MEADOW)&&!Living.occupied(s,x,y))land.push(n);return false;});
  for(const t of [T.BERRY,T.FOREST,T.STONE]){
   const floor=t===T.BERRY?6:4;
   while(counts[t]<floor&&land.length){const n=land.shift();s.map[n]=t;counts[t]++;}
@@ -554,7 +554,7 @@ function tick(s){s.tick++;discoverRegion(s,s.bot.x,s.bot.y);revive(s);if(s.tick%
  if(s.weatherUntil&&s.tick>=s.weatherUntil){s.weather='clear';s.weatherUntil=0;}
  if(s.tick%12===0){const b=s.bot;b.hunger=clamp(b.hunger-1,0,100);b.energy=clamp(b.energy-1,0,100);if(b.hunger===0)b.hp-=1;}
  if(s.tick%72===0)s.faith=clamp(s.faith+1,0,50);
- if(s.tick%93===0){renewResources(s);for(let i=0;i<3;i++){let x=rint(s,W),y=rint(s,H),n=idx(x,y);if(s.map[n]===T.GRASS)s.map[n]=T.BERRY;}}
+ if(s.tick%93===0){renewResources(s);for(let i=0;i<3;i++){let x=rint(s,W),y=rint(s,H),n=idx(x,y);if(s.map[n]===T.GRASS&&!Living.occupied(s,x,y))s.map[n]=T.BERRY;}}
  if(s.guide){s.guide.ticks--;if(s.guide.ticks<=0)s.guide=null;}
  s.marks=s.marks.filter(z=>z.until>s.tick);
  // Planning is deliberate: every movement step or completed action chooses what matters now.
