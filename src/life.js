@@ -33,6 +33,7 @@ function zone(s,x,y,type){
   const tx=x+dx,ty=y+dy,t=at(s,tx,ty);
   if(t!==0&&t!==6)return false;
   if(s.camp&&Math.abs(tx-s.camp.x)+Math.abs(ty-s.camp.y)<=1)return false;
+  if((s.npcs||[]).some(p=>Math.abs(tx-p.homeX)+Math.abs(ty-p.homeY)<1))return false;
   for(const q of s.life.buildings)
    if(tx>=q.x-1&&tx<q.x+q.w+1&&ty>=q.y-1&&ty<q.y+q.h+1)return false;
  }
@@ -109,15 +110,18 @@ function repair(s){
  return l;
 }
 function classify(input){
- const text=String(input).toLowerCase();
- // Deliberately narrow and explainable: unsupported free text is NOT "understood".
- if(/\b(build|construct|constru|edific|house|home|casa|vivienda|settlement|asentamiento|workshop|taller)\b/.test(text))return 'build';
- if(/\b(farm|grow|plant|crop|food|granja|cultiv|sembr|comida|huerto)\b/.test(text))return 'farm';
- if(/\b(explore|travel|discover|wander|explor|viaj|descubr|investig|mundo)\b/.test(text))return 'explore';
- if(/\b(rest|sleep|recover|descans|dorm|recuper|pausa)\b/.test(text))return 'rest';
- if(/\b(help|care|protect|social|ayud|cuid|proteg|amistad|amig)\b/.test(text))return 'help';
- if(/\b(study|learn|research|read|estudi|aprend|leer|conocim)\b/.test(text))return 'study';
- if(/\b(gather|collect|harvest|mine|recolect|recog|madera|piedra|miner)\b/.test(text))return 'gather';
+ const words=String(input).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(/[^a-z0-9]+/).filter(Boolean);
+ // Narrow offline intent vocabulary, including Spanish verb conjugations.
+ const patterns=[
+  ['build',/^(build|construct|constru|edific|house|home|casa|viviend|settlement|asentam|workshop|taller)/],
+  ['farm',/^(farm|grow|plant|crop|food|granja|cultiv|sembr|comida|huerto|aliment)/],
+  ['explore',/^(explor|travel|discover|wander|viaj|descubr|investig|mundo)/],
+  ['rest',/^(rest|sleep|recover|descans|dorm|recuper|pausa)/],
+  ['help',/^(help|care|protect|social|ayud|cuid|proteg|amistad|amig)/],
+  ['study',/^(study|learn|research|read|estudi|aprend|leer|conocim)/],
+  ['gather',/^(gather|collect|harvest|mine|recolect|recog|madera|piedra|miner)/]
+ ];
+ for(const [intent,re] of patterns)if(words.some(word=>re.test(word)))return intent;
  return null;
 }
 function issue(s,target,message){
