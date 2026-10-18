@@ -5,6 +5,8 @@ import json
 import tempfile
 import zipfile
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
 from make_sample_lore_pack import build_pack
 
 with tempfile.TemporaryDirectory() as folder:
