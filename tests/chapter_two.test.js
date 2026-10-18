@@ -115,3 +115,14 @@ test('Autonomous map quest chooses walkable region route without direct god cont
  S.roadStatus(s);
  assert.equal(S.serialize(s),baseline,'rendering status cannot mutate world');
 });
+
+test('Chapter II can conclude in a long fully autonomous seeded playthrough',()=>{
+ const s=S.create(41);
+ for(let i=0;i<10000;i++)S.tick(s);
+ const first=S.chapterStatus(s),second=S.roadStatus(s);
+ assert.equal(first.completed,true,'Chapter I remains autonomously completable');
+ assert.equal(second.completed,true,'Nim must restore the road with no player controls; stage='+second.stage+
+  ' discovered='+s.regions.discovered.join(',')+' ruins='+s.bot.ruins+
+  ' shrines='+s.shrinesVisited.length+' mera='+s.npcs.find(p=>p.name==='Mera').met);
+ assert.ok(S.restore(S.serialize(s)));
+});
