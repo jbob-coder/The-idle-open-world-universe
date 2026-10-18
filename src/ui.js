@@ -35,12 +35,13 @@ const assets=window.GodseedAssets,terrain=window.GodseedTerrain,visualFx=window.
 const motionQuery=window.matchMedia('(prefers-reduced-motion: reduce)');let reducedMotion=motionQuery.matches;
 $('reduceMotion').checked=reducedMotion;$('reduceMotion').addEventListener('change',e=>{reducedMotion=e.target.checked;if(s.settings.speed===0)draw();});
 assets.loaded.then(()=>{document.querySelectorAll('[data-power]').forEach(button=>{const slot=button.querySelector('.ico,.power-icon');if(!slot)return;slot.textContent='';const c=document.createElement('canvas');c.width=c.height=16;c.className='power-pixel';c.setAttribute('aria-hidden','true');slot.appendChild(c);const f=assets.manifest.atlases[2].symbols.find(f=>f.name===button.dataset.power);if(f)assets.blit(c.getContext('2d'),2,f.rect,0,0);});const portrait=$('portrait');const f=assets.manifest.atlases[1].frames[0];assets.blit(portrait.getContext('2d'),1,f.rect,0,0);oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
+function godSeesTown(x,y){return !!s.living&&s.living.towns.some(t=>Math.abs(t.x-x)<=3&&Math.abs(t.y-y)<=3);}
 function drawTile(tile,x,y,wx,wy){if(assets.ready)terrain.draw(ctx,assets,s,tile,x,y,wx,wy);else rect(x,y,16,16,'#152723');}
 function updateScenery(){
  let changed=camX!==sceneX||camY!==sceneY,k=0;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
   const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy);
-  const tile=s.seen[n]?(s.map[n]+1)*32+((s.map[n]===8||s.map[n]===2)?terrain.mask(s,wx,wy,s.map[n]):0):0;
+  const tile=(s.seen[n]||godSeesTown(wx,wy))?(s.map[n]+1)*32+((s.map[n]===8||s.map[n]===2)?terrain.mask(s,wx,wy,s.map[n]):0):0;
   if(oldCells[k]!==tile){oldCells[k]=tile;changed=true;}k++;
  }
  if(!changed)return;
@@ -48,7 +49,7 @@ function updateScenery(){
  ctx=sceneryCtx;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
   const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy),x=rx*size,y=ry*size;
-  if(!s.seen[n]){rect(x,y,size,size,'#11191A');continue;}
+  if(!s.seen[n]&&!godSeesTown(wx,wy)){rect(x,y,size,size,'#11191A');continue;}
   drawTile(s.map[n],x,y,wx,wy);
 
  }
@@ -59,7 +60,7 @@ function draw(){screenRedraws++;positionCamera();const b=s.bot;updateScenery();
  ctx.drawImage(scenery,0,0);
  // Physical settlements are persistent Canvas actors, not symbolic village tiles.
  if(s.living)for(const town of s.living.towns)for(const building of town.buildings){
-  if(building.x>=camX&&building.x<camX+VW&&building.y>=camY&&building.y<camY+VH&&s.seen[A.idx(building.x,building.y)]){
+  if(building.x>=camX&&building.x<camX+VW&&building.y>=camY&&building.y<camY+VH&&godSeesTown(building.x,building.y)){
    Living.drawBuilding(ctx,building,(building.x-camX)*16,(building.y-camY)*16);
   }
  }
@@ -70,7 +71,7 @@ function draw(){screenRedraws++;positionCamera();const b=s.bot;updateScenery();
  }
  if(s.guide&&s.guide.x>=camX&&s.guide.x<camX+VW&&s.guide.y>=camY&&s.guide.y<camY+VH){const x=(s.guide.x-camX)*16,y=(s.guide.y-camY)*16;rect(x,y,16,1,'#e4d386');rect(x,y+15,16,1,'#e4d386');rect(x,y,1,16,'#e4d386');rect(x+15,y,1,16,'#e4d386');}
  const actors=window.GodseedActors.sorted([...(s.npcs||[]),...(s.living?s.living.citizens:[]),...s.enemies,b]);
- for(const actor of actors){if(actor.x<camX||actor.x>=camX+VW||actor.y<camY||actor.y>=camY+VH||!s.seen[A.idx(actor.x,actor.y)])continue;
+ for(const actor of actors){if(actor.x<camX||actor.x>=camX+VW||actor.y<camY||actor.y>=camY+VH||(!s.seen[A.idx(actor.x,actor.y)]&&!godSeesTown(actor.x,actor.y)))continue;
   const px=(actor.x-camX)*16,py=(actor.y-camY)*16;
   if(actor===b){rect(px+1,py+15,14,1,'#EFCB76');}
   if(s.living&&s.living.citizens.includes(actor))Living.drawCitizen(ctx,actor,px,py,s.tick);else window.GodseedActors.draw(ctx,assets,actor,s.tick,px,py);
