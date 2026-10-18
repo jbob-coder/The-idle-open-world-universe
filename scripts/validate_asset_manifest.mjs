@@ -9,7 +9,8 @@ assert.equal(manifest.state,'starter-not-integrated');
 assert.equal(manifest.atlases.length,4);
 assert.equal(tasks.entries.length,25);
 assert.equal(new Set(tasks.entries.map(t=>t.id)).size,25);
-assert.ok(tasks.entries.every(t=>t.status==='todo'), 'Prep must not falsely mark implementation as completed');
+assert.ok(tasks.entries.every(t=>['todo','done','blocked','implemented_pending_visual_qa'].includes(t.status)), 'Known implementation states');
+assert.ok(tasks.entries.filter(t=>t.status==='done').every(t=>t.evidence.length>0), 'Completed tasks require evidence');
 const sign=[137,80,78,71,13,10,26,10];
 function crc32(bytes){let crc=0xffffffff;for(const octet of bytes){crc^=octet;for(let i=0;i<8;i++)crc=crc&1?0xedb88320^(crc>>>1):crc>>>1;}return (crc^0xffffffff)>>>0;}
 let total=0;

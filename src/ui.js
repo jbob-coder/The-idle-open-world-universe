@@ -7,6 +7,7 @@ let zoomIndex=0,VW=ZOOMS[0].w,VH=ZOOMS[0].h;
 const canvas=$('world'),screenCtx=canvas.getContext('2d',{alpha:false}),mini=$('minimap'),mctx=mini.getContext('2d',{alpha:false});
 const scenery=document.createElement('canvas');scenery.width=canvas.width;scenery.height=canvas.height;
 const sceneryCtx=scenery.getContext('2d',{alpha:false});let ctx=screenCtx,sceneX=-1,sceneY=-1;
+let sceneryRedraws=0;
 let oldCells=new Int16Array(VW*VH);oldCells.fill(-99);
 screenCtx.imageSmoothingEnabled=false;sceneryCtx.imageSmoothingEnabled=false;mctx.imageSmoothingEnabled=false;
 const SAVE_KEY='godseed-one-small-life-v1';let s,mode='inspect',camX=0,camY=0,lastDraw=0,lastHUD=0,lastSave=0,acc=0,frameLast=0,hover=null,flashMessage='',flashUntil=0;
@@ -30,108 +31,27 @@ const colors=['#3c5c43','#254b3a','#26536a','#62635e','#426c49','#837458','#688b
 const hash=(x,y)=>((Math.imul(x+91,374761393)^Math.imul(y+37,668265263))>>>0);
 function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
 function dot(x,y,c){rect(x,y,1,1,c);}
-function drawTile(tile,x,y,wx,wy){let v=hash(wx,wy);rect(x,y,size,size,colors[tile]);
- // Each motif is at most a few rectangles, stamped to a cached 576x352 canvas.
- if(tile===A.T.ROAD){
-  rect(x,y+4,16,9,'#a59a76');rect(x,y+5,16,1,'#c4b68e');
-  rect(x+(v%7),y+7,4,2,'#817661');rect(x+9,y+11,5,1,'#d3b58c');
-  if(v%3===0){dot(x+2,y+2,'#7da06e');dot(x+14,y+14,'#7da06e');}return;
- }
- if(tile===A.T.VILLAGE){
-  rect(x+1,y+13,14,2,'#332e2c');rect(x+2,y+7,12,7,'#a98c65');
-  rect(x+2,y+7,2,6,'#e3c18e');rect(x+12,y+7,2,6,'#e3c18e');
-  rect(x+6,y+10,4,4,'#40362f');rect(x+3,y+9,2,2,'#e8c97b');
-  rect(x+10,y+9,2,2,'#e8c97b');
-  rect(x+1,y+5,14,3,'#694b46');rect(x+3,y+3,10,3,'#995d50');
-  rect(x+5,y+2,6,2,'#bd7960');dot(x+7,y+3,'#e2b17b');return;
- }
- if(tile===A.T.SHRINE){
-  rect(x+1,y+13,14,2,'#2a2c34');rect(x+3,y+10,10,3,'#85808f');
-  rect(x+5,y+3,6,9,'#9b99a9');rect(x+4,y+2,8,2,'#d0c2af');
-  rect(x+7,y+5,2,5,'#4e7489');rect(x+6,y+6,1,3,'#e3d29d');
-  rect(x+9,y+6,1,3,'#e3d29d');rect(x+2,y+8,2,3,'#6c816c');
-  dot(x+8,y+1,'#d9d6b6');return;
- }
- // All ground motifs are deterministic rectangles; no image assets, shaders or allocations.
- if(tile===A.T.GRASS){if(v%5===0){rect(x+3,y+10,2,4,'#73936a');rect(x+12,y+6,1,3,'#a1aa73');}
-  if(v%17===0){rect(x+9,y+9,3,2,'#837b68');rect(x+10,y+8,1,1,'#a39a7d');}
-  if(v%29===0){rect(x+6,y+5,3,2,'#c4a66b');dot(x+5,y+5,'#b2bd8b');}return;}
- if(tile===A.T.WATER){rect(x,y+7,16,1,'#366b85');rect(x+(v%8),y+4,5,1,'#6ba5a9');if(v%3===0)rect(x+2,y+12,4,1,'#4d8499');
-  if(v%7===0){rect(x+11,y+11,3,1,'#b1c8ad');}return;}
- if(tile===A.T.FOREST){rect(x+3,y+13,13,2,'#1b352a');rect(x+5,y+7,6,8,'#75583c');
-  rect(x+2,y+5,12,7,'#1d3c31');rect(x+(v%3),y+2,12,7,'#2d7750');
-  rect(x+5,y+1,7,6,v%3?'#38815c':'#51845e');rect(x+4,y+4,2,2,'#78a777');
-  if(v%8===0){rect(x+12,y+12,2,2,'#d6b08a');}return;}
- if(tile===A.T.STONE){rect(x+1,y+13,14,2,'#303b3c');rect(x+2,y+10,13,5,'#3e4448');
-  rect(x+4,y+5,10,8,'#90958a');rect(x+6,y+4,5,2,'#bdc4b1');
-  rect(x+11,y+9,3,3,'#66746c');if(v%3===0){rect(x+2,y+2,4,2,'#666f66');}return;}
- if(tile===A.T.BERRY){rect(x+4,y+11,9,3,'#254a36');rect(x+3,y+5,10,8,'#4c9c5b');
-  rect(x+6,y+4,6,6,'#2b7348');dot(x+4,y+7,'#e99b85');
-  rect(x+10,y+9,2,2,'#f49c90');if(v%2===0)dot(x+8,y+6,'#f9bd91');return;}
- if(tile===A.T.RUIN){rect(x+1,y+12,14,3,'#353c36');rect(x+2,y+9,12,6,'#454843');
-  rect(x+4,y+2,9,10,'#a8a38e');rect(x+6,y+4,5,1,'#dfc9a4');
-  rect(x+7,y+6,2,5,'#555f56');dot(x+12,y+10,'#c1b49c');
-  rect(x+2,y+3,2,3,'#62685a');rect(x+13,y+11,2,2,'#c4b98e');
-  // Rune glyph is carved into the ancient stone, not a costly animated particle.
-  dot(x+8,y+2,'#74b9aa');rect(x+8,y+3,1,2,'#74b9aa');return;}
- if(tile===A.T.CAMP){rect(x+1,y+13,14,2,'#2e2b25');rect(x+2,y+8,11,5,'#775039');
-  rect(x+7,y+2,6,11,'#cb9f64');rect(x+2,y+7,12,2,'#d4b77f');
-  rect(x+4,y+10,3,3,'#332d22');dot(x+8,y+1,'#d9d4b3');
-  rect(x+12,y+11,2,3,'#f4a85c');dot(x+13,y+10,'#edcf76');return;}
- if(tile===A.T.MEADOW){rect(x+2,y+11,2,3,'#a3ba77');rect(x+11,y+8,2,3,'#b1d48c');
-  dot(x+8,y+6,'#eacb81');dot(x+10,y+12,'#ebd0a1');
-  if(v%4===0){rect(x+4,y+6,2,3,'#b5b688');dot(x+4,y+5,'#eabca0');}return;}
- dot(x+1+(v%12),y+2+((v>>>6)%12),'#50765b');if(v%4===0)dot(x+10,y+4,'#729478');
-}
-function drawBot(cx,cy,worldTime){
- const step=worldTime%6<3?0:1;
- // Overhead two-dimensional sprite: hair/face, cloak, satchel, feet and a readable silhouette.
- rect(cx+2,cy+13,13,2,'#1c3029');
- rect(cx+6,cy+12,3,3-step,'#423e37');rect(cx+11,cy+12+step,3,2,'#423e37');
- rect(cx+4,cy+7,11,6,'#516d5b');rect(cx+6,cy+8,6,5,'#d3b675');
- rect(cx+3,cy+8,2,3,'#a77956');rect(cx+14,cy+8,2,3,'#a77956');
- rect(cx+12,cy+9,3,4,'#986d45');dot(cx+13,cy+10,'#e5cb91');
- rect(cx+5,cy+3,9,6,'#d8aa83');rect(cx+5,cy+2,9,3,'#594639');
- rect(cx+4,cy+4,2,3,'#75523d');rect(cx+13,cy+4,2,3,'#75523d');
- rect(cx+7,cy+3,4,1,'#947354');dot(cx+7,cy+7,'#2c3735');dot(cx+12,cy+7,'#2c3735');
-}
+const assets=window.GodseedAssets,terrain=window.GodseedTerrain;
+assets.loaded.then(()=>{oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
+function drawTile(tile,x,y,wx,wy){if(assets.ready)terrain.draw(ctx,assets,s,tile,x,y,wx,wy);else rect(x,y,16,16,'#152723');}
+function drawBot(cx,cy){const f=assets.manifest.atlases[1].frames.find(f=>f.name==='Nim'&&f.direction==='south'&&f.phase===0);assets.blit(ctx,1,f.rect,cx,cy-8);}
 function drawEnemy(x,y,e){rect(x+2,y+13,13,2,'#1b2b27');if(e.type==='Boar'){rect(x+2,y+6,12,7,'#b67a57');rect(x+10,y+3,4,5,'#d1a174');rect(x+3,y+5,3,2,'#7a4c36');dot(x+12,y+7,'#292424');rect(x+2,y+12,3,2,'#6b4534');}else{rect(x+3,y+7,10,6,'#a88473');rect(x+4,y+3,3,6,'#cab096');rect(x+10,y+3,3,6,'#cab096');rect(x+5,y+7,2,2,'#edcf9b');rect(x+10,y+7,2,2,'#edcf9b');dot(x+6,y+7,'#222');dot(x+11,y+7,'#222');}}
-function drawPerson(x,y,p){
- const coat=['Apothecary','Herbalist'].includes(p.role)?'#819c72':['Rune Scholar','Lorekeeper'].includes(p.role)?'#846d9c':'#9b9e96';
- rect(x+3,y+13,11,2,'#22342c');rect(x+6,y+2,7,6,'#d8aa82');
- rect(x+5,y+1,9,3,['Rune Scholar','Lorekeeper'].includes(p.role)?'#b1a0c5':'#66503b');
- rect(x+4,y+8,10,5,coat);rect(x+3,y+9,2,3,'#d7b08c');
- rect(x+12,y+9,2,3,'#d7b08c');rect(x+5,y+13,3,2,'#433d34');
- rect(x+10,y+13,3,2,'#433d34');
- // Guild silhouettes: shield for Squire, rune for Scholar, satchel for Apothecary.
- if(p.role==='Squire'){rect(x+13,y+4,3,7,'#afb9af');rect(x+14,y+5,1,5,'#f0debd');}
- if(p.role==='Rune Scholar'){rect(x+5,y+3,8,1,'#b2b0dd');rect(x+3,y+11,3,4,'#dbcda2');}
- if(p.role==='Apothecary'){rect(x+12,y+10,4,4,'#82705b');dot(x+13,y+10,'#b5daa3');}
- // A tiny readable heraldic insignia distinguishes medieval professions.
- if(p.role==='Squire')rect(x+8,y+9,3,4,'#c8c9b7');
- if(p.role==='Rune Scholar')dot(x+8,y+10,'#e6d39c');
- if(p.role==='Apothecary')dot(x+8,y+9,'#c1eab5');
- if(p.favorUntil>s.tick){rect(x+7,y-2,4,2,'#f2dc88');dot(x+5,y,'#f3e8ad');}
-}
+function drawPerson(x,y,p){const f=assets.manifest.atlases[1].frames.find(f=>f.name===p.name&&f.direction==='south'&&f.phase===0);if(f)assets.blit(ctx,1,f.rect,x,y-8);}
 function updateScenery(){
  let changed=camX!==sceneX||camY!==sceneY,k=0;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
   const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy);
-  const tile=s.seen[n]?s.map[n]+1:0;
+  const tile=s.seen[n]?(s.map[n]+1)*32+((s.map[n]===8||s.map[n]===2)?terrain.mask(s,wx,wy,s.map[n]):0):0;
   if(oldCells[k]!==tile){oldCells[k]=tile;changed=true;}k++;
  }
  if(!changed)return;
- sceneX=camX;sceneY=camY;
+ sceneX=camX;sceneY=camY;sceneryRedraws++;
  ctx=sceneryCtx;
  for(let ry=0;ry<VH;ry++)for(let rx=0;rx<VW;rx++){
   const wx=camX+rx,wy=camY+ry,n=A.idx(wx,wy),x=rx*size,y=ry*size;
-  if(!s.seen[n]){drawTile(s.map[n],x,y,wx,wy);rect(x,y,size,size,'rgba(6,16,24,.72)');if(hash(wx,wy)%13===0)rect(x+7,y+7,2,2,'#425058');continue;}
+  if(!s.seen[n]){rect(x,y,size,size,'#11191A');continue;}
   drawTile(s.map[n],x,y,wx,wy);
-  // Light beaches and rocky shorelines make biome transitions readable.
-  if(s.map[n]!==A.T.WATER&&wy>0&&s.map[A.idx(wx,wy-1)]===A.T.WATER)
-   rect(x,y,16,2,'#b0a576');
-  if(s.map[n]!==A.T.WATER&&wx>0&&s.map[A.idx(wx-1,wy)]===A.T.WATER)
-   rect(x,y,2,16,'#918b6c');
+
  }
  ctx=screenCtx;
 }
@@ -147,7 +67,7 @@ function draw(){positionCamera();const b=s.bot;updateScenery();
  for(const p of s.npcs||[])if(p.x>=camX&&p.x<camX+VW&&p.y>=camY&&p.y<camY+VH&&s.seen[A.idx(p.x,p.y)])drawPerson((p.x-camX)*16,(p.y-camY)*16,p);
  for(const e of s.enemies)if(e.x>=camX&&e.x<camX+VW&&e.y>=camY&&e.y<camY+VH&&s.seen[A.idx(e.x,e.y)])drawEnemy((e.x-camX)*16,(e.y-camY)*16,e);
  if(b.x>=camX&&b.x<camX+VW&&b.y>=camY&&b.y<camY+VH){const px=(b.x-camX)*16,py=(b.y-camY)*16;rect(px+1,py+14,14,1,'#cfdda2');drawBot(px,py,s.tick>>1);ctx.fillStyle='#f0e0a2';ctx.font='bold 8px monospace';ctx.textAlign='center';ctx.fillText('NIM',px+8,py-3);ctx.textAlign='start';}
- for(const m of s.marks){if(m.x<camX||m.x>=camX+VW||m.y<camY||m.y>=camY+VH)continue;const xx=(m.x-camX)*16,yy=(m.y-camY)*16,c=({hit:'#e9dd88',hurt:'#ee7770',evade:'#88ccdb',parry:'#d1bb7c',bless:'#c4f7aa',gift:'#f1cb8d',bloom:'#85dbbb',guide:'#ddda92',storm:'#c6dffc',talk:'#f1c4a9',inspire:'#fff2a0'})[m.kind];rect(xx+2,yy+2,12,2,c);rect(xx+2,yy+12,12,2,c);rect(xx+2,yy+2,2,12,c);rect(xx+12,yy+2,2,12,c);}
+ for(const m of s.marks){const glyph=assets.manifest.atlases[2].symbols.find(f=>f.name===m.kind);if(glyph){assets.blit(ctx,2,glyph.rect,(m.x-camX)*16,(m.y-camY)*16-8);continue;}if(m.x<camX||m.x>=camX+VW||m.y<camY||m.y>=camY+VH)continue;const xx=(m.x-camX)*16,yy=(m.y-camY)*16,c=({hit:'#e9dd88',hurt:'#ee7770',evade:'#88ccdb',parry:'#d1bb7c',bless:'#c4f7aa',gift:'#f1cb8d',bloom:'#85dbbb',guide:'#ddda92',storm:'#c6dffc',talk:'#f1c4a9',inspire:'#fff2a0'})[m.kind];rect(xx+2,yy+2,12,2,c);rect(xx+2,yy+12,12,2,c);rect(xx+2,yy+2,2,12,c);rect(xx+12,yy+2,2,12,c);}
  if(hover&&hover.x>=camX&&hover.x<camX+VW&&hover.y>=camY&&hover.y<camY+VH){const xx=(hover.x-camX)*16,yy=(hover.y-camY)*16;rect(xx,yy,16,1,'#efe2ac');rect(xx,yy+15,16,1,'#efe2ac');rect(xx,yy,1,16,'#efe2ac');rect(xx+15,yy,1,16,'#efe2ac');}
  $('coordinates').textContent=`${b.x}, ${b.y} · ${A.regionAt(s,b.x,b.y).name} · ${ZOOMS[zoomIndex].name}`;
 }
@@ -231,5 +151,5 @@ function frame(ts){requestAnimationFrame(frame);if(!active)return;if(!frameLast)
  if(ts-lastSave>16000){save();lastSave=ts;}
  if(flashUntil&&Date.now()>flashUntil){$('toast').classList.remove('show');flashUntil=0;}}
 setMode('inspect');hud();draw();requestAnimationFrame(frame);
-window.GodseedDebug={getState:()=>s,getCamera:()=>({x:camX,y:camY,width:VW,height:VH,zoom:ZOOMS[zoomIndex].name}),setZoom:(i)=>{setZoom(i);hud();draw();},setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
+window.GodseedDebug={getState:()=>s,getRenderStats:()=>({sceneryRedraws,atlasesReady:assets.ready,decodedBytes:assets.decodedBytes}),draw,getCamera:()=>({x:camX,y:camY,width:VW,height:VH,zoom:ZOOMS[zoomIndex].name}),setZoom:(i)=>{setZoom(i);hud();draw();},setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
 })();

@@ -94,10 +94,15 @@
       "id": "B01",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Wire four starter PNG sheets through manifest into renderer",
       "acceptance": "Runtime shows actual atlas pixels, all offline.  Integrate genuine native 16\u00d716 square-pixel atlases with exact palette/binary-alpha art source. Art concepts/PNGs alone do not count as in-game use.",
-      "evidence": [],
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -105,10 +110,15 @@
       "id": "B02",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Draw roads and water adjacency masks",
       "acceptance": "Test joins, bends and edges without altering collision.  Road/water joins have hard square-pixel seams and logically matching traversability, verified visually and by sim tests.",
-      "evidence": [],
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "B01"
       ],
@@ -118,10 +128,15 @@
       "id": "B03",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Add deterministic nonblocking environmental props",
       "acceptance": "World seed yields same placements after reload.",
-      "evidence": [],
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "B02"
       ],
@@ -131,10 +146,15 @@
       "id": "B04",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Improve hamlet, shrine, ruin and camp silhouettes",
       "acceptance": "Readable destinations at 32x20, no phantom interiors.  Timber roofs, shrines, ruins and houses assembled from aligned square-pixel clusters, not smooth vector/painted backgrounds.",
-      "evidence": [],
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "B03"
       ],
@@ -144,10 +164,15 @@
       "id": "B05",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Cache/invalidate scenery and profile before/after",
       "acceptance": "Evidence of no stale tiles and bounded redraws.",
-      "evidence": [],
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "B04"
       ],

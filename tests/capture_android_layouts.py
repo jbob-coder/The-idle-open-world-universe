@@ -15,7 +15,7 @@ with sync_playwright() as pw:
         page.evaluate('GodseedDebug.newWorld(20261017);GodseedDebug.step(100);GodseedDebug.setSpeed(0)')
         assert page.evaluate('GodseedDebug.getCamera().width')==32
         for zoom,tiles in enumerate([(32,20),(24,15),(16,10)]):
-            page.evaluate('(z)=>{GodseedDebug.setZoom(z);window.scrollTo(0,0)}',zoom)
+            page.evaluate("(z)=>{GodseedDebug.newWorld(20261017);GodseedDebug.step(100);GodseedDebug.setSpeed(0);GodseedDebug.setZoom(z);document.querySelector('#toast').classList.remove('show');window.scrollTo(0,0)}",zoom)
             camera=page.evaluate('GodseedDebug.getCamera()');assert (camera['width'],camera['height'])==tiles
             assert page.locator('#androidDock button').count()==10
             assert page.evaluate("[...document.querySelectorAll('#androidDock button')].every(b=>{const r=b.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&r.height>=40})")

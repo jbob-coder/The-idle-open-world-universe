@@ -25,3 +25,6 @@ W06–W10: finite Crownfall/Moonwell ruin rewards, Oathkeeper shrine preserved, 
 
 ## Camera
 A01–A05: 32×20 default, 24×15 and 16×10 alternatives; pure roundtrip transforms, integer follow, keyboard/minimap/touch drag panning. Browser test found the old dock covered the center target at 640×360; compact header and bounded canvas height fix that. Nine running Chromium captures, successful actual NPC clicks at each zoom/size, ten controls, zero errors. Pixel source validator passes. Screenshots are desktop Chromium, never Android hardware.
+
+## Terrain
+B01–B05: all four manifest atlases bundled as data URLs and drawn; terrain variants, cardinal roads, water edges and deterministic regional props. Actor and power starter frames integrated for subsequent animation slices. Fog conceals unknown terrain. Native atlas decode: 106,496 bytes. Cache invalidation covers topology/fog/camera/zoom and asset decode; 100 unchanged draws rebuild scenery zero times. Desktop before/after timing in qa-screenshots/render-metrics.json is a microbenchmark, not Android FPS. 40 tests pass; nine viewport/zoom screenshots plus regional QA scenes captured.

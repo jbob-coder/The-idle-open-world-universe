@@ -1,0 +1,8 @@
+{
+  "hundredCachedDrawsMs": 6.2999999999883585,
+  "decodedBytes": 106496,
+  "atlases": 4,
+  "cacheRebuildsFor100UnchangedDraws": 0,
+  "baselineHundredCachedDrawsMs": 3.7999999999883585,
+  "source": "Desktop Chromium timings; not Android FPS or resident memory"
+}
