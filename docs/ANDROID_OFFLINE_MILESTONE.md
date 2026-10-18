@@ -12,15 +12,15 @@ The numeric **1 GB core + up to 5 GB optional** limits are persistent-storage *d
 
 ## Automated baseline evidence (actual CI, not simulated success)
 
-- Native **Gradle APK compile, asset equality and no-permissions check:** passed in [GitHub Actions run 39118963546](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39118963546).
-- Android **API 29 Google APIs x86_64 emulator**, APK installation, app launch, four instrumentation tests and screenshot/log capture: passed in the same run.
+- Native **Gradle APK compile, asset equality and no-permissions check:** passed in [GitHub Actions run 39119312080](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39119312080).
+- Android **API 29 Google APIs x86_64 emulator**, APK installation, app launch, five instrumentation tests and screenshot/log capture: passed in the same run.
 - Emulator tests include valid pack import/read/delete, invalid hash, untrusted ZIP entry and invalid region rejection, duplicated import rejection, and offline WebView startup with visible 32×20 canvas and native bridge.
 - Original browser/simulation/PNG validators are continuously checked by the `GODSEED offline QA` workflow; their success is NOT Android hardware evidence.
-- A fifth instrumentation test for save persistence across native Activity/WebView recreation has been added and requires its own verified CI result before calling that behavior tested.
+- **Five native Android instrumentation tests passed**, including restoration of a saved Nim world across Activity/WebView recreation, in [run 39119312080](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39119312080) (commit `7e52a1bbaa3a`). The emulator still does not substitute for a real 2 GB/3 GB RAM phone.
 
 Reference artifact URLs for **the first emulator-tested checkpoint**:
-- APK + test APK: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39118963546/artifacts/12133477403
-- Emulator screenshot, instrumentation output, Android logcat and process memory snapshot: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39118963546/artifacts/12133128001
+- APK + test APK: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39119312080/artifacts/12133262674
+- Emulator screenshot, instrumentation output, Android logcat and process memory snapshot: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39119312080/artifacts/12133722030
 
 ## Repeatable local tests
 
