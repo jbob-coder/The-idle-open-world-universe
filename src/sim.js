@@ -1,5 +1,5 @@
 /* GODSEED deterministic simulation. UMD: browser global + CommonJS. No external services. */
-(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./world/regions.js'):root.GodseedRegions);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Regions){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./world/regions.js'):root.GodseedRegions,typeof module!=='undefined'&&module.exports?require('./life.js'):root.GodseedLife);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Regions,Life){
 'use strict';
 const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7,ROAD:8,VILLAGE:9,SHRINE:10};
 const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter','Kingdom road','Village','Ancient shrine'];
@@ -96,14 +96,8 @@ function updatePeople(s){
    }
    addMark(s,p.x,p.y,'inspire');
   }
-  // Capped to three tiny local wandering agents; no global per-NPC path search.
-  const directions=[[0,0],...DIRS], [dx,dy]=directions[rint(s,directions.length)];
-  const nx=p.x+dx,ny=p.y+dy;
-  if(walkable(s,nx,ny)&&Math.abs(nx-p.homeX)+Math.abs(ny-p.homeY)<=9&&
-     !s.npcs.some(other=>other!==p&&other.x===nx&&other.y===ny)){
-    if(nx!==p.x||ny!==p.y){p.facing=nx>p.x?'east':nx<p.x?'west':ny>p.y?'south':'north';p.movedAt=s.tick;}p.x=nx;p.y=ny;
-  }
-  if(p.favorUntil<=s.tick)p.activity=p.role==='Apothecary'?'Collecting herbs':p.role==='Squire'?'Patrolling':'Studying runes';
+  // Residents follow work, rest and social routines instead of dice-driven walking.
+  Life.stepPerson(s,p,T,walkable,rand);
  }
 }
 function meetPerson(s,p){
@@ -355,7 +349,7 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,worldSee
  for(const [x,y] of [[s.bot.x+10,s.bot.y-5],[s.bot.x-12,s.bot.y+7]]){
   s.map[idx(x,y)]=T.SHRINE;
  }
- Regions.connect(s,T);s.npcs=initPeople(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
+ Regions.connect(s,T);s.npcs=initPeople(s);Life.init(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
  return s;}
 function discoverRegion(s,x,y){const r=Regions.at(s,x,y);if(!r||s.regions.discovered.includes(r.id))return;
  s.regions.discovered.push(r.id);event(s,r.name,r.minimumGameplay);remember(s,'Discovered '+r.name);
@@ -399,6 +393,7 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  }
  if(s.guide&&s.guide.ticks>0){const gx=s.guide.x,gy=s.guide.y;if(!walkable(s,gx,gy)){s.guide=null;}else{const p=findPath(s,(x,y)=>x===gx&&y===gy);if(p){setGoal(s,'Follow omen','Something calls to me from afar.',p);return;}s.guide=null;}}
  if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
+ if(Life.nimDirective(s,findPath,setGoal))return;
  if(chooseRoadJourney(s))return;
  if(chooseFinaleJourney(s))return;
  if(s.map[idx(b.x,b.y)]===T.RUIN){setGoal(s,'Study ruins','I have reached the ancient stones.');return;}
@@ -545,6 +540,7 @@ function tick(s){s.tick++;discoverRegion(s,s.bot.x,s.bot.y);revive(s);if(s.tick%
  const b=s.bot;if(b.actionDelay>0)b.actionDelay--;
  if(s.tick%2===0){plan(s);botAct(s);updateEnemies(s);}
  updatePeople(s);
+ Life.advance(s);
  advanceChapter(s);
  advanceRoad(s);
  advanceFinale(s);
@@ -626,6 +622,6 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
  // Shrine evidence is sanitized before chapter migration.
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
- s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
-return {chapterStatus,roadStatus,finaleStatus,regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
+ s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;Life.repair(s);return s;}catch(e){return null;}}
+return {issueGuidance:Life.issue,chapterStatus,roadStatus,finaleStatus,regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
 });
