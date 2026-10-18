@@ -200,7 +200,7 @@ function advanceLife(s){
   log(s,'Nim chooses a path','Through '+choice[0]+' experience, Nim chose a life as a '+choice[1]+'.');
  }
  for(const p of s.npcs){
-  if(!p.met||p.trust<27||life.friends.includes(p.name))continue;
+  if(!p.met||p.trust<26||life.friends.includes(p.name))continue;
   life.friends.push(p.name);life.events.push({tick:s.tick,text:'Became friends with '+p.name});
   log(s,'A friendship takes root','Nim and '+p.name+' have built trust over repeated encounters.');
  }
