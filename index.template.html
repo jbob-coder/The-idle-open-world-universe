@@ -82,6 +82,15 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 @media(max-width:700px){#nativeStoragePanel{top:3px;right:3px}#nativeStorageBody{max-height:60vh}}
 
 
+
+/* Life observatory: flat pixel-square cards, no chat UI pretending to be an LLM. */
+#godLetters{padding:12px 16px}#godLetters label{font-size:11px;color:#e8d2a0;display:block;margin:7px 0}
+#godLetters select,#godLetters textarea{width:100%;background:#102325;color:#efe7d0;border:2px solid #73847a;padding:8px;font:12px/1.4 monospace;border-radius:0}
+#godLetters textarea{height:66px;resize:vertical}#godLetters .hint{font-size:10px;color:#b8c6bb;margin-top:8px}
+#godLetters button{background:#4d523e;border-color:#d0ac6c;width:100%;font-weight:bold}
+#townStatus,#townBuildings,#lifeDiary,#lettersStatus{overflow-wrap:anywhere;line-height:1.6}
+#townStatus{color:#efcf91;font-size:11px}#lifeDiary{max-height:110px;overflow:auto}
+
 /* Chapter I: in-world pixel-square milestones, not an intrusive new HUD. */
 #chapterPanel{margin-top:11px;padding:8px 10px;background:#1b3029;border:2px solid #8e9870;border-left:4px solid #e1bd7a;color:#eee1bf}
 #chapterTitle{font-size:11px;font-weight:bold;letter-spacing:.035em;color:#f0d39a}
@@ -124,6 +133,22 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 <button class="power" data-power="storm" title="Key 5 · Disperse enemies"><span class="power-icon">ϟ</span><span>Lightning</span><small>8 Faith · key 5</small></button>
   <button class="power" data-power="inspire" title="Key 6 · Inspire a revealed traveler"><span class="power-icon">✺</span><span>Inspire</span><small>5 Faith · key 6</small></button>
 </div><p class="powers-foot" id="instruction">Toca el mapa para observar o emplear un poder divino.</p><p class="tiny muted" id="inspect">Nim despierta en las fronteras de un reino olvidado.</p></div></div>
+<div class="panel" style="margin-top:14px" aria-label="Observatory for the living kingdom">
+ <div class="panelhead"><h2>El susurro del dios · Observatorio</h2><span class="tiny muted">La decisión es de ellos</span></div>
+ <div id="godLetters">
+  <label for="divineTarget">¿Quién escuchará la sugerencia?</label>
+  <select id="divineTarget" aria-label="Choose an autonomous inhabitant">
+   <option value="Nim">Nim — explorador</option>
+   <option value="Ira">Ira — herbolaria</option>
+   <option value="Toren">Toren — guardia</option>
+   <option value="Mera">Mera — erudita</option>
+  </select>
+  <label for="divineMessage">Mensaje / Intención</label>
+  <textarea id="divineMessage" maxlength="180" placeholder="Ejemplo: Construye una casa cerca del camino; aprende a cultivar, pero decide tú." aria-label="Divine suggestion, not a direct order"></textarea>
+  <button id="sendGuidance" type="button">Enviar mensaje · Dejarles decidir</button>
+  <p class="hint">Interpretación local y limitada: construir, cultivar, explorar, descansar, ayudar, estudiar o recolectar. Los habitantes pueden rechazarla. No es IA conversacional remota.</p>
+ </div>
+</div>
 <div class="panel" style="margin-top:14px"><div class="panelhead"><h2>03 / Time & World Control</h2><span class="tiny muted">Top-down · Z = cambiar zoom · 4 pasos/seg</span></div>
 <div class="timebox"><button data-speed="0" aria-pressed="false">Pause</button><button data-speed="1" class="active" aria-pressed="true">1×</button><button data-speed="3" aria-pressed="false">3×</button><button data-speed="8" aria-pressed="false">8×</button><button class="stepbtn" id="step" title="Advance 1 simulation step">+1 step</button><button id="follow" class="active" aria-pressed="true">Follow</button><button id="zoom" title="Cambiar zoom de cámara (Z)">Zoom: Cerca</button></div>
 <div class="savebuttons"><button id="save">Save now</button><button id="export">Export JSON</button><button id="import">Import JSON</button><button id="reset" class="danger">New World</button><input id="importFile" type="file" accept=".json,application/json" hidden></div><div class="save-note"><span id="saveState">Auto-save enabled when supported.</span> Saved locally in the app; use Export JSON to copy a backup.</div></div>
@@ -134,7 +159,12 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 <div class="section-title">PERSONALITY / ADAPTATION</div><p class="tiny muted" id="traits"></p>
 <div class="section-title">SKILLS — LEARNED BY DOING</div><div class="memory" id="skillRanks"></div><div class="section-title">TALES &amp; SURVIVAL</div><p class="tiny muted" id="adventures"></p><p class="tiny muted">Current rumor: <strong id="lead">No active legend</strong></p>
 <label class="tiny"><input type="checkbox" id="reduceMotion"> Reduce motion</label><div class="section-title">HABITANTES DEL REINO</div><p class="tiny muted" id="people" aria-live="off">The world is waking…</p>
-  <div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
+  <div class="section-title">CIVILIZACIÓN · EDIFICIOS Y PLANOS</div>
+<p id="townStatus" role="status" class="tiny"></p>
+<p id="townBuildings" class="memory">El asentamiento está comenzando.</p>
+<div class="section-title">VIDAS · DECISIONES COTIDIANAS</div><p id="lifeDiary" class="memory">Las decisiones aparecerán aquí.</p>
+<div class="section-title">SUGERENCIAS · ACEPTADAS O RECHAZADAS</div><p id="lettersStatus" class="memory">Sin mensajes todavía.</p>
+<div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
 <div class="divider"></div><div class="tiny muted" id="milestones"></div><section id="chapterPanel" aria-label="Autonomous story chapter">
  <div id="chapterTitle">CHAPTER I · THE MOSSBOUND OATH</div>
  <div id="chapterStep">1 / 3 — The First Hearth</div>
