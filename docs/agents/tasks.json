@@ -1335,7 +1335,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "Per-person belief, safety and autonomy acceptance engine",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "FORGE-27",
       "work_branch": "feat/god-002-forge-27-autonomy",
       "depends": [
@@ -1344,8 +1344,10 @@
       ],
       "acceptance": "People evaluate each message, decline, explain and do not auto-complete objectives.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 34,
+      "evidence": [
+        "PR #34 https://github.com/jbob-coder/The-idle-open-world-universe/pull/34; exact HEAD a9822e8c6037b7f0baa07b55e9a7ea95fbb49905, stacked on verified SIM-001 PR #26 (553ef5c) with GOD-001 parser PR #25 (e97465f) integrated. CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188140209 COMPLETED SUCCESS: 108/108 Node PASS, offline HTML, pixel/art assets, debug APK structure/signature, 640x360 Chromium mobile consent/no NPC puppet/save regression and screenshots. Separate native Android evaluation run 39188273888 emulator pending at handoff, Gradle build PASS. Physical low-RAM device unverified; independent review required; no merge."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -1374,6 +1376,13 @@
           "to": "in_progress",
           "actor": "FORGE-27",
           "reason": "Implement offline per-person belief/safety/autonomy evaluator; integrate verified SIM-001 needs and GOD-001 parser; deterministic refusal, named targets, save v1, HTML and Node/Android regression."
+        },
+        {
+          "date": "2026-10-19T02:08:23.133Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FORGE-27",
+          "reason": "Delivered named-person voluntary divine beliefs, safety/refusal responses, bounded v1-compatible memory and CI verified offline/browser test in PR #34; independent verification pending."
         }
       ]
     },
