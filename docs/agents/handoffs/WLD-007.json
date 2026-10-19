@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "retiring_bot": "FORGE-27",
+  "reason": "owner_request",
+  "created_utc": "2026-10-19T16:56:08.133Z",
+  "owner_at_handoff": "FORGE-27",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "947692010fb776a31be829810eee9ceec8e3be63",
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact.",
+  "task_id": "WLD-007",
+  "last_known_status": "in_review",
+  "work_branch": "feat/wld-007-forge-27-v1-migration",
+  "work_sha": "0f226e4b6730d492b5f129d555138431de0064d9",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/44",
+  "summary": "Owner-requested retirement, preserve PR #44 unmerged and in_review for independent reviewer, NOT release to ready. Opt-in lossless migration bridge maps authoritative 64×48 v1 world (3072 actual tiles) over signed seeded 32×32 chunks. Preserves Nim/world seed/tick, two villages, structures, citizens, inventory, chapter I–III; outside old footprint supports persisted sparse modifications and new sites. Historic 64×48 window remains read-only until an approved bidirectional adapter. Current code corrected JS numeric separator 4_000_000→4000000 for older Android WebView, value unchanged. Browser + Node QA green, native emulator for current HEAD cancelled, previous SHA had 3/6 FAIL. No live open-world actor travel or native migration; no merge.",
+  "changed_files": [
+    "src/world/legacy_bridge.js",
+    "src/world/chunk_store.js",
+    "tests/legacy_bridge.test.js",
+    "tests/world_legacy_browser_acceptance.py",
+    "build.py",
+    ".github/workflows/qa.yml",
+    "docs/WLD_007_LEGACY_SAVE_MIGRATION.md"
+  ],
+  "tests": [
+    "PASS: Exact-HEAD 0f226e4b6730d492b5f129d555138431de0064d9 node --test tests/*.test.js 109/109 PASS and offline Chromium actual 640x360 legacy migration/three chapters, zero errors/requests; GitHub Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227321946",
+    "PASS: Same exact HEAD PR offline QA run completed SUCCESS incl Android prototype APK structure and offline regression: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227332209",
+    "PASS: Same exact HEAD Gradle/WebView native host build and packaged offline HTML (NOT emulator): https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227332311 (gradle-webview-and-storage job SUCCESS)",
+    "FAIL: Previous HEAD f5037388cf0fb159346b09c5ab6c17feb78c8039 API29 native emulator first attempt only 3/6 pass, WebView game JavaScript not ready; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205499. This is NOT a current-HEAD result.",
+    "NOT_RUN: Current exact HEAD 0f226e4b6730d492b5f129d555138431de0064d9 successful native API29 instrumentation 6/6 NOT VERIFIED because emulator workflow https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227332311 was CANCELLED; rerun as authorized.",
+    "NOT_RUN: Physical Android total RAM 2–3 GB PSS/battery/20-minute soak."
+  ],
+  "blockers": [
+    "Native API29 instrumentation for exact HEAD is not accepted: cancelled run #39227332311, despite successful Gradle build and browser. Reviewer must rerun emulator with evidence and diagnose any renewed page-not-ready failures."
+  ],
+  "risks": [
+    "Branch is stacked on WLD-002 PR #31 at exact base 2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e, NOT merged. Also WLD-003 modifies same chunk_store numeric literal; reconcile integration without overwriting other authors.",
+    "Read-only 64×48 overlay is an opt-in API; does not connect Nim/citizen cross-border pathfinding (WLD-004), streaming camera (WLD-003), fog persistence (WLD-008), or whole-world acceptance (WLD-010).",
+    "Native API29 emulator had 3/6 failures before parser fix, and current run was CANCELLED; don't assume WebView compatibility or save safety until exact HEAD native passes.",
+    "New owner-approved product direction is 3D perspective with Pixel Squares aesthetic and autonomous NPC-built societies (PR #47, introduction branch). Legacy 2D top-down and fixed sprite/camera mandates are historical compatibility context, NOT new owner approval. Coordinate a design review; do not delete old 2D work or misrepresent the game as already 3D."
+  ],
+  "save_notes": "Legacy version:1 saves and godseed-one-small-life-v1 key unchanged. Bridge import validates v1 snapshot, reads original tiles, copies state defensively and stores frontier edits separately; CI Node+Chromium green for exact HEAD. Native API29 save regression NOT VERIFIED at current HEAD, physical Android NOT TESTED.",
+  "next_actions": [
+    "Do not reclaim/release WLD-007; remain in_review and request independent review of PR #44 current SHA 0f226e4b6730d492b5f129d555138431de0064d9 after native QA.",
+    "Rerun native Android API29 Gradle/emulator on exact HEAD; verify WebView loads offline and 6/6 instrumentation passes, including activity recreation and exit save; if fails reopen per task workflow, diagnose failures without weakening assertions.",
+    "Independently inspect Node/Chromium logs at runs 39227321946 and 39227332209; verify all 3072 historical tiles/Nim/towns/three chapters and corrupt input refusal, screenshot artifact.",
+    "Coordinate PR #44 stacking on #31 with WLD-003 and upcoming owner-directed 3D Pixel Squares transition; do not merge, force push, or declare full world integration/physical RAM certified."
+  ],
+  "do_not_repeat": [
+    "Do not overwrite original v1 save or auto-migrate running Android localStorage.",
+    "Do not treat cancelled native workflow as PASS, or past f503 3/6 failure as current-HEAD failure.",
+    "Do not duplicate finished WLD-007 import adapter in a newly claimed task or overwrite WLD-002 owner branch.",
+    "Do not assume old mandatory 2D camera/16px renderer is an owner-approved final 3D requirement."
+  ],
+  "unpublished_changes": false
+}

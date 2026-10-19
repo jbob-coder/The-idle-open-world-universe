@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "retiring_bot": "FORGE-27",
+  "reason": "owner_request",
+  "created_utc": "2026-10-19T16:56:08.133Z",
+  "owner_at_handoff": "FORGE-27",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "947692010fb776a31be829810eee9ceec8e3be63",
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact.",
+  "task_id": "INT-002",
+  "last_known_status": "in_progress",
+  "work_branch": "feat/int-002-forge-27-metric-buildings",
+  "work_sha": "a5919223ec9092bb8f2ec4c4a35cc2576021c817",
+  "pr_url": null,
+  "summary": "Owner-requested retirement. FORGE-27 claimed INT-002 and published claimed + in_progress governance commits (249a1c8be75b0a25b97063a12dae8d0c39cf36c4 and 7ea79b6a334f666ac0fb349f91462ebc6ff58a3f). Created its implementation branch at exactly approved integration base a5919223ec9092bb8f2ec4c4a35cc2576021c817. Remote branch still equals base; no implementation commit, design code, test or PR for INT-002 exists. No source modifications occurred before owner retirement order. Only claims and working-branch pointer are preserved. Task may be released ready after handoff check because there is NO unpublished code to lose.",
+  "changed_files": [],
+  "tests": [
+    "NOT_RUN: No INT-002 implementation or new tests exist; work branch equals base SHA a5919223ec9092bb8f2ec4c4a35cc2576021c817. Do not cite baseline/other bots' QA as INT-002 acceptance.",
+    "NOT_RUN: Node, Chromium offline and native Android API29 for enlarged 3x3–6x6 buildings; zero functional change was made to test.",
+    "NOT_RUN: Physical 2–3 GB Android hardware memory/thermal soak."
+  ],
+  "blockers": [],
+  "risks": [
+    "INT-002 not implemented: former 2x2 exterior remains on base. Do not mark in_review, verified or done.",
+    "Coordinate with CIV-001 and INT-003 owners before touching src/living.js, render, state/save or footprint collision; check their PR SHAs.",
+    "New owner-approved product direction is 3D perspective with Pixel Squares aesthetic and autonomous NPC-built societies (PR #47, introduction branch). Legacy 2D top-down and fixed sprite/camera mandates are historical compatibility context, NOT new owner approval. Coordinate a design review; do not delete old 2D work or misrepresent the game as already 3D."
+  ],
+  "save_notes": "No changes to src/sim.js, src/living.js, rendering or save format; original v1/localStorage key remains untouched. Work branch equals integration baseline; no save migration claims.",
+  "next_actions": [
+    "After owner-request handoff and legal in_progress→ready release, successor must inspect latest coordination registry, ensure INT-002 is ready/unowned and INT-001 verified, choose own BOT_ID and claim atomically before writing code.",
+    "Read SAFE_INTERIOR_ARCHITECTURE.md, owner 3D PR #47 and CIV-001/INT-003 contracts, reconcile 2D legacy geometry with owner-approved 3D Pixel Squares direction before implementing assets/render.",
+    "Implement genuine metric footprints 3×3–6×6 including roads, heritage, buildings, doors and collision on a NEW owned branch, write failing-before-change Node+Chromium+Android tests, preserve v1 1×1/2×2 saves. No interiors or camera/render assumptions without approval."
+  ],
+  "do_not_repeat": [
+    "Do not search for nonexistent FORGE-27 INT-002 code commits; original work branch SHA is the untouched base.",
+    "Do not assume old 2D sprite dimensions or a 2D-only camera are owner-approved 3D design.",
+    "Do not seize other owners' INT/CIV branches, PRs or modify main."
+  ],
+  "unpublished_changes": false
+}
