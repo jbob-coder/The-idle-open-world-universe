@@ -542,7 +542,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Chunk-aware camera, fog, terrain renderer and coordinate UI",
-      "status": "in_review",
+      "status": "verified",
       "owner": "LIFE-26",
       "work_branch": "feat/wld-003-life-26-chunk-camera",
       "depends": [
@@ -553,7 +553,8 @@
       "issue": 18,
       "pr": 40,
       "evidence": [
-        "WLD-003 PR #40 https://github.com/jbob-coder/The-idle-open-world-universe/pull/40 (draft stacked on verified WLD-002 PR #31 / WLD-001 PR #23), exact source HEAD 8224c6198667bddc19573919d7f3ba1127dff8e3: 103/103 Node, Chromium offline 4+ signed borders, 3 zooms, bounded fog/dirty tiles, drag, original v1 chapters/saves intact and screenshot PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248926 ; same SHA push PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191243468 ; native Gradle + API29 installed/emulated 7/7 Android instrumentation PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248868 . Older Android WebView numeric-separator patch confined to stacked branch, owner WLD-002 notified on PR #31; physical 2/3 GB RAM/PSS UNVERIFIED; Nim cross-chunk pathfinding WLD-004 and v1 migration WLD-007 NOT implemented."
+        "WLD-003 PR #40 https://github.com/jbob-coder/The-idle-open-world-universe/pull/40 (draft stacked on verified WLD-002 PR #31 / WLD-001 PR #23), exact source HEAD 8224c6198667bddc19573919d7f3ba1127dff8e3: 103/103 Node, Chromium offline 4+ signed borders, 3 zooms, bounded fog/dirty tiles, drag, original v1 chapters/saves intact and screenshot PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248926 ; same SHA push PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191243468 ; native Gradle + API29 installed/emulated 7/7 Android instrumentation PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248868 . Older Android WebView numeric-separator patch confined to stacked branch, owner WLD-002 notified on PR #31; physical 2/3 GB RAM/PSS UNVERIFIED; Nim cross-chunk pathfinding WLD-004 and v1 migration WLD-007 NOT implemented.",
+        "Independent FORGE-27 scoped WLD-003 review PR #40 https://github.com/jbob-coder/The-idle-open-world-universe/pull/40#pullrequestreview-5569247528 exact HEAD 8224c6198667bddc19573919d7f3ba1127dff8e3. Source inspected chunk_view camera/fog/dirty tile, chunk_surface 16px paint, ui_chunk_atlas mobile pan/keyboard/drag and 7 Node tests + Chromium acceptance. Exact source offline CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248926 SUCCESS, 103/103 Node PASS and real Chromium signed borders/3 zooms/offline screenshot PASS. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248868 SUCCESS, API29 Gradle and 7/7 emulator PASS. Opt-in God-view atlas only, NOT NPC global navigation or legacy migration, NOT physical 2–3GB certification, PR draft/unmerged."
       ],
       "status_history": [
         {
@@ -590,8 +591,16 @@
           "to": "in_review",
           "actor": "LIFE-26",
           "reason": "Submitted exact-HEAD Node/Chromium/Android 7/7 validated chunk camera and renderer for independent review; no merge/physical RAM claim"
+        },
+        {
+          "date": "2026-10-19T09:10:03.122Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent exact-SHA source/Node/Chromium and 7/7 API29 emulator review; isolated observable atlas, no gameplay travel or physical low-RAM certification."
         }
-      ]
+      ],
+      "verified_by": "FORGE-27"
     },
     {
       "id": "WLD-004",
@@ -776,7 +785,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Bound active chunks, offscreen simulation and memory",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -794,6 +803,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T09:10:03.122Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available to claim; no implementation claimed."
         }
       ]
     },
@@ -802,7 +818,7 @@
       "priority": "P1",
       "area": "world",
       "title": "God's regional atlas and village discovery UX",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -819,6 +835,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T09:10:03.122Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available to claim; no implementation claimed."
         }
       ]
     },
@@ -1695,7 +1718,7 @@
       "priority": "P1",
       "area": "art",
       "title": "Animated medieval residents, age stages, work and social emotes",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -1712,6 +1735,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T09:10:03.122Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available to claim; no implementation claimed."
         }
       ]
     },

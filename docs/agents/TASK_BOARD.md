@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 70 tasks · planned: 38 · ready: 4 · claimed: 0 · in_progress: 3 · blocked: 3 · in_review: 6 · verified: 16 · done: 0 · cancelled: 0.
+**Tracked work:** 70 tasks · planned: 35 · ready: 7 · claimed: 0 · in_progress: 3 · blocked: 3 · in_review: 5 · verified: 17 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -59,13 +59,13 @@
 | **QA-006** | P0 | qa | **in_review** | SCOPE-31 | — | V3 cross-system causal acceptance for divine agency, cognition, families, kingdoms and resource efficiency |
 | **WLD-001** | P0 | world | **verified** | TERRAIN-01 | — | Seeded world coordinate system and 32×32 chunk generator · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-002** | P0 | world | **verified** | GDS-KESTREL-1810 | WLD-001 | Sparse modified-terrain deltas and chunk persistence · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **WLD-003** | P0 | world | **in_review** | LIFE-26 | WLD-001, WLD-002 | Chunk-aware camera, fog, terrain renderer and coordinate UI · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-003** | P0 | world | **verified** | LIFE-26 | WLD-001, WLD-002 | Chunk-aware camera, fog, terrain renderer and coordinate UI · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-004** | P0 | world | **ready** | — | WLD-001, WLD-002 | Cross-chunk autonomous navigation and bounded pathfinding · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-005** | P0 | world | **planned** | — | WLD-002, CIV-001 | Distant independent villages with local resources and population · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-007** | P0 | world | **in_progress** | FORGE-27 | WLD-001, WLD-002 | Map existing 64×48 version-1 saves into expanded world · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **WLD-008** | P0 | world | **planned** | — | WLD-002, WLD-003 | Bound active chunks, offscreen simulation and memory · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-008** | P0 | world | **ready** | — | WLD-002, WLD-003 | Bound active chunks, offscreen simulation and memory · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-010** | P0 | world | **planned** | — | WLD-003, WLD-004, WLD-007, WLD-008 | Four-border open-world acceptance and multi-region save QA · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **ART-001** | P1 | art | **planned** | — | SIM-002 | Animated medieval residents, age stages, work and social emotes |
+| **ART-001** | P1 | art | **ready** | — | SIM-002 | Animated medieval residents, age stages, work and social emotes |
 | **ART-003** | P1 | art | **planned** | — | INT-009, GOD-004 | Responsive world/indoor HUD and accessible mobile controls |
 | **ART-005** | P1 | art | **planned** | — | INT-005, ART-002 | Automated visual regressions of rooms, buildings and villagers |
 | **ART-006** | P1 | art | **verified** | SPLASH-01 | — | Playable GODSEED medieval pixel-art splash and truthful offline loading state |
@@ -86,7 +86,7 @@
 | **REL-001** | P1 | release | **ready** | — | QA-003 | Stable Android signing identity and save-safe upgrade |
 | **REL-003** | P1 | release | **planned** | — | QA-002, QA-003, REL-001 | Integrate stacked PRs, QA gate and tagged Android beta |
 | **WLD-006** | P1 | world | **in_review** | TERRAIN-01 | WLD-001 | Streaming biome ecology, climate, water and landmarks · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **WLD-009** | P1 | world | **planned** | — | WLD-003 | God's regional atlas and village discovery UX · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-009** | P1 | world | **ready** | — | WLD-003 | God's regional atlas and village discovery UX · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **ART-004** | P2 | art | **planned** | — | WLD-006 | Medieval biome props, weather/time and seasonal differences |
 | **GOD-005** | P2 | divine | **planned** | — | GOD-001, QA-004 | Optional advanced offline language understanding feasibility |
 | **REL-002** | P2 | release | **planned** | — | WLD-008 | Real optional offline content pack streaming and disk budgets |
