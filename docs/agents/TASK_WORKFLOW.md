@@ -71,6 +71,26 @@ La rama de coordinación y los archivos de estado son **un recurso compartido**.
 - Si un PR cambia de HEAD, repite el CI del nuevo HEAD antes de conservar `verified`.
 - Conflicto en save schema, rutas, cámara, Android o arquitectura: marca `blocked`, describe alternativas y solicita revisión coordinada.
 
+## Nueva tarea al terminar cada entrega — regla permanente
+
+Tras completar su propia entrega con evidencia, **cualquier bot puede registrar una nueva tarea necesaria**. El origen debe estar en `in_review`, `verified` o `done`, con propietario y evidencia reales. No es obligatorio añadir una nueva si no hay trabajo justificable: evita duplicados y tareas triviales. La entrega inicial sigue las reglas de cambio de estado; la creación de otra tarea **no significa** que la primera ya fue integrada.
+
+**Solo una nueva tarea por entrega de origen**, salvo coordinación explícita para iniciativas adicionales. Debe explicar el hallazgo, prioridad, área, dependencias y aceptación verificable. La herramienta asigna el siguiente ID de esa área y registra `origin_task`, `created_by`, `new_task_reason` y la historia de estado.
+
+Ejemplo ilustrativo, sustituir todos los IDs/actores por tareas actuales y dueño real:
+
+```bash
+python tools/godseed_tasks.py add --after SIM-001 --actor LIFE-01 --area people --priority P1 --title "Sim occupational fatigue and recuperation" --acceptance "Measured exhaustion changes work decisions and remains correct after v1 save/reload." --depends SIM-001 --reason "Repeated work caused preventable exhaustion in seeded citizen acceptance tests."
+python tools/godseed_tasks.py validate
+git add docs/agents/tasks.json docs/agents/TASK_BOARD.md
+git commit -m "docs(tasks): propose follow-up after SIM-001"
+git push origin HEAD:docs/godseed-agent-task-governance-v1
+```
+
+El estado inicial es `ready` solamente si **todas** las dependencias están `verified` o `done`; de lo contrario queda `planned`. Si no hay dependencias, puede quedar `ready`. La tarea nueva **no se autoasigna**; el bot debe completar/revisar su tarea anterior antes de reclamar otra. Si otra entidad creó trabajo equivalente, no crearlo nuevamente. Si la rama de coordinación cambió, refetch + comprobar SHA, nunca sobrescribir registros ajenos. El tablero es generado por CLI, nunca editado a mano.
+
+En cada reporte final: `NEW_TASK_CREATED: <ID/estado/razón/commit>` o `none: no justified follow-up`.
+
 ## Selección automática de la siguiente tarea
 
 Elegir por este orden: **P0 desbloqueada** → dependencias importantes → reducción de riesgo para Android/guardados → P1 → P2. Dentro de una misma prioridad, elegir la tarea que permita una entrega **jugable y comprobable** más pequeña.
