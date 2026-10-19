@@ -59,7 +59,7 @@ test('Nim-only nearby enemies do not disable village labor, targeted threats do'
  p.needs=Needs.normalize({safety:95,energy:100,hunger:100,comfort:100,social:100,hygiene:100});
  s.enemies=[{id:999,type:'Wolf',x:p.x+1,y:p.y,hp:50,defense:0,attack:1,cooldown:500}];
  for(let i=0;i<12;i++)S.tick(s);
- assert.notMatch(p.activity,/Sheltering for safety/,'incidental Nim-only enemy must not paralyze village labor');
+ assert.doesNotMatch(p.activity,/Sheltering for safety/,'incidental Nim-only enemy must not paralyze village labor');
  p.needs.safety=95;
  s.enemies[0].targetCitizenId=p.id;
  for(let i=0;i<12;i++)S.tick(s);
