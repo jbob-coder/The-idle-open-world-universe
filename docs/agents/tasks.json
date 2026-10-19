@@ -2364,9 +2364,9 @@
       "priority": "P0",
       "area": "divine",
       "title": "Replace direct god power toolbar with indirect consequence-based divine influence",
-      "status": "blocked",
-      "owner": "FORGE-27",
-      "work_branch": "feat/god-006-forge-27-indirect-influence",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
       "depends": [
         "GOD-004",
         "GOD-001"
@@ -2375,7 +2375,8 @@
       "issue": null,
       "pr": null,
       "evidence": [
-        "Code candidate Git object aead479e55d1f24a545eb69347a816448ab8c2ab exists but is UNREFERENCED: branch feat/god-006-forge-27-indirect-influence remains at 7de364157e45260e4d728daa1c3558be79dacd39 after an OpenAI/GitHub connector safety block on publishing. NOT TESTED, NOT PR, NOT INTEGRATED. Requires authorized branch publication and fresh tests."
+        "Code candidate Git object aead479e55d1f24a545eb69347a816448ab8c2ab exists but is UNREFERENCED: branch feat/god-006-forge-27-indirect-influence remains at 7de364157e45260e4d728daa1c3558be79dacd39 after an OpenAI/GitHub connector safety block on publishing. NOT TESTED, NOT PR, NOT INTEGRATED. Requires authorized branch publication and fresh tests.",
+        "Recovery checkpoint by original owner FORGE-27: existing one-commit fast-forward safely published to feat/god-006-forge-27-indirect-influence at exact SHA aead479e55d1f24a545eb69347a816448ab8c2ab (parent 7de364157e45260e4d728daa1c3558be79dacd39), force=false and expected_sha lease. Code remains UNTESTED, no PR or approval. Safe to re-claim work under governance and write tests."
       ],
       "status_history": [
         {
@@ -2412,6 +2413,13 @@
           "to": "blocked",
           "actor": "FORGE-27",
           "reason": "Implementation tree prepared but code commit reference update blocked by connector safety checks; no branch publication or CI evidence; do not claim complete or attempt unsafe overwrite."
+        },
+        {
+          "date": "2026-10-19T02:32:41.966Z",
+          "from": "blocked",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Connector publication blocker resolved via non-force one-commit fast-forward with exact expected SHA; source safely preserved, tests not yet executed. Release then re-claim for ordinary work."
         }
       ]
     },
