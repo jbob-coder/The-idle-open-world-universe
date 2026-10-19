@@ -1026,7 +1026,7 @@
       "priority": "P1",
       "area": "people",
       "title": "Personal journals, memories, long goals and moral decisions",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -1043,6 +1043,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:21:23+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Dependencies SIM-002 independently verified. Open for a fresh exclusive bot claim; no ownership reserved and no implementation performed by this transition."
         }
       ]
     },
@@ -2369,7 +2376,7 @@
       "priority": "P0",
       "area": "people",
       "title": "Individual intelligence, cognition, learning styles and personality effect on choices",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -2387,6 +2394,13 @@
           "to": "planned",
           "actor": "DESIGN-28",
           "reason": "Current Sims are rudimentary and user explicitly requests intelligence/stats alter actions and personalities."
+        },
+        {
+          "date": "2026-10-19T02:21:23+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Dependencies SIM-001, SIM-002 independently verified. Open for a fresh exclusive bot claim; no ownership reserved and no implementation performed by this transition."
         }
       ]
     },
