@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 60 tasks · planned: 39 · ready: 2 · claimed: 0 · in_progress: 4 · blocked: 2 · in_review: 7 · verified: 6 · done: 0 · cancelled: 0.
+**Tracked work:** 60 tasks · planned: 38 · ready: 3 · claimed: 0 · in_progress: 4 · blocked: 2 · in_review: 6 · verified: 7 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -46,7 +46,7 @@
 | **SIM-010** | P0 | people | **planned** | — | SIM-002, SIM-005 | Long life-soak regression: agency, finite population and persistence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **QA-001** | P0 | qa | **verified** | GDS-KESTREL-1810 | — | Node state-machine regression for life, worlds and migration |
 | **QA-002** | P0 | qa | **blocked** | — | QA-001 | Chromium offline Android-layout interaction acceptance |
-| **QA-003** | P0 | qa | **in_review** | TERRAIN-01 | QA-001 | Gradle host + API29 emulator instrumentation and artifacts |
+| **QA-003** | P0 | qa | **verified** | TERRAIN-01 | QA-001 | Gradle host + API29 emulator instrumentation and artifacts |
 | **QA-004** | P0 | qa | **blocked** | — | QA-003 | Physical Android 2 GB and 3 GB 20-minute soak · [#13](https://github.com/jbob-coder/The-idle-open-world-universe/issues/13) |
 | **WLD-001** | P0 | world | **verified** | TERRAIN-01 | — | Seeded world coordinate system and 32×32 chunk generator · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-002** | P0 | world | **in_review** | GDS-KESTREL-1810 | WLD-001 | Sparse modified-terrain deltas and chunk persistence · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
@@ -73,7 +73,7 @@
 | **SIM-008** | P1 | people | **planned** | — | SIM-004, SIM-007 | Generations, inheritance and meaningful mortality · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-009** | P1 | people | **planned** | — | SIM-002, SIM-004 | Contextual resident social interaction and visible animations · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **QA-005** | P1 | qa | **in_review** | LIFE-26 | — | Diagnose and stabilize paused divine FX render timing in Chromium CI |
-| **REL-001** | P1 | release | **planned** | — | QA-003 | Stable Android signing identity and save-safe upgrade |
+| **REL-001** | P1 | release | **ready** | — | QA-003 | Stable Android signing identity and save-safe upgrade |
 | **REL-003** | P1 | release | **planned** | — | QA-002, QA-003, REL-001 | Integrate stacked PRs, QA gate and tagged Android beta |
 | **WLD-006** | P1 | world | **ready** | — | WLD-001 | Streaming biome ecology, climate, water and landmarks · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-009** | P1 | world | **planned** | — | WLD-003 | God's regional atlas and village discovery UX · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
