@@ -1067,9 +1067,9 @@
       "priority": "P1",
       "area": "people",
       "title": "Personal journals, memories, long goals and moral decisions",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "CORTEX-19",
+      "work_branch": "feat/sim-007-cortex-19-personal-chronicles",
       "depends": [
         "SIM-002"
       ],
@@ -1091,6 +1091,13 @@
           "to": "ready",
           "actor": "GDS-KESTREL-1810",
           "reason": "Dependencies SIM-002 independently verified. Open for a fresh exclusive bot claim; no ownership reserved and no implementation performed by this transition."
+        },
+        {
+          "date": "2026-10-19T08:53:22.237Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "CORTEX-19",
+          "reason": "Reserve SIM-007 real per-citizen chronicles, long goals, moral tradeoffs and inspectable consequences on isolated verified SIM-002 base."
         }
       ]
     },
