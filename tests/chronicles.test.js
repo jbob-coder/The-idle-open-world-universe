@@ -140,14 +140,10 @@ test('malformed/oversized optional memories sanitize, never fabricate a positive
  assert.ok(loaded);
  const j=loaded.living.citizens[0].journal;
  assert.equal(j.goal,'master_craft');
- assert.equal(j.progress,5);
+ assert.equal(j.progress,0,'forged outcomes cannot create a completed goal');
  assert.equal(j.goalTarget,5);
  assert.deepEqual(j.ethics,C.newJournal(loaded.living.citizens[0]).ethics);
- assert.ok(j.entries.length<=11&&j.entries.length>=1);
- assert.ok(j.entries.every(e=>e.reason.length<=120&&e.consequence.length<=140));
- assert.ok(j.entries.every(e=>e.impact.wood===999));
- assert.ok(j.entries.every(e=>e.alternative===null));
- assert.ok(j.entries.every(e=>e.observed===true));
+ assert.equal(j.entries.length,0,'impossible +9,999,999 resource gains must be rejected');
  assert.equal(loaded.worldSeed,s.worldSeed);
  p.journal={version:99,entries:'malicious'};
  const invalid=S.restore(JSON.stringify(save));
