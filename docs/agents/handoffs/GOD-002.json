@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "task_id": "GOD-002",
+  "retiring_bot": "FORGE-27",
+  "reason": "session_end",
+  "created_utc": "2026-10-19T02:10:01.601Z",
+  "last_known_status": "in_review",
+  "owner_at_handoff": "FORGE-27",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "95f4543eb66e48553f855d5296d4e17f8135cc46",
+  "work_branch": "feat/god-002-forge-27-autonomy",
+  "work_sha": "a9822e8c6037b7f0baa07b55e9a7ea95fbb49905",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/34",
+  "summary": "Delivered read-only, deterministic personal belief and consent for 8 named inhabitants: individuals may decline or consider God whispers based on urgency (citizen safety/hunger/energy), agency and personality, with explanations and bounded histories. Single-person messages do not set village agendas or auto-complete goals. Bilingual GOD-001 intent grammar combined with SIM-001 needs. PR #34 ready for independent review and not merged.",
+  "changed_files": [
+    "src/divine/consent.js",
+    "src/divine/intent.js",
+    "src/living.js",
+    "src/ui.js",
+    "build.py",
+    "tests/consent.test.js",
+    "tests/intent.test.js",
+    "tests/god_consent_browser_acceptance.py",
+    ".github/workflows/qa.yml"
+  ],
+  "tests": [
+    "PASS: 108/108 deterministic Node tests at exact HEAD a9822e8c6037b7f0baa07b55e9a7ea95fbb49905 plus offline HTML/asset reproducibility/debug APK structure/signature, run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188140209",
+    "PASS: dedicated GOD-002 Chromium offline mobile 640x360 consent, refusal, no NPC control, save/reload and 0 outgoing requests, screenshot qa-screenshots/god-002-consent-640x360.png within run 39188140209.",
+    "PASS: Exact-head pull request offline QA run 39188273873 completed success, https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188273873",
+    "PASS: Native Android Gradle/WebView debug APK and emulator installation/API tests in Actions run 39188273888 completed success, https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188273888",
+    "NOT_RUN: Physical 2–3 GB total RAM Android phone PSS/FPS/20-minute test."
+  ],
+  "blockers": [],
+  "risks": [
+    "Stacked PR #34 targets unmerged SIM-001 PR #26 at 553ef5c and separately includes GOD-001 parser from unmerged PR #25 at e97465f; integrator must reconcile both before merge.",
+    "A considering response is not a performed objective; GOD-003 owns scheduled actions and outcomes.",
+    "Emulator PASS does not establish low-end physical device memory limits.",
+    "Separate GOD-004 observer PR #28 owned FORGE-27 remains in_review; total two in_review prevents taking another task."
+  ],
+  "save_notes": "Saves stay version:1 and localStorage identity unchanged. New optional per-actor divineBelief fields are bounded and normalized on restore; no direct actor movement, quest completion, inventory, time or faith mutation from GOD-002 whispers.",
+  "next_actions": [
+    "Independently review PR #34 exact SHA a9822e8c6037b7f0baa07b55e9a7ea95fbb49905 against GOV-002 consent acceptance and full CI logs.",
+    "Confirm independent person refusals, targeted English/Spanish parsing, effect-free whisper, v1 migration, capped saved beliefs and Chromium screenshots; update in_review->verified ONLY as a different reviewer.",
+    "Handle upstream SIM-001 #26 and GOD-001 #25 stacking safely after their authorized merge; do not merge PR #34 without owner approval.",
+    "Run physical 2–3 GB Android hardware QA via QA-004 later; never infer PSS from emulator."
+  ],
+  "do_not_repeat": [
+    "GOD-002 is owned by FORGE-27 and in_review, not ready. Do not duplicate or reclaim.",
+    "GOD-001 parser and SIM-001 needs were previously independently verified but not merged. Preserve their code and tests.",
+    "Do not mistake draft/green CI for gameplay complete or integrate unapproved PRs.",
+    "DO NOT overwrite GOD-004's unrelated observer work or others' branches."
+  ],
+  "unpublished_changes": false,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact."
+}
