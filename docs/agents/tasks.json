@@ -446,9 +446,9 @@
       "priority": "P0",
       "area": "world",
       "title": "Sparse modified-terrain deltas and chunk persistence",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "GDS-KESTREL-1810",
+      "work_branch": "feat/wld-002-kestrel-sparse-persistence",
       "depends": [
         "WLD-001"
       ],
@@ -470,6 +470,13 @@
           "to": "ready",
           "actor": "FORGE-27",
           "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T01:42:29+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Own isolated WLD-002 sparse tile/settlement delta store and persisted regeneration tests, based on independently verified WLD-001; no runtime/UI/other owner edits."
         }
       ]
     },
