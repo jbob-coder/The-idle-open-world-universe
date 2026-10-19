@@ -11,6 +11,14 @@
 
 ---
 
+## Relevo y terminación de los bots anteriores (orden posterior del propietario)
+
+El propietario ordenó consolidar progresivamente los bots y sus tareas. **ANTES de iniciar un sustituto sobre una tarea ocupada**, envía a cada bot antiguo [BOT_RETIRO_DEFINITIVO_PROMPT.md](./BOT_RETIRO_DEFINITIVO_PROMPT.md), exige su certificado final y comprueba el archivo handoff y SHA en GitHub. Para el nuevo agente usa [BOT_SUCESOR_CONSOLIDADO_PROMPT.md](./BOT_SUCESOR_CONSOLIDADO_PROMPT.md), que incorpora esta introducción y el mandato de consolidación sin sobrescritura.
+
+El protocolo técnico sigue siendo [CHAT_RETIRE_AND_RESUME.md](./CHAT_RETIRE_AND_RESUME.md) en la rama de coordinación. Estos prompts no apagan automáticamente procesos ajenos, no transfieren propiedad por sí solos y no reemplazan la comprobación de tareas activas. No dar por cancelada una tarea sin registro ni borrar el trabajo útil de las PRs 2D anteriores.
+
+---
+
 ## INICIO — COPIAR ESTE PROMPT COMPLETO AL AGENTE
 
 ### 0. Identidad, mandato y límites
