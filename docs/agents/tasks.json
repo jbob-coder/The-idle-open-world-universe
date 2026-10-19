@@ -1129,14 +1129,16 @@
       "priority": "P0",
       "area": "divine",
       "title": "Multilingual intent parsing with negation, target and ambiguity",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "FORGE-27",
       "work_branch": "feat/god-001-forge-27-intent-parser",
       "depends": [],
       "acceptance": "English/Spanish recognized categories, unsupported text refused clearly; do-not obey negations.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 25,
+      "evidence": [
+        "PR #25 https://github.com/jbob-coder/The-idle-open-world-universe/pull/25; implementation HEAD e97465f1343c77362812db603e0c3ae686191041; exact-SHA CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 ; Build HTML, deterministic Node suite, pixel contract and APK structure steps SUCCESS as observed; browser checks pending at handoff; physical 2–3 GB device NOT VERIFIED; independent reviewer required."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -1165,6 +1167,13 @@
           "to": "in_progress",
           "actor": "FORGE-27",
           "reason": "Inspect existing Living.interpret and whisper contract; implement independent pure offline bilingual parser, integrate without altering save schema; add deterministic Node tests."
+        },
+        {
+          "date": "2026-10-19T01:06:40Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FORGE-27",
+          "reason": "Submitted reproducible bilingual offline grammar with negation/ambiguity/target tests in draft PR #25; Node CI steps succeeded, browser checks pending; independent final review needed."
         }
       ]
     },
