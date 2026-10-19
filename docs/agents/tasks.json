@@ -1582,7 +1582,7 @@
       "priority": "P0",
       "area": "governance",
       "title": "♾️ Continuous bot work-loop prompt, lifecycle automation and safe handoffs",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "ORBIT-01",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
@@ -1611,6 +1611,13 @@
           "to": "claimed",
           "actor": "ORBIT-01",
           "reason": "Claimed the user-requested continuous bot automation documentation before editing."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "ORBIT-01",
+          "reason": "Implementing ♾️ continuation prompt, preemption limits, audit logs and handoff rules"
         }
       ]
     }
