@@ -621,9 +621,9 @@
       "priority": "P0",
       "area": "world",
       "title": "Cross-chunk autonomous navigation and bounded pathfinding",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "PATH-34",
+      "work_branch": "feat/wld-004-path-34-autonomous-travel",
       "depends": [
         "WLD-001",
         "WLD-002"
@@ -646,6 +646,13 @@
           "to": "ready",
           "actor": "FORGE-27",
           "reason": "All prerequisites independently verified; task available for separate claim, not implemented."
+        },
+        {
+          "date": "2026-10-19T16:16:51.681+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "PATH-34",
+          "reason": "WLD-004 libre; implemento navegación autónoma global desacoplada de render 2D para futura vista 3D aprobada."
         }
       ]
     },
