@@ -625,7 +625,7 @@
       "priority": "P1",
       "area": "world",
       "title": "Streaming biome ecology, climate, water and landmarks",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "TERRAIN-01",
       "work_branch": "feat/wld-006-terrain-01-biome-ecology",
       "depends": [
@@ -656,6 +656,13 @@
           "to": "claimed",
           "actor": "TERRAIN-01",
           "reason": "Isolated deterministic biome/landmark and route-safe resource overlay; WLD-001 verified; no conflicts with chunk storage files."
+        },
+        {
+          "date": "2026-10-19T02:15:42+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "TERRAIN-01",
+          "reason": "Develop pure world biome/climate sampling, route-preserving water and stable non-overlapping heritage/renewable resource overlays; add seeded tests without touching live runtime."
         }
       ]
     },
