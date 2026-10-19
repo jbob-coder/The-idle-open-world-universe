@@ -647,7 +647,7 @@
       "priority": "P0",
       "area": "people",
       "title": "Need profile: hunger, energy, comfort, safety, social, hygiene",
-      "status": "in_review",
+      "status": "verified",
       "owner": "LIFE-26",
       "work_branch": "feat/sim-001-life-26-needs",
       "depends": [],
@@ -655,7 +655,8 @@
       "issue": 19,
       "pr": null,
       "evidence": [
-        "PR #26 (draft) | commit 553ef5c2068c48ddd83d0d70bf971d6234156bf0 | Node regression 92/92 passed, browser/Android structure rerun attempt 2 passed: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625841 | Gradle+Android emulator success: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625780 | attempt 1 paused FX render timing failure retained as known risk | physical Android RAM/PSS not verified"
+        "PR #26 (draft) | commit 553ef5c2068c48ddd83d0d70bf971d6234156bf0 | Node regression 92/92 passed, browser/Android structure rerun attempt 2 passed: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625841 | Gradle+Android emulator success: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625780 | attempt 1 paused FX render timing failure retained as known risk | physical Android RAM/PSS not verified",
+        "Independent GDS-KESTREL-1810 review https://github.com/jbob-coder/The-idle-open-world-universe/pull/26#issuecomment-6257801934 at exact source SHA 553ef5c2068c48ddd83d0d70bf971d6234156bf0: 94/94 Node PASS, full offline Chromium PASS, native Gradle + API29 6 tests PASS. CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625841 (attempt 2) and https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625780 (attempt 1). Caveat QA-005 paused FX flake, 2-3GB physical device NOT VERIFIED; PR #26 remains open/unmerged."
       ],
       "status_history": [
         {
@@ -692,8 +693,16 @@
           "to": "in_review",
           "actor": "LIFE-26",
           "reason": "Submit implemented and tested citizen-need model as draft PR #26 for independent verification; Node and Android emulator jobs green at exact SHA; first browser FX timing attempt was flaky; physical low-memory QA pending."
+        },
+        {
+          "date": "2026-10-19T01:37:23+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Independent exact-SHA review of SIM-001: six bounded needs, resident choices, real food costs, v1 migration and CI 94/94 Node plus offline Chromium and native API29 6/6 on SHA 553ef5c2068c48ddd83d0d70bf971d6234156bf0; known paused-FX flake tracked as QA-005; no physical hardware claims."
         }
-      ]
+      ],
+      "verified_by": "GDS-KESTREL-1810"
     },
     {
       "id": "SIM-002",
