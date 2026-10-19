@@ -112,7 +112,11 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
    const c=p.choice;
    if(!c)return p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity;
    const alternative=c.alternatives.length?c.alternatives[0].intent:'none';
-   return p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity+
+   const cognition=p.cognition&&p.cognition.stats;
+   const mind=cognition?' | Mind I:'+cognition.intelligence+' F:'+cognition.focus+
+    ' C:'+cognition.creativity+' E:'+cognition.empathy+' P:'+cognition.patience:'';
+   const plan=c.thinking?' | Plan '+c.thinking.horizon+' steps':'';
+   return p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity+mind+plan+
     ' | Why: '+c.why+' | Alternative: '+alternative+' | Result: '+c.consequence;
   }).join('\n');
   const recent=s.living.whispers[s.living.whispers.length-1];
