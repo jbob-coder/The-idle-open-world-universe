@@ -778,7 +778,7 @@
       "priority": "P0",
       "area": "people",
       "title": "Utility-based choices with visible why/alternative/consequence",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "LIFE-26",
       "work_branch": "feat/sim-002-life-26-utility-decisions",
       "depends": [
@@ -809,6 +809,13 @@
           "to": "claimed",
           "actor": "LIFE-26",
           "reason": "Reserve utility-scored autonomous decisions with transparent alternatives, outcome traces and v1-compatible bounded serialization; depending on verified SIM-001."
+        },
+        {
+          "date": "2026-10-19T01:55:19+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement independent decision engine + visible citizen rationale/outcomes; preserve food/work production, safe needs overrides, and offline Android compatibility."
         }
       ]
     },

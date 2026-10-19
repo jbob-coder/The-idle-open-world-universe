@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 60 tasks · planned: 39 · ready: 4 · claimed: 1 · in_progress: 3 · blocked: 1 · in_review: 7 · verified: 5 · done: 0 · cancelled: 0.
+**Tracked work:** 60 tasks · planned: 39 · ready: 4 · claimed: 0 · in_progress: 4 · blocked: 1 · in_review: 7 · verified: 5 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -40,7 +40,7 @@
 | **INT-007** | P0 | interiors | **planned** | — | INT-004, INT-006 | Autonomous sleep, food, shelter and social actions indoors |
 | **INT-010** | P0 | interiors | **planned** | — | INT-004, INT-005 | Interior transitions: adversarial Android and save regression |
 | **SIM-001** | P0 | people | **verified** | LIFE-26 | — | Need profile: hunger, energy, comfort, safety, social, hygiene · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
-| **SIM-002** | P0 | people | **claimed** | LIFE-26 | SIM-001 | Utility-based choices with visible why/alternative/consequence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
+| **SIM-002** | P0 | people | **in_progress** | LIFE-26 | SIM-001 | Utility-based choices with visible why/alternative/consequence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-003** | P0 | people | **planned** | — | SIM-001, INT-003 | Homes, household membership, work IDs and inventories · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-005** | P0 | people | **planned** | — | SIM-001, CIV-001 | Profession schedules and workplace resource delivery · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-010** | P0 | people | **planned** | — | SIM-002, SIM-005 | Long life-soak regression: agency, finite population and persistence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
