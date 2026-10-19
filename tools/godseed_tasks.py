@@ -301,12 +301,16 @@ def main():
         p.error("Blocked by dependency tasks not yet verified")
     if t.get("owner") and t["owner"] != args.actor and args.to_status not in {"ready", "blocked", "verified", "done"}:
         p.error(f"Already owned by {t['owner']}; cannot steal a task")
-    if args.to_status == "claimed" and any(
-        other["id"] != t["id"] and other.get("owner") == args.actor and
-        other["status"] in {"claimed", "in_progress", "in_review"}
-        for other in db["tasks"]
-    ):
-        p.error("Bot already owns an active task; finish, block or release it before claiming another")
+    if args.to_status == "claimed":
+        other_owned = [other for other in db["tasks"]
+                       if other["id"] != t["id"] and other.get("owner") == args.actor]
+        # An evidence-backed in_review PR has been handed to an independent
+        # reviewer; it is not an actively edited task. This permits the ♾️
+        # next-task loop without self-verifying or merging the prior PR.
+        if any(other["status"] in {"claimed", "in_progress"} for other in other_owned):
+            p.error("Bot already owns an active claimed/in_progress task")
+        if sum(other["status"] == "in_review" for other in other_owned) >= 2:
+            p.error("Review backlog limit: two unverified PRs per bot; await independent review")
     if args.to_status == "verified":
         if t.get("owner") == args.actor:
             p.error("Independent reviewer required; owner cannot self-verify")
