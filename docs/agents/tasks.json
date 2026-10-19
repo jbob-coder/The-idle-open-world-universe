@@ -2669,14 +2669,16 @@
       "priority": "P0",
       "area": "qa",
       "title": "V3 cross-system causal acceptance for divine agency, cognition, families, kingdoms and resource efficiency",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "SCOPE-31",
       "work_branch": "docs/godseed-v3-causal-acceptance",
       "depends": [],
       "acceptance": "Bot-readable reproducible cross-system QA cases verify divergent intelligent choices, effects of traits/family environment, real input-output resource conservation, god advice refusal, autonomous new colonies, royal succession, remote LOD and save/Android budgets, while explicitly distinguishing documentation from coded tests.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 42,
+      "evidence": [
+        "PR #42 https://github.com/jbob-coder/The-idle-open-world-universe/pull/42; branch docs/godseed-v3-causal-acceptance SHA 997b22fd6dbebd9e0385d6489643e1d10275aae4; governance PASS 34 tests https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191484387; offline QA pending; docs/qa/GODSEED_V3_CAUSAL_ACCEPTANCE.md; NOT GAMEPLAY IMPLEMENTATION"
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -2705,6 +2707,13 @@
           "to": "in_progress",
           "actor": "SCOPE-31",
           "reason": "Drafting the causal cross-domain verification matrix, scenarios and measurable acceptance invariants."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SCOPE-31",
+          "reason": "Documented 14 cross-system V3 acceptance scenarios and causal/resource/performance invariants; 34 governance tests pass exact SHA. Await offline QA and independent review."
         }
       ]
     }
