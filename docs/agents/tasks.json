@@ -361,9 +361,9 @@
       "priority": "P0",
       "area": "world",
       "title": "Seeded world coordinate system and 32×32 chunk generator",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "TERRAIN-01",
+      "work_branch": "feat/wld-001-seeded-chunks-terrain-01",
       "depends": [],
       "acceptance": "Stable procedural adjacent chunks; tests for negative and 1000+ tile coordinates; no full-world allocation.",
       "issue": 18,
@@ -383,6 +383,13 @@
           "to": "ready",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-19T00:59:12+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "TERRAIN-01",
+          "reason": "Reserve deterministic 32×32 world-chunk generation; isolated module and seeded boundary tests (issue #18)"
         }
       ]
     },
