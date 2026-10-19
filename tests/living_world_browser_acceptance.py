@@ -34,6 +34,10 @@ with sync_playwright() as pw:
     towns=page.evaluate('GodseedDebug.getState().living.towns.map(t=>({age:t.age,buildings:t.buildings.length}))')
     assert all(t['buildings']>=6 for t in towns),towns
     assert page.evaluate('GodseedDebug.getState().living.citizens.every(c=>c.skill>1)')
+    choices=page.evaluate("""() => GodseedDebug.getState().living.citizens.map(c => c.choice)""")
+    assert len(choices)==4 and all(c and c['why'] and c['consequence'] and len(c['alternatives'])==2 for c in choices),choices
+    decision_text=page.locator('#citizenLives').inner_text()
+    assert all(label in decision_text for label in ['Why:', 'Alternative:', 'Result:']),decision_text
     assert page.evaluate('GodseedSim.finaleStatus(GodseedDebug.getState()).completed')
     page.evaluate("window.scrollTo(0,0)")
     page.screenshot(path=str(SHOT),full_page=True)
