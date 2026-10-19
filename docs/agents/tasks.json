@@ -2674,9 +2674,9 @@
       "priority": "P0",
       "area": "art",
       "title": "Redesign GODSEED mobile god-view into map-first coherent pixel interface",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "LIFE-26",
+      "work_branch": "feat/art-007-life-26-godview-layout",
       "depends": [
         "GOD-004"
       ],
@@ -2698,6 +2698,13 @@
           "to": "ready",
           "actor": "DESIGN-28",
           "reason": "Prerequisites verified or absent"
+        },
+        {
+          "date": "2026-10-19T08:58:08.841Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "LIFE-26",
+          "reason": "Reserve map-first mobile Divine Observatory UI based on approved visual reference, existing read-only GOD-004 and safe offline legacy gameplay"
         }
       ]
     },
