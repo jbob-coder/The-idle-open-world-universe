@@ -11,7 +11,13 @@
 
 ---
 
-## Relevo y terminación de los bots anteriores (orden posterior del propietario)
+## Supervisión central, relevo y terminación de los bots anteriores
+
+Para coordinar todo el procedimiento, el **supervisor general** utiliza [BOT_SUPERVISOR_GENERAL_PROMPT.md](./BOT_SUPERVISOR_GENERAL_PROMPT.md). Comprueba certificados, handoffs, tareas, propietarios, CI y conflictos sin robar claims ni dar por terminados bots remotos. Ningún bot es considerado retirado hasta verificar su relevo. El supervisor no reclama por defecto trabajo de programación.
+
+(Se mantiene el procedimiento MODO A / MODO B descrito a continuación.)
+
+### Relevo y terminación de los bots anteriores (orden posterior del propietario)
 
 El propietario ordenó consolidar progresivamente los bots y sus tareas. **ANTES de iniciar un sustituto sobre una tarea ocupada**, envía a cada bot antiguo [BOT_RETIRO_DEFINITIVO_PROMPT.md](./BOT_RETIRO_DEFINITIVO_PROMPT.md), exige su certificado final y comprueba el archivo handoff y SHA en GitHub. Para el nuevo agente usa [BOT_SUCESOR_CONSOLIDADO_PROMPT.md](./BOT_SUCESOR_CONSOLIDADO_PROMPT.md), que incorpora esta introducción y el mandato de consolidación sin sobrescritura.
 
