@@ -2,7 +2,7 @@
 (function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
-const DIMENSIONS={house:[3,3],farm:[3,3],workshop:[3,3],market:[4,3],watchtower:[2,3],well:[2,2]};
+const DIMENSIONS={house:[3,3],farm:[2,2],workshop:[3,3],market:[3,3],watchtower:[2,2],well:[2,2]};
 const Interiors=typeof module!=='undefined'&&module.exports?require('./world/interiors.js'):globalThis.GodseedInteriors;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
 const BLUEPRINTS={
@@ -29,10 +29,10 @@ function occupied(s,x,y){
 function site(s,town,type){
  const [width,height]=DIMENSIONS[type]||[2,2];
  let best=null,score=-1e9;
- for(let y=Math.max(2,town.y-9);y<=Math.min(H-height-1,town.y+10);y++)
- for(let x=Math.max(2,town.x-9);x<=Math.min(W-width-1,town.x+10);x++){ 
+ for(let y=Math.max(2,town.y-9);y<=Math.min(H-height-1,town.y+13);y++)
+ for(let x=Math.max(2,town.x-9);x<=Math.min(W-width-1,town.x+13);x++){ 
   const radius=distance(x,y,town.x,town.y);
-  if(radius<2||radius>15)continue;
+  if(radius<2||radius>19)continue;
   let clear=true,meadow=0;
   // Validate every square metre of the exterior footprint, not merely its origin.
   for(let dy=0;dy<height;dy++)for(let dx=0;dx<width;dx++){ 
@@ -51,7 +51,7 @@ function site(s,town,type){
    if([8,9].includes(s.map[yy*W+xx]))
     nearestRoad=Math.min(nearestRoad,Math.max(0,Math.abs(xx-(x+(width-1)/2))-(width-1)/2)+Math.max(0,Math.abs(yy-(y+(height-1)/2))-(height-1)/2));
   }
-  if(nearestRoad>2)continue;
+  if(nearestRoad>4)continue;
   const preference=type==='farm'?meadow*2:type==='well'?0:type==='watchtower'?radius*.5:0;
   const value=28-radius*1.1-nearestRoad*4+preference+(hash(town.x,town.y,x+y*W)%13)/100;
   if(value>score){best={x,y};score=value;}
@@ -136,7 +136,7 @@ function restore(s){
 function goalFor(s,p){
  const t=townOf(s,p.townId)||s.living.towns[0];
  const phase=(s.tick+p.id*23)%240;
- if(phase>=185){const house=t.buildings.find(b=>b.type==='house');
+ if(phase>=150){const house=t.buildings.find(b=>b.type==='house');
   const d=Interiors.outerDoor(s,house);if(d)return {x:d.x,y:d.y,activity:'Going home',buildingId:house.id};
   return {x:p.homeX,y:p.homeY,activity:'Resting at home'};}
  if(phase>=140)return {x:t.x,y:t.y,activity:'Sharing evening stories'};
@@ -197,7 +197,7 @@ function tick(s){
  if(s.tick%240===0)advanceLife(s);
  for(const p of s.living.citizens){
   const phase=(s.tick+p.id*23)%240;
-  if(p.insideId){if(phase<185)Interiors.exit(s,p);else{Interiors.rest(s,p);continue;}}
+  if(p.insideId){if(phase<150)Interiors.exit(s,p);else{Interiors.rest(s,p);continue;}}
   const task=goalFor(s,p);p.activity=task.activity;walk(s,p,task);
   if(task.buildingId&&p.x===task.x&&p.y===task.y)Interiors.enter(s,p,task.buildingId);
   if((s.tick+p.id*23)%240<90)work(s,p);
