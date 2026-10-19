@@ -57,6 +57,9 @@ with sync_playwright() as pw:
     unchanged=page.evaluate('GodseedChunkAtlas.render().dirty')
     assert unchanged==0,unchanged
     drag_before=details()['camera']['centerX']
+    # The pan buttons scroll the mobile page below the map; bring the actual
+    # Canvas back into the viewport before generating physical pointer moves.
+    page.locator('#chunkAtlasCanvas').scroll_into_view_if_needed()
     box=page.locator('#chunkAtlasCanvas').bounding_box()
     page.mouse.move(box['x']+box['width']*.7,box['y']+box['height']*.5)
     page.mouse.down()
