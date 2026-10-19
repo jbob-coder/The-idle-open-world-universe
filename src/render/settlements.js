@@ -9,6 +9,14 @@ const tones={
 };
 function rect(c,x,y,w,h,col){c.fillStyle=col;c.fillRect(x|0,y|0,w|0,h|0);}
 function draw(c,b,x,y){
+ // Keep one tiny source set of pixel shapes and scale it to true world footprint.
+ if(c.save&&c.translate&&c.scale&&((b.w||2)!==2||(b.h||2)!==2)){
+  c.save();c.translate(x,y);c.scale((b.w||2)/2,(b.h||2)/2);
+  const result=drawShape(c,b,0,0);c.restore();return result;
+ }
+ return drawShape(c,b,x,y);
+}
+function drawShape(c,b,x,y){
  const t=tones[b.roof==='oak'?'timber':b.roof==='reed'?'moss':'stone']||tones.timber;
  // Base + outline preserved at 1 physical pixel, never gradients or blur.
  rect(c,x+1,y+9,30,21,t.shadow);rect(c,x+3,y+11,26,18,t.wall);
