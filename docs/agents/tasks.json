@@ -2652,7 +2652,7 @@
       "priority": "P0",
       "area": "qa",
       "title": "V3 cross-system causal acceptance for divine agency, cognition, families, kingdoms and resource efficiency",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "SCOPE-31",
       "work_branch": "docs/godseed-v3-causal-acceptance",
       "depends": [],
@@ -2681,6 +2681,13 @@
           "to": "claimed",
           "actor": "SCOPE-31",
           "reason": "Reserve specific cross-system QA documentation without taking existing V3 subsystems from other agents."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "SCOPE-31",
+          "reason": "Drafting the causal cross-domain verification matrix, scenarios and measurable acceptance invariants."
         }
       ]
     }
