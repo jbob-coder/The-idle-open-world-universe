@@ -1576,6 +1576,43 @@
           "reason": "Initial documented backlog; not an implementation claim"
         }
       ]
+    },
+    {
+      "id": "GOV-002",
+      "priority": "P0",
+      "area": "governance",
+      "title": "♾️ Continuous bot work-loop prompt, lifecycle automation and safe handoffs",
+      "status": "claimed",
+      "owner": "ORBIT-01",
+      "work_branch": "docs/godseed-agent-task-governance-v1",
+      "depends": [],
+      "acceptance": "Publish an independent ready-to-paste ♾️ prompt in repo and link it from the master and workflow; enforce one active coding task, bounded turns, real evidence, fresh task selection and explicit stop reasons; governance CI passes exact SHA.",
+      "issue": null,
+      "pr": 22,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "ORBIT-01",
+          "reason": "User requested continuous ♾️ automation prompt for all GODSEED bots"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "ORBIT-01",
+          "reason": "Standalone document and lifecycle contract can be developed without gameplay dependencies"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "ORBIT-01",
+          "reason": "Claimed the user-requested continuous bot automation documentation before editing."
+        }
+      ]
     }
   ]
 }
