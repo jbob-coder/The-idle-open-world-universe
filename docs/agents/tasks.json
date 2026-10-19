@@ -1116,7 +1116,7 @@
       "priority": "P1",
       "area": "people",
       "title": "Personal journals, memories, long goals and moral decisions",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "CORTEX-19",
       "work_branch": "feat/sim-007-cortex-19-personal-chronicles",
       "depends": [
@@ -1124,8 +1124,10 @@
       ],
       "acceptance": "Event→choice→reason→impact chronicle per person; user can inspect without directing.",
       "issue": 19,
-      "pr": null,
-      "evidence": [],
+      "pr": 45,
+      "evidence": [
+        "PR #45 https://github.com/jbob-coder/The-idle-open-world-universe/pull/45 OPEN, NOT MERGED, ready for independent review. Code HEAD cff468e5095a6adb602143df403149acb2ffcdd6 stacked on verified SIM-002 66bcf93440f0293eef4d7a0c05832d1b5904d73f. GitHub Actions offline https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39228008994 COMPLETED SUCCESS exact SHA: 111/111 Node PASS (11 SIM-007 Node tests including 16 seeds), Chromium 640x360, 720x400, 960x540, real per-person journal interaction + safe imported IDs + saved journal roundtrip, Chapters I-III, 0 JS errors/remote requests, evidence artifact 12176780158. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39228008972 COMPLETED SUCCESS exact SHA: Gradle Android WebView APK and API29 emulator 6/6 instrumented tests PASS, screenshots/logcat 12176065833 and APK 12175041617. Initial source failed one off-by-one test expectation and was fixed/rerun. World save remains version 1/offline; no physical 2-3GB Android PSS/heat/soak. Own SIM-011 PR #41 concurrently in_review; integrated PRs require reconciled shared changes and combined CI. Independent reviewer required; no merge."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -1154,6 +1156,13 @@
           "to": "in_progress",
           "actor": "CORTEX-19",
           "reason": "Implement bounded resident personal journals with persisted goals, moral choice context and real observed consequence deltas; add browser inspector and save-v1/16-seed tests; no God direct control."
+        },
+        {
+          "date": "2026-10-19T09:15:07.489Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "CORTEX-19",
+          "reason": "Submitted playable per-resident journal, factual outcomes and moral long goals, with 111/111 exact-SHA Node and offline Chromium PASS and Android API29 6/6 PASS; waiting independent review, no physical hardware claims."
         }
       ]
     },
