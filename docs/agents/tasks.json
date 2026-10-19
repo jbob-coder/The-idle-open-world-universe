@@ -1252,7 +1252,8 @@
       "issue": null,
       "pr": 28,
       "evidence": [
-        "PR #28 https://github.com/jbob-coder/The-idle-open-world-universe/pull/28; exact implementation HEAD 7de364157e45260e4d728daa1c3558be79dacd39; GODSEED offline QA run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185439491 COMPLETED SUCCESS, including Node tests, browser GOD-004 observer interaction/no-mutation/XSS safety, offline HTML, simulated/mobile layout and APK structure/signature. Native Android emulator workflow pending separately; physical 2–3 GB Android device NOT VERIFIED; independent review required."
+        "PR #28 https://github.com/jbob-coder/The-idle-open-world-universe/pull/28; exact implementation HEAD 7de364157e45260e4d728daa1c3558be79dacd39; GODSEED offline QA run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185439491 COMPLETED SUCCESS, including Node tests, browser GOD-004 observer interaction/no-mutation/XSS safety, offline HTML, simulated/mobile layout and APK structure/signature. Native Android emulator workflow pending separately; physical 2–3 GB Android device NOT VERIFIED; independent review required.",
+        "Native exact-HEAD 7de364157e45260e4d728daa1c3558be79dacd39: GitHub Actions 39185442827 COMPLETED SUCCESS — separate Gradle/WebView build, APK asset verification, Android emulator install/tests and artifacts. https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185442827 . Physical Android 2–3 GB RAM hardware benchmark still NOT VERIFIED."
       ],
       "status_history": [
         {
