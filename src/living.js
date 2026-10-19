@@ -2,6 +2,8 @@
 (function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
+const DIMENSIONS={house:[3,3],farm:[3,3],workshop:[3,3],market:[4,3],watchtower:[2,3],well:[2,2]};
+const Interiors=typeof module!=='undefined'&&module.exports?require('./world/interiors.js'):globalThis.GodseedInteriors;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
 const BLUEPRINTS={
  house:{wood:4,stone:1,label:'Home',kind:'housing'},
@@ -25,14 +27,15 @@ function occupied(s,x,y){
   x>=b.x&&x<b.x+(b.w||1)&&y>=b.y&&y<b.y+(b.h||1)));
 }
 function site(s,town,type){
+ const [width,height]=DIMENSIONS[type]||[2,2];
  let best=null,score=-1e9;
- for(let y=Math.max(2,town.y-9);y<=Math.min(H-4,town.y+8);y++)
- for(let x=Math.max(2,town.x-9);x<=Math.min(W-4,town.x+8);x++){
+ for(let y=Math.max(2,town.y-9);y<=Math.min(H-height-1,town.y+10);y++)
+ for(let x=Math.max(2,town.x-9);x<=Math.min(W-width-1,town.x+10);x++){ 
   const radius=distance(x,y,town.x,town.y);
-  if(radius<2||radius>12)continue;
+  if(radius<2||radius>15)continue;
   let clear=true,meadow=0;
-  // The entire 2x2 building must sit on safe tiles, not merely its origin.
-  for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){
+  // Validate every square metre of the exterior footprint, not merely its origin.
+  for(let dy=0;dy<height;dy++)for(let dx=0;dx<width;dx++){ 
    const tx=x+dx,ty=y+dy,n=ty*W+tx,tile=s.map[n];
    if(!GROUND.has(tile)||occupied(s,tx,ty)||s.living.heritage.includes(n)||
       s.npcs.some(p=>p.homeX===tx&&p.homeY===ty))clear=false;
@@ -40,13 +43,13 @@ function site(s,town,type){
   }
   if(!clear)continue;
   const nearby=s.living.towns.flatMap(t=>t.buildings);
-  if(nearby.some(b=>x<b.x+(b.w||1)&&x+2>b.x&&
-    y<b.y+(b.h||1)&&y+2>b.y))continue;
+  if(nearby.some(b=>x<b.x+(b.w||1)&&x+width>b.x&&
+    y<b.y+(b.h||1)&&y+height>b.y))continue;
   let nearestRoad=4;
-  for(let yy=y-2;yy<=y+3;yy++)for(let xx=x-2;xx<=x+3;xx++){
+  for(let yy=y-2;yy<=y+height+2;yy++)for(let xx=x-2;xx<=x+width+2;xx++){ 
    if(xx<0||xx>=W||yy<0||yy>=H)continue;
    if([8,9].includes(s.map[yy*W+xx]))
-    nearestRoad=Math.min(nearestRoad,Math.max(0,Math.abs(xx-(x+.5))-1)+Math.max(0,Math.abs(yy-(y+.5))-1));
+    nearestRoad=Math.min(nearestRoad,Math.max(0,Math.abs(xx-(x+(width-1)/2))-(width-1)/2)+Math.max(0,Math.abs(yy-(y+(height-1)/2))-(height-1)/2));
   }
   if(nearestRoad>2)continue;
   const preference=type==='farm'?meadow*2:type==='well'?0:type==='watchtower'?radius*.5:0;
@@ -61,7 +64,8 @@ function build(s,town,type,starting=false){
  if(!starting&&(town.stock.wood<bp.wood||town.stock.stone<bp.stone))return false;
  if(!starting){town.stock.wood-=bp.wood;town.stock.stone-=bp.stone;}
  const shapes=['oak','reed','stone'],roof=shapes[(hash(pos.x,pos.y,town.seed)+town.buildings.length)%3];
- town.buildings.push({id:town.id+'-'+(town.buildings.length+1),type,x:pos.x,y:pos.y,w:2,h:2,roof,builtAt:s.tick});
+ const [w,h]=DIMENSIONS[type]||[2,2];
+ town.buildings.push({id:town.id+'-'+(town.buildings.length+1),type,x:pos.x,y:pos.y,w,h,roof,builtAt:s.tick});
  if(!starting){log(s,town.name+' built '+bp.label, 'Residents chose a '+roof+' style '+bp.label.toLowerCase()+' near the old roads.');}
  return true;
 }
@@ -112,13 +116,16 @@ function restore(s){
   t.x=home.x;t.y=home.y;t.stock=t.stock||{food:4,wood:1,stone:1};
   for(const k of ['food','wood','stone'])t.stock[k]=Math.max(0,Math.min(999,Number(t.stock[k])||0));
   t.buildings=Array.isArray(t.buildings)?t.buildings.slice(0,MAX_BUILDINGS).filter(b=>b&&BLUEPRINTS[b.type]&&
-   Number.isInteger(b.x)&&Number.isInteger(b.y)&&b.x>1&&b.x<W-2&&b.y>1&&b.y<H-2).map(b=>({...b,w:b.w===2?2:1,h:b.h===2?2:1})):[];
+   Number.isInteger(b.x)&&Number.isInteger(b.y)&&b.x>1&&b.x<W-2&&b.y>1&&b.y<H-2).map(b=>({...b,
+    w:Number.isInteger(b.w)&&b.w>=1&&b.w<=4&&b.x+b.w<W?b.w:1,
+    h:Number.isInteger(b.h)&&b.h>=1&&b.h<=4&&b.y+b.h<H?b.h:1})):[];
   t.agenda=BLUEPRINTS[t.agenda]||['housing','food','defense','craft','trade'].includes(t.agenda)?t.agenda:'housing';
   const built=kind=>t.buildings.some(b=>b.type===kind);
   const inferred=t.buildings.length>=9&&built('market')?3:t.buildings.length>=7&&built('workshop')?2:t.buildings.length>=4?1:0;
   const level=Number.isInteger(t.technology&&t.technology.level)?Math.max(0,Math.min(3,t.technology.level)):inferred;
   t.technology={level,era:['Founding Age','Farming Age','Craft Age','Trade Age'][level]};
  }
+ Interiors.sanitize(s);
  for(const c of l.citizens){
   const t=townOf(s,c.townId)||l.towns[0];
   if(!Number.isInteger(c.x)||!Number.isInteger(c.y)||c.x<1||c.y<1||c.x>=W-1||c.y>=H-1){c.x=t.x;c.y=t.y;}
@@ -129,7 +136,9 @@ function restore(s){
 function goalFor(s,p){
  const t=townOf(s,p.townId)||s.living.towns[0];
  const phase=(s.tick+p.id*23)%240;
- if(phase>=185)return {x:p.homeX,y:p.homeY,activity:'Resting at home'};
+ if(phase>=185){const house=t.buildings.find(b=>b.type==='house');
+  const d=Interiors.outerDoor(s,house);if(d)return {x:d.x,y:d.y,activity:'Going home',buildingId:house.id};
+  return {x:p.homeX,y:p.homeY,activity:'Resting at home'};}
  if(phase>=140)return {x:t.x,y:t.y,activity:'Sharing evening stories'};
  if(phase>=90)return {x:t.x+(p.id%3)-1,y:t.y+1,activity:'Talking to neighbors'};
  // Occupations refer to REAL installed structures instead of abstract offsets.
@@ -187,7 +196,10 @@ function tick(s){
  if(!s.living||s.tick%12!==0)return;
  if(s.tick%240===0)advanceLife(s);
  for(const p of s.living.citizens){
+  const phase=(s.tick+p.id*23)%240;
+  if(p.insideId){if(phase<185)Interiors.exit(s,p);else{Interiors.rest(s,p);continue;}}
   const task=goalFor(s,p);p.activity=task.activity;walk(s,p,task);
+  if(task.buildingId&&p.x===task.x&&p.y===task.y)Interiors.enter(s,p,task.buildingId);
   if((s.tick+p.id*23)%240<90)work(s,p);
   if(s.tick%240===0){p.age+=1/12;p.mood=p.actions%5===0?'content':'calm';}
  }
@@ -331,5 +343,5 @@ function drawCitizen(ctx,p,x,y,tick){
  ctx.fillStyle='#3e3c31';ctx.fillRect(x+5,y+0,6,2);ctx.fillRect(x+5,y+11,2,3+step);ctx.fillRect(x+9,y+11,2,4-step);
  ctx.fillStyle='#2a322d';ctx.fillRect(x+6,y+4,1,1);ctx.fillRect(x+9,y+4,1,1);
 }
-return {create,restore,tick,personTick,whisper,interpret,BLUEPRINTS,site,drawBuilding,drawCitizen,occupied};
+return {create,restore,tick,personTick,whisper,interpret,BLUEPRINTS,DIMENSIONS,site,drawBuilding,drawCitizen,occupied};
 });
