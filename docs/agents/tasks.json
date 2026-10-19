@@ -446,7 +446,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Sparse modified-terrain deltas and chunk persistence",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "GDS-KESTREL-1810",
       "work_branch": "feat/wld-002-kestrel-sparse-persistence",
       "depends": [
@@ -477,6 +477,13 @@
           "to": "claimed",
           "actor": "GDS-KESTREL-1810",
           "reason": "Own isolated WLD-002 sparse tile/settlement delta store and persisted regeneration tests, based on independently verified WLD-001; no runtime/UI/other owner edits."
+        },
+        {
+          "date": "2026-10-19T01:43:39+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Begin WLD-002: stateless bounded chunk cache with sparse terrain/site edits and deterministic v1-independent persistence; preserve live sim, old saves and other bot files."
         }
       ]
     },
