@@ -13,7 +13,8 @@ h=h.replace('/*UI_SOURCE*/',render+(p/'src/ui.js').read_text())
 # WLD-003 runs in opt-in independent script elements AFTER the legacy game.
 # Older Android WebViews must still start/save the village even if a future
 # atlas module hits an unsupported API or a script parse/runtime error.
-atlas_modules=['world/chunks.js','world/chunk_store.js','world/chunk_view.js',
+atlas_modules=['world/chunks.js','world/chunk_store.js','world/chunk_travel.js',
+               'world/chunk_view.js',
                'render/chunk_surface.js','ui_chunk_atlas.js']
 addon=''.join('<script>\n'+(p/('src/'+name)).read_text()+'\n</script>\n' for name in atlas_modules)
 assert h.count('</body>')==1
