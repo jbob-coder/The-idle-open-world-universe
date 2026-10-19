@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 69 tasks · planned: 41 · ready: 8 · claimed: 1 · in_progress: 1 · blocked: 2 · in_review: 7 · verified: 9 · done: 0 · cancelled: 0.
+**Tracked work:** 69 tasks · planned: 41 · ready: 8 · claimed: 1 · in_progress: 0 · blocked: 2 · in_review: 8 · verified: 9 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -34,7 +34,7 @@
 | **GOV-004** | P0 | governance | **claimed** | DESIGN-28 | — | Author GODSEED V3 divine-view, intelligent lives and kingdoms design bible |
 | **INT-001** | P0 | interiors | **verified** | DOORKEEPER | — | Safe layers, metric grid, doors and interiors technical contract |
 | **INT-002** | P0 | interiors | **ready** | — | INT-001 | Enlarge exterior homes and public buildings to 3×3–6×6 cells |
-| **INT-003** | P0 | interiors | **in_progress** | GDS-KESTREL-1810 | INT-001 | Persist interior IDs, furnishings and entry/return anchors |
+| **INT-003** | P0 | interiors | **in_review** | GDS-KESTREL-1810 | INT-001 | Persist interior IDs, furnishings and entry/return anchors |
 | **INT-004** | P0 | interiors | **planned** | — | INT-002, INT-003 | Implement safe, atomic door entry and exit |
 | **INT-005** | P0 | interiors | **planned** | — | INT-003, INT-004 | Render indoor pixel rooms, furniture and 3 camera zoom levels |
 | **INT-006** | P0 | interiors | **planned** | — | INT-003, SIM-001 | Assign households, beds and private spaces to each citizen |

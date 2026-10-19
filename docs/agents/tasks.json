@@ -170,7 +170,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Persist interior IDs, furnishings and entry/return anchors",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "GDS-KESTREL-1810",
       "work_branch": "feat/int-003-kestrel-interior-save-state",
       "depends": [
@@ -178,8 +178,10 @@
       ],
       "acceptance": "Version-1 compatible optional space data; restore old, malformed and multi-building saves without losing progress.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 36,
+      "evidence": [
+        "INT-003 PR #36 https://github.com/jbob-coder/The-idle-open-world-universe/pull/36 (OPEN, NOT DRAFT, NOT MERGED), source SHA e1ccce37b90b24dff027f60414f15d6f96bf4ee3; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188588604 SUCCESS: 91/91 Node tests incl 9 new interior-save regressions, Chromium offline chapters I-III/save/layout/pixel UI with 0 JS errors/remote requests, artifact 12158848844. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188588615 SUCCESS: Gradle offline APK, Android API29 emulator 6/6 instrumentation and screenshot/logcat artifact 12159336172. First SHA 746c4afd failed 1 overly strict raw JSON regression test; corrected and rerun green at exact HEAD. Physical Android 2-3GB NOT VERIFIED; data-only interior persistence, doors/render/AI interior routines NOT implemented; no merge."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -208,6 +210,13 @@
           "to": "in_progress",
           "actor": "GDS-KESTREL-1810",
           "reason": "Begin isolated INT-003 optional spaces persistence + strict v1 migration; Node acceptance for multi-building records/anchors/furniture, save/restore without moving actors; no door-entry gameplay claimed."
+        },
+        {
+          "date": "2026-10-19T02:13:58+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Submitted nine validated v1-compatible interior persistence regressions at exact source HEAD, Node 91/91 and native API29 6/6 PASS; awaiting independent review, no door gameplay claimed."
         }
       ]
     },
