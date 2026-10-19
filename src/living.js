@@ -1,5 +1,5 @@
 /* GODSEED Living Settlements: bounded, deterministic offline agency. No external AI. */
-(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./needs.js'):root.GodseedNeeds);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Needs){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./needs.js'):root.GodseedNeeds,typeof module!=='undefined'&&module.exports?require('./divine/intent.js'):root.GodseedIntent,typeof module!=='undefined'&&module.exports?require('./divine/consent.js'):root.GodseedConsent);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Needs,Intent,Consent){
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
@@ -87,6 +87,7 @@ function create(s){
    facing:'south',movedAt:-100,age:19+i*3,skill:1,skillXP:0,trust:35,
    kindness,diligence,independence,mood:'calm',activity:'Getting ready',relationships:{},life:[],actions:0,needs:Needs.normalize()});
  }
+ for(const p of [s.bot,...s.npcs,...living.citizens])p.divineBelief=Consent.profile(s.worldSeed,p);
  log(s,'Two communities awaken','Briarford and Emberwick have working residents, limited supplies and homes. They choose how to grow.');
  return living;
 }
@@ -126,6 +127,7 @@ function restore(s){
   c.actions=Number(c.actions)||0;c.skillXP=Number(c.skillXP)||0;c.skill=Number(c.skill)||1;
   c.needs=Needs.normalize(c.needs);
  }
+ for(const p of [s.bot,...s.npcs,...l.citizens])p.divineBelief=Consent.profile(s.worldSeed,p,p.divineBelief);
 }
 function goalFor(s,p){
  const t=townOf(s,p.townId)||s.living.towns[0];
@@ -345,37 +347,50 @@ const COMMANDS=[
  {intent:'housing',re:/\b(build|construct|construir)\w*/i,label:'build homes'},
  {intent:'rest',re:/\b(rest|sleep|recover|descansa|dormir|dorm|repos|curar)\w*/i,label:'rest'}
 ];
-function interpret(message){
- const text=String(message||'').trim().slice(0,220);
- // A limited offline parser must never invert a negative instruction into a positive command.
- const denied=/\b(don.t|do not|never|avoid|no construy|no edifi|no hag|nunca|eviten|prohibi)\w*/i.test(text);
- const match=denied?null:COMMANDS.find(a=>a.re.test(text));
- return {text,intent:match?match.intent:'unknown',label:match?match.label:'unrecognized request'};
-}
+function interpret(message){return Intent.interpret(message);}
 function whisper(s,message){
  if(!s.living)return {ok:false,reason:'World is still awakening'};
  const m=interpret(message);
  if(!m.text||m.text.length<3)return {ok:false,reason:'Write a short intention first'};
- if(m.intent==='unknown')return {ok:false,reason:'This offline version understands building, food, defense, crafts, trade, exploring and rest. No order was issued.'};
- if(s.living.whispers.length&&s.tick-s.living.whispers[s.living.whispers.length-1].tick<12)return {ok:false,reason:'Let the world consider the previous whisper'};
- const towns=s.living.towns,decisions=[];
+ if(m.status!=='recognized')return {ok:false,reason:m.reason};
+ if(s.living.whispers.length&&s.tick-s.living.whispers[s.living.whispers.length-1].tick<12)
+  return {ok:false,reason:'Let the world consider the previous whisper'};
+ const people=[...s.living.citizens,...s.npcs,s.bot];
+ const selected=m.target&&m.target.kind==='person'?
+  people.filter(p=>p.name.toLowerCase()===m.target.id):
+  m.target&&m.target.kind==='town'?
+  people.filter(p=>p.townId===m.target.id):people;
+ if(!selected.length)return {ok:false,reason:'Recipient not found. No order was issued.'};
+ // Consent is individual: urgency, independence and faith are evaluated BEFORE preferences change.
+ const decisionsPeople=selected.map(p=>{
+  const town=p.townId?townOf(s,p.townId):null;
+  return {person:p,decision:Consent.evaluate(s,p,m,town)};
+ });
+ const decisions=[];
+ const targetedPerson=!!m.target&&m.target.kind==='person';
+ const towns=m.target&&m.target.kind==='town'?
+  s.living.towns.filter(t=>t.id===m.target.id):
+  targetedPerson?[]:s.living.towns;
  for(const t of towns){
-  const workers=s.living.citizens.filter(c=>c.townId===t.id);
-  const independence=workers.reduce((n,c)=>n+c.independence,0)/workers.length;
-  const hungry=t.stock.food<3||workers.some(c=>c.needs&&c.needs.hunger<=15);
-  const unsafe=workers.some(c=>c.needs&&c.needs.safety<=15);
-  const safeIntent=(!hungry||m.intent==='food')&&(!unsafe||m.intent==='defense');
-  const agree=safeIntent&&(independence<.75||hash(s.tick,t.x,m.text.length)%4!==0);
+  const local=decisionsPeople.filter(x=>x.person.townId===t.id).map(x=>x.decision);
+  const agree=local.some(x=>x.agree);
   if(agree&&['housing','food','defense','craft','trade'].includes(m.intent))t.agenda=m.intent;
   if(agree&&m.intent==='remodel')t.renovateAfter=s.tick+48;
-  decisions.push({name:t.name,agree,reason:agree?'Residents will consider this within their needs and supplies.':'Residents are prioritizing survival or independence.'});
+  decisions.push({name:t.name,agree,reason:agree?
+   'At least one resident is considering this; the village may plan around it.':
+   'Residents independently declined or prioritized their needs.'});
  }
- const nimAgree=s.bot.hunger>=30&&s.bot.energy>=25&&
-  (m.intent==='explore'||m.intent==='rest'||m.intent==='food')&&(hash(s.worldSeed,s.tick,m.text.length)%10)<Math.floor(s.bot.personality.curiosity*10);
- if(nimAgree)s.living.nimWish={intent:m.intent,until:s.tick+120};
- const entry={id:s.living.nextWhisper++,tick:s.tick,message:m.text,intent:m.intent,label:m.label,decisions,nimAgree};
+ const nim=decisionsPeople.find(x=>x.person===s.bot);
+ const nimAgree=!!nim&&nim.decision.agree;
+ if(nimAgree&&['explore','rest','food'].includes(m.intent))
+  s.living.nimWish={intent:m.intent,until:s.tick+120};
+ for(const x of decisionsPeople)Consent.record(s,x.person,m,x.decision);
+ const entry={id:s.living.nextWhisper++,tick:s.tick,message:m.text,intent:m.intent,
+  label:m.label,target:m.target,decisions,people:decisionsPeople.map(x=>x.decision),
+  nimAgree};
  s.living.whispers.push(entry);if(s.living.whispers.length>12)s.living.whispers.shift();
- log(s,'The god whispers',m.text+' · '+decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join(', ')+(nimAgree?' · Nim is curious.':' · Nim has other plans.'));
+ log(s,'The god whispers',m.text+' · '+entry.people.map(p=>
+  p.name+': '+p.state).join(', '));
  return {ok:true,entry};
 }
 function drawBuilding(ctx,b,x,y){
