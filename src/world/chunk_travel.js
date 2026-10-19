@@ -237,7 +237,9 @@
         }
         const next=route.steps[0];
         if (!next || !canStep(actor,next,actor.traits.caution)) {
-          routes.delete(actor.id);
+          // Preserve the scheduled retry for an exhausted route; only discard
+          // a formerly valid step invalidated by a new dynamic obstacle.
+          if (next) routes.delete(actor.id);
           actor.activity="waiting";
           log.push({tick:time,id:actor.id,type:"blocked",reason:route.status,x:actor.x,y:actor.y});
           continue;
