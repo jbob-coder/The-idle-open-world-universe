@@ -533,7 +533,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Chunk-aware camera, fog, terrain renderer and coordinate UI",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "LIFE-26",
       "work_branch": "feat/wld-003-life-26-chunk-camera",
       "depends": [
@@ -565,6 +565,13 @@
           "to": "claimed",
           "actor": "LIFE-26",
           "reason": "Reserve deterministic bounded 32x32 chunk camera and offline God-view atlas viewport with true cross-border rendering, fog, zoom and safe legacy save isolation"
+        },
+        {
+          "date": "2026-10-19T02:16:27+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement opt-in world atlas camera/view/caching and browser+Node acceptance without modifying other agents' chunk store, navigation, legacy simulation, interiors or divine rules"
         }
       ]
     },
