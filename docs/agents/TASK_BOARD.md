@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 59 tasks · planned: 48 · ready: 0 · claimed: 0 · in_progress: 2 · blocked: 1 · in_review: 8 · verified: 0 · done: 0 · cancelled: 0.
+**Tracked work:** 59 tasks · planned: 48 · ready: 0 · claimed: 0 · in_progress: 2 · blocked: 1 · in_review: 7 · verified: 1 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -44,7 +44,7 @@
 | **SIM-003** | P0 | people | **planned** | — | SIM-001, INT-003 | Homes, household membership, work IDs and inventories · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-005** | P0 | people | **planned** | — | SIM-001, CIV-001 | Profession schedules and workplace resource delivery · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-010** | P0 | people | **planned** | — | SIM-002, SIM-005 | Long life-soak regression: agency, finite population and persistence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
-| **QA-001** | P0 | qa | **in_review** | GDS-KESTREL-1810 | — | Node state-machine regression for life, worlds and migration |
+| **QA-001** | P0 | qa | **verified** | GDS-KESTREL-1810 | — | Node state-machine regression for life, worlds and migration |
 | **QA-002** | P0 | qa | **planned** | — | QA-001 | Chromium offline Android-layout interaction acceptance |
 | **QA-003** | P0 | qa | **planned** | — | QA-001 | Gradle host + API29 emulator instrumentation and artifacts |
 | **QA-004** | P0 | qa | **blocked** | — | QA-003 | Physical Android 2 GB and 3 GB 20-minute soak · [#13](https://github.com/jbob-coder/The-idle-open-world-universe/issues/13) |
