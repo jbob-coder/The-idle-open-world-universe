@@ -20,7 +20,8 @@
   const MAX_PATCHED_CHUNKS = 256;
   const MAX_EDITED_TILES = 256;
   const MAX_SITES = 24;
-  const MAX_SAVE_BYTES = 4_000_000;
+  // Android API29's bundled WebView may predate numeric-separator syntax.
+  const MAX_SAVE_BYTES = 4000000;
   const ALLOWED_TILES = new Set(Object.values(Chunks.T));
   const SITE_KINDS = new Set(["settlement", "building", "road", "landmark"]);
   const IDENTIFIER = /^[a-z][a-z0-9:_-]{0,63}$/i;
