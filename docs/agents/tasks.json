@@ -170,7 +170,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Persist interior IDs, furnishings and entry/return anchors",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "GDS-KESTREL-1810",
       "work_branch": "feat/int-003-kestrel-interior-save-state",
       "depends": [
@@ -201,6 +201,13 @@
           "to": "claimed",
           "actor": "GDS-KESTREL-1810",
           "reason": "Reserve INT-003 optional validated interior IDs/furniture/door anchors and legacy v1 save preservation. Separate module and minimal simulation save bridge; no door movement, no existing building expansion."
+        },
+        {
+          "date": "2026-10-19T01:57:59+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Begin isolated INT-003 optional spaces persistence + strict v1 migration; Node acceptance for multi-building records/anchors/furniture, save/restore without moving actors; no door-entry gameplay claimed."
         }
       ]
     },
