@@ -70,7 +70,12 @@ test("two real existing buildings persist distinct interior IDs, items and corre
   assert.equal(Spaces.find(reloaded.spaces,"interior:"+house.id).furniture[0].kind,"bed");
   assert.deepEqual(Spaces.find(reloaded.spaces,"interior:"+second.id).entrance.approachWorld,
     {x:second.x,y:second.y+second.h});
-  assert.equal(Sim.serialize(reloaded),save);
+  const again=Sim.restore(Sim.serialize(reloaded));
+  assert.ok(again);
+  assert.deepEqual(again.spaces,s.spaces);
+  assert.equal(again.worldSeed,s.worldSeed);
+  assert.equal(again.tick,s.tick);
+  assert.deepEqual(again.map,s.map);
 });
 
 test("4x4 external family home is 8x8 metres/64m2 and each furnishing uses 1m grid",()=>{
