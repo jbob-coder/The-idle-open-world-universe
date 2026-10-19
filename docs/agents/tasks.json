@@ -76,7 +76,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Safe layers, metric grid, doors and interiors technical contract",
-      "status": "in_review",
+      "status": "verified",
       "owner": "DOORKEEPER",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
@@ -84,7 +84,8 @@
       "issue": null,
       "pr": 22,
       "evidence": [
-        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; interior metric/door contracts docs/agents/SAFE_INTERIOR_ARCHITECTURE.md + docs/agents/INTERIORS_SYSTEM_SPEC.md; CI review pending; gameplay interiors NOT implemented"
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; interior metric/door contracts docs/agents/SAFE_INTERIOR_ARCHITECTURE.md + docs/agents/INTERIORS_SYSTEM_SPEC.md; CI review pending; gameplay interiors NOT implemented",
+        "Independent scoped INT-001 verification by FORGE-27 (different from owner DOORKEEPER): reviewed normative docs/agents/SAFE_INTERIOR_ARCHITECTURE.md + docs/agents/INTERIORS_SYSTEM_SPEC.md; 2m/1m grids, 3×3–6×6 exterior plans, validated entry/exit and rollback, optional v1 save migration, actor autonomy, error/Android/deterministic test contracts and explicit non-goals. Review https://github.com/jbob-coder/The-idle-open-world-universe/pull/22#pullrequestreview-5566118348 anchored at 18bcf9924b59cb71da8004e2a50be3170278e39f; HEAD fba2204fa5054328eeea90475e12ad70782777fb only changes coordination registry/board since reviewed SHA. Exact-HEAD governance CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186385206 COMPLETED SUCCESS. INT-001 documentation contract only: doors/interiors NOT implemented, physical device NOT TESTED, draft PR #22 NOT MERGED."
       ],
       "status_history": [
         {
@@ -121,15 +122,23 @@
           "to": "in_review",
           "actor": "DOORKEEPER",
           "reason": "Interior metric contract and safe door transition specifications delivered in PR #22; awaiting independent review and CI"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent scoped documentation contract review; exact-HEAD governance CI successful; design not gameplay implementation."
         }
-      ]
+      ],
+      "verified_by": "FORGE-27"
     },
     {
       "id": "INT-002",
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -146,6 +155,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
         }
       ]
     },
@@ -154,7 +170,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Persist interior IDs, furnishings and entry/return anchors",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -171,6 +187,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
         }
       ]
     },
@@ -423,7 +446,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Sparse modified-terrain deltas and chunk persistence",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -440,6 +463,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
         }
       ]
     },
@@ -526,7 +556,7 @@
       "priority": "P1",
       "area": "world",
       "title": "Streaming biome ecology, climate, water and landmarks",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -543,6 +573,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
         }
       ]
     },
@@ -718,7 +755,7 @@
       "priority": "P0",
       "area": "people",
       "title": "Utility-based choices with visible why/alternative/consequence",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -735,6 +772,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
         }
       ]
     },
@@ -949,7 +993,7 @@
       "priority": "P0",
       "area": "civilization",
       "title": "Metric 3×3–6×6 medieval blueprint library and zoning",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -966,6 +1010,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
         }
       ]
     },
@@ -1533,7 +1584,7 @@
       "priority": "P0",
       "area": "qa",
       "title": "Chromium offline Android-layout interaction acceptance",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -1550,6 +1601,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
         }
       ]
     },

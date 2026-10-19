@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 59 tasks · planned: 47 · ready: 0 · claimed: 0 · in_progress: 1 · blocked: 1 · in_review: 7 · verified: 3 · done: 0 · cancelled: 0.
+**Tracked work:** 59 tasks · planned: 40 · ready: 7 · claimed: 0 · in_progress: 1 · blocked: 1 · in_review: 6 · verified: 4 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -21,7 +21,7 @@
 | ID | P | Area | State | Owner | Depends on | Definition of done (short) |
 |---|---|---|---|---|---|---|
 | **ART-002** | P0 | art | **planned** | — | INT-001, CIV-001 | Tile-coherent roofs, doors, interior walls and furnishings |
-| **CIV-001** | P0 | civilization | **planned** | — | INT-001 | Metric 3×3–6×6 medieval blueprint library and zoning |
+| **CIV-001** | P0 | civilization | **ready** | — | INT-001 | Metric 3×3–6×6 medieval blueprint library and zoning |
 | **CIV-002** | P0 | civilization | **planned** | — | CIV-001, SIM-005 | Construction sites, builders, work orders and interruptions |
 | **CIV-005** | P0 | civilization | **planned** | — | SIM-006, CIV-002 | Medieval technology and era advancement with real prerequisites |
 | **GOD-001** | P0 | divine | **in_review** | FORGE-27 | — | Multilingual intent parsing with negation, target and ambiguity |
@@ -31,25 +31,25 @@
 | **GOV-001** | P0 | governance | **in_review** | ARCHIVIST | — | Repository task registry, bot lifecycle, automation and handoff |
 | **GOV-002** | P0 | governance | **in_review** | ORBIT-01 | — | ♾️ Continuous bot work-loop prompt, lifecycle automation and safe handoffs |
 | **GOV-003** | P0 | governance | **in_review** | RELAY-01 | — | Context-limit retirement and new-chat successor handoff |
-| **INT-001** | P0 | interiors | **in_review** | DOORKEEPER | — | Safe layers, metric grid, doors and interiors technical contract |
-| **INT-002** | P0 | interiors | **planned** | — | INT-001 | Enlarge exterior homes and public buildings to 3×3–6×6 cells |
-| **INT-003** | P0 | interiors | **planned** | — | INT-001 | Persist interior IDs, furnishings and entry/return anchors |
+| **INT-001** | P0 | interiors | **verified** | DOORKEEPER | — | Safe layers, metric grid, doors and interiors technical contract |
+| **INT-002** | P0 | interiors | **ready** | — | INT-001 | Enlarge exterior homes and public buildings to 3×3–6×6 cells |
+| **INT-003** | P0 | interiors | **ready** | — | INT-001 | Persist interior IDs, furnishings and entry/return anchors |
 | **INT-004** | P0 | interiors | **planned** | — | INT-002, INT-003 | Implement safe, atomic door entry and exit |
 | **INT-005** | P0 | interiors | **planned** | — | INT-003, INT-004 | Render indoor pixel rooms, furniture and 3 camera zoom levels |
 | **INT-006** | P0 | interiors | **planned** | — | INT-003, SIM-001 | Assign households, beds and private spaces to each citizen |
 | **INT-007** | P0 | interiors | **planned** | — | INT-004, INT-006 | Autonomous sleep, food, shelter and social actions indoors |
 | **INT-010** | P0 | interiors | **planned** | — | INT-004, INT-005 | Interior transitions: adversarial Android and save regression |
 | **SIM-001** | P0 | people | **verified** | LIFE-26 | — | Need profile: hunger, energy, comfort, safety, social, hygiene · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
-| **SIM-002** | P0 | people | **planned** | — | SIM-001 | Utility-based choices with visible why/alternative/consequence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
+| **SIM-002** | P0 | people | **ready** | — | SIM-001 | Utility-based choices with visible why/alternative/consequence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-003** | P0 | people | **planned** | — | SIM-001, INT-003 | Homes, household membership, work IDs and inventories · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-005** | P0 | people | **planned** | — | SIM-001, CIV-001 | Profession schedules and workplace resource delivery · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-010** | P0 | people | **planned** | — | SIM-002, SIM-005 | Long life-soak regression: agency, finite population and persistence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **QA-001** | P0 | qa | **verified** | GDS-KESTREL-1810 | — | Node state-machine regression for life, worlds and migration |
-| **QA-002** | P0 | qa | **planned** | — | QA-001 | Chromium offline Android-layout interaction acceptance |
+| **QA-002** | P0 | qa | **ready** | — | QA-001 | Chromium offline Android-layout interaction acceptance |
 | **QA-003** | P0 | qa | **in_progress** | TERRAIN-01 | QA-001 | Gradle host + API29 emulator instrumentation and artifacts |
 | **QA-004** | P0 | qa | **blocked** | — | QA-003 | Physical Android 2 GB and 3 GB 20-minute soak · [#13](https://github.com/jbob-coder/The-idle-open-world-universe/issues/13) |
 | **WLD-001** | P0 | world | **verified** | TERRAIN-01 | — | Seeded world coordinate system and 32×32 chunk generator · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **WLD-002** | P0 | world | **planned** | — | WLD-001 | Sparse modified-terrain deltas and chunk persistence · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-002** | P0 | world | **ready** | — | WLD-001 | Sparse modified-terrain deltas and chunk persistence · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-003** | P0 | world | **planned** | — | WLD-001, WLD-002 | Chunk-aware camera, fog, terrain renderer and coordinate UI · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-004** | P0 | world | **planned** | — | WLD-001, WLD-002 | Cross-chunk autonomous navigation and bounded pathfinding · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-005** | P0 | world | **planned** | — | WLD-002, CIV-001 | Distant independent villages with local resources and population · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
@@ -74,7 +74,7 @@
 | **QA-005** | P1 | qa | **in_review** | LIFE-26 | — | Diagnose and stabilize paused divine FX render timing in Chromium CI |
 | **REL-001** | P1 | release | **planned** | — | QA-003 | Stable Android signing identity and save-safe upgrade |
 | **REL-003** | P1 | release | **planned** | — | QA-002, QA-003, REL-001 | Integrate stacked PRs, QA gate and tagged Android beta |
-| **WLD-006** | P1 | world | **planned** | — | WLD-001 | Streaming biome ecology, climate, water and landmarks · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-006** | P1 | world | **ready** | — | WLD-001 | Streaming biome ecology, climate, water and landmarks · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-009** | P1 | world | **planned** | — | WLD-003 | God's regional atlas and village discovery UX · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **ART-004** | P2 | art | **planned** | — | WLD-006 | Medieval biome props, weather/time and seasonal differences |
 | **GOD-005** | P2 | divine | **planned** | — | GOD-001, QA-004 | Optional advanced offline language understanding feasibility |
