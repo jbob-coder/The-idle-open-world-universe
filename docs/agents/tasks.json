@@ -1400,7 +1400,7 @@
       "priority": "P0",
       "area": "qa",
       "title": "Node state-machine regression for life, worlds and migration",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "GDS-KESTREL-1810",
       "work_branch": "test/qa-001-kestrel-node-regressions",
       "depends": [],
@@ -1429,6 +1429,13 @@
           "to": "claimed",
           "actor": "GDS-KESTREL-1810",
           "reason": "Own QA-001: add genuine seeded state-machine/save regression tests without changing runtime subsystems owned by other bots"
+        },
+        {
+          "date": "2026-10-19T01:02:27.893+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Starting isolated QA-001 tests covering deterministic autonomy state and version-1 save restoration, with CI verification at exact HEAD"
         }
       ]
     },
