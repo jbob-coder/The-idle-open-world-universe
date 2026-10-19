@@ -1686,6 +1686,43 @@
           "reason": "Published ♾️ automation prompt, guardrails, tests and master prompt links; governance CI pass. Submitted for independent review."
         }
       ]
+    },
+    {
+      "id": "GOV-003",
+      "priority": "P0",
+      "area": "governance",
+      "title": "Context-limit retirement and new-chat successor handoff",
+      "status": "claimed",
+      "owner": "RELAY-01",
+      "work_branch": "docs/godseed-agent-task-governance-v1",
+      "depends": [],
+      "acceptance": "Repository-native one-prompt retirement/new-chat resume instructions, per-task structured verified handoffs, state release/reclaim workflow, tests for invalid handoffs, CI and links from starting bot documents.",
+      "issue": null,
+      "pr": 22,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "RELAY-01",
+          "reason": "Owner requested safe retiring bot handoff when chat context capacity is exhausted."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "RELAY-01",
+          "reason": "Independent governance tooling and documentation; no gameplay dependencies."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "RELAY-01",
+          "reason": "Reserving context-exhaustion chat retirement and succession workflow before edits."
+        }
+      ]
     }
   ]
 }
