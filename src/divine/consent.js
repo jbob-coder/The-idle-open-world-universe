@@ -11,7 +11,7 @@ function hash(seed,id,intent,tick){
  let n=(seed>>>0)^Math.imul(id>>>0,2654435761)^(tick>>>0);
  for(let i=0;i<intent.length;i++)n=Math.imul(n^intent.charCodeAt(i),16777619)>>>0;
  n=Math.imul(n^(n>>>16),2246822519)>>>0;
- return n^(n>>>13);
+ return (n^(n>>>13))>>>0;
 }
 function actorId(p){return p&&p.name==='Nim'?0:Number(p&&p.id)||0;}
 function profile(seed,p,stored){
