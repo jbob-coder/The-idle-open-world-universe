@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import difflib
 import os
 from pathlib import Path
 import re
@@ -191,7 +192,9 @@ def main():
     if args.cmd == "validate":
         generated = render(db)
         if not BOARD.exists() or BOARD.read_text(encoding="utf-8") != generated:
-            p.error("Task board is stale: run 'board --write' then commit both documents")
+            actual = BOARD.read_text(encoding="utf-8") if BOARD.exists() else ""
+            diff = "".join(difflib.unified_diff(actual.splitlines(True), generated.splitlines(True), fromfile="committed", tofile="generated"))
+            p.error("Task board is stale: run 'board --write' then commit both documents. Diff:\n" + diff[:5000])
         print("PASS: task schema, dependency DAG, status history and generated board match")
         return
     if args.cmd == "board":
