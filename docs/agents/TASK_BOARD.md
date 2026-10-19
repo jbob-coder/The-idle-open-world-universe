@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 69 tasks · planned: 39 · ready: 7 · claimed: 0 · in_progress: 4 · blocked: 2 · in_review: 4 · verified: 13 · done: 0 · cancelled: 0.
+**Tracked work:** 69 tasks · planned: 39 · ready: 7 · claimed: 0 · in_progress: 3 · blocked: 2 · in_review: 5 · verified: 13 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -84,7 +84,7 @@
 | **QA-005** | P1 | qa | **verified** | LIFE-26 | — | Diagnose and stabilize paused divine FX render timing in Chromium CI |
 | **REL-001** | P1 | release | **ready** | — | QA-003 | Stable Android signing identity and save-safe upgrade |
 | **REL-003** | P1 | release | **planned** | — | QA-002, QA-003, REL-001 | Integrate stacked PRs, QA gate and tagged Android beta |
-| **WLD-006** | P1 | world | **in_progress** | TERRAIN-01 | WLD-001 | Streaming biome ecology, climate, water and landmarks · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-006** | P1 | world | **in_review** | TERRAIN-01 | WLD-001 | Streaming biome ecology, climate, water and landmarks · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-009** | P1 | world | **planned** | — | WLD-003 | God's regional atlas and village discovery UX · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **ART-004** | P2 | art | **planned** | — | WLD-006 | Medieval biome props, weather/time and seasonal differences |
 | **GOD-005** | P2 | divine | **planned** | — | GOD-001, QA-004 | Optional advanced offline language understanding feasibility |
