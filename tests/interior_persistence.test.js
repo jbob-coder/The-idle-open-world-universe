@@ -33,7 +33,9 @@ test("legacy v1 saves without spaces restore exterior progress exactly",()=>{
   const old=JSON.parse(Sim.serialize(s));
   delete old.spaces;
   const before=JSON.parse(JSON.stringify({
-    tick:old.tick,day:old.day,bot:old.bot,worldSeed:old.worldSeed,
+    tick:old.tick,day:old.day,
+    level:old.bot.level,xp:old.bot.xp,hp:old.bot.hp,food:old.bot.food,
+    position:[old.bot.x,old.bot.y],worldSeed:old.worldSeed,
     map:old.map,faith:old.faith,chapter:old.chapter,chapterTwo:old.chapterTwo,
     finale:old.finale
   }));
@@ -42,7 +44,9 @@ test("legacy v1 saves without spaces restore exterior progress exactly",()=>{
   assert.equal(restored.version,1);
   assert.deepEqual(restored.spaces,Spaces.empty());
   assert.deepEqual({
-    tick:restored.tick,day:restored.day,bot:restored.bot,worldSeed:restored.worldSeed,
+    tick:restored.tick,day:restored.day,
+    level:restored.bot.level,xp:restored.bot.xp,hp:restored.bot.hp,food:restored.bot.food,
+    position:[restored.bot.x,restored.bot.y],worldSeed:restored.worldSeed,
     map:restored.map,faith:restored.faith,chapter:restored.chapter,
     chapterTwo:restored.chapterTwo,finale:restored.finale
   },before);
