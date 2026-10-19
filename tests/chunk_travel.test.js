@@ -145,3 +145,28 @@ test("travel is opt-in and cannot corrupt existing 64x48 version-1 save", () => 
   assert.deepEqual(Sim.restore(unchanged).map,state.map);
   assert.equal(state.version,1);
 });
+
+
+test("blocked actors back off instead of spending the full search budget each tick", () => {
+  let sampled=0;
+  const world={tileAt(x,y){sampled++;return x===5&&y===0?Chunks.T.WATER:Chunks.T.GRASS;},
+    stats(){return {activeChunks:0};}};
+  const sim=Travel.create(world);
+  sim.add(actor("stuck",0,0,5,0));
+  for(let i=0;i<48;i++)sim.tick();
+  assert.equal(sim.inspect("stuck").x,0);
+  assert.ok(sampled<40,"blocked citizen should not replan on every tick");
+});
+
+test("corrupt snapshots and excessive payloads are rejected without mutation", () => {
+  const world=Store.create(13);
+  clearLane(world,0,4,1);
+  const sim=Travel.create(world);
+  sim.add(actor("safe",0,1,4,1));
+  const original=sim.serialize();
+  assert.throws(()=>Travel.restore(world,"x".repeat(Travel.MAX_TRAVEL_SAVE_BYTES+1)),RangeError);
+  const tampered=JSON.parse(original);
+  tampered.citizens[0].id="bad id";
+  assert.throws(()=>Travel.restore(world,tampered),RangeError);
+  assert.equal(sim.serialize(),original);
+});
