@@ -1630,14 +1630,16 @@
       "priority": "P0",
       "area": "governance",
       "title": "♾️ Continuous bot work-loop prompt, lifecycle automation and safe handoffs",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "ORBIT-01",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
       "acceptance": "Publish an independent ready-to-paste ♾️ prompt in repo and link it from the master and workflow; enforce one active coding task, bounded turns, real evidence, fresh task selection and explicit stop reasons; governance CI passes exact SHA.",
       "issue": null,
       "pr": 22,
-      "evidence": [],
+      "evidence": [
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; commit 46bd0d440142d565fce4bce74c23e445e50d512c; GOV QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183825897 PASS; tests/test_task_infinity.py; docs/agents/INFINITY_AUTOMATION_PROMPT.md. Await independent review; not merged."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -1666,6 +1668,13 @@
           "to": "in_progress",
           "actor": "ORBIT-01",
           "reason": "Implementing ♾️ continuation prompt, preemption limits, audit logs and handoff rules"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "ORBIT-01",
+          "reason": "Published ♾️ automation prompt, guardrails, tests and master prompt links; governance CI pass. Submitted for independent review."
         }
       ]
     }
