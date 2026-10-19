@@ -2421,7 +2421,7 @@
       "priority": "P0",
       "area": "people",
       "title": "Individual intelligence, cognition, learning styles and personality effect on choices",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "CORTEX-19",
       "work_branch": "feat/sim-011-cortex-19-cognition",
       "depends": [
@@ -2453,6 +2453,13 @@
           "to": "claimed",
           "actor": "CORTEX-19",
           "reason": "New unique CORTEX-19 session claims autonomous cognitive attributes, learning and 16-seed behavior acceptance stacked on verified SIM-002; separate implementation branch."
+        },
+        {
+          "date": "2026-10-19T02:30:28.775Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "CORTEX-19",
+          "reason": "Build actual seeded cognition, bounded learning and personal plans on verified SIM-002; retain v1 compatibility; acceptance across 16 seeds."
         }
       ]
     },
