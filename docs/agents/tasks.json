@@ -822,7 +822,7 @@
       "priority": "P0",
       "area": "people",
       "title": "Utility-based choices with visible why/alternative/consequence",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "LIFE-26",
       "work_branch": "feat/sim-002-life-26-utility-decisions",
       "depends": [
@@ -831,7 +831,9 @@
       "acceptance": "Distinct personalities independently choose work, explore, rest, help; event trace explains outcomes.",
       "issue": 19,
       "pr": null,
-      "evidence": [],
+      "evidence": [
+        "PR #33 (draft stacked on SIM-001 PR #26) | commit 66bcf93440f0293eef4d7a0c05832d1b5904d73f | 100/100 Node + offline Chromium browser and save acceptance PASS: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188383945 | same-SHA PR QA PASS: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386706 | native Gradle+API29 emulator PASS: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386682 | physical 2/3GB Android PSS NOT VERIFIED | predecessor negative-index failure fixed"
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -860,6 +862,13 @@
           "to": "in_progress",
           "actor": "LIFE-26",
           "reason": "Implement independent decision engine + visible citizen rationale/outcomes; preserve food/work production, safe needs overrides, and offline Android compatibility."
+        },
+        {
+          "date": "2026-10-19T02:11:02+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "LIFE-26",
+          "reason": "Independent review requested after exact-SHA 100/100 Node, offline Chromium and native API29 emulator CI successes; SIM-001 integration still outstanding and hardware PSS unverified."
         }
       ]
     },
