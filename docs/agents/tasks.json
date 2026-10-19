@@ -2053,14 +2053,16 @@
       "priority": "P1",
       "area": "art",
       "title": "Playable GODSEED medieval pixel-art splash and truthful offline loading state",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "SPLASH-01",
       "work_branch": "feat/art-006-godseed-loading-screen",
       "depends": [],
       "acceptance": "Real offline splash rendered before game UI; coherent 16:9 pixel graphics, accessible status/progress, optional reduced motion, waits for sprite atlas readiness, saves unaffected; browser/node QA and Android packaging CI pass at exact SHA.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 32,
+      "evidence": [
+        "PR #32 https://github.com/jbob-coder/The-idle-open-world-universe/pull/32; SHA 89bd62e6329b1108c95de5bb509a7084c86e9fe7; offline QA 85/85 tests PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076690; native Android API29 6/6 PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076673; actual screenshots and artifact. Independent review and merge pending."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -2089,6 +2091,13 @@
           "to": "in_progress",
           "actor": "SPLASH-01",
           "reason": "Building offline pixel village splash and asset-loading lifecycle tests."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SPLASH-01",
+          "reason": "Integrated local pixel village splash, truthful readiness UI and Chromium/Android CI; PR #32 ready for independent review."
         }
       ]
     }
