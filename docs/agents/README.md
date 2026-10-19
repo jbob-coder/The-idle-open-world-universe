@@ -38,6 +38,12 @@ El [prompt de automatización ♾️](./INFINITY_AUTOMATION_PROMPT.md) describe 
 
 Cuando un bot no puede continuar por agotamiento del contexto de su chat, use [`CHAT_RETIRE_AND_RESUME.md`](./CHAT_RETIRE_AND_RESUME.md) **MODO A** para guardar el estado real en `docs/agents/handoffs/<TASK_ID>.json`, validarlo, publicar commit y liberar la tarea `claimed/in_progress → ready` **solo si el trabajo se preservó**. Su mensaje final declara honestamente que ya no puede continuar esa conversación y entrega ID, commits y ruta. **En un chat nuevo**, pegar el **MODO B**, que empieza leyendo el [README](./README.md), el [prompt inicial](./BOT_MASTER_PROMPT.md) y el registro antes de reclamar. Relevos no conceden propiedad automáticamente, no hacen merges ni configuran ejecución en segundo plano.
 
+## Rediseño GODSEED V3: referencias del propietario
+
+**Nuevo contrato de producto:** [`docs/design/README.md`](../design/README.md) y seis documentos enlazados explican el juego como dios, la reorganización de interfaz, las capacidades de inteligencia/persona y conocimiento, familias intergeneracionales, colonias y reyes, gestión de miles de agentes con LOD y migración de guardados. Es una **especificación futura**, no un cambio de código ya terminado.
+
+Las tareas **GOV-004, GOD-006/007, SIM-011/012/013, CIV-009/010, ART-007** se registraron en `tasks.json`. El bot debe consultar el **HEAD de la rama de coordinación** y comprobar la propiedad actual antes de reclamar; no trabajar dos tareas a la vez ni sustituir el progreso de otro bot.
+
 ## Comienza aquí si eres un bot
 
 1. Anuncia `AI NAME`, rol y rama actual leída de GitHub.
