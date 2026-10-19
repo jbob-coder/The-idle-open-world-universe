@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 70 tasks · planned: 34 · ready: 7 · claimed: 0 · in_progress: 1 · blocked: 3 · in_review: 6 · verified: 19 · done: 0 · cancelled: 0.
+**Tracked work:** 70 tasks · planned: 34 · ready: 6 · claimed: 1 · in_progress: 1 · blocked: 3 · in_review: 6 · verified: 19 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -29,7 +29,7 @@
 | **CIV-010** | P0 | civilization | **planned** | — | WLD-005, CIV-002, SIM-005 | Found frontier colonies and simulate logistics, settlements and autonomy |
 | **GOD-001** | P0 | divine | **verified** | FORGE-27 | — | Multilingual intent parsing with negation, target and ambiguity |
 | **GOD-002** | P0 | divine | **verified** | FORGE-27 | SIM-001, GOD-001 | Per-person belief, safety and autonomy acceptance engine |
-| **GOD-003** | P0 | divine | **ready** | — | GOD-002, SIM-002 | Nonblocking suggestions lifecycle: heard→considered→action→result |
+| **GOD-003** | P0 | divine | **claimed** | LIFE-26 | GOD-002, SIM-002 | Nonblocking suggestions lifecycle: heard→considered→action→result |
 | **GOD-004** | P0 | divine | **verified** | FORGE-27 | — | God view: inspect life, building, village, memories and intent |
 | **GOD-006** | P0 | divine | **blocked** | FORGE-27 | GOD-004, GOD-001 | Replace direct god power toolbar with indirect consequence-based divine influence |
 | **GOV-001** | P0 | governance | **verified** | ARCHIVIST | — | Repository task registry, bot lifecycle, automation and handoff |
