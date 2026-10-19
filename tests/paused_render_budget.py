@@ -48,10 +48,38 @@ with sync_playwright() as pw:
         GodseedDebug.draw();
     }""")
     assert page.evaluate('GodseedDebug.getRenderStats().activeEffects')>=1
+    # Measure enough real animation frames rather than trusting a fixed wall-clock
+    # sleep: a busy CI runner may execute only one RAF in 320 ms. Keep a bounded
+    # timeout so a truly stuck tab still fails, and report scheduler vs FX evidence.
     before=get()
-    page.wait_for_timeout(320)
+    page.evaluate("""() => {
+        const trace={frames:0,elapsedMs:0,maxGapMs:0,startMs:null,lastMs:null,
+                     activeFrames:0,drawChanges:0,lastDraws:GodseedDebug.getRenderStats().screenRedraws};
+        window.__godseedFxRafTrace=trace;
+        const sample=ts=>{
+            if(trace.startMs===null)trace.startMs=ts;
+            if(trace.lastMs!==null)trace.maxGapMs=Math.max(trace.maxGapMs,ts-trace.lastMs);
+            trace.lastMs=ts;trace.frames++;trace.elapsedMs=ts-trace.startMs;
+            const stats=GodseedDebug.getRenderStats();
+            if(stats.activeEffects>0)trace.activeFrames++;
+            if(stats.screenRedraws>trace.lastDraws)trace.drawChanges+=stats.screenRedraws-trace.lastDraws;
+            trace.lastDraws=stats.screenRedraws;
+            if(trace.elapsedMs<300||trace.frames<5)requestAnimationFrame(sample);
+        };
+        requestAnimationFrame(sample);
+    }""")
+    try:
+        page.wait_for_function("""() => {
+            const t=window.__godseedFxRafTrace;
+            return t&&t.frames>=5&&t.elapsedMs>=300;
+        }""",polling='raf',timeout=2500)
+    except Exception as exc:
+        trace=page.evaluate('window.__godseedFxRafTrace')
+        raise AssertionError(('paused FX RAF scheduler stalled; not a verified FX redraw regression',trace)) from exc
+    trace=page.evaluate('window.__godseedFxRafTrace')
     fx_draws=get()-before
-    assert fx_draws>=2,('divine FX animation should stay responsive',fx_draws)
+    assert trace['activeFrames']>=5,('divine FX expired while the renderer was stalled',trace)
+    assert fx_draws>=2,('divine FX animation must redraw during >=300 ms of RAF time',fx_draws,trace)
 
     # Unpaused world returns to normal redraw cadence and autonomous time.
     page.evaluate('GodseedDebug.setSpeed(1)')
