@@ -712,7 +712,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Map existing 64×48 version-1 saves into expanded world",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "FORGE-27",
       "work_branch": "feat/wld-007-forge-27-v1-migration",
       "depends": [
@@ -721,8 +721,10 @@
       ],
       "acceptance": "Imported Nim/world/villages, all 3 chapters and structures unchanged; bad data rejected.",
       "issue": 18,
-      "pr": null,
-      "evidence": [],
+      "pr": 44,
+      "evidence": [
+        "PR #44 https://github.com/jbob-coder/The-idle-open-world-universe/pull/44 ; exact work HEAD f5037388cf0fb159346b09c5ab6c17feb78c8039, stacked on independently verified WLD-002 (2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e). Current-head offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205388 COMPLETED SUCCESS: 108/108 Node tests incl 12 WLD-007 legacy map/save/corruption roundtrips, actual Chromium offline 640x360 WLD-007 migration PASS, chapter I-II-III/backup/viewport regression, APK prototype checks, screenshots artifact. Native Android Gradle/API29 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205499 completed / failure at transition; physical 2–3GB phone NOT TESTED. Import API opt-in, NOT live 4-border playable world; v1 key/schema untouched; no merge."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -751,6 +753,13 @@
           "to": "in_progress",
           "actor": "FORGE-27",
           "reason": "Implement opt-in canonical v1/64×48 window import with lossless structures/progression and deterministic chunk store outside window; reject mismatched/corrupt data and test roundtrip."
+        },
+        {
+          "date": "2026-10-19T08:58:53.550Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FORGE-27",
+          "reason": "Delivered lossless v1 64x48 window migration with 12 new Node tests, mobile offline Chromium, compatibility/negative tests and current SHA full offline CI green; native emulator result tracked separately; independent review requested."
         }
       ]
     },
