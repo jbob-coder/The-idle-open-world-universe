@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 59 tasks · planned: 47 · ready: 0 · claimed: 0 · in_progress: 2 · blocked: 1 · in_review: 7 · verified: 2 · done: 0 · cancelled: 0.
+**Tracked work:** 59 tasks · planned: 47 · ready: 0 · claimed: 0 · in_progress: 1 · blocked: 1 · in_review: 8 · verified: 2 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -71,7 +71,7 @@
 | **SIM-007** | P1 | people | **planned** | — | SIM-002 | Personal journals, memories, long goals and moral decisions · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-008** | P1 | people | **planned** | — | SIM-004, SIM-007 | Generations, inheritance and meaningful mortality · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-009** | P1 | people | **planned** | — | SIM-002, SIM-004 | Contextual resident social interaction and visible animations · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
-| **QA-005** | P1 | qa | **in_progress** | LIFE-26 | — | Diagnose and stabilize paused divine FX render timing in Chromium CI |
+| **QA-005** | P1 | qa | **in_review** | LIFE-26 | — | Diagnose and stabilize paused divine FX render timing in Chromium CI |
 | **REL-001** | P1 | release | **planned** | — | QA-003 | Stable Android signing identity and save-safe upgrade |
 | **REL-003** | P1 | release | **planned** | — | QA-002, QA-003, REL-001 | Integrate stacked PRs, QA gate and tagged Android beta |
 | **WLD-006** | P1 | world | **planned** | — | WLD-001 | Streaming biome ecology, climate, water and landmarks · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
