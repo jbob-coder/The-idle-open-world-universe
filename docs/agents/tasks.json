@@ -23,7 +23,7 @@
       "priority": "P0",
       "area": "governance",
       "title": "Repository task registry, bot lifecycle, automation and handoff",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "ARCHIVIST",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
@@ -52,6 +52,13 @@
           "to": "claimed",
           "actor": "ARCHIVIST",
           "reason": "ARCHIVIST reserves governance task before touching workflow files; same-file SHA lock"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "ARCHIVIST",
+          "reason": "ARCHIVIST is authoring validator, agent lifecycle docs, bot handoff, and GitHub QA"
         }
       ]
     },
