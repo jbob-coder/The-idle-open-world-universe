@@ -31,6 +31,13 @@ EDGES = {
  "cancelled": set(),
 }
 PRIORITIES = ("P0", "P1", "P2")
+AREA_PREFIX = {
+ "governance":"GOV", "interiors":"INT", "world":"WLD", "people":"SIM",
+ "civilization":"CIV", "divine":"GOD", "art":"ART", "qa":"QA", "release":"REL",
+}
+# One discoverable follow-up per delivered source task. Further ideas can
+# be proposed to the coordinator without silently multiplying backlog items.
+
 STAGES = ("planned", "ready", "claimed", "in_progress", "blocked", "in_review", "verified", "done", "cancelled")
 
 
@@ -79,6 +86,11 @@ def validate(db):
             errors.append(f"{ident}: review and completion require real evidence")
         if t["status"] == "done" and not any("merged" in str(e).lower() for e in t.get("evidence", [])):
             errors.append(f"{ident}: done requires explicit merged evidence")
+        if t.get("origin_task"):
+            if t["origin_task"] not in byid:
+                errors.append(f"{ident}: follow-up origin task missing")
+            if not t.get("created_by") or not t.get("new_task_reason"):
+                errors.append(f"{ident}: follow-up lacks proposer and justification")
         history = t.get("status_history", [])
         if not isinstance(history, list) or not history or history[-1].get("to") != t["status"]:
             errors.append(f"{ident}: history/status mismatch")
@@ -150,6 +162,16 @@ def render(db):
         "",
         "Commits updating task status belong on the **coordination branch**, not on main. If another bot already claimed the task, do not overwrite it; consult `docs/agents/TASK_WORKFLOW.md`.",
         "",
+        "## Optional new task after delivery", "",
+        "After your OWN task reaches `in_review`, `verified` or `done` **with evidence**, you may propose **one** necessary follow-up. The new task is never automatically yours. First verify no equivalent ID/scope exists in the registry, open issues or PRs.",
+        "",
+        "```bash",
+        "python tools/godseed_tasks.py add --after SIM-001 --actor LIFE-01 --area people --priority P1 --title 'Sim occupational fatigue and recuperation' --acceptance 'Measured exhaustion affects job decisions and preserves version 1 saves in seeded tests.' --depends SIM-001 --reason 'Observed repeated work without adequate rest in the submitted acceptance tests.'",
+        "python tools/godseed_tasks.py validate",
+        "```",
+        "",
+        "The CLI assigns the next unique ID, checks provenance and exact-title duplicates, and picks `ready` only if prerequisites are verified; otherwise `planned`. It updates `tasks.json` and this generated board together. Commit/push both on the coordination branch. No automatic claiming or implementation of the new task.",
+        "",
         "## Hardware and release truth", "",
         "2–3 GB refers to **total physical device RAM**; target app PSS approximately 128–192 MiB with provisional 256 MiB soft limit, unverified. The game remains offline. The previous 1 GB core / up to 5 GB optional content are *disk targets*, not completed content or RAM allocation. Hardware QA = **BLOCKED** until real measurements in issue #13.",
         "",
@@ -176,6 +198,15 @@ def main():
     sub.add_parser("validate")
     show = sub.add_parser("board")
     show.add_argument("--write", action="store_true")
+    add = sub.add_parser("add", help="Propose one justified follow-up from a delivered task")
+    add.add_argument("--after", required=True, help="Your in_review, verified or done source task ID")
+    add.add_argument("--actor", required=True, help="Must be the source task owner")
+    add.add_argument("--area", required=True, choices=tuple(AREA_PREFIX))
+    add.add_argument("--priority", required=True, choices=PRIORITIES)
+    add.add_argument("--title", required=True)
+    add.add_argument("--acceptance", required=True)
+    add.add_argument("--reason", required=True, help="Why this needed work was discovered")
+    add.add_argument("--depends", action="append", default=[], help="Real prerequisite ID; repeat for multiples")
     change = sub.add_parser("transition")
     change.add_argument("task_id")
     change.add_argument("to_status", choices=STAGES)
@@ -204,6 +235,57 @@ def main():
             print(f"Wrote {BOARD}")
         else:
             print(out)
+        return
+    if args.cmd == "add":
+        source = next((t for t in db["tasks"] if t["id"] == args.after), None)
+        if not source:
+            p.error("Unknown source task")
+        if source.get("owner") != args.actor or source["status"] not in {"in_review", "verified", "done"}:
+            p.error("A bot may propose a follow-up only after delivering its OWN task")
+        if not source.get("evidence"):
+            p.error("The delivered source task needs real PR/test evidence")
+        if any(t.get("origin_task") == args.after for t in db["tasks"]):
+            p.error("A follow-up already exists for this delivery; ask the coordinator for more")
+        title = " ".join(args.title.split())
+        acceptance = " ".join(args.acceptance.split())
+        reason = " ".join(args.reason.split())
+        if not 12 <= len(title) <= 160 or len(acceptance) < 30 or len(reason) < 25:
+            p.error("Need a specific title (12-160 chars), measurable acceptance (30+) and reason (25+)")
+        normalized = lambda x: " ".join(x.casefold().split())
+        if any(normalized(t["title"]) == normalized(title) for t in db["tasks"]):
+            p.error("Equivalent task title already exists; inspect registry and open PR/issues for duplicates")
+        if len(args.depends) != len(set(args.depends)):
+            p.error("Duplicate dependency IDs")
+        byid = {t["id"]: t for t in db["tasks"]}
+        if any(dep not in byid for dep in args.depends):
+            p.error("Unknown dependency: register or verify the prerequisite first")
+        prefix = AREA_PREFIX[args.area]
+        seq = max([int(t["id"].split("-")[1]) for t in db["tasks"]
+                   if t["id"].startswith(prefix + "-")] or [0]) + 1
+        if seq > 999:
+            p.error("Task ID space exhausted; request a schema upgrade")
+        ident = f"{prefix}-{seq:03d}"
+        today = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+        ready = all(byid[dep]["status"] in {"verified", "done"} for dep in args.depends)
+        task = {"id": ident, "priority": args.priority, "area": args.area, "title": title,
+                "status": "ready" if ready else "planned", "owner": None,
+                "work_branch": None, "depends": args.depends, "acceptance": acceptance,
+                "issue": None, "pr": None, "evidence": [],
+                "origin_task": args.after, "created_by": args.actor, "new_task_reason": reason,
+                "status_history": [{"date": today, "from": None, "to": "planned",
+                    "actor": args.actor, "reason": f"Necessary follow-up to {args.after}: {reason}"}]}
+        if ready:
+            task["status_history"].append({"date": today, "from": "planned",
+                "to": "ready", "actor": args.actor,
+                "reason": "All declared prerequisites verified; available for assignment"})
+        db["tasks"].append(task)
+        errors = validate(db)
+        if errors:
+            p.error("Proposed new task invalid: " + "; ".join(errors))
+        replace_text(REGISTRY, json.dumps(db, indent=2, ensure_ascii=False) + "\n")
+        replace_text(BOARD, render(db))
+        print(f"{ident}: {task['status']}; proposed by {args.actor} after {args.after}")
+        print("Check PRs/issues for semantic duplicates, then commit/push both files on coordination branch.")
         return
     t = next((item for item in db["tasks"] if item["id"] == args.task_id), None)
     if t is None:
