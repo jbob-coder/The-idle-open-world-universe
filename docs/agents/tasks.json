@@ -2197,7 +2197,7 @@
       "priority": "P0",
       "area": "governance",
       "title": "Author GODSEED V3 divine-view, intelligent lives and kingdoms design bible",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "DESIGN-28",
       "work_branch": "docs/godseed-divine-life-kingdoms-v3",
       "depends": [],
@@ -2226,6 +2226,13 @@
           "to": "claimed",
           "actor": "DESIGN-28",
           "reason": "Owner-requested complete redesign docs claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "DESIGN-28",
+          "reason": "Authoring source-checked V3 gameplay vision and architecture docs, UX map, intelligence/kinship and political simulation."
         }
       ]
     },
