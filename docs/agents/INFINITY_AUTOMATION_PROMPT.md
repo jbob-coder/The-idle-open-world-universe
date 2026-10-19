@@ -9,6 +9,10 @@
 
 ---
 
+> **Retiro por contexto:** si el ciclo ♾️ se queda sin contexto fiable o debe moverse a otro chat, ejecuta el [relevo entre chats](./CHAT_RETIRE_AND_RESUME.md) **MODO A** antes de detenerte. El bot nuevo recibe **MODO B**: lee `README.md`, `BOT_MASTER_PROMPT.md`, `tasks.json`, `TASK_BOARD.md` y el archivo `handoffs/<TASK_ID>.json`. ♾️ no hace continuar nada después de terminar la sesión.
+
+---
+
 ## INICIO — PROMPT ♾️
 
 ### 0. Identidad y misión permanente
