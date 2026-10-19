@@ -647,14 +647,16 @@
       "priority": "P0",
       "area": "people",
       "title": "Need profile: hunger, energy, comfort, safety, social, hygiene",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "LIFE-26",
       "work_branch": "feat/sim-001-life-26-needs",
       "depends": [],
       "acceptance": "Needs bounded, serialized, degrade/recover via actions, priorities and safety precede divine suggestions.",
       "issue": 19,
       "pr": null,
-      "evidence": [],
+      "evidence": [
+        "PR #26 (draft) | commit 553ef5c2068c48ddd83d0d70bf971d6234156bf0 | Node regression 92/92 passed, browser/Android structure rerun attempt 2 passed: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625841 | Gradle+Android emulator success: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625780 | attempt 1 paused FX render timing failure retained as known risk | physical Android RAM/PSS not verified"
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -683,6 +685,13 @@
           "to": "in_progress",
           "actor": "LIFE-26",
           "reason": "Implement isolated needs model and deterministic Node tests without touching shared simulation systems."
+        },
+        {
+          "date": "2026-10-19T01:25:23+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "LIFE-26",
+          "reason": "Submit implemented and tested citizen-need model as draft PR #26 for independent verification; Node and Android emulator jobs green at exact SHA; first browser FX timing attempt was flaky; physical low-memory QA pending."
         }
       ]
     },

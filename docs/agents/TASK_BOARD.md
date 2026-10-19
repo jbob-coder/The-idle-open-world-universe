@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 58 tasks · planned: 48 · ready: 0 · claimed: 0 · in_progress: 3 · blocked: 1 · in_review: 6 · verified: 0 · done: 0 · cancelled: 0.
+**Tracked work:** 58 tasks · planned: 48 · ready: 0 · claimed: 0 · in_progress: 2 · blocked: 1 · in_review: 7 · verified: 0 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -39,7 +39,7 @@
 | **INT-006** | P0 | interiors | **planned** | — | INT-003, SIM-001 | Assign households, beds and private spaces to each citizen |
 | **INT-007** | P0 | interiors | **planned** | — | INT-004, INT-006 | Autonomous sleep, food, shelter and social actions indoors |
 | **INT-010** | P0 | interiors | **planned** | — | INT-004, INT-005 | Interior transitions: adversarial Android and save regression |
-| **SIM-001** | P0 | people | **in_progress** | LIFE-26 | — | Need profile: hunger, energy, comfort, safety, social, hygiene · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
+| **SIM-001** | P0 | people | **in_review** | LIFE-26 | — | Need profile: hunger, energy, comfort, safety, social, hygiene · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-002** | P0 | people | **planned** | — | SIM-001 | Utility-based choices with visible why/alternative/consequence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-003** | P0 | people | **planned** | — | SIM-001, INT-003 | Homes, household membership, work IDs and inventories · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-005** | P0 | people | **planned** | — | SIM-001, CIV-001 | Profession schedules and workplace resource delivery · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
