@@ -621,7 +621,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Cross-chunk autonomous navigation and bounded pathfinding",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "PATH-34",
       "work_branch": "feat/wld-004-path-34-autonomous-travel",
       "depends": [
@@ -653,6 +653,13 @@
           "to": "claimed",
           "actor": "PATH-34",
           "reason": "WLD-004 libre; implemento navegación autónoma global desacoplada de render 2D para futura vista 3D aprobada."
+        },
+        {
+          "date": "2026-10-19T16:17:10.220+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "PATH-34",
+          "reason": "Implementación de navegación y viajeros voluntarios entre chunks, con obstáculos, límites de búsqueda y pruebas reproducibles."
         }
       ]
     },
