@@ -2364,7 +2364,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "Replace direct god power toolbar with indirect consequence-based divine influence",
-      "status": "in_progress",
+      "status": "blocked",
       "owner": "FORGE-27",
       "work_branch": "feat/god-006-forge-27-indirect-influence",
       "depends": [
@@ -2376,7 +2376,8 @@
       "pr": null,
       "evidence": [
         "Code candidate Git object aead479e55d1f24a545eb69347a816448ab8c2ab exists but is UNREFERENCED: branch feat/god-006-forge-27-indirect-influence remains at 7de364157e45260e4d728daa1c3558be79dacd39 after an OpenAI/GitHub connector safety block on publishing. NOT TESTED, NOT PR, NOT INTEGRATED. Requires authorized branch publication and fresh tests.",
-        "Recovery checkpoint by original owner FORGE-27: existing one-commit fast-forward safely published to feat/god-006-forge-27-indirect-influence at exact SHA aead479e55d1f24a545eb69347a816448ab8c2ab (parent 7de364157e45260e4d728daa1c3558be79dacd39), force=false and expected_sha lease. Code remains UNTESTED, no PR or approval. Safe to re-claim work under governance and write tests."
+        "Recovery checkpoint by original owner FORGE-27: existing one-commit fast-forward safely published to feat/god-006-forge-27-indirect-influence at exact SHA aead479e55d1f24a545eb69347a816448ab8c2ab (parent 7de364157e45260e4d728daa1c3558be79dacd39), force=false and expected_sha lease. Code remains UNTESTED, no PR or approval. Safe to re-claim work under governance and write tests.",
+        "Recovered branch feat/god-006-forge-27-indirect-influence source commit aead479e55d1f24a545eb69347a816448ab8c2ab exists and is FAST-FORWARD PUBLISHED. Exact-head push QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39190373911 FAILED: Node 93/93 PASS, offline HTML/assets/APK structure PASS; Chromium tests/browser_smoke.py line 28 times out clicking deliberately disabled/hidden legacy [data-power=\"bless\"] toolbar. New 14 guidance Node cases, 640x360 offline browser case and workflow prepared in session but their new Git reference update was BLOCKED by OpenAI safety checks; new tests NOT PUBLISHED, NOT RUN. No native emulator or physical low-RAM QA at this SHA. No PR or merge."
       ],
       "status_history": [
         {
@@ -2434,6 +2435,13 @@
           "to": "in_progress",
           "actor": "FORGE-27",
           "reason": "Continue preserved indirect guidance candidate: inspect source, add >=10 deterministic tests, repair legacy browser expectations, run CI. Do not change NPC decisions directly."
+        },
+        {
+          "date": "2026-10-19T02:42:43.970Z",
+          "from": "in_progress",
+          "to": "blocked",
+          "actor": "FORGE-27",
+          "reason": "Recovered original code branch safely; exact-head Node 93 PASS but legacy browser QA fails against removed direct powers. Publication of new regression-test commit refused by connector safety; cannot advance without authorized publication/tests, no unsafe workaround."
         }
       ]
     },

@@ -3,15 +3,15 @@
   "task_id": "GOD-006",
   "retiring_bot": "FORGE-27",
   "reason": "blocked",
-  "created_utc": "2026-10-19T02:27:48.478Z",
+  "created_utc": "2026-10-19T02:42:43.970Z",
   "last_known_status": "blocked",
   "owner_at_handoff": "FORGE-27",
   "coordination_branch": "docs/godseed-agent-task-governance-v1",
-  "coordination_sha": "adfd0bd67b5d28f9bb002d4967267cb8c0b29484",
+  "coordination_sha": "638987f1a6ef7ba962491e621113a94524a9e90a",
   "work_branch": "feat/god-006-forge-27-indirect-influence",
   "work_sha": "aead479e55d1f24a545eb69347a816448ab8c2ab",
   "pr_url": null,
-  "summary": "Designed isolated pure guidance + contextual read-only observer UI, and reviewed legacy direct-power browser regressions. A Git code object exists at the candidate SHA, but its branch reference update was explicitly blocked by connector safety. No part of this code is on the work branch, no PR/CI; treat as unpublished and unverified.",
+  "summary": "FORGE-27 successfully published the original GOD-006 code aead479e as a nonforce fast-forward from 7de3641. Baseline push CI 39190373911: 93/93 Node passed; browser smoke failed clicking intentionally disabled legacy bless control. New 14 Node guidance tests, offline 640x360 browser acceptance, and workflow changes were prepared, but publishing that newer test commit was refused by OpenAI GitHub connector safety, so do NOT claim that test changes are in the branch or tested. No PR, no completed deliverable.",
   "changed_files": [
     "src/divine/intent.js",
     "src/living.js",
@@ -22,30 +22,36 @@
     "build.py"
   ],
   "tests": [
-    "NOT_RUN: Node God guidance acceptance tests — not yet written or executed.",
-    "NOT_RUN: Offline Chromium, Android emulator and physical 2–3 GB hardware tests — code branch not published.",
-    "NOT_RUN: Prior legacy browser direct-power tests need safe adaptation to the new indirect influence semantics."
+    "PASS: Exact-head aead479e GODSEED offline QA Node suite 93/93, HTML build, asset reproducibility, APK prototype structure/signature; run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39190373911",
+    "FAIL: Same run browser_smoke.py line 28 Playwright times out clicking hidden/disabled legacy [data-power=\"bless\"] after GOD-006 replaces direct power toolbar",
+    "NOT_RUN: Proposed 14 new deterministic guidance Node tests and 640x360 offline mobile browser acceptance; content NOT PUBLISHED because connector update_ref safety blocked",
+    "NOT_RUN: Native Android API29 emulator tests for published GOD-006 source",
+    "NOT_RUN: Physical Android 2-3 GB RAM performance/soak"
   ],
   "blockers": [
-    "OpenAI/GitHub connector safety refused update_ref to work branch; candidate commit exists only as unreferenced Git object.",
-    "No accepted PR or CI for candidate changes, and the old browser tests would need updating to the new interface contract."
+    "Publishing the new guidance regression-test commit to feat/god-006-forge-27-indirect-influence was refused by the GitHub connector's OpenAI safety checks; do not evade the block through force or alternate push route.",
+    "Current published commit aead479e causes browser_smoke.py timeout: old direct power button bless is now hidden and disabled. tests/mobile_acceptance.py and tests/capture_android_layouts.py also still assume direct bless/inspire controls and 10 dock buttons. They must be adapted, not disabled.",
+    "No accepted PR/CI with the new guidance tests; original branch code remains unverified and should not be integrated."
   ],
   "risks": [
-    "Unreferenced Git object may be garbage-collected; do not claim reliable branch storage.",
-    "Porting verified GOD-001 parser into GOD-004 introduces future stacked-merge considerations.",
-    "Changing old direct power UI requires updating old mobile/browser acceptance tests rather than hiding failures."
+    "The prepared 14-test update was NOT published; no reliable remote commit SHA/branch reference is recorded for those changes. Do not assume they survive after this chat.",
+    "Source guidance.js uses opt-in consent/whisper but direct Sim.power API remains for legacy simulation; browser UI hides direct toolbar. Verify no hidden UI keyboard path still executes direct powers.",
+    "GOD-006 branch is based on GOD-004 at 7de3641 and ports GOD-001 parser; integration with verified GOD-002 and ART-007 must be coordinated and explicit.",
+    "Do not claim save v1, physical Android low-RAM, or autonomy correctness without fresh test evidence."
   ],
-  "save_notes": "Candidate aimed to leave sim power API, v1 save key and schema unchanged, but it has not been tested. No claim of verified migration or saved-state compatibility.",
+  "save_notes": "Existing v1 save key and schema preserved by the implementation candidate, but browser regression and migration checks incomplete; only 93 Node tests passed, Chromium startup smoke failed, Android hardware NOT RUN.",
   "next_actions": [
-    "Resolve connector publication limitation through authorized tooling without bypassing safety checks.",
-    "After safely publishing source, add >=10 deterministic God guidance Node tests, update legacy browser acceptance, run full offline and native Android CI at exact HEAD.",
-    "Review scope/costs/agency wording and integration with GOD-002 consent and ART-007 UI; create PR only after evidence.",
-    "Once independently reviewed and tested, transition blocked -> ready and re-claim through governance; do not jump from blocked to in_review."
+    "Obtain an authorized, safety-compliant path to publish the newer test commit; do not bypass the connector safety denial. The recovered code branch HEAD is aead479e55d1f24a545eb69347a816448ab8c2ab.",
+    "Add >=10 deterministic tests for all eight guidance options, costs, preview purity, invalid scope/person, individual consent limitation, insufficient faith, 12-tick cooldown, refusal, no instant NPC moves/resources, deterministic save v1.",
+    "Adapt browser_smoke.py, mobile_acceptance.py and capture_android_layouts.py from hidden bless/inspire direct controls to the touch-safe guidanceDock/guidanceScope/guidanceAction/guidanceSubmit UI while preserving camera, screenshot, touch, save and offline assertions.",
+    "Add and run tests/god_guidance_browser_acceptance.py in .github/workflows/qa.yml; verify browser 640x360 read-only preview, consent/rejection, cooldown, no teleports and save.",
+    "Run exact-head full Node/browser + native Gradle Android API29 tests, record FAIL/PASS and artifacts; write PR and only then move blocked->ready->claimed->in_progress->in_review through authorized transitions and independent review."
   ],
   "do_not_repeat": [
-    "Do not mark GOD-006 as in_review or verified based on the unreferenced code object.",
-    "Do not force push or move another agent's branch.",
-    "Do not change direct Sim behavior silently or claim social actions completed from a whisper."
+    "Do not mark the unpublished guidance tests as committed or passing.",
+    "Do not try another Git push/update_ref route to bypass OpenAI safety denial without explicit authorization.",
+    "Do not treat the 93/93 Node passes as full QA success because the browser job failed.",
+    "Do not restore instant God powers to make legacy browser tests pass; tests should reflect the new indirect-god-play semantics."
   ],
   "unpublished_changes": true,
   "starting_documents": [
