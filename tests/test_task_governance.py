@@ -3,6 +3,10 @@ import copy
 import importlib.util
 from pathlib import Path
 import unittest
+import json
+from unittest.mock import patch
+import io
+from contextlib import redirect_stderr, redirect_stdout
 
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location("godseed_tasks",ROOT/"tools/godseed_tasks.py")
@@ -49,6 +53,69 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual("blocked",hardware["status"])
         self.assertEqual(13,hardware["issue"])
         self.assertNotIn("done",[t["status"] for t in self.db["tasks"] if t["area"]=="release"])
+
+
+    def test_independent_reviewer_keeps_original_owner(self):
+        current=copy.deepcopy(self.db)
+        t=next(t for t in current["tasks"] if t["id"]=="INT-001")
+        self.assertEqual(t["status"],"in_review")
+        self.assertEqual(t["owner"],"DOORKEEPER")
+        writes=[]
+        with patch.object(bot,"load",return_value=current), \
+             patch.object(bot,"replace_text",side_effect=lambda path,value:writes.append((path,value))), \
+             patch("sys.argv",["godseed_tasks.py","transition","INT-001","verified",
+                 "--expect","in_review","--actor","REVIEW-01","--note","CI and spec reviewed",
+                 "--evidence","PR #22; SHA 123456; CI https://github.com/example/actions/runs/100"]), \
+             redirect_stdout(io.StringIO()):
+            bot.main()
+        updated=json.loads(next(value for path,value in writes if path==bot.REGISTRY))
+        item=next(x for x in updated["tasks"] if x["id"]=="INT-001")
+        self.assertEqual(item["status"],"verified")
+        self.assertEqual(item["owner"],"DOORKEEPER")
+        self.assertEqual(item["verified_by"],"REVIEW-01")
+        self.assertEqual(item["status_history"][-1]["actor"],"REVIEW-01")
+
+    def test_owner_cannot_self_verify(self):
+        current=copy.deepcopy(self.db)
+        with patch.object(bot,"load",return_value=current), \
+             patch("sys.argv",["godseed_tasks.py","transition","INT-001","verified",
+                 "--expect","in_review","--actor","DOORKEEPER","--note","self-review",
+                 "--evidence","PR #22; CI passed"]), \
+             redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit):
+                bot.main()
+
+    def test_integrator_does_not_erase_implementation_owner(self):
+        current=copy.deepcopy(self.db)
+        task=next(x for x in current["tasks"] if x["id"]=="INT-001")
+        task["status"]="verified"
+        task["verified_by"]="REVIEW-01"
+        task["status_history"].append({
+            "date":"2026-10-18","from":"in_review","to":"verified",
+            "actor":"REVIEW-01","reason":"independent review"})
+        writes=[]
+        with patch.object(bot,"load",return_value=current), \
+             patch.object(bot,"replace_text",side_effect=lambda path,value:writes.append((path,value))), \
+             patch("sys.argv",["godseed_tasks.py","transition","INT-001","done",
+                 "--expect","verified","--actor","INTEGRATOR","--note","Merged and accepted",
+                 "--evidence","merged PR #22 into approved integration branch with CI"]), \
+             redirect_stdout(io.StringIO()):
+            bot.main()
+        updated=json.loads(next(value for path,value in writes if path==bot.REGISTRY))
+        task=next(x for x in updated["tasks"] if x["id"]=="INT-001")
+        self.assertEqual(task["owner"],"DOORKEEPER")
+        self.assertEqual(task["integrated_by"],"INTEGRATOR")
+        self.assertEqual(task["status"],"done")
+
+    def test_one_bot_cannot_claim_multiple_active_tasks(self):
+        current=copy.deepcopy(self.db)
+        with patch.object(bot,"load",return_value=current), \
+             patch("sys.argv",["godseed_tasks.py","transition","GOD-001","claimed",
+                 "--expect","ready","--actor","ARCHIVIST","--branch","feat/stolen",
+                 "--note","second concurrent task"]), \
+             redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit):
+                bot.main()
 
 
 if __name__=="__main__":
