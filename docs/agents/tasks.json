@@ -1539,7 +1539,7 @@
       "priority": "P0",
       "area": "qa",
       "title": "Gradle host + API29 emulator instrumentation and artifacts",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -1556,6 +1556,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:31:02+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "TERRAIN-01",
+          "reason": "QA-001 independently verified on exact SHA; native emulator validation can run without unavailable interiors."
         }
       ]
     },
