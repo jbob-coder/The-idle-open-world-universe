@@ -1708,14 +1708,16 @@
       "priority": "P0",
       "area": "governance",
       "title": "Context-limit retirement and new-chat successor handoff",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "RELAY-01",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
       "acceptance": "Repository-native one-prompt retirement/new-chat resume instructions, per-task structured verified handoffs, state release/reclaim workflow, tests for invalid handoffs, CI and links from starting bot documents.",
       "issue": null,
       "pr": 22,
-      "evidence": [],
+      "evidence": [
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; docs/agents/CHAT_RETIRE_AND_RESUME.md; docs/agents/handoffs/README.md; tools/godseed_handoff.py; tests/test_task_handoff.py; governance CI PASS at b2cc988e https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185395507 (25 tests); awaiting independent review and merge."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -1744,6 +1746,13 @@
           "to": "in_progress",
           "actor": "RELAY-01",
           "reason": "Building handoff templates, retirement/new-chat prompts and deterministic validation."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "RELAY-01",
+          "reason": "Dual-mode retirement/successor prompt, validated per-task handoff writer, CI and start-document links are published; review pending."
         }
       ]
     },
