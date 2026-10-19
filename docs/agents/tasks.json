@@ -2646,6 +2646,43 @@
           "reason": "Prerequisites verified or absent"
         }
       ]
+    },
+    {
+      "id": "QA-006",
+      "priority": "P0",
+      "area": "qa",
+      "title": "V3 cross-system causal acceptance for divine agency, cognition, families, kingdoms and resource efficiency",
+      "status": "claimed",
+      "owner": "SCOPE-31",
+      "work_branch": "docs/godseed-v3-causal-acceptance",
+      "depends": [],
+      "acceptance": "Bot-readable reproducible cross-system QA cases verify divergent intelligent choices, effects of traits/family environment, real input-output resource conservation, god advice refusal, autonomous new colonies, royal succession, remote LOD and save/Android budgets, while explicitly distinguishing documentation from coded tests.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "SCOPE-31",
+          "reason": "Owner requested detailed documentation; GOV-004 design exists but no single end-to-end causal acceptance contract."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "SCOPE-31",
+          "reason": "Standalone cross-system QA specification can be authored before implementations."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SCOPE-31",
+          "reason": "Reserve specific cross-system QA documentation without taking existing V3 subsystems from other agents."
+        }
+      ]
     }
   ]
 }
