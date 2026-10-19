@@ -1427,7 +1427,8 @@
       "issue": null,
       "pr": 24,
       "evidence": [
-        "PR #24 https://github.com/jbob-coder/The-idle-open-world-universe/pull/24; implementation HEAD 654081fe91a6c9a1cca763472beacb637074d038; QA Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317; Node deterministic suite, offline HTML, asset contract, native debug APK build/signature checks SUCCESS; Chromium offline checks RUNNING when submitted; physical Android 2–3 GB NOT VERIFIED; no merge"
+        "PR #24 https://github.com/jbob-coder/The-idle-open-world-universe/pull/24; implementation HEAD 654081fe91a6c9a1cca763472beacb637074d038; QA Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317; Node deterministic suite, offline HTML, asset contract, native debug APK build/signature checks SUCCESS; Chromium offline checks RUNNING when submitted; physical Android 2–3 GB NOT VERIFIED; no merge",
+        "Full CI SUCCESS at exact implementation SHA 654081fe91a6c9a1cca763472beacb637074d038: 88/88 Node tests PASS (including six QA-001 new regressions), 0 failures; offline HTML, asset reproducibility, native debug APK rebuild/structure/signature, offline Chromium mobile/3-chapter/save/touch tests PASS with 0 JS errors/external requests; screenshots and debug APK artifact 12156824428; run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317. Emulator and physical 2–3 GB hardware not claimed by this run; PR #24 remains unmerged, awaiting independent review."
       ],
       "status_history": [
         {
