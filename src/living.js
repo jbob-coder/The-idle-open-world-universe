@@ -251,7 +251,7 @@ function choiceGoal(s,p,intent,partner){
   activity:'Checking on '+partner.name};
  if(intent==='explore'){
   const offsets=[[4,0],[-4,0],[0,4],[0,-4],[3,3],[-3,3],[3,-3],[-3,-3]];
-  const first=hash(s.worldSeed,p.id,Math.floor((s.tick+p.id*23)/240))%offsets.length;
+  const first=(hash(s.worldSeed,p.id,Math.floor((s.tick+p.id*23)/240))>>>0)%offsets.length;
   for(let i=0;i<offsets.length;i++){
    const offset=offsets[(first+i)%offsets.length],x=t.x+offset[0],y=t.y+offset[1];
    if(x>1&&y>1&&x<W-1&&y<H-1&&GROUND.has(s.map[y*W+x])&&!occupied(s,x,y)){
