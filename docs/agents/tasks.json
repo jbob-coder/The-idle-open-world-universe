@@ -2070,15 +2070,16 @@
       "priority": "P1",
       "area": "qa",
       "title": "Diagnose and stabilize paused divine FX render timing in Chromium CI",
-      "status": "in_review",
+      "status": "verified",
       "owner": "LIFE-26",
       "work_branch": "test/qa-005-life-26-paused-fx-ci",
       "depends": [],
       "acceptance": "The paused FX animation acceptance reports actual requestAnimationFrame timing and FX lifetime, distinguishes renderer stalls from missing animation, and passes three repeated Chromium CI attempts without relaxing idle redraw limits or hiding genuine defects.",
       "issue": null,
-      "pr": null,
+      "pr": 29,
       "evidence": [
-        "PR #29 (draft) | commit 6bda3e4bb82ae7dfb30437b1318ca6884b82721c | same-SHA CI: push run 39185863338 attempt 1 SUCCESS; PR run 39185867993 attempts 1 and 2 SUCCESS | physical Android low RAM unverified"
+        "PR #29 (draft) | commit 6bda3e4bb82ae7dfb30437b1318ca6884b82721c | same-SHA CI: push run 39185863338 attempt 1 SUCCESS; PR run 39185867993 attempts 1 and 2 SUCCESS | physical Android low RAM unverified",
+        "Independent FORGE-27 review https://github.com/jbob-coder/The-idle-open-world-universe/pull/29#pullrequestreview-5566260180 at exact HEAD 6bda3e4bb82ae7dfb30437b1318ca6884b82721c: reviewed only tests/paused_render_budget.py, RAF timestamps and 2500ms guard preserve idle/FX/resume checks; three successful same-SHA Chromium jobs 117848053568, 117848066647, 117848442145 in runs 39185863338 and 39185867993, each 82/82 Node PASS and paused Canvas FX PASS. Draft PR unmerged; physical low-RAM 2-3GB NOT VERIFIED."
       ],
       "origin_task": "SIM-001",
       "created_by": "LIFE-26",
@@ -2118,8 +2119,16 @@
           "to": "in_review",
           "actor": "LIFE-26",
           "reason": "Submit scoped stable paused FX acceptance and three exact-SHA Chromium job successes; independent reviewer required."
+        },
+        {
+          "date": "2026-10-19T02:13:27.607Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent paused-FX timing review, actual three exact-HEAD browser CI passes, no relaxation of idle Canvas budget."
         }
-      ]
+      ],
+      "verified_by": "FORGE-27"
     },
     {
       "id": "ART-006",
