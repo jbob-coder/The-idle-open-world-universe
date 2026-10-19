@@ -361,7 +361,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Seeded world coordinate system and 32×32 chunk generator",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "TERRAIN-01",
       "work_branch": "feat/wld-001-seeded-chunks-terrain-01",
       "depends": [],
@@ -390,6 +390,13 @@
           "to": "claimed",
           "actor": "TERRAIN-01",
           "reason": "Reserve deterministic 32×32 world-chunk generation; isolated module and seeded boundary tests (issue #18)"
+        },
+        {
+          "date": "2026-10-19T00:59:41+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "TERRAIN-01",
+          "reason": "Implement isolated seeded chunk API with negative world coordinates and bounded 32×32 generation tests; preserve existing v1 game runtime."
         }
       ]
     },
