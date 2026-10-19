@@ -2277,14 +2277,16 @@
       "priority": "P0",
       "area": "governance",
       "title": "Author GODSEED V3 divine-view, intelligent lives and kingdoms design bible",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "DESIGN-28",
       "work_branch": "docs/godseed-divine-life-kingdoms-v3",
       "depends": [],
       "acceptance": "Publish linked, source-checked V3 vision, divine UI, cognitive-family AI, kingdoms/colonies, performance/save and task acceptance documents; reference real existing code/PRs and distinguish concepts from implemented.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 39,
+      "evidence": [
+        "PR #39 https://github.com/jbob-coder/The-idle-open-world-universe/pull/39; exact head f54b71f6d8ca3be9091fe215e761d412c08231a7; GOV CI PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189837964 (30 tests); six V3 design contracts, index, master bot links; offline QA pending at submission. No gameplay features implemented and no merge."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -2313,6 +2315,13 @@
           "to": "in_progress",
           "actor": "DESIGN-28",
           "reason": "Authoring source-checked V3 gameplay vision and architecture docs, UX map, intelligence/kinship and political simulation."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "DESIGN-28",
+          "reason": "Documented complete requested GODSEED V3 redesign and registered derived tasks; source-grounded documents and 30 governance tests passed. Await review, general QA and integration."
         }
       ]
     },
