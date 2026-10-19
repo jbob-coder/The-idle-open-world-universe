@@ -67,6 +67,20 @@ GODSEED debe sentirse como **BitLife visual en un mundo medieval observable**, N
 7. Actualiza registro `in_progress → in_review` incluyendo PR, commit y CI exacto; luego espera verificación de otro agente. Solo el propietario/integrador marca `done` tras merge realmente aceptado.
 8. Si no puedes avanzar, `blocked` con descripción precisa, evidencia del problema y siguiente paso, no promesas de terminar en segundo plano.
 
+### Nueva regla: al entregar cada tarea puedes crear una tarea nueva (OPCIONAL)
+
+**Después de terminar y entregar una tarea** en estado `in_review`, `verified` o `done`, con evidencia auténtica (PR, commit y pruebas), **puedes crear UNA nueva tarea necesaria** si durante el trabajo descubriste un problema, dependencia, mejora jugable o riesgo que aún no esté registrado. Esto también aplica después de cada futura tarea: el backlog puede crecer de manera justificada y continua.
+
+**Procedimiento obligatorio:**
+1. Consulta `docs/agents/tasks.json`, `TASK_BOARD.md`, issues y PRs; evita repetir tareas existentes, objetivos vagos o dividir artificialmente el trabajo para crear más tareas.
+2. Justifica qué descubriste, por qué es necesario, prioridad `P0/P1/P2`, subsistema, dependencias y criterios de aceptación **comprobables**.
+3. Ejecuta `python tools/godseed_tasks.py add --after <TASK_ID_ENTREGADA> --actor <TU_BOT_ID> --area <AREA> --priority P1 --title "<TITULO>" --acceptance "<PRUEBAS_CONCRETAS>" --depends <TASK_ID_DEPENDENCIA> --reason "<HALLAZGO_VERIFICABLE>"`. El parámetro `--depends` puede omitirse si realmente no hay dependencia; repítelo para varias.
+4. La herramienta asigna un ID nuevo sin colisiones y agrega `origin_task`, autor, motivo e historial. Establece `planned` si faltan dependencias verificadas, o `ready` si están cumplidas. **Nunca** marca la tarea nueva `claimed` ni `done` automáticamente.
+5. Valida, publica `tasks.json` **y** `TASK_BOARD.md` en la rama de coordinación con control de conflictos SHA. Si otra entidad escribió primero, relee y vuelve a evaluar; nunca hagas `force push`.
+6. **No abandones la obligación de entregar y actualizar el estado de la tarea original.** La tarea nueva permanece libre para asignación futura. No reclames otra tarea mientras sigas con una activa; solicita al coordinador que apruebe múltiples propuestas si el hallazgo necesita más de una.
+
+En el reporte final incluye `NEW_TASK_CREATED: <ID, estado, motivo, commit>` o `NEW_TASK_CREATED: none (no justified follow-up)`. **Crear nuevas tareas es una opción, no una recompensa por cada trabajo ni una licencia para inflar el backlog.**
+
 ### Tu primera salida debe contener
 
 ```text
