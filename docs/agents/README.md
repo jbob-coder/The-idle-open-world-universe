@@ -7,10 +7,11 @@
 
 | Documento | Propósito | Autoridad |
 |---|---|---|
-| [Registro de 56 tareas](tasks.json) | ID, prioridad, dependencia, estado, propietario, pruebas, historial | **Única fuente estructurada** |
+| [Registro de tareas (dinámico)](tasks.json) | ID, prioridad, dependencia, estado, propietario, pruebas, historial | **Única fuente estructurada** |
 | [Tablero actualizado](TASK_BOARD.md) | Estado y responsable visibles para todos | **Generado desde JSON**, nunca editar manualmente |
 | [Protocolo de los bots](TASK_WORKFLOW.md) | Reclamar antes de editar, cambiar estados, resolver conflictos y cerrar | **Obligatorio** |
 | [Prompt maestro](BOT_MASTER_PROMPT.md) | Instrucciones reproducibles para Codex y otros agentes | **Copiar para activar bots** |
+| [Modo automático ♾️](INFINITY_AUTOMATION_PROMPT.md) | Continuar tareas sucesivas por sesión con límites y evidencia | **Copiar para bots autónomos** |
 | [Arquitectura de puertas seguras](SAFE_INTERIOR_ARCHITECTURE.md) | Métricas m², huellas, hogares, puertas, transición y guardados | **Diseño pendiente de aceptación** |
 | [Orden de desarrollo](EXECUTION_PLAN.md) | Fases, trabajo paralelo seguro, bloqueos | Guía de planificación |
 | [Matriz de aceptación](ACCEPTANCE_MATRIX.md) | Pruebas mínimas por subsistema y evidencia física | Contrato de verificación |
@@ -27,6 +28,10 @@
 
 **Aún no existe** navegación exterior/interior, casas realmente habitables, puertas utilizables, un mapa continuo por chunks, generaciones sociales completas ni certificación de un APK comercial. Documentar el diseño no implementa esas funciones.
 
+## Modo ♾️ para bots autónomos
+
+El [prompt de automatización ♾️](./INFINITY_AUTOMATION_PROMPT.md) describe cómo repetir ciclos de ejecución durante una sesión activa: elegir tarea `ready`, reclamar, desarrollar, probar, entregar PR, actualizar estado y pasar a otra. Se admite **una tarea activa** por bot y un máximo de dos PRs propios en revisión; a partir de ese límite, detener el ciclo para revisión. Si la sesión termina, se reanuda únicamente mediante una nueva invocación o un ejecutor externo explícitamente configurado.
+
 ## Comienza aquí si eres un bot
 
 1. Anuncia `AI NAME`, rol y rama actual leída de GitHub.
@@ -40,7 +45,7 @@
 
 Cada bot **puede crear una tarea nueva después de entregar la suya**, si detecta trabajo necesario no documentado. La entrega debe figurar `in_review`, `verified` o `done`, con evidencia; la nueva tarea se crea usando `python tools/godseed_tasks.py add --after ...`, genera ID único y estado inicial `planned` o `ready` según sus dependencias. Se registra el vínculo con la tarea de origen, el bot autor y la justificación.
 
-La nueva tarea no se reclama automáticamente y no autoriza a trabajar en dos tareas activas. Solo se admite una propuesta nueva por entrega de origen; duplicados e ideas sin criterios verificables se rechazan. Ver `TASK_WORKFLOW.md` para comandos, reglas de concurrencia y publicación de ambos documentos.
+La tarea de seguimiento no se reclama automáticamente. En modo ♾️ se permite una tarea en desarrollo y hasta dos PRs propios en revisión; nunca dos tareas `claimed/in_progress`. Solo se admite una propuesta nueva por entrega de origen; duplicados e ideas sin criterios verificables se rechazan. Ver `TASK_WORKFLOW.md` para comandos, reglas de concurrencia y publicación de ambos documentos.
 
 Para comprobar sin modificar:
 ```bash
