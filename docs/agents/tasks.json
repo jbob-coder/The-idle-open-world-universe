@@ -1113,7 +1113,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "Multilingual intent parsing with negation, target and ambiguity",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "FORGE-27",
       "work_branch": "feat/god-001-forge-27-intent-parser",
       "depends": [],
@@ -1142,6 +1142,13 @@
           "to": "claimed",
           "actor": "FORGE-27",
           "reason": "Implement bounded offline English/Spanish God-Whisper intent parsing, negation, explicit target, ambiguity rejection and regression tests; no independent NPC override."
+        },
+        {
+          "date": "2026-10-19T01:00:43Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Inspect existing Living.interpret and whisper contract; implement independent pure offline bilingual parser, integrate without altering save schema; add deterministic Node tests."
         }
       ]
     },
