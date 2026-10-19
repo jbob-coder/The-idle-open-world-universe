@@ -119,7 +119,7 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
   if(picker.options.length!==residents.length||
       residents.some((p,i)=>picker.options[i].value!==String(p.id))){
    const previous=picker.value;
-   picker.innerHTML=residents.map(p=>'<option value="'+String(p.id)+'">'+
+   picker.innerHTML=residents.map(p=>'<option value="'+html(String(p.id))+'">'+
       html(p.name)+' ('+html(p.role)+')</option>').join('');
    picker.value=residents.some(p=>String(p.id)===previous)?previous:
       (residents.length?String(residents[0].id):'');
