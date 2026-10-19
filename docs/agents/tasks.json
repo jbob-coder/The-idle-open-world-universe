@@ -1966,6 +1966,43 @@
           "reason": "Submit scoped stable paused FX acceptance and three exact-SHA Chromium job successes; independent reviewer required."
         }
       ]
+    },
+    {
+      "id": "ART-006",
+      "priority": "P1",
+      "area": "art",
+      "title": "Playable GODSEED medieval pixel-art splash and truthful offline loading state",
+      "status": "claimed",
+      "owner": "SPLASH-01",
+      "work_branch": "feat/art-006-godseed-loading-screen",
+      "depends": [],
+      "acceptance": "Real offline splash rendered before game UI; coherent 16:9 pixel graphics, accessible status/progress, optional reduced motion, waits for sprite atlas readiness, saves unaffected; browser/node QA and Android packaging CI pass at exact SHA.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "SPLASH-01",
+          "reason": "Owner asked to integrate generated GODSEED loading screen into the playable game."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "SPLASH-01",
+          "reason": "Isolated splash/startup scope; no gameplay dependencies."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SPLASH-01",
+          "reason": "Reserve artwork loading screen integration before code changes."
+        }
+      ]
     }
   ]
 }
