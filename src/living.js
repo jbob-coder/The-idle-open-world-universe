@@ -152,8 +152,15 @@ function needGoal(s,p,decision){
   case 'seek_safety': x=p.homeX;y=p.homeY;activity='Seeking safety at home';break;
   case 'sleep': x=p.homeX;y=p.homeY;activity='Returning home to sleep';break;
   case 'warm': x=p.homeX;y=p.homeY;activity='Seeking warmth at home';break;
-  case 'eat': x=town.x;y=town.y;activity='Seeking food at the settlement';break;
-  case 'socialize': x=town.x;y=town.y;activity='Seeking company';break;
+  case 'eat':
+   // When the pantry is empty, let workers provision it instead of locking
+   // the entire village in a futile queue outside an empty food store.
+   if(town.stock.food<1)return null;
+   x=town.x;y=town.y;activity='Seeking food at the settlement';break;
+  case 'socialize':
+   // Continue useful routines when there is no actual nearby company.
+   if(!s.living.citizens.some(q=>q!==p&&q.townId===p.townId&&distance(q.x,q.y,town.x,town.y)<=3))return null;
+   x=town.x;y=town.y;activity='Seeking company';break;
   case 'wash': {
    const well=town.buildings.find(b=>b.type==='well');
    if(!well)return null; // Do not pretend washing is possible without a water site.
@@ -234,7 +241,11 @@ function tick(s){
   const working=(s.tick+p.id*23)%240<90;
   const threatened=dangerNear(s,p);
   p.needs=Needs.decay(p.needs,{working,danger:threatened});
-  const task=needGoal(s,p,Needs.priority(p.needs,{danger:threatened}))||goalFor(s,p);
+  const need=Needs.priority(p.needs,{danger:threatened});
+  const survival=need&&['seek_safety','eat','sleep'].includes(need.action);
+  // Hygiene/comfort/social upkeep is handled outside work hours unless urgent
+  // survival takes precedence; this prevents stalled production loops.
+  const task=((!working||survival)&&needGoal(s,p,need))||goalFor(s,p);
   p.activity=task.activity;walk(s,p,task);
   completeNeed(s,p,task);
   if(working&&!task.needAction)work(s,p);
