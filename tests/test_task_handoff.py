@@ -74,6 +74,18 @@ class ChatHandoffTests(unittest.TestCase):
              redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
             tool.main(args)
 
+    def test_owner_can_handoff_independently_verified_unmerged_task(self):
+        """Verification keeps task ownership; it must not prohibit a truthful retirement."""
+        db = copy.deepcopy(self.db)
+        task = next(t for t in db["tasks"] if t["id"] == "GOV-999")
+        task.update(status="verified", evidence=["Independent review at exact source SHA"])
+        writes = self.captured_write(db=db)
+        self.assertEqual(1, len(writes))
+        self.assertEqual("verified", writes[0][1]["last_known_status"])
+        self.assertEqual([], tool.validate_handoff(writes[0][1], "GOV-999"))
+        self.assertEqual("verified", task["status"], "retirement does not release a verified task")
+        self.assertEqual("RELAY-TEST", task["owner"])
+
     def test_nonexistent_task_rejected(self):
         args = list(self.arguments)
         args[args.index("--task") + 1] = "GOV-998"

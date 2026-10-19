@@ -21,7 +21,7 @@ HANDOFFS = ROOT / "docs/agents/handoffs"
 TASK_ID = re.compile(r"[A-Z]{2,4}-\d{3}\Z")
 SHA = re.compile(r"[0-9a-fA-F]{40}\Z")
 REASONS = {"context_limit", "session_end", "owner_request", "blocked"}
-STATUSES = {"claimed", "in_progress", "in_review", "blocked", "ready"}
+STATUSES = {"claimed", "in_progress", "in_review", "verified", "blocked", "ready"}
 REQUIRED_START = [
     "docs/agents/README.md", "docs/agents/BOT_MASTER_PROMPT.md",
     "docs/agents/TASK_WORKFLOW.md", "docs/agents/tasks.json",
