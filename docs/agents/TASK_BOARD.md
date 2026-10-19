@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 60 tasks · planned: 38 · ready: 3 · claimed: 0 · in_progress: 3 · blocked: 2 · in_review: 7 · verified: 7 · done: 0 · cancelled: 0.
+**Tracked work:** 60 tasks · planned: 35 · ready: 6 · claimed: 0 · in_progress: 3 · blocked: 2 · in_review: 6 · verified: 8 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -49,11 +49,11 @@
 | **QA-003** | P0 | qa | **verified** | TERRAIN-01 | QA-001 | Gradle host + API29 emulator instrumentation and artifacts |
 | **QA-004** | P0 | qa | **blocked** | — | QA-003 | Physical Android 2 GB and 3 GB 20-minute soak · [#13](https://github.com/jbob-coder/The-idle-open-world-universe/issues/13) |
 | **WLD-001** | P0 | world | **verified** | TERRAIN-01 | — | Seeded world coordinate system and 32×32 chunk generator · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **WLD-002** | P0 | world | **in_review** | GDS-KESTREL-1810 | WLD-001 | Sparse modified-terrain deltas and chunk persistence · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **WLD-003** | P0 | world | **planned** | — | WLD-001, WLD-002 | Chunk-aware camera, fog, terrain renderer and coordinate UI · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **WLD-004** | P0 | world | **planned** | — | WLD-001, WLD-002 | Cross-chunk autonomous navigation and bounded pathfinding · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-002** | P0 | world | **verified** | GDS-KESTREL-1810 | WLD-001 | Sparse modified-terrain deltas and chunk persistence · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-003** | P0 | world | **ready** | — | WLD-001, WLD-002 | Chunk-aware camera, fog, terrain renderer and coordinate UI · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-004** | P0 | world | **ready** | — | WLD-001, WLD-002 | Cross-chunk autonomous navigation and bounded pathfinding · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-005** | P0 | world | **planned** | — | WLD-002, CIV-001 | Distant independent villages with local resources and population · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **WLD-007** | P0 | world | **planned** | — | WLD-001, WLD-002 | Map existing 64×48 version-1 saves into expanded world · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-007** | P0 | world | **ready** | — | WLD-001, WLD-002 | Map existing 64×48 version-1 saves into expanded world · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-008** | P0 | world | **planned** | — | WLD-002, WLD-003 | Bound active chunks, offscreen simulation and memory · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-010** | P0 | world | **planned** | — | WLD-003, WLD-004, WLD-007, WLD-008 | Four-border open-world acceptance and multi-region save QA · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **ART-001** | P1 | art | **planned** | — | SIM-002 | Animated medieval residents, age stages, work and social emotes |

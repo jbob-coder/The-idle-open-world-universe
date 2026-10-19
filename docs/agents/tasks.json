@@ -460,7 +460,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Sparse modified-terrain deltas and chunk persistence",
-      "status": "in_review",
+      "status": "verified",
       "owner": "GDS-KESTREL-1810",
       "work_branch": "feat/wld-002-kestrel-sparse-persistence",
       "depends": [
@@ -470,7 +470,8 @@
       "issue": 18,
       "pr": 31,
       "evidence": [
-        "WLD-002 PR #31 https://github.com/jbob-coder/The-idle-open-world-universe/pull/31; exact HEAD 2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045231 SUCCESS, 96/96 Node PASS including 8 new sparse persistent chunk tests, browser offline and saves PASS, artifact 12158597071; native Gradle+API29 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045283 SUCCESS, 6/6 emulator instrumentation, screenshots/logcat artifact 12158097881; opt-in API not live world integration; physical low-RAM Android NOT VERIFIED; PR unmerged; independent review pending."
+        "WLD-002 PR #31 https://github.com/jbob-coder/The-idle-open-world-universe/pull/31; exact HEAD 2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045231 SUCCESS, 96/96 Node PASS including 8 new sparse persistent chunk tests, browser offline and saves PASS, artifact 12158597071; native Gradle+API29 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045283 SUCCESS, 6/6 emulator instrumentation, screenshots/logcat artifact 12158097881; opt-in API not live world integration; physical low-RAM Android NOT VERIFIED; PR unmerged; independent review pending.",
+        "Independent FORGE-27 code+test review WLD-002 PR #31 at exact HEAD 2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e: https://github.com/jbob-coder/The-idle-open-world-universe/pull/31#pullrequestreview-5566248763 ; reviewed standalone signed-chunk sparse delta/cache/site IDs and v1 isolation; 8 new regression cases, 96/96 Node PASS and browser/offline from Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045231 ; separate Gradle/API29 6/6 emulator PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045283 ; NOT integrated into live gameplay, NOT physical low-RAM device tested, PR unmerged."
       ],
       "status_history": [
         {
@@ -507,15 +508,23 @@
           "to": "in_review",
           "actor": "GDS-KESTREL-1810",
           "reason": "Submitted opt-in sparse chunk/settlement persistence and 8 regression tests in stacked PR #31; exact SHA Node 96/96 and native API29 6/6 passed; awaiting independent review, not a live open world."
+        },
+        {
+          "date": "2026-10-19T02:10:40.660Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent review of exact-HEAD opt-in sparse chunk persistence and site metadata, 96/96 Node/offline and 6/6 API29 emulator passes; gameplay integration remains future work."
         }
-      ]
+      ],
+      "verified_by": "FORGE-27"
     },
     {
       "id": "WLD-003",
       "priority": "P0",
       "area": "world",
       "title": "Chunk-aware camera, fog, terrain renderer and coordinate UI",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -533,6 +542,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:10:40.660Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available for separate claim, not implemented."
         }
       ]
     },
@@ -541,7 +557,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Cross-chunk autonomous navigation and bounded pathfinding",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -559,6 +575,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:10:40.660Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available for separate claim, not implemented."
         }
       ]
     },
@@ -625,7 +648,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Map existing 64×48 version-1 saves into expanded world",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -643,6 +666,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:10:40.660Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available for separate claim, not implemented."
         }
       ]
     },
