@@ -1665,7 +1665,7 @@
       "priority": "P0",
       "area": "qa",
       "title": "Chromium offline Android-layout interaction acceptance",
-      "status": "ready",
+      "status": "blocked",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -1689,6 +1689,13 @@
           "to": "ready",
           "actor": "FORGE-27",
           "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T01:55:44+00:00",
+          "from": "ready",
+          "to": "blocked",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Acceptance requires real browser door entry/exit, but runtime doors/interior transitions do not exist yet (INT-004 and INT-005 still planned). QA-001 verification alone is insufficient; resume ready only after live door/scene work is verified. Prevent false PASS and wasted parallel ownership."
         }
       ]
     },
