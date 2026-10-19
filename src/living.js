@@ -240,7 +240,12 @@ function tick(s){
  for(const p of s.living.citizens){
   const working=(s.tick+p.id*23)%240<90;
   const threatened=dangerNear(s,p);
-  p.needs=Needs.decay(p.needs,{working,danger:threatened});
+  if(s.tick%48===0||threatened){
+   // Resident needs change at a slower life cadence than tactical movement.
+   // Otherwise hunger/energy monopolize the work loop before villages can
+   // generate replacement food, leading to a self-sustaining starvation lock.
+   p.needs=Needs.decay(p.needs,{working:s.tick%48===0&&working,danger:threatened});
+  }
   const need=Needs.priority(p.needs,{danger:threatened});
   const survival=need&&['seek_safety','eat','sleep'].includes(need.action);
   // Hygiene/comfort/social upkeep is handled outside work hours unless urgent
