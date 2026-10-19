@@ -2585,7 +2585,7 @@
       "priority": "P0",
       "area": "people",
       "title": "Individual intelligence, cognition, learning styles and personality effect on choices",
-      "status": "in_review",
+      "status": "verified",
       "owner": "CORTEX-19",
       "work_branch": "feat/sim-011-cortex-19-cognition",
       "depends": [
@@ -2596,7 +2596,8 @@
       "issue": null,
       "pr": 41,
       "evidence": [
-        "SIM-011 draft-to-ready PR #41 https://github.com/jbob-coder/The-idle-open-world-universe/pull/41 (OPEN, NOT MERGED), exact source HEAD cb6ef3f89343a4456e3403db5a3230185be67660 stacked on independently verified SIM-002 66bcf93440f0293eef4d7a0c05832d1b5904d73f; full offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106721 COMPLETED SUCCESS, 109/109 Node PASS incl 9 new SIM-011 tests and 16 seed simulations, Chromium offline visible cognition/plan, mobile 640x360/720x400/960x540, stories I-III/save with 0 JS/errors/remote requests. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106704 COMPLETED SUCCESS, Gradle/WebView APK and Android API29 emulator 6/6 instrumentation PASS, screenshot/logcat artifacts 12159677864 and 12160520171. Outer save v1 preserved; 4 current resident Sims only. Physical 2/3GB RAM/PSS, real device heat/20 minute soak NOT VERIFIED. Independent review required; no merge authorized."
+        "SIM-011 draft-to-ready PR #41 https://github.com/jbob-coder/The-idle-open-world-universe/pull/41 (OPEN, NOT MERGED), exact source HEAD cb6ef3f89343a4456e3403db5a3230185be67660 stacked on independently verified SIM-002 66bcf93440f0293eef4d7a0c05832d1b5904d73f; full offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106721 COMPLETED SUCCESS, 109/109 Node PASS incl 9 new SIM-011 tests and 16 seed simulations, Chromium offline visible cognition/plan, mobile 640x360/720x400/960x540, stories I-III/save with 0 JS/errors/remote requests. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106704 COMPLETED SUCCESS, Gradle/WebView APK and Android API29 emulator 6/6 instrumentation PASS, screenshot/logcat artifacts 12159677864 and 12160520171. Outer save v1 preserved; 4 current resident Sims only. Physical 2/3GB RAM/PSS, real device heat/20 minute soak NOT VERIFIED. Independent review required; no merge authorized.",
+        "FORGE-27 independently reviewed SIM-011 https://github.com/jbob-coder/The-idle-open-world-universe/pull/41#pullrequestreview-5569327334 at exact SHA cb6ef3f89343a4456e3403db5a3230185be67660; source cognition/choices/living/UI + nine Node cognition regressions and seeded v1 migration. Exact-head offline CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106721 SUCCESS, 109/109 Node, real mobile Chromium visible cognitive profile and 3 Chapters/save; native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106704 SUCCESS, 6/6 API29 emulator. Physical low RAM NOT TESTED, 4 current citizens only, no family/genetics, no PR merge."
       ],
       "status_history": [
         {
@@ -2633,8 +2634,16 @@
           "to": "in_review",
           "actor": "CORTEX-19",
           "reason": "Submitted deterministic resident cognition/learning v1 and visible planning in PR #41: exact source Node 109/109, Chromium and Gradle Android emulator 6/6 PASS; independent reviewer required; physical low RAM not tested."
+        },
+        {
+          "date": "2026-10-19T09:17:16.141Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent reviewed exact SHA cognitive trait-based choices and earned learning, 109 Node/Chromium + 6 API29 emulator tests; no unearned resources or full generational AI claims."
         }
-      ]
+      ],
+      "verified_by": "FORGE-27"
     },
     {
       "id": "SIM-012",
