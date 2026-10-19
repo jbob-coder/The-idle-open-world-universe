@@ -1,5 +1,5 @@
 /* GODSEED Living Settlements: bounded, deterministic offline agency. No external AI. */
-(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./needs.js'):root.GodseedNeeds,typeof module!=='undefined'&&module.exports?require('./choices.js'):root.GodseedChoices);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Needs,Choices){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./needs.js'):root.GodseedNeeds,typeof module!=='undefined'&&module.exports?require('./choices.js'):root.GodseedChoices,typeof module!=='undefined'&&module.exports?require('./chronicles.js'):root.GodseedChronicles);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Needs,Choices,Chronicles){
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
@@ -87,6 +87,7 @@ function create(s){
    facing:'south',movedAt:-100,age:19+i*3,skill:1,skillXP:0,trust:35,
    kindness,diligence,independence,mood:'calm',activity:'Getting ready',relationships:{},life:[],actions:0,needs:Needs.normalize(),choice:null,choiceHistory:[]});
  }
+ for(const p of living.citizens)p.journal=Chronicles.newJournal(p);
  log(s,'Two communities awaken','Briarford and Emberwick have working residents, limited supplies and homes. They choose how to grow.');
  return living;
 }
@@ -127,6 +128,7 @@ function restore(s){
   c.needs=Needs.normalize(c.needs);
   c.choice=Choices.normalizeTrace(c.choice);
   c.choiceHistory=Array.isArray(c.choiceHistory)?c.choiceHistory.slice(-4).map(Choices.normalizeTrace).filter(Boolean):[];
+  c.journal=Chronicles.restore(c,c.journal);
  }
 }
 function goalFor(s,p){
@@ -281,6 +283,7 @@ function tick(s){
    priority:urgentGoal?need:null});
   const task=urgentGoal||choiceGoal(s,p,decision.intent,partner);
   const oldX=p.x,oldY=p.y,oldNeeds={...p.needs};
+  const beforeMemory=Chronicles.snapshot(p,townOf(s,p.townId),partner);
   p.activity=task.activity;walk(s,p,task);
   const recovered=completeNeed(s,p,task);
   let consequence='Continuing the chosen route';
@@ -308,6 +311,7 @@ function tick(s){
   }else if(decision.intent==='rest') consequence='Returning to a resting place';
   const previous=p.choice&&p.choice.intent;
   p.choice=Choices.normalizeTrace({...decision,tick:s.tick,consequence});
+  Chronicles.record(p,p.choice,beforeMemory,Chronicles.snapshot(p,townOf(s,p.townId),partner),s.tick);
   if(!Array.isArray(p.choiceHistory))p.choiceHistory=[];
   if(s.tick%48===0||previous!==p.choice.intent){
    p.choiceHistory.push(p.choice);
