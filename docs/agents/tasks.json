@@ -1692,7 +1692,7 @@
       "priority": "P0",
       "area": "governance",
       "title": "Context-limit retirement and new-chat successor handoff",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "RELAY-01",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
@@ -1721,6 +1721,13 @@
           "to": "claimed",
           "actor": "RELAY-01",
           "reason": "Reserving context-exhaustion chat retirement and succession workflow before edits."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "RELAY-01",
+          "reason": "Building handoff templates, retirement/new-chat prompts and deterministic validation."
         }
       ]
     }
