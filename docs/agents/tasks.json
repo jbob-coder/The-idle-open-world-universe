@@ -67,9 +67,9 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Safe layers, metric grid, doors and interiors technical contract",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "DOORKEEPER",
+      "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
       "acceptance": "Normative contract defines grids, transition, saves, safety, deterministic tests and explicit non-goals.",
       "issue": null,
@@ -89,6 +89,13 @@
           "to": "ready",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "DOORKEEPER",
+          "reason": "DOORKEEPER reserves metric-grid interior/door contract; no gameplay implementation claimed"
         }
       ]
     },
