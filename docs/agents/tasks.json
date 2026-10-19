@@ -2182,6 +2182,265 @@
           "reason": "Integrated local pixel village splash, truthful readiness UI and Chromium/Android CI; PR #32 ready for independent review."
         }
       ]
+    },
+    {
+      "id": "GOV-004",
+      "priority": "P0",
+      "area": "governance",
+      "title": "Author GODSEED V3 divine-view, intelligent lives and kingdoms design bible",
+      "status": "claimed",
+      "owner": "DESIGN-28",
+      "work_branch": "docs/godseed-divine-life-kingdoms-v3",
+      "depends": [],
+      "acceptance": "Publish linked, source-checked V3 vision, divine UI, cognitive-family AI, kingdoms/colonies, performance/save and task acceptance documents; reference real existing code/PRs and distinguish concepts from implemented.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Owner requested full documentation of the God-play redesign, emotional/personality intelligence, family traits, new colonies and monarchies."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "DESIGN-28",
+          "reason": "Prerequisites verified or absent"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "DESIGN-28",
+          "reason": "Owner-requested complete redesign docs claim"
+        }
+      ]
+    },
+    {
+      "id": "GOD-006",
+      "priority": "P0",
+      "area": "divine",
+      "title": "Replace direct god power toolbar with indirect consequence-based divine influence",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "GOD-004",
+        "GOD-001"
+      ],
+      "acceptance": "Read-only observer UI and contextual god influence rules; every action shows scope, costs, agency effects and side effects; 10 God guidance tests and no direct sim steering.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Current seven powers are disconnected buttons; visual life-sim needs coherent ethical observatory powers."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "DESIGN-28",
+          "reason": "Prerequisites verified or absent"
+        }
+      ]
+    },
+    {
+      "id": "GOD-007",
+      "priority": "P1",
+      "area": "divine",
+      "title": "Visual god narrative dashboard and life-history/century time controls",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "GOD-004",
+        "SIM-007"
+      ],
+      "acceptance": "Mobile usable map-first HUD, person/household/village/kingdom inspection, generation timeline with causally grounded event cards and safe time advance.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "God observer needs one meaningful UI hierarchy rather than many permanent overlapping panels."
+        }
+      ]
+    },
+    {
+      "id": "SIM-011",
+      "priority": "P0",
+      "area": "people",
+      "title": "Individual intelligence, cognition, learning styles and personality effect on choices",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-001",
+        "SIM-002"
+      ],
+      "acceptance": "Seeded stat vector, needs/traits/skills/knowledge distinction, bounded multi-goal utility, intelligence changes planning and learning not raw universal success; independent decision traces and 16-seed outcomes.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Current Sims are rudimentary and user explicitly requests intelligence/stats alter actions and personalities."
+        }
+      ]
+    },
+    {
+      "id": "SIM-012",
+      "priority": "P0",
+      "area": "people",
+      "title": "Family inheritance, kinship transmission and intergenerational variation",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-004",
+        "SIM-011"
+      ],
+      "acceptance": "Persist stable parentage and guardians, age/family relationships; inherited probabilistic trait distributions blended with environment and experience; generational multi-seed persistence and anti-determinism tests.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "User wants family characteristics to influence descendants without deterministic clones."
+        }
+      ]
+    },
+    {
+      "id": "SIM-013",
+      "priority": "P0",
+      "area": "people",
+      "title": "Low-RAM population simulation LOD and offscreen event aggregation",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-011",
+        "WLD-008"
+      ],
+      "acceptance": "Demonstrate bounded active resident count and sparse offline summaries over several colonies, consistent births/deaths/growth after revisit, 20k-tick deterministic save/reload tests and mobile profiling.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Expanded generations and colonies must not exhaust 2–3 GB Android devices."
+        }
+      ]
+    },
+    {
+      "id": "CIV-009",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Kings, succession, political legitimacy, noble houses and diplomacy",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-005",
+        "SIM-004"
+      ],
+      "acceptance": "King/queen and council entities persist, succession and conflicting claims resolve deterministically, 3+ kingdoms bargain/ally/trade/war with causes and measurable world-state changes.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Existing two towns lack kings, distinct governments, realm politics and inherited rulership."
+        }
+      ]
+    },
+    {
+      "id": "CIV-010",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Found frontier colonies and simulate logistics, settlements and autonomy",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-005",
+        "CIV-002",
+        "SIM-005"
+      ],
+      "acceptance": "New colony has founding group, seed position, supply route/stock, ruler/faction, housing/work and independence pressures; isolation causes effects; 3+ active colonies persist across world chunks.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "New colonies must be built and sustained rather than decorative map icons."
+        }
+      ]
+    },
+    {
+      "id": "ART-007",
+      "priority": "P0",
+      "area": "art",
+      "title": "Redesign GODSEED mobile god-view into map-first coherent pixel interface",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "GOD-004"
+      ],
+      "acceptance": "640x360 and 720x400 responsive real browser screens prioritize visible world, one contextual inspector, hierarchical tabs, legible portraits, consistent icons and no obstructive overlays.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "User reported chaotic current UI, unclear god abilities and poor sim detail; visual concept needs functional implementation."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "DESIGN-28",
+          "reason": "Prerequisites verified or absent"
+        }
+      ]
     }
   ]
 }
