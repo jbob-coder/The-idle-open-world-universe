@@ -26,6 +26,7 @@ jobs:
         run: |
           node --check src/sim.js
           node --check src/ui.js
+          node --check src/splash.js
           node --test tests/*.test.js
       - name: Verify Codex starter-art contract and reproducibility
         run: |
@@ -58,6 +59,7 @@ jobs:
           python tests/living_world_browser_acceptance.py
           python tests/capture_android_layouts.py
           python tests/native_storage_ui_acceptance.py
+          python tests/loading_screen_acceptance.py
       - name: Preserve v1 APK and actual browser screenshots
         if: success()
         uses: actions/upload-artifact@v4
