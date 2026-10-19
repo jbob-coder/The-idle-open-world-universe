@@ -36,7 +36,14 @@
     distance:0
    };
   });
-  return {version:1,until:integer(s.tick+DEADLINE),people};
+  const towns=(entry.decisions||[]).slice(0,4).map(d=>({
+   id:'town:'+String(d.name).toLowerCase().slice(0,19),name:name(d.name),intent:entry.intent,
+   status:d.agree?'considered':'declined',accepted:!!d.agree,
+   events:[marker('heard',s.tick,'Town heard an optional suggestion'),
+    marker(d.agree?'considered':'declined',s.tick,text(d.reason)||'Town considered the idea')],
+   result:null,origin:null,distance:0
+  }));
+  return {version:1,until:integer(s.tick+DEADLINE),people,towns};
  }
  function attach(s,entry,actors){
   if(!s||!entry||!INTENTS.has(entry.intent))return null;
@@ -83,11 +90,30 @@
   }
   return changed;
  }
- function expire(s){
+function observeTown(s,town,activity){
+  if(!s||!s.living||!town||!activity)return 0;
+  let changed=0;
+  for(const w of (s.living.whispers||[]).slice(-LIMIT)){
+   if(!w.lifecycle||w.tick>=s.tick||s.tick>w.lifecycle.until)continue;
+   const rec=(w.lifecycle.towns||[]).find(p=>p.name===town.name&&
+    p.accepted&&p.status==='considered');
+   if(!rec||!validAction(w.intent,activity))continue;
+   const detail=text(activity.detail||'Observed a settlement change');
+   const proof=text(activity.kind+':'+(activity.buildingType||'')+
+     ' site='+(activity.buildingId||'')+' delta='+(activity.amount||0));
+   rec.status='acted';add(rec,marker('action',s.tick,detail,proof));
+   rec.status='result';rec.result={status:'observed',tick:integer(s.tick),
+    summary:detail,proof};
+   add(rec,marker('result',s.tick,'Town change observed; no causal attribution',proof));
+   changed++;
+  }
+  return changed;
+}
+function expire(s){
   if(!s||!s.living)return 0;let changed=0;
   for(const w of (s.living.whispers||[]).slice(-LIMIT)){
    if(!w.lifecycle||s.tick<=w.lifecycle.until)continue;
-   for(const rec of w.lifecycle.people){
+   for(const rec of [...w.lifecycle.people,...(w.lifecycle.towns||[])]){
     if(rec.status!=='considered'&&rec.status!=='acted')continue;
     rec.status='result';rec.result={
      status:'unobserved',tick:integer(s.tick),
@@ -133,16 +159,17 @@
      l.until<integer(w.tick)||l.until>integer(w.tick)+DEADLINE||
      !Array.isArray(l.people)){if(w)delete w.lifecycle;continue;}
    const people=l.people.slice(0,MAX_PEOPLE).map(p=>cleanRecord(p,w.intent,now)).filter(Boolean);
-   w.lifecycle={version:1,until:l.until,people};
+   const towns=Array.isArray(l.towns)?l.towns.slice(0,4).map(p=>cleanRecord(p,w.intent,now)).filter(Boolean):[];
+   w.lifecycle={version:1,until:l.until,people,towns};
   }
  }
  function summary(entry){
   if(!entry||!entry.lifecycle)return [];
-  return entry.lifecycle.people.map(p=>({
+  return [...entry.lifecycle.people,...(entry.lifecycle.towns||[])].map(p=>({
    name:p.name,status:p.status,accepted:p.accepted,
    result:p.result?{...p.result}:null,
    latest:p.events.length?{...p.events[p.events.length-1]}:null
   }));
  }
- return Object.freeze({LIMIT,MAX_PEOPLE,MAX_EVENTS,DEADLINE,attach,observe,expire,restore,summary});
+ return Object.freeze({LIMIT,MAX_PEOPLE,MAX_EVENTS,DEADLINE,attach,observe,observeTown,expire,restore,summary});
 });
