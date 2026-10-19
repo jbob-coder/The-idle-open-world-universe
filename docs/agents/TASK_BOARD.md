@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 69 tasks · planned: 39 · ready: 7 · claimed: 0 · in_progress: 1 · blocked: 3 · in_review: 6 · verified: 13 · done: 0 · cancelled: 0.
+**Tracked work:** 69 tasks · planned: 39 · ready: 6 · claimed: 1 · in_progress: 1 · blocked: 3 · in_review: 6 · verified: 13 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -49,7 +49,7 @@
 | **SIM-003** | P0 | people | **planned** | — | SIM-001, INT-003 | Homes, household membership, work IDs and inventories · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-005** | P0 | people | **planned** | — | SIM-001, CIV-001 | Profession schedules and workplace resource delivery · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-010** | P0 | people | **planned** | — | SIM-002, SIM-005 | Long life-soak regression: agency, finite population and persistence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
-| **SIM-011** | P0 | people | **ready** | — | SIM-001, SIM-002 | Individual intelligence, cognition, learning styles and personality effect on choices |
+| **SIM-011** | P0 | people | **claimed** | CORTEX-19 | SIM-001, SIM-002 | Individual intelligence, cognition, learning styles and personality effect on choices |
 | **SIM-012** | P0 | people | **planned** | — | SIM-004, SIM-011 | Family inheritance, kinship transmission and intergenerational variation |
 | **SIM-013** | P0 | people | **planned** | — | SIM-011, WLD-008 | Low-RAM population simulation LOD and offscreen event aggregation |
 | **QA-001** | P0 | qa | **verified** | GDS-KESTREL-1810 | — | Node state-machine regression for life, worlds and migration |
