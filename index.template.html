@@ -114,6 +114,8 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 #godFeedback{margin-top:9px;white-space:pre-wrap}
 #townStatus,#citizenLives{color:#d0dabc;font-size:10px;line-height:1.55;margin:5px 0}
 #citizenLives{white-space:pre-wrap;overflow-wrap:anywhere}
+#residentJournalSelect{display:block;box-sizing:border-box;width:100%;min-height:44px;background:#102122;color:#efe4c5;padding:8px;border:2px solid #738b7a;font:12px/1.4 monospace}
+#residentJournal{margin:7px 0;padding:9px;border:1px solid #607a6a;background:#142824;color:#d6e2cc;font-size:11px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;max-height:210px;overflow-y:auto}
 </style>
 </head><body><div class="site">
 <header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">A FORGOTTEN KINGDOM LIVES WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ CRÓNICAS DEL REINO OLVIDADO</span></h1><p>Fantasía medieval · Observa una vida. Inspira a un reino.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v1 experimental</span></div></header>
@@ -156,6 +158,10 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
  <div class="memory" id="lifeTimeline"></div>
  <div class="section-title">GROWING SETTLEMENTS</div><p id="townStatus">The people are establishing their homes.</p>
  <div class="section-title">LIVES &amp; OCCUPATIONS</div><p id="citizenLives">Residents have begun work.</p>
+ <div class="section-title">PERSONAL JOURNAL · CONSEQUENCES</div>
+ <label for="residentJournalSelect" class="tiny muted">Inspect a person's own memories</label>
+ <select id="residentJournalSelect" aria-label="Choose a resident journal"><option value="">Choose resident</option></select>
+ <div id="residentJournal" role="region" aria-label="Selected resident's personal chronicle" aria-live="off">Their choices and real consequences will appear here.</div>
  <div class="section-title">LONG-TERM MEMORIES</div><div class="memory" id="memory"></div>
 <div class="divider"></div><div class="tiny muted" id="milestones"></div><section id="chapterPanel" aria-label="Autonomous story chapter">
  <div id="chapterTitle">CHAPTER I · THE MOSSBOUND OATH</div>
