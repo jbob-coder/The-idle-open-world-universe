@@ -9,7 +9,7 @@
   Surface=window.GodseedChunkSurface,Assets=window.GodseedAssets;
  if(!Debug||!Views||!Surface||!Assets)throw new Error("Chunk atlas runtime dependencies missing");
  const byId=id=>document.getElementById(id);
- const original=byId("world");
+ const original=byId("world"),androidDock=byId("androidDock");
  if(!original||!original.parentNode)throw new Error("World Canvas missing");
  const container=original.parentNode;
  const bar=document.createElement("div");
@@ -51,7 +51,7 @@
  controls.appendChild(hint);
  canvas.insertAdjacentElement("afterend",controls);
 
- let active=false,view=null,surface=null,loadedSeed=null,drag=null,dragged=false;
+ let active=false,view=null,surface=null,loadedSeed=null,drag=null,dragged=false,dockDisplay=null;
  function ensure(){
   const state=Debug.getState(),seed=state.worldSeed>>>0;
   if(!view||loadedSeed!==seed){
@@ -74,6 +74,9 @@
   if(active)return false;
   ensure();active=true;
   original.style.display="none";canvas.style.display="block";
+  // A fixed Android power dock would cover the atlas pan buttons. There are
+  // no direct divine powers in this read-only map; restore it on return.
+  if(androidDock){dockDisplay=androidDock.style.display;androidDock.style.display="none";}
   controls.style.display="flex";
   toggle.setAttribute("aria-pressed","true");toggle.textContent="Return to village";
   view.invalidate();render();return true;
@@ -81,6 +84,7 @@
  function close(){
   if(!active)return false;
   active=false;original.style.display="block";canvas.style.display="none";
+  if(androidDock){androidDock.style.display=dockDisplay===null?"":dockDisplay;dockDisplay=null;}
   controls.style.display="none";
   toggle.setAttribute("aria-pressed","false");toggle.textContent="Open world atlas";
   drag=null;return true;
