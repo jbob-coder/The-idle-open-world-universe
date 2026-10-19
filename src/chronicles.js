@@ -16,6 +16,10 @@
   const MORALS=Object.freeze(['duty','care','curiosity','wellbeing']);
   const IMPACT_KEYS=Object.freeze(['movement','food','wood','stone','relationship',
     'energy','hunger','safety','social','skill']);
+  // Conservative maxima for ONE resident action; impossible saved deltas are
+  // rejected rather than transformed into convincing but fabricated memories.
+  const SAVE_DELTA_LIMITS=Object.freeze({movement:1,food:4,wood:4,stone:4,
+    relationship:4,energy:100,hunger:100,safety:100,social:100,skill:1});
   function obj(v){return !!v&&typeof v==='object'&&!Array.isArray(v);}
   function finite(v,min,max,fallback){
     return Number.isFinite(v)?Math.max(min,Math.min(max,Math.round(v))):fallback;
@@ -44,6 +48,9 @@
   function normalizedEvent(raw){
     if(!obj(raw)||!Number.isSafeInteger(raw.tick)||raw.tick<0||
        !INTENTS.includes(raw.choice)||!MORALS.includes(raw.moral))return null;
+    if(!obj(raw.impact)||IMPACT_KEYS.some(k=>
+      !Number.isSafeInteger(raw.impact[k])||
+      Math.abs(raw.impact[k])>SAVE_DELTA_LIMITS[k]))return null;
     const impact=normalizeImpact(raw.impact);
     const observed=IMPACT_KEYS.some(k=>impact[k]!==0);
     return {tick:Math.min(raw.tick,1000000000),choice:raw.choice,
@@ -60,6 +67,7 @@
     // silently rewrite traits, and no local storage value grants a divine command.
     if(Array.isArray(raw.entries))state.entries=raw.entries.slice(-MAX_ENTRIES)
       .map(normalizedEvent).filter(Boolean);
+    if(!state.entries.length)state.progress=0; // no surviving evidence
     return state;
   }
   function bias(p,options){
