@@ -59,14 +59,16 @@
       moral:raw.moral,observed,
       impact};
   }
-  function restore(p,raw){
+  function restore(p,raw,worldTick){
     const state=newJournal(p);
+    const lastTick=Number.isSafeInteger(worldTick)&&worldTick>=0?
+      worldTick:1000000000;
     if(!obj(raw)||raw.version!==VERSION)return state;
     state.progress=finite(raw.goal===state.goal?raw.progress:0,0,TARGET,0);
     // Ethical priorities are born from personality; invalid save values cannot
     // silently rewrite traits, and no local storage value grants a divine command.
     if(Array.isArray(raw.entries))state.entries=raw.entries.slice(-MAX_ENTRIES)
-      .map(normalizedEvent).filter(Boolean);
+      .map(normalizedEvent).filter(e=>e&&e.tick<=lastTick);
     if(!state.entries.length)state.progress=0; // no surviving evidence
     return state;
   }
