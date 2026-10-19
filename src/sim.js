@@ -1,5 +1,5 @@
 /* GODSEED deterministic simulation. UMD: browser global + CommonJS. No external services. */
-(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./world/regions.js'):root.GodseedRegions,typeof module!=='undefined'&&module.exports?require('./living.js'):root.GodseedLiving);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Regions,Living){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./world/regions.js'):root.GodseedRegions,typeof module!=='undefined'&&module.exports?require('./living.js'):root.GodseedLiving,typeof module!=='undefined'&&module.exports?require('./world/interiors.js'):root.GodseedInteriors);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Regions,Living,Interiors){
 'use strict';
 const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7,ROAD:8,VILLAGE:9,SHRINE:10};
 const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter','Kingdom road','Village','Ancient shrine'];
@@ -357,7 +357,7 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,worldSee
  for(const [x,y] of [[s.bot.x+10,s.bot.y-5],[s.bot.x-12,s.bot.y+7]]){
   s.map[idx(x,y)]=T.SHRINE;
  }
- Regions.connect(s,T);s.npcs=initPeople(s);Living.create(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
+ Regions.connect(s,T);s.npcs=initPeople(s);Living.create(s);s.spaces=Interiors.empty();discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
  return s;}
 function discoverRegion(s,x,y){const r=Regions.at(s,x,y);if(!r||s.regions.discovered.includes(r.id))return;
  s.regions.discovered.push(r.id);event(s,r.name,r.minimumGameplay);remember(s,'Discovered '+r.name);
@@ -596,7 +596,7 @@ function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!=
  if(!Number.isFinite(s.faith)||s.faith<0||s.faith>50||!Number.isInteger(s.day)||s.day<1)return false;
  if(!Array.isArray(s.enemies)||!s.enemies.every(e=>e&&Number.isInteger(e.x)&&Number.isInteger(e.y)&&inside(e.x,e.y)&&['hp','attack','defense','cooldown','id'].every(k=>Number.isFinite(e[k]))))return false;
  return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
-function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
+function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];copy.spaces=Interiors.restore(copy.spaces,copy.living);return JSON.stringify(copy);}
 function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;if(!Number.isInteger(s.worldSeed))s.worldSeed=s.seed;s.regions={version:1,discovered:[...new Set(s.regions&&Array.isArray(s.regions.discovered)?s.regions.discovered.filter(id=>Regions.data.regions.some(r=>r.id===id)):[])]};s.shrinesVisited=[...visitedShrines(s)].slice(0,8);if(!s.chapter||s.chapter.version!==1||!Number.isInteger(s.chapter.stage)||s.chapter.stage<0||s.chapter.stage>CHAPTER_STEPS.length){
   s.chapter=chapterFromLegacy(s);
  }else{
@@ -643,6 +643,6 @@ function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return nu
  // Shrine evidence is sanitized before chapter migration.
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
- s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;Living.restore(s);return s;}catch(e){return null;}}
+ s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;Living.restore(s);s.spaces=Interiors.restore(s.spaces,s.living);return s;}catch(e){return null;}}
 return {chapterStatus,roadStatus,finaleStatus,whisper:Living.whisper,interpretWhisper:Living.interpret,regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
 });
