@@ -2172,7 +2172,7 @@
       "priority": "P1",
       "area": "art",
       "title": "Playable GODSEED medieval pixel-art splash and truthful offline loading state",
-      "status": "in_review",
+      "status": "verified",
       "owner": "SPLASH-01",
       "work_branch": "feat/art-006-godseed-loading-screen",
       "depends": [],
@@ -2180,7 +2180,8 @@
       "issue": null,
       "pr": 32,
       "evidence": [
-        "PR #32 https://github.com/jbob-coder/The-idle-open-world-universe/pull/32; SHA 89bd62e6329b1108c95de5bb509a7084c86e9fe7; offline QA 85/85 tests PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076690; native Android API29 6/6 PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076673; actual screenshots and artifact. Independent review and merge pending."
+        "PR #32 https://github.com/jbob-coder/The-idle-open-world-universe/pull/32; SHA 89bd62e6329b1108c95de5bb509a7084c86e9fe7; offline QA 85/85 tests PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076690; native Android API29 6/6 PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076673; actual screenshots and artifact. Independent review and merge pending.",
+        "Independent FORGE-27 source/CI review PR #32 at exact SHA 89bd62e6329b1108c95de5bb509a7084c86e9fe7: https://github.com/jbob-coder/The-idle-open-world-universe/pull/32#pullrequestreview-5566277095 ; real offline embedded SVG 640x360 crispEdges no external resources, responsive accessible loading/progress/error/reduced-motion, atlas+first-render gating and save isolation. Full QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076690 PASS 85/85 Node and offline 720x400/640x360 Chromium splash/screenshots; Gradle/API29 emulator https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076673 PASS 6/6. Aesthetic subjective signoff and physical 2–3GB hardware measurements NOT VERIFIED. PR unmerged."
       ],
       "status_history": [
         {
@@ -2217,8 +2218,16 @@
           "to": "in_review",
           "actor": "SPLASH-01",
           "reason": "Integrated local pixel village splash, truthful readiness UI and Chromium/Android CI; PR #32 ready for independent review."
+        },
+        {
+          "date": "2026-10-19T02:17:00.372Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent scoped loading UI asset/lifecycle review and exact-SHA Node/Chromium/API29 QA; no subjective art or physical low-RAM certification."
         }
-      ]
+      ],
+      "verified_by": "FORGE-27"
     },
     {
       "id": "GOV-004",

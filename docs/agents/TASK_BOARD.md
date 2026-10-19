@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 69 tasks · planned: 41 · ready: 6 · claimed: 0 · in_progress: 3 · blocked: 2 · in_review: 8 · verified: 9 · done: 0 · cancelled: 0.
+**Tracked work:** 69 tasks · planned: 41 · ready: 6 · claimed: 0 · in_progress: 3 · blocked: 2 · in_review: 7 · verified: 10 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -67,7 +67,7 @@
 | **ART-001** | P1 | art | **planned** | — | SIM-002 | Animated medieval residents, age stages, work and social emotes |
 | **ART-003** | P1 | art | **planned** | — | INT-009, GOD-004 | Responsive world/indoor HUD and accessible mobile controls |
 | **ART-005** | P1 | art | **planned** | — | INT-005, ART-002 | Automated visual regressions of rooms, buildings and villagers |
-| **ART-006** | P1 | art | **in_review** | SPLASH-01 | — | Playable GODSEED medieval pixel-art splash and truthful offline loading state |
+| **ART-006** | P1 | art | **verified** | SPLASH-01 | — | Playable GODSEED medieval pixel-art splash and truthful offline loading state |
 | **CIV-003** | P1 | civilization | **planned** | — | CIV-001, WLD-001 | Path streets, roads, fields and districts based on settlement needs |
 | **CIV-004** | P1 | civilization | **planned** | — | CIV-002, SIM-005 | Markets, home stores, trade caravans and local shortages |
 | **CIV-006** | P1 | civilization | **planned** | — | SIM-002, CIV-001 | Council approvals, autonomy, refusals and architectural remodeling |
