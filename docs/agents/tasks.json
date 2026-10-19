@@ -1298,9 +1298,9 @@
       "priority": "P0",
       "area": "divine",
       "title": "Per-person belief, safety and autonomy acceptance engine",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "FORGE-27",
+      "work_branch": "feat/god-002-forge-27-autonomy",
       "depends": [
         "SIM-001",
         "GOD-001"
@@ -1323,6 +1323,13 @@
           "to": "ready",
           "actor": "TERRAIN-01",
           "reason": "Both dependency tasks GOD-001 and SIM-001 independently verified; safe per-person acceptance engine now available to claim."
+        },
+        {
+          "date": "2026-10-19T01:53:52.734Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Own GOD-002 per-person belief, safety gate and independent choice; explicitly integrate verified GOD-001 parser and SIM-001 needs without overriding their PRs."
         }
       ]
     },
