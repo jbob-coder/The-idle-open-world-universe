@@ -1137,7 +1137,8 @@
       "issue": null,
       "pr": 25,
       "evidence": [
-        "PR #25 https://github.com/jbob-coder/The-idle-open-world-universe/pull/25; implementation HEAD e97465f1343c77362812db603e0c3ae686191041; exact-SHA CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 ; Build HTML, deterministic Node suite, pixel contract and APK structure steps SUCCESS as observed; browser checks pending at handoff; physical 2–3 GB device NOT VERIFIED; independent reviewer required."
+        "PR #25 https://github.com/jbob-coder/The-idle-open-world-universe/pull/25; implementation HEAD e97465f1343c77362812db603e0c3ae686191041; exact-SHA CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 ; Build HTML, deterministic Node suite, pixel contract and APK structure steps SUCCESS as observed; browser checks pending at handoff; physical 2–3 GB device NOT VERIFIED; independent reviewer required.",
+        "Exact HEAD e97465f1343c77362812db603e0c3ae686191041 : GODSEED offline QA Actions run 39183679624 COMPLETED SUCCESS; test/build job simulation-and-android-structure SUCCESS, including deterministic Node tests, HTML build, browser/mobile-layout verification and APK structure; not a physical Android hardware test. PR #25 marked ready for independent review."
       ],
       "status_history": [
         {
