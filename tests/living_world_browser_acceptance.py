@@ -47,6 +47,16 @@ with sync_playwright() as pw:
     assert all(word in journal_text for word in ['Rowan', 'Goal:', 'Memories', 'Reason:', 'Result:', 'Impact:']),journal_text
     after_inspect=page.evaluate("()=>({tick:GodseedDebug.getState().tick, nim:[GodseedDebug.getState().bot.x,GodseedDebug.getState().bot.y], residents:GodseedDebug.getState().living.citizens.map(p=>[p.x,p.y])})")
     assert before_inspect==after_inspect,'Inspecting a resident must never move people or advance time'
+    injected_markup=page.evaluate("""() => {
+      const p=GodseedDebug.getState().living.citizens[0],original=p.id;
+      p.id='20"><img id="journal-injection" src="x">';
+      GodseedDebug.step(0);
+      const injected=!!document.getElementById('journal-injection');
+      p.id=original;
+      GodseedDebug.step(0);
+      return injected;
+    }""")
+    assert not injected_markup,'Untrusted saved citizen IDs must not create HTML elements'
     assert page.evaluate('GodseedSim.finaleStatus(GodseedDebug.getState()).completed')
     page.evaluate("window.scrollTo(0,0)")
     page.screenshot(path=str(SHOT),full_page=True)
