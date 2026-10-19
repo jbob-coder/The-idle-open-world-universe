@@ -45,7 +45,8 @@ public class MapFirstNativeSmokeTest {
             for(int n=0;n<30;n++){
                 diagnostic=eval(activity,
                     "JSON.stringify({state:document.readyState,sim:typeof window.GodseedDebug,"+
-                    "map:typeof window.GodseedMapFirst,observer:typeof window.GodseedObservatory})");
+                    "map:typeof window.GodseedMapFirst,observer:typeof window.GodseedObservatory,"+
+                    "module:typeof window.GodseedObserver,domReset:typeof document.createElement('div').replaceChildren})");
                 if("true".equals(eval(activity,
                     "document.readyState==='complete'"+
                     " && typeof window.GodseedDebug==='object'"+
