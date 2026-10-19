@@ -1,9 +1,9 @@
 /* GODSEED utility-based citizen choices. Offline, deterministic, bounded v1 trace. */
 (function(root, factory) {
- const api = factory();
+ const api = factory(typeof module!=='undefined'&&module.exports?require('./cognition.js'):root.GodseedCognition);
  if (typeof module !== 'undefined' && module.exports) module.exports = api;
  root.GodseedChoices = api;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function() {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function(Cognition) {
  'use strict';
  const INTENTS = Object.freeze(['work', 'explore', 'help', 'rest',
   'seek_safety', 'eat', 'sleep', 'wash', 'warm', 'socialize']);
@@ -24,7 +24,7 @@
   const phase = bounded(c.phase, 0, 239, 0);
   const working = c.working === true;
   const company = c.company === true;
-  const options = [
+  const options = Cognition.score(p, [
    {intent:'work', score: working ? 150 + Math.round(20*diligence) : -10,
     why:'Scheduled work and diligence support the village'},
    {intent:'explore', score: phase >= 185 ? 5 :
@@ -35,7 +35,7 @@
     why:'Kindness favors checking on another resident'},
    {intent:'rest', score: 36 + .7*(100-energy) + (phase >= 185 ? 80 : 0),
     why:'Energy and the time of day favor resting at home'}
-  ];
+  ], c);
   options.sort((a,b) => b.score-a.score ||
    INTENTS.indexOf(a.intent)-INTENTS.indexOf(b.intent));
   let chosen = options[0];
@@ -48,7 +48,8 @@
   return {
    intent:chosen.intent, score:Math.round(chosen.score), why:chosen.why,
    alternatives:options.filter(o=>o.intent!==chosen.intent).slice(0,2)
-    .map(o=>({intent:o.intent,score:Math.round(o.score)}))
+    .map(o=>({intent:o.intent,score:Math.round(o.score)})),
+   thinking:Cognition.plan(p,options,chosen)
   };
  }
  function normalizeTrace(raw) {
@@ -64,7 +65,8 @@
     o.intent!==raw.intent).slice(0,2).map(o=>({
      intent:o.intent,score:Math.round(bounded(o.score,-1000,1000,0))
     })),
-   consequence:short(raw.consequence,140)
+   consequence:short(raw.consequence,140),
+   thinking:Cognition.cleanPlan(raw.thinking)
   };
  }
  return Object.freeze({INTENTS,decide,normalizeTrace});
