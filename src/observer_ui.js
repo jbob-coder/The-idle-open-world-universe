@@ -27,7 +27,7 @@ function render(force=false){
  const s=state();if(!s)return;
  const options=O.entries(s),signature=options.map(e=>e.key+'|'+e.label).join('\n');
  if(signature!==lastList){
-  choice.replaceChildren();
+  while(choice.firstChild)choice.removeChild(choice.firstChild); // API29 WebView compatibility
   for(const item of options){const option=el('option','',item.label);option.value=item.key;choice.appendChild(option);}
   lastList=signature;
  }
@@ -36,7 +36,7 @@ function render(force=false){
  if(!force&&lastTick===s.tick&&lastKey===selected)return;
  lastTick=s.tick;lastKey=selected;
  const data=O.inspect(s,selected);
- detail.replaceChildren();
+ while(detail.firstChild)detail.removeChild(detail.firstChild); // Avoid modern replaceChildren()
  if(!data){detail.appendChild(el('p','','No observable record.'));return;}
  detail.appendChild(el('h4','',data.title));
  detail.appendChild(el('p','',data.subtitle));
