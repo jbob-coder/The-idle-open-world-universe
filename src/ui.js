@@ -1,6 +1,8 @@
 /* GODSEED UI: intentionally dependency-free and low-resolution. */
 (function(){'use strict';
 const A=window.GodseedSim; if(!A)throw new Error('GODSEED simulation missing');
+const splash=window.GodseedSplash;
+if(splash)splash.step(20,'Recuperando recuerdos y aldeas...');
 const $=id=>document.getElementById(id),size=16;
 const ZOOMS=[{name:'Panorama',w:32,h:20},{name:'Cerca',w:24,h:15},{name:'Inspección',w:16,h:10}];
 let zoomIndex=0,VW=ZOOMS[0].w,VH=ZOOMS[0].h;
@@ -12,6 +14,7 @@ let oldCells=new Int16Array(VW*VH);oldCells.fill(-99);
 screenCtx.imageSmoothingEnabled=false;sceneryCtx.imageSmoothingEnabled=false;mctx.imageSmoothingEnabled=false;
 const SAVE_KEY='godseed-one-small-life-v1';let s,mode='inspect',camX=0,camY=0,lastDraw=0,lastHUD=0,lastSave=0,acc=0,frameLast=0,hover=null,flashMessage='',flashUntil=0;
 try{s=A.restore(localStorage.getItem(SAVE_KEY));}catch(_){s=null}if(!s)s=A.create(Math.floor(Date.now()/1000));
+if(splash)splash.step(42,'Preparando la vida del reino...');
 function setZoom(next){
  zoomIndex=(next+ZOOMS.length)%ZOOMS.length;
  ({w:VW,h:VH}=ZOOMS[zoomIndex]);
@@ -34,7 +37,9 @@ function dot(x,y,c){rect(x,y,1,1,c);}
 const assets=window.GodseedAssets,terrain=window.GodseedTerrain,visualFx=window.GodseedFX.create(),Living=window.GodseedLiving;
 const motionQuery=window.matchMedia('(prefers-reduced-motion: reduce)');let reducedMotion=motionQuery.matches;
 $('reduceMotion').checked=reducedMotion;$('reduceMotion').addEventListener('change',e=>{reducedMotion=e.target.checked;if(s.settings.speed===0)draw();});
-assets.loaded.then(()=>{document.querySelectorAll('[data-power]').forEach(button=>{const slot=button.querySelector('.ico,.power-icon');if(!slot)return;slot.textContent='';const c=document.createElement('canvas');c.width=c.height=16;c.className='power-pixel';c.setAttribute('aria-hidden','true');slot.appendChild(c);const f=assets.manifest.atlases[2].symbols.find(f=>f.name===button.dataset.power);if(f)assets.blit(c.getContext('2d'),2,f.rect,0,0);});const portrait=$('portrait');const f=assets.manifest.atlases[1].frames[0];assets.blit(portrait.getContext('2d'),1,f.rect,0,0);oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
+assets.loaded.then(()=>{document.querySelectorAll('[data-power]').forEach(button=>{const slot=button.querySelector('.ico,.power-icon');if(!slot)return;slot.textContent='';const c=document.createElement('canvas');c.width=c.height=16;c.className='power-pixel';c.setAttribute('aria-hidden','true');slot.appendChild(c);const f=assets.manifest.atlases[2].symbols.find(f=>f.name===button.dataset.power);if(f)assets.blit(c.getContext('2d'),2,f.rect,0,0);});const portrait=$('portrait');const f=assets.manifest.atlases[1].frames[0];assets.blit(portrait.getContext('2d'),1,f.rect,0,0);oldCells.fill(-99);draw();
+ if(splash)splash.complete();
+}).catch(e=>{notify(e.message);if(splash)splash.fail(e.message);});
 function godSeesTown(x,y){return !!s.living&&s.living.towns.some(t=>Math.abs(t.x-x)<=3&&Math.abs(t.y-y)<=3);}
 function drawTile(tile,x,y,wx,wy){if(assets.ready)terrain.draw(ctx,assets,s,tile,x,y,wx,wy);else rect(x,y,16,16,'#152723');}
 function updateScenery(){
@@ -222,6 +227,8 @@ function frame(ts){requestAnimationFrame(frame);if(!active)return;if(!frameLast)
  if(ts-lastHUD>(s.settings.speed===0?1500:450)){hud();lastHUD=ts;}
  if(ts-lastSave>16000){save();lastSave=ts;}
  if(flashUntil&&Date.now()>flashUntil){$('toast').classList.remove('show');flashUntil=0;}}
-setMode('inspect');hud();draw();requestAnimationFrame(frame);
+setMode('inspect');hud();draw();
+if(splash)splash.step(75,'Dibujando el mundo medieval...');
+requestAnimationFrame(frame);
 window.GodseedDebug={getState:()=>s,getRenderStats:()=>({sceneryRedraws,screenRedraws,atlasesReady:assets.ready,decodedBytes:assets.decodedBytes,activeEffects:visualFx.list(performance.now()).length,reducedMotion}),draw,getCamera:()=>({x:camX,y:camY,width:VW,height:VH,zoom:ZOOMS[zoomIndex].name}),setZoom:(i)=>{setZoom(i);hud();draw();},setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
 })();
