@@ -12,7 +12,14 @@ set +e
 adb shell am instrument -w -r io.godseed.one.test/androidx.test.runner.AndroidJUnitRunner | tee qa-screenshots/android-emulator-instrumentation.txt
 res=${PIPESTATUS[0]}
 set -e
-test "$res" -eq 0
+# Capture WebView console/crash details even when instrumentation fails.
+# Otherwise the artifact contains only an assertion and the real JS fault is lost.
+adb logcat -d -t 1800 > qa-screenshots/android-emulator-logcat.txt || true
+if [ "$res" -ne 0 ]; then
+  echo 'Native instrumentation failed; WebView/logcat diagnostics:'
+  grep -Ei 'chromium|CONSOLE|Uncaught|SyntaxError|Godseed|E/WebView' qa-screenshots/android-emulator-logcat.txt | tail -100 || true
+  exit "$res"
+fi
 grep -q 'OK (7 tests)' qa-screenshots/android-emulator-instrumentation.txt
 adb shell am force-stop io.godseed.one || true
 adb shell am start -n io.godseed.one/.MainActivity
