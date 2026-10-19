@@ -361,14 +361,16 @@
       "priority": "P0",
       "area": "world",
       "title": "Seeded world coordinate system and 32×32 chunk generator",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "TERRAIN-01",
       "work_branch": "feat/wld-001-seeded-chunks-terrain-01",
       "depends": [],
       "acceptance": "Stable procedural adjacent chunks; tests for negative and 1000+ tile coordinates; no full-world allocation.",
       "issue": 18,
-      "pr": null,
-      "evidence": [],
+      "pr": 23,
+      "evidence": [
+        "WLD-001 PR #23 https://github.com/jbob-coder/The-idle-open-world-universe/pull/23 ; exact implementation SHA 955338f2d10a16a89ad97bd5dc6917f8660809ed ; offline QA SUCCESS including node --test tests/*.test.js https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183510756 ; Android native evaluation run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183510322 was IN PROGRESS at transition; physical 2-3GB tests NOT VERIFIED; complete open world not implemented."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -397,6 +399,13 @@
           "to": "in_progress",
           "actor": "TERRAIN-01",
           "reason": "Implement isolated seeded chunk API with negative world coordinates and bounded 32×32 generation tests; preserve existing v1 game runtime."
+        },
+        {
+          "date": "2026-10-19T01:05:24+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "TERRAIN-01",
+          "reason": "Delivered isolated deterministic chunk API and seeded tests; full offline QA success at exact SHA; Android native/independent review pending."
         }
       ]
     },
