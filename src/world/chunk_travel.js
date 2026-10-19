@@ -19,6 +19,7 @@
   const MAX_ACTORS = 64;
   const MAX_EXPANSIONS = 4096;
   const MAX_ROUTE = 256;
+  const MAX_TRAVEL_SAVE_BYTES = 64000;
   const DIRS = Object.freeze([[1,0],[0,1],[-1,0],[0,-1]]);
   const WATER = Chunks.T.WATER, STONE = Chunks.T.STONE;
 
@@ -217,12 +218,21 @@
           continue;
         }
         let route=routes.get(actor.id);
+        // No path: stagger deterministic retries rather than running up to
+        // 4096 A-star expansions for every stuck citizen on every game tick.
+        if(route && route.target.x===goal.x && route.target.y===goal.y &&
+           !route.steps.length && route.retryAt>time){
+          actor.activity="waiting";
+          log.push({tick:time,id:actor.id,type:"blocked",reason:route.status,x:actor.x,y:actor.y});
+          continue;
+        }
         if(!route || route.target.x!==goal.x || route.target.y!==goal.y ||
            !route.steps.length || !canStep(actor,route.steps[0],actor.traits.caution)) {
           const budget=512+Math.round(actor.traits.intelligence*35);
           const plan=findRoute(store,actor,goal,{caution:actor.traits.caution,
             maxExpansions:Math.min(MAX_EXPANSIONS,budget),isHazard:hazard});
-          route={target:{...goal},steps:plan.path,status:plan.status};
+          route={target:{...goal},steps:plan.path,status:plan.status,
+            retryAt:plan.path.length?0:time+16};
           routes.set(actor.id,route);
         }
         const next=route.steps[0];
@@ -256,11 +266,18 @@
       const a=actors.get(id);
       return a?{...a,home:{...a.home},work:a.work&&{...a.work},traits:{...a.traits}}:null;
     }
-    return Object.freeze({add,tick,snapshot,serialize:()=>JSON.stringify(snapshot()),
+    function serialize() {
+      const serialized=JSON.stringify(snapshot());
+      if(serialized.length>MAX_TRAVEL_SAVE_BYTES)throw new RangeError("travel save quota exceeded");
+      return serialized;
+    }
+    return Object.freeze({add,tick,snapshot,serialize,
       inspect,stats:()=>({time,actors:actors.size,cachedRoutes:routes.size,
         activeChunks:store.stats().activeChunks})});
   }
   function restore(store,saved,options) {
+    if(typeof saved==="string" && saved.length>MAX_TRAVEL_SAVE_BYTES)
+      throw new RangeError("travel save quota exceeded");
     const raw=typeof saved==="string"?JSON.parse(saved):saved;
     if(!raw||raw.schemaVersion!==1||!Array.isArray(raw.citizens)||
        !Number.isSafeInteger(raw.time)||raw.time<0||raw.time>Number.MAX_SAFE_INTEGER)
@@ -279,10 +296,14 @@
       add:runtime.add,inspect:runtime.inspect,
       tick:()=>runtime.tick().map(e=>({...e,tick:e.tick+offset})),
       snapshot:()=>({...runtime.snapshot(),time:runtime.snapshot().time+offset}),
-      serialize:()=>JSON.stringify({...runtime.snapshot(),time:runtime.snapshot().time+offset}),
+      serialize:()=>{
+        const value=JSON.stringify({...runtime.snapshot(),time:runtime.snapshot().time+offset});
+        if(value.length>MAX_TRAVEL_SAVE_BYTES)throw new RangeError("travel save quota exceeded");
+        return value;
+      },
       stats:()=>({...runtime.stats(),time:runtime.stats().time+offset})
     });
   }
   return Object.freeze({MAX_COORD,MAX_ACTORS,MAX_EXPANSIONS,MAX_ROUTE,
-    findRoute,create,restore});
+    MAX_TRAVEL_SAVE_BYTES,findRoute,create,restore});
 });
