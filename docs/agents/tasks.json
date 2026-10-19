@@ -23,7 +23,7 @@
       "priority": "P0",
       "area": "governance",
       "title": "Repository task registry, bot lifecycle, automation and handoff",
-      "status": "in_review",
+      "status": "verified",
       "owner": "ARCHIVIST",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
@@ -31,7 +31,8 @@
       "issue": null,
       "pr": 22,
       "evidence": [
-        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; governance CLI and tests commit a9cf45644b2c729902e507885a2fef83efc3eace; governance CI SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39182635075; general offline QA pending; no merge"
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; governance CLI and tests commit a9cf45644b2c729902e507885a2fef83efc3eace; governance CI SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39182635075; general offline QA pending; no merge",
+        "Independent scoped GOV-001 review on PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22#pullrequestreview-5566342411 at reviewed source SHA aae4db1dc6c759e7edf88928bba57b61c0e4c4dc; subsequent commits through b4ba72d5e2f83a9e3438a83e90506df3625ad42a change only tasks.json/TASK_BOARD.md; exact current HEAD governance CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39190405487 COMPLETED SUCCESS, schema/DAG/history generated board, handoff check and 25/25 unit tests. Repository coordination protocol verified; no background executor/merge, draft PR #22 remains unmerged."
       ],
       "status_history": [
         {
@@ -68,8 +69,16 @@
           "to": "in_review",
           "actor": "ARCHIVIST",
           "reason": "Bot registry, generated board, status CLI/ownership validation, prompt and workflow delivered for independent PR review"
+        },
+        {
+          "date": "2026-10-19T02:32:09.587Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent exact-source review of task registry, CLI transitions, bot ownership protocol and tests; current SHA governance CI passed. No merge authorization."
         }
-      ]
+      ],
+      "verified_by": "FORGE-27"
     },
     {
       "id": "INT-001",

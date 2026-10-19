@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 69 tasks · planned: 38 · ready: 7 · claimed: 0 · in_progress: 2 · blocked: 3 · in_review: 4 · verified: 15 · done: 0 · cancelled: 0.
+**Tracked work:** 69 tasks · planned: 38 · ready: 7 · claimed: 0 · in_progress: 2 · blocked: 3 · in_review: 3 · verified: 16 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -32,7 +32,7 @@
 | **GOD-003** | P0 | divine | **ready** | — | GOD-002, SIM-002 | Nonblocking suggestions lifecycle: heard→considered→action→result |
 | **GOD-004** | P0 | divine | **verified** | FORGE-27 | — | God view: inspect life, building, village, memories and intent |
 | **GOD-006** | P0 | divine | **blocked** | FORGE-27 | GOD-004, GOD-001 | Replace direct god power toolbar with indirect consequence-based divine influence |
-| **GOV-001** | P0 | governance | **in_review** | ARCHIVIST | — | Repository task registry, bot lifecycle, automation and handoff |
+| **GOV-001** | P0 | governance | **verified** | ARCHIVIST | — | Repository task registry, bot lifecycle, automation and handoff |
 | **GOV-002** | P0 | governance | **verified** | ORBIT-01 | — | ♾️ Continuous bot work-loop prompt, lifecycle automation and safe handoffs |
 | **GOV-003** | P0 | governance | **verified** | RELAY-01 | — | Context-limit retirement and new-chat successor handoff |
 | **GOV-004** | P0 | governance | **verified** | DESIGN-28 | — | Author GODSEED V3 divine-view, intelligent lives and kingdoms design bible |
