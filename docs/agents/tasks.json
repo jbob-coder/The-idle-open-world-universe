@@ -446,7 +446,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Sparse modified-terrain deltas and chunk persistence",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "GDS-KESTREL-1810",
       "work_branch": "feat/wld-002-kestrel-sparse-persistence",
       "depends": [
@@ -454,8 +454,10 @@
       ],
       "acceptance": "Edits and settlements survive eviction/reentry while untouched chunks regenerate identically.",
       "issue": 18,
-      "pr": null,
-      "evidence": [],
+      "pr": 31,
+      "evidence": [
+        "WLD-002 PR #31 https://github.com/jbob-coder/The-idle-open-world-universe/pull/31; exact HEAD 2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045231 SUCCESS, 96/96 Node PASS including 8 new sparse persistent chunk tests, browser offline and saves PASS, artifact 12158597071; native Gradle+API29 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045283 SUCCESS, 6/6 emulator instrumentation, screenshots/logcat artifact 12158097881; opt-in API not live world integration; physical low-RAM Android NOT VERIFIED; PR unmerged; independent review pending."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -484,6 +486,13 @@
           "to": "in_progress",
           "actor": "GDS-KESTREL-1810",
           "reason": "Begin WLD-002: stateless bounded chunk cache with sparse terrain/site edits and deterministic v1-independent persistence; preserve live sim, old saves and other bot files."
+        },
+        {
+          "date": "2026-10-19T01:54:11+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Submitted opt-in sparse chunk/settlement persistence and 8 regression tests in stacked PR #31; exact SHA Node 96/96 and native API29 6/6 passed; awaiting independent review, not a live open world."
         }
       ]
     },
