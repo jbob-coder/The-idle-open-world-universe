@@ -703,7 +703,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Map existing 64×48 version-1 saves into expanded world",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "FORGE-27",
       "work_branch": "feat/wld-007-forge-27-v1-migration",
       "depends": [
@@ -735,6 +735,13 @@
           "to": "claimed",
           "actor": "FORGE-27",
           "reason": "Independently claim legacy 64×48 v1 save import as opt-in world-window adapter over verified WLD-002; preserve all progress and reject bad data; avoid WLD-003 camera and other bots."
+        },
+        {
+          "date": "2026-10-19T08:47:11.764Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Implement opt-in canonical v1/64×48 window import with lossless structures/progression and deterministic chunk store outside window; reject mismatched/corrupt data and test roundtrip."
         }
       ]
     },
