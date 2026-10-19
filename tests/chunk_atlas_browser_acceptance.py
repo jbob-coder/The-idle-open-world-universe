@@ -28,6 +28,7 @@ with sync_playwright() as pw:
     assert page.locator('#chunkAtlasCanvas').is_visible()
     assert page.locator('#world').is_hidden()
     assert page.locator('#chunkAtlasToggle').get_attribute('aria-pressed')=='true'
+    assert page.locator('#androidDock').is_hidden(),'mobile god powers must not cover atlas pan controls'
     assert page.evaluate('GodseedChunkAtlas.isOpen()')
     assert 'terrain preview' in page.locator('#chunkAtlasControls').inner_text().lower()
     def details():
@@ -73,6 +74,7 @@ with sync_playwright() as pw:
     # Opening/panning an atlas is read-only with respect to actual Nim and v1.
     assert page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')==before
     page.locator('#chunkAtlasToggle').click()
+    assert page.locator('#androidDock').evaluate('(el)=>el.style.display')!='none','original dock must be restored'
     assert page.locator('#world').is_visible()
     assert page.locator('#chunkAtlasCanvas').is_hidden()
     page.locator('#save').click()
