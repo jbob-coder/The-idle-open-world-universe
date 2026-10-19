@@ -21,13 +21,17 @@
 | ID | P | Area | State | Owner | Depends on | Definition of done (short) |
 |---|---|---|---|---|---|---|
 | **ART-002** | P0 | art | **planned** | — | INT-001, CIV-001 | Tile-coherent roofs, doors, interior walls and furnishings |
+| **ART-007** | P0 | art | **ready** | — | GOD-004 | Redesign GODSEED mobile god-view into map-first coherent pixel interface |
 | **CIV-001** | P0 | civilization | **in_review** | TERRAIN-01 | INT-001 | Metric 3×3–6×6 medieval blueprint library and zoning |
 | **CIV-002** | P0 | civilization | **planned** | — | CIV-001, SIM-005 | Construction sites, builders, work orders and interruptions |
 | **CIV-005** | P0 | civilization | **planned** | — | SIM-006, CIV-002 | Medieval technology and era advancement with real prerequisites |
+| **CIV-009** | P0 | civilization | **planned** | — | CIV-005, SIM-004 | Kings, succession, political legitimacy, noble houses and diplomacy |
+| **CIV-010** | P0 | civilization | **planned** | — | WLD-005, CIV-002, SIM-005 | Found frontier colonies and simulate logistics, settlements and autonomy |
 | **GOD-001** | P0 | divine | **verified** | FORGE-27 | — | Multilingual intent parsing with negation, target and ambiguity |
 | **GOD-002** | P0 | divine | **in_review** | FORGE-27 | SIM-001, GOD-001 | Per-person belief, safety and autonomy acceptance engine |
 | **GOD-003** | P0 | divine | **planned** | — | GOD-002, SIM-002 | Nonblocking suggestions lifecycle: heard→considered→action→result |
 | **GOD-004** | P0 | divine | **verified** | FORGE-27 | — | God view: inspect life, building, village, memories and intent |
+| **GOD-006** | P0 | divine | **ready** | — | GOD-004, GOD-001 | Replace direct god power toolbar with indirect consequence-based divine influence |
 | **GOV-001** | P0 | governance | **in_review** | ARCHIVIST | — | Repository task registry, bot lifecycle, automation and handoff |
 | **GOV-002** | P0 | governance | **in_review** | ORBIT-01 | — | ♾️ Continuous bot work-loop prompt, lifecycle automation and safe handoffs |
 | **GOV-003** | P0 | governance | **in_review** | RELAY-01 | — | Context-limit retirement and new-chat successor handoff |
@@ -45,6 +49,9 @@
 | **SIM-003** | P0 | people | **planned** | — | SIM-001, INT-003 | Homes, household membership, work IDs and inventories · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-005** | P0 | people | **planned** | — | SIM-001, CIV-001 | Profession schedules and workplace resource delivery · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-010** | P0 | people | **planned** | — | SIM-002, SIM-005 | Long life-soak regression: agency, finite population and persistence · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
+| **SIM-011** | P0 | people | **planned** | — | SIM-001, SIM-002 | Individual intelligence, cognition, learning styles and personality effect on choices |
+| **SIM-012** | P0 | people | **planned** | — | SIM-004, SIM-011 | Family inheritance, kinship transmission and intergenerational variation |
+| **SIM-013** | P0 | people | **planned** | — | SIM-011, WLD-008 | Low-RAM population simulation LOD and offscreen event aggregation |
 | **QA-001** | P0 | qa | **verified** | GDS-KESTREL-1810 | — | Node state-machine regression for life, worlds and migration |
 | **QA-002** | P0 | qa | **blocked** | — | QA-001 | Chromium offline Android-layout interaction acceptance |
 | **QA-003** | P0 | qa | **verified** | TERRAIN-01 | QA-001 | Gradle host + API29 emulator instrumentation and artifacts |
@@ -66,8 +73,7 @@
 | **CIV-006** | P1 | civilization | **planned** | — | SIM-002, CIV-001 | Council approvals, autonomy, refusals and architectural remodeling |
 | **CIV-007** | P1 | civilization | **planned** | — | INT-004, CIV-002 | Building wear, fires, repairs and shelters during attacks |
 | **CIV-008** | P1 | civilization | **planned** | — | CIV-001, INT-008 | Distinct functional medieval public buildings and services |
-| **CIV-009** | P0 | civilization | **planned** | — | CIV-005, SIM-004 | Kings, succession, political legitimacy, noble houses and diplomacy |
-| **CIV-010** | P0 | civilization | **planned** | — | WLD-005, CIV-002, SIM-005 | Found frontier colonies and simulate logistics, settlements and autonomy |
+| **GOD-007** | P1 | divine | **planned** | — | GOD-004, SIM-007 | Visual god narrative dashboard and life-history/century time controls |
 | **INT-008** | P1 | interiors | **planned** | — | INT-005, SIM-005 | Workplace interiors: forge, tavern, granary, shrine and hall |
 | **INT-009** | P1 | interiors | **planned** | — | INT-005, GOD-004 | God-level house inspector and door/floor UI |
 | **SIM-004** | P1 | people | **planned** | — | SIM-003 | Affection, friendship, conflict, families and child growth · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
@@ -75,19 +81,13 @@
 | **SIM-007** | P1 | people | **planned** | — | SIM-002 | Personal journals, memories, long goals and moral decisions · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-008** | P1 | people | **planned** | — | SIM-004, SIM-007 | Generations, inheritance and meaningful mortality · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-009** | P1 | people | **planned** | — | SIM-002, SIM-004 | Contextual resident social interaction and visible animations · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
-| **SIM-011** | P0 | people | **planned** | — | SIM-001, SIM-002 | Individual intelligence, cognition, learning styles and personality effect on choices |
-| **SIM-012** | P0 | people | **planned** | — | SIM-004, SIM-011 | Family inheritance, kinship transmission and intergenerational variation |
-| **SIM-013** | P0 | people | **planned** | — | SIM-011, WLD-008 | Low-RAM population simulation LOD and offscreen event aggregation |
 | **QA-005** | P1 | qa | **verified** | LIFE-26 | — | Diagnose and stabilize paused divine FX render timing in Chromium CI |
 | **REL-001** | P1 | release | **ready** | — | QA-003 | Stable Android signing identity and save-safe upgrade |
 | **REL-003** | P1 | release | **planned** | — | QA-002, QA-003, REL-001 | Integrate stacked PRs, QA gate and tagged Android beta |
 | **WLD-006** | P1 | world | **in_progress** | TERRAIN-01 | WLD-001 | Streaming biome ecology, climate, water and landmarks · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-009** | P1 | world | **planned** | — | WLD-003 | God's regional atlas and village discovery UX · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **ART-004** | P2 | art | **planned** | — | WLD-006 | Medieval biome props, weather/time and seasonal differences |
-| **ART-007** | P0 | art | **ready** | — | GOD-004 | Redesign GODSEED mobile god-view into map-first coherent pixel interface |
 | **GOD-005** | P2 | divine | **planned** | — | GOD-001, QA-004 | Optional advanced offline language understanding feasibility |
-| **GOD-006** | P0 | divine | **ready** | — | GOD-004, GOD-001 | Replace direct god power toolbar with indirect consequence-based divine influence |
-| **GOD-007** | P1 | divine | **planned** | — | GOD-004, SIM-007 | Visual god narrative dashboard and life-history/century time controls |
 | **REL-002** | P2 | release | **planned** | — | WLD-008 | Real optional offline content pack streaming and disk budgets |
 
 ## How bots update states
