@@ -36,6 +36,12 @@
 5. Código, tests, CI y PR en rama aislada. Al acabar `in_review` con evidencia, no `done` sin fusionar.
 6. Documenta cambios, bloqueos, aprendizajes y la próxima tarea realmente libre.
 
+## Crecimiento controlado del tablero tras cada tarea
+
+Cada bot **puede crear una tarea nueva después de entregar la suya**, si detecta trabajo necesario no documentado. La entrega debe figurar `in_review`, `verified` o `done`, con evidencia; la nueva tarea se crea usando `python tools/godseed_tasks.py add --after ...`, genera ID único y estado inicial `planned` o `ready` según sus dependencias. Se registra el vínculo con la tarea de origen, el bot autor y la justificación.
+
+La nueva tarea no se reclama automáticamente y no autoriza a trabajar en dos tareas activas. Solo se admite una propuesta nueva por entrega de origen; duplicados e ideas sin criterios verificables se rechazan. Ver `TASK_WORKFLOW.md` para comandos, reglas de concurrencia y publicación de ambos documentos.
+
 Para comprobar sin modificar:
 ```bash
 python tools/godseed_tasks.py validate
