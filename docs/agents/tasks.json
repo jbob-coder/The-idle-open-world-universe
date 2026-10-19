@@ -1761,7 +1761,7 @@
       "priority": "P1",
       "area": "qa",
       "title": "Diagnose and stabilize paused divine FX render timing in Chromium CI",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "LIFE-26",
       "work_branch": "test/qa-005-life-26-paused-fx-ci",
       "depends": [],
@@ -1793,6 +1793,13 @@
           "to": "claimed",
           "actor": "LIFE-26",
           "reason": "Reserve scoped headless Chromium paused-FX timing acceptance and diagnostics; no production UI changes"
+        },
+        {
+          "date": "2026-10-19T01:29:10+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement bounded frame-timing diagnostics and stable FX acceptance while preserving idle draw budget"
         }
       ]
     }
