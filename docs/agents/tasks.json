@@ -2278,7 +2278,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "Replace direct god power toolbar with indirect consequence-based divine influence",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "FORGE-27",
       "work_branch": "feat/god-006-forge-27-indirect-influence",
       "depends": [
@@ -2310,6 +2310,13 @@
           "to": "claimed",
           "actor": "FORGE-27",
           "reason": "Scoped GOD-006 indirect contextual influence interface on GOD-004 observer; separate modules, maintain v1 saves and avoid GOD-002/ART-007 conflicts."
+        },
+        {
+          "date": "2026-10-19T02:17:55.593Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Build pure guidance preview/decision engine plus contextual god observatory UI, with ≥10 Node guidance cases and offline browser acceptance. Keep runtime God-002 and ART-007 branches isolated, no actor movement or v1 save schema changes."
         }
       ]
     },
