@@ -638,7 +638,7 @@
       "priority": "P0",
       "area": "people",
       "title": "Need profile: hunger, energy, comfort, safety, social, hygiene",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "LIFE-26",
       "work_branch": "feat/sim-001-life-26-needs",
       "depends": [],
@@ -667,6 +667,13 @@
           "to": "claimed",
           "actor": "LIFE-26",
           "reason": "Reserve deterministic citizen needs profile with safe priorities and version-1-compatible serialization; independent new module; issue #19"
+        },
+        {
+          "date": "2026-10-19T01:01:31+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement isolated needs model and deterministic Node tests without touching shared simulation systems."
         }
       ]
     },
