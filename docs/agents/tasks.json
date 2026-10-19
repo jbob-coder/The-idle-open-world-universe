@@ -1746,6 +1746,39 @@
           "reason": "Building handoff templates, retirement/new-chat prompts and deterministic validation."
         }
       ]
+    },
+    {
+      "id": "QA-005",
+      "priority": "P1",
+      "area": "qa",
+      "title": "Diagnose and stabilize paused divine FX render timing in Chromium CI",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [],
+      "acceptance": "The paused FX animation acceptance reports actual requestAnimationFrame timing and FX lifetime, distinguishes renderer stalls from missing animation, and passes three repeated Chromium CI attempts without relaxing idle redraw limits or hiding genuine defects.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "origin_task": "SIM-001",
+      "created_by": "LIFE-26",
+      "new_task_reason": "The first SIM-001 exact-SHA Chromium job observed only one animated divine FX redraw in 320ms, while the unchanged code passed on a rerun; this makes acceptance unreliable under runner load.",
+      "status_history": [
+        {
+          "date": "2026-10-19T01:27:26+00:00",
+          "from": null,
+          "to": "planned",
+          "actor": "LIFE-26",
+          "reason": "Necessary follow-up to SIM-001: The first SIM-001 exact-SHA Chromium job observed only one animated divine FX redraw in 320ms, while the unchanged code passed on a rerun; this makes acceptance unreliable under runner load."
+        },
+        {
+          "date": "2026-10-19T01:27:26+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "LIFE-26",
+          "reason": "All declared prerequisites verified; available for assignment"
+        }
+      ]
     }
   ]
 }
