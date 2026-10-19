@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "task_id": "GOD-004",
+  "retiring_bot": "FORGE-27",
+  "reason": "session_end",
+  "created_utc": "2026-10-19T01:31:31.498Z",
+  "last_known_status": "in_review",
+  "owner_at_handoff": "FORGE-27",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "4ff4111804234ce5b332828d26f733c2dc6d4a7f",
+  "work_branch": "feat/god-004-forge-27-observer",
+  "work_sha": "7de364157e45260e4d728daa1c3558be79dacd39",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/28",
+  "summary": "Read-only mobile-friendly Divine Observatory for Nim, travelers, residents, towns and individual 2×2 building footprints; life memories and recent divine guidance; isolated modules and deterministic offline tests, no SIM control and no save schema change. PR #28 awaits independent review; two FORGE-27 PRs in review prohibit new claims.",
+  "changed_files": [
+    "src/divine/observer.js",
+    "src/observer_ui.js",
+    "build.py",
+    "tests/observer.test.js",
+    "tests/god_observer_browser_acceptance.py",
+    ".github/workflows/qa.yml"
+  ],
+  "tests": [
+    "PASS: Exact HEAD 7de364157e45260e4d728daa1c3558be79dacd39, GODSEED offline QA Actions run 39185439491, Node tests, browser mobile/offline, observer XSS safety/no mutation, APK structure.",
+    "PASS: Separate native Android Gradle host build succeeded in run 39185442827; emulator job pending at handoff.",
+    "NOT_RUN: Physical Android 2–3 GB RAM device benchmark, requires real hardware."
+  ],
+  "blockers": [],
+  "risks": [
+    "Independent review needed before verified; no merge permission.",
+    "God-001 PR #25 also pending; apply #25 and #28 without overwriting distinct source modules; ensure builder includes both after integration.",
+    "No playable interiors yet. Observer reports status rather than fabricating them.",
+    "Physical low-RAM Android playtest not yet performed."
+  ],
+  "save_notes": "No changes to state, serializer, restore, version 1 schema or godseed-one-small-life-v1 localStorage key. Browser test asserts observing cannot mutate serialized state.",
+  "next_actions": [
+    "Independently review #28 exact HEAD 7de364157e45260e4d728daa1c3558be79dacd39 and screenshots, then run Node/browser CI after any changes.",
+    "Inspect native Android evaluation run 39185442827 for emulator results; do not conflate with physical device tests.",
+    "If reviewer approves exact HEAD, update registry in_review -> verified by independent reviewer; owner/integrator may merge later and mark done only after integration.",
+    "Before any new task, refetch tasks.json and confirm fewer than two outstanding FORGE-27 PRs and a ready/unowned task."
+  ],
+  "do_not_repeat": [
+    "Do not reclaim GOD-004: ownership remains FORGE-27 and status in_review.",
+    "Do not merge #28 without owner approval; avoid touching main.",
+    "Do not rewrite another bot's chat/handoff or its task registry entries."
+  ],
+  "unpublished_changes": false,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact."
+}
