@@ -67,7 +67,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Safe layers, metric grid, doors and interiors technical contract",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "DOORKEEPER",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
@@ -96,6 +96,13 @@
           "to": "claimed",
           "actor": "DOORKEEPER",
           "reason": "DOORKEEPER reserves metric-grid interior/door contract; no gameplay implementation claimed"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "DOORKEEPER",
+          "reason": "Writing precise interior layer safety, entry anchors, simulation and save migration specifications"
         }
       ]
     },
