@@ -2,7 +2,7 @@
 Counts screen draws, not FPS/device memory. Physical Android QA still required.
 """
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 ROOT=Path(__file__).resolve().parents[1]
 with sync_playwright() as pw:
@@ -73,7 +73,7 @@ with sync_playwright() as pw:
             const t=window.__godseedFxRafTrace;
             return t&&t.frames>=5&&t.elapsedMs>=300;
         }""",polling='raf',timeout=2500)
-    except Exception as exc:
+    except PlaywrightTimeoutError as exc:
         trace=page.evaluate('window.__godseedFxRafTrace')
         raise AssertionError(('paused FX RAF scheduler stalled; not a verified FX redraw regression',trace)) from exc
     trace=page.evaluate('window.__godseedFxRafTrace')
