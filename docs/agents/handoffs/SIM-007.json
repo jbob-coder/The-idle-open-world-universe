@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "retiring_bot": "CORTEX-19",
+  "reason": "owner_request",
+  "created_utc": "2026-10-19T16:54:57.536Z",
+  "owner_at_handoff": "CORTEX-19",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "2d00ddecfa94f89ddef0af83c9e248f24673ecb3",
+  "unpublished_changes": false,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact.",
+  "task_id": "SIM-007",
+  "last_known_status": "in_review",
+  "work_branch": "feat/sim-007-cortex-19-personal-chronicles",
+  "work_sha": "cff468e5095a6adb602143df403149acb2ffcdd6",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/45",
+  "summary": "Retiro definitivo solicitado por el propietario. SIM-007: diarios personales visibles y persistentes de cuatro habitantes Elin/Rowan/Sera/Bram, objetivos a largo plazo, preferencias éticas de elección y consecuencias verificadas por deltas antes/después de recursos, movimientos, necesidades, relaciones y habilidades. Hasta 12 eventos por persona, decisión/razón/alternativa/resultado/impacto inspeccionables sin control divino. Gestión v1 y datos importados no confiables; rama íntegra PR #45 enviada, aún sin aprobación independiente ni merge.",
+  "changed_files": [
+    "src/chronicles.js",
+    "src/choices.js",
+    "src/living.js",
+    "src/ui.js",
+    "index.template.html",
+    "build.py",
+    "tests/chronicles.test.js",
+    "tests/living_world_browser_acceptance.py",
+    "docs/SIM_007_PERSONAL_CHRONICLES.md"
+  ],
+  "tests": [
+    "PASS: node --test tests/*.test.js — 111/111 Node en commit cff468e5095a6adb602143df403149acb2ffcdd6; GitHub Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39228008994 (completed success). Incluye 11 pruebas nuevas y 16 semillas.",
+    "PASS: python build.py y suite Chromium offline en commit cff468e5095a6adb602143df403149acb2ffcdd6 — selector por habitante, datos de impacto, seguridad HTML, guardado/restauración v1, capítulos I–III; 640x360, 720x400 y 960x540 sin solicitudes remotas ni errores JS; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39228008994.",
+    "PASS: Gradle WebView debug APK y Android API29 emulator instrumentación 6/6 en commit cff468e5095a6adb602143df403149acb2ffcdd6; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39228008972; artefactos 12176065833 y 12175041617.",
+    "FAIL: histórico commit 0a40d07bf10778e28dc7ae4c647097afdac53944 — 109/110 Node, una expectativa errónea de 12 entradas donde sólo se generaban 11; corregido en f4a2f7927277f6367a7e6852e2138f542b45c7cc y CI del último SHA PASS.",
+    "NOT_RUN: pruebas Android en teléfonos físicos con 2 y 3 GB de RAM, PSS/RSS, temperatura, FPS y soak de 20 minutos; QA-004 requiere hardware.",
+    "NOT_RUN: resolución de conflictos e integración conjunta con SIM-011 en un único árbol, pruebas del nuevo render 3D Pixel Squares y regresiones de migración arquitectónica; la dirección 3D aún no está implementada."
+  ],
+  "blockers": [
+    "PR #45 permanece open/in_review y necesita revisor independiente; ningún permiso de merge por retiro.",
+    "La integración conjunta con SIM-011 (#41) no se ha ejecutado ni verificado; resolver archivos compartidos sin sobrescritura."
+  ],
+  "risks": [
+    "Dirección de producto APROBADA 2026-10-19: perspectiva 3D con estética Pixel Squares y sociedad autónoma creada por NPC Sims; la UI 2D cenital previa es LEGACY, no contrato visual definitivo. PR #47 de dirección todavía abierta, no presupone motor gráfico/renderer.",
+    "PR #41 y PR #45 son ramas hermanas apiladas sobre SIM-002; editan src/choices.js, src/living.js, src/ui.js, build.py y la prueba Chromium de manera concurrente. El sucesor/integrador autorizado debe reconciliar ambas sin perder ninguna funcionalidad y correr pruebas combinadas en SHA de integración.",
+    "No inspeccioné copias locales de otras personas ni sus ficheros sin commitear; TODOS los cambios que hice en estos dos PR dentro de esta conversación figuran en commits remotos verificados. Este reporte no afirma conocer todos los checkouts ajenos.",
+    "Android 2-3 GB físicos, PSS, FPS, temperatura y 20 minutos de soak: NOT_RUN / QA-004; la prueba API 29 de emulador no los certifica.",
+    "No modificar main, no hacer merge/cerrar PR ni liberar in_review/verified a ready. Mantener tareas con su estado y owner auditables; un sucesor puede revisar pero no reclamar automáticamente."
+  ],
+  "save_notes": "Formato JSON exterior version:1 y clave godseed-one-small-life-v1 preservados. Saves previos sin journal generan cronología vacía, sin inventar pasado; sanitización de impactos imposibles, fechas futuras, longitud y HTML importado. Android offline pasa CI de emulador en HEAD, no teléfono físico.",
+  "next_actions": [
+    "Leer docs/agents/INTRODUCCION_AL_PROYECTO_PROMPT.md en introduccion-al-proyecto, memo de propietario PR #47, issue #43 y este handoff; comprobar registry/board HEAD y PR #45 SHA. No auto-reclamar esta tarea mientras in_review.",
+    "Realizar revisión independiente de SIM-007 en commit cff468e5095a6adb602143df403149acb2ffcdd6: reproducir Node 111/111, Chromium offline, Android API29 y auditar causalidad de 'impactos' y save v1; sólo un agente independiente puede marcar verified con evidencia.",
+    "Coordinar integración de PR #45 con el verified SIM-011 PR #41: merge/rebase autorizado de ambos sobre base acordada sin eliminar campos 'journal' o 'cognition', reconstruir build.py y rerun tests combinados en HEAD exacto; no tocar main sin autorización.",
+    "Planificar sustitución del inspector heredado 2D por vista de observación en el nuevo render 3D Pixel Squares, manteniendo accesibilidad y autonomía NPC; no asumir cámara/engine/voxels todavía."
+  ],
+  "do_not_repeat": [
+    "No volver a implementar el motor de diarios; revisar los 17 commits publicados del PR #45 y tests/chronicles.test.js.",
+    "No tratar fallo histórico del primer test como fallo del último SHA; último CI confirmado PASS.",
+    "No transformar el inspector en control directo de Sims ni otorgar recursos por escribir susurros.",
+    "No cancelar PR #45 sólo por ser parte de un UI 2D heredado; conservar lógica de memoria y planificar adaptación visual."
+  ],
+  "published_commits": [
+    "f157013623da57d5f29e5d63a0d81502a8c495f7",
+    "c17f64e6ad1a220b732cc0cbf79b44467010ae8e",
+    "5c7d517e4c887cc0a65aa0116c09d0e966446990",
+    "b6b7ead0aef227a5ec1c68b965f3526abd6aecab",
+    "42c3e6bbc0859dbba20a935d34f9759f88a24017",
+    "46fc498da6f7ade197047350529ee782ed8e67f2",
+    "2000ce20c398f0f383f23b9be6cd9b42a9aac670",
+    "64f24cac1dde01793b43a83d8bf2aee71f3f54d6",
+    "0a40d07bf10778e28dc7ae4c647097afdac53944",
+    "f4a2f7927277f6367a7e6852e2138f542b45c7cc",
+    "36411cf9e9050422f028ecd02e37fc678efce854",
+    "a7814997336589a927b4362f4e8cb01a503d08f2",
+    "538bf06567e707247618e4411ff9232f4a5fd255",
+    "0e74037ad0a52dcc13e1816027574892e400c441",
+    "0df1ac1c3d06ada1a4f660a7ee9f4760814e2743",
+    "15a0f4f34a5c78d45ac42af472b506e8aa88ed8b",
+    "cff468e5095a6adb602143df403149acb2ffcdd6"
+  ],
+  "source_base_sha": "66bcf93440f0293eef4d7a0c05832d1b5904d73f",
+  "claim_commit": "bba8eda4a5d9e6f6211458589b6acdc05a3bdac1",
+  "start_commit": "e2185020c76ea61c2df63d51abced7e1938864eb",
+  "review_handoff_commit": "dc7e5267b0ed77148afaa17af12d3baebc0f2a50"
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "retiring_bot": "CORTEX-19",
+  "reason": "owner_request",
+  "created_utc": "2026-10-19T16:54:57.536Z",
+  "owner_at_handoff": "CORTEX-19",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "2d00ddecfa94f89ddef0af83c9e248f24673ecb3",
+  "unpublished_changes": false,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact.",
+  "task_id": "SIM-011",
+  "last_known_status": "verified",
+  "work_branch": "feat/sim-011-cortex-19-cognition",
+  "work_sha": "cb6ef3f89343a4456e3403db5a3230185be67660",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/41",
+  "summary": "Retiro definitivo solicitado por propietario. SIM-011 ya fue independientemente VERIFIED por FORGE-27 (2026-10-19) con PR #41 abierto SIN MERGE: perfiles cognitivos individuales seedables para cuatro ciudadanos, cinco atributos 0–100, tres estilos de aprendizaje, cuatro dominios de conocimiento/práctica, horizonte de planificación 1–4 y utilidad ponderada por capacidades sin derrotar prioridades de supervivencia. Aprendizaje únicamente de acciones concluidas, visible en inspector de Dios. Código preservado íntegramente en SHA confirmado.",
+  "changed_files": [
+    "src/cognition.js",
+    "src/choices.js",
+    "src/living.js",
+    "src/ui.js",
+    "build.py",
+    "tests/cognition.test.js",
+    "tests/living_world_browser_acceptance.py",
+    "docs/SIM_011_COGNITION.md"
+  ],
+  "tests": [
+    "PASS: node --test tests/*.test.js — 109/109 Node, nueve nuevas pruebas de cognición con 16 semillas, commit cb6ef3f89343a4456e3403db5a3230185be67660, https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106721.",
+    "PASS: python build.py y Chromium offline en mismo commit cb6ef3f89343a4456e3403db5a3230185be67660 — HUD visible I/F/C/E/P y plan, historias I–III, guardado v1, 640x360/720x400/960x540, 0 errores JS/solicitudes remotas; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106721.",
+    "PASS: Gradle WebView APK y Android API29 emulador 6/6 en commit cb6ef3f89343a4456e3403db5a3230185be67660; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106704; artefactos 12159677864 y 12160520171.",
+    "PASS: revisión de código/CI independiente por FORGE-27 https://github.com/jbob-coder/The-idle-open-world-universe/pull/41#pullrequestreview-5569327334 en SHA cb6ef3f89343a4456e3403db5a3230185be67660; estado authoritative verified, NO merged/done.",
+    "NOT_RUN: pruebas reales Android en teléfonos físicos 2–3 GB RAM, métricas PSS/RSS, FPS/calor/soak de 20 min (QA-004).",
+    "NOT_RUN: integración del PR #41 con SIM-007 (#45) y nuevo motor/perspectiva 3D Pixel Squares; no existe CI de combinación."
+  ],
+  "blockers": [
+    "El PR #41 sigue abierto no fusionado: verified significa revisión aprobada, no done. Sólo OWNER/INTEGRATOR autorizado puede integrar y publicar done.",
+    "Reconciliar SIM-007 porque ambos PR modifican archivos compartidos; no auto-fusionar ni inventar CI conjunto."
+  ],
+  "risks": [
+    "Dirección de producto APROBADA 2026-10-19: perspectiva 3D con estética Pixel Squares y sociedad autónoma creada por NPC Sims; la UI 2D cenital previa es LEGACY, no contrato visual definitivo. PR #47 de dirección todavía abierta, no presupone motor gráfico/renderer.",
+    "PR #41 y PR #45 son ramas hermanas apiladas sobre SIM-002; editan src/choices.js, src/living.js, src/ui.js, build.py y la prueba Chromium de manera concurrente. El sucesor/integrador autorizado debe reconciliar ambas sin perder ninguna funcionalidad y correr pruebas combinadas en SHA de integración.",
+    "No inspeccioné copias locales de otras personas ni sus ficheros sin commitear; TODOS los cambios que hice en estos dos PR dentro de esta conversación figuran en commits remotos verificados. Este reporte no afirma conocer todos los checkouts ajenos.",
+    "Android 2-3 GB físicos, PSS, FPS, temperatura y 20 minutos de soak: NOT_RUN / QA-004; la prueba API 29 de emulador no los certifica.",
+    "No modificar main, no hacer merge/cerrar PR ni liberar in_review/verified a ready. Mantener tareas con su estado y owner auditables; un sucesor puede revisar pero no reclamar automáticamente."
+  ],
+  "save_notes": "Conserva save exterior version 1 y clave godseed-one-small-life-v1; perfil cognitivo opcional nuevo, reconstrucción desde world seed + id en saves previos sin cognition; saneamiento de estadísticas e historial. Emulador Android PASS en SHA exacto, dispositivos físicos NOT_RUN.",
+  "next_actions": [
+    "Leer memo de dirección del propietario PR #47, handoff SIM-011, registro actualizado y PR #41 SHA. Mantener verified, owner CORTEX-19 como historia de autoría; no declarar done antes de integración aprobada.",
+    "Reconfirmar revisión independiente FORGE-27 al SHA cb6ef3f89343a4456e3403db5a3230185be67660 y CI 109/109 Node, Chromium offline, Android API29 6/6; si PR cambia SHA, revalidar.",
+    "Coordinar integración de #41 con SIM-007 #45, preservando 'cognition' y 'journal' en cada ciudadano, motivaciones, UI observable y bundling; generar un SHA integrado nuevo con pruebas completas.",
+    "Migrar representación visual de estos atributos desde inspector Canvas 2D heredado hacia perspectiva 3D Pixel Squares aprobada, una vez escogida arquitectura por propietario/coordinador; no cambiar funcionamiento off-line ni autonomía."
+  ],
+  "do_not_repeat": [
+    "No implementar otra vez src/cognition.js; conservar ocho commits publicados y revisión externa https://github.com/jbob-coder/The-idle-open-world-universe/pull/41#pullrequestreview-5569327334.",
+    "No degradar verified a ready/in_review ni quitar owner por retiro: transición CLI prohibida desde verified.",
+    "No confundir rasgos inteligentes individuales (cuatro habitantes) con IA general, generaciones ni población masiva.",
+    "No asumir que el look 2D heredado sigue aprobado como visual definitivo; tampoco imponer un motor 3D sin aprobación técnica."
+  ],
+  "published_commits": [
+    "677983227b90c6193cdef6617b59c273cd53e0f7",
+    "a2f68175f229f3815ef202c8a4d9b4c01d1b3ed8",
+    "2faed85d455bc2fb1c4db4049ff61fc8f2ac39ca",
+    "a6549f611b336ce6fb5b9213f11723e542c1350a",
+    "978bf7bb108cefe0bb8804adf15ae081b3b93218",
+    "10e5cc0d80ff75e80299df12351b9abecd9b1c31",
+    "fdc2f058f7879748b644d6d818cb3d0428d53419",
+    "cb6ef3f89343a4456e3403db5a3230185be67660"
+  ],
+  "source_base_sha": "66bcf93440f0293eef4d7a0c05832d1b5904d73f",
+  "claim_commit": "aae4db1dc6c759e7edf88928bba57b61c0e4c4dc",
+  "start_commit": "24584ca97aad2f3293b8f180bf4388f6413d1e48",
+  "review_handoff_commit": "4a9a9317b9f15647194e75a4ccecfe9d1459d9e6",
+  "verified_by": "FORGE-27",
+  "review_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/41#pullrequestreview-5569327334"
+}
