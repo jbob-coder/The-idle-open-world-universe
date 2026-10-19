@@ -52,7 +52,7 @@ def validate(db):
         errors.append("Missing governance task")
     for t in tasks:
         ident = t.get("id", "?")
-        if not re.fullmatch(r"[A-Z]{3}-\d{3}", ident):
+        if not re.fullmatch(r"[A-Z]{2,4}-\d{3}", ident):
             errors.append(f"{ident}: invalid ID")
         if t.get("status") not in STATUS:
             errors.append(f"{ident}: unknown status")
