@@ -110,7 +110,7 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
   $('townStatus').textContent=s.living.towns.map(t=>t.name+' · '+t.age+' / '+(t.technology?t.technology.era:'Founding Age')+' · '+t.buildings.length+' buildings · '+t.stock.food+' food · '+t.stock.wood+' wood · '+t.stock.stone+' stone').join(' | ');
   $('citizenLives').textContent=s.living.citizens.map(p=>p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity).join(' • ');
   const recent=s.living.whispers[s.living.whispers.length-1];
-  $('godFeedback').textContent=recent?('Interpreted as: '+recent.label+'. '+recent.decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join('; ')+(recent.nimAgree?'; Nim is considering it.':'')):'Speak your intention; residents decide how to respond.';
+  $('godFeedback').textContent=recent?('Interpreted as: '+recent.label+'. '+(recent.people||[]).slice(0,8).map(d=>d.name+': '+d.state+' ('+d.reason+')').join('; ')+(recent.nimAgree?'; Nim may consider it.':'')):'Speak your intention; residents decide how to respond.';
  }
 
  $('milestones').title=(s.shrinesVisited||[]).length+' santuarios antiguos visitados';
