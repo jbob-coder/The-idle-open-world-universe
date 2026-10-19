@@ -625,9 +625,9 @@
       "priority": "P1",
       "area": "world",
       "title": "Streaming biome ecology, climate, water and landmarks",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "TERRAIN-01",
+      "work_branch": "feat/wld-006-terrain-01-biome-ecology",
       "depends": [
         "WLD-001"
       ],
@@ -649,6 +649,13 @@
           "to": "ready",
           "actor": "FORGE-27",
           "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T02:15:13+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "TERRAIN-01",
+          "reason": "Isolated deterministic biome/landmark and route-safe resource overlay; WLD-001 verified; no conflicts with chunk storage files."
         }
       ]
     },
