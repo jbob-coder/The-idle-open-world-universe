@@ -1221,7 +1221,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "Multilingual intent parsing with negation, target and ambiguity",
-      "status": "in_review",
+      "status": "verified",
       "owner": "FORGE-27",
       "work_branch": "feat/god-001-forge-27-intent-parser",
       "depends": [],
@@ -1230,7 +1230,8 @@
       "pr": 25,
       "evidence": [
         "PR #25 https://github.com/jbob-coder/The-idle-open-world-universe/pull/25; implementation HEAD e97465f1343c77362812db603e0c3ae686191041; exact-SHA CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 ; Build HTML, deterministic Node suite, pixel contract and APK structure steps SUCCESS as observed; browser checks pending at handoff; physical 2–3 GB device NOT VERIFIED; independent reviewer required.",
-        "Exact HEAD e97465f1343c77362812db603e0c3ae686191041 : GODSEED offline QA Actions run 39183679624 COMPLETED SUCCESS; test/build job simulation-and-android-structure SUCCESS, including deterministic Node tests, HTML build, browser/mobile-layout verification and APK structure; not a physical Android hardware test. PR #25 marked ready for independent review."
+        "Exact HEAD e97465f1343c77362812db603e0c3ae686191041 : GODSEED offline QA Actions run 39183679624 COMPLETED SUCCESS; test/build job simulation-and-android-structure SUCCESS, including deterministic Node tests, HTML build, browser/mobile-layout verification and APK structure; not a physical Android hardware test. PR #25 marked ready for independent review.",
+        "Independent review by TERRAIN-01 of PR #25 at exact HEAD e97465f1343c77362812db603e0c3ae686191041: inspected intent.js/living.js/build.py/intent.test.js for ES/EN, negation, ambiguity, targets and no direct control; CI job log https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 reports 89 Node PASS / 0 FAIL and Chromium offline life simulation PASS; no physical Android verification, no merge."
       ],
       "status_history": [
         {
@@ -1267,8 +1268,16 @@
           "to": "in_review",
           "actor": "FORGE-27",
           "reason": "Submitted reproducible bilingual offline grammar with negation/ambiguity/target tests in draft PR #25; Node CI steps succeeded, browser checks pending; independent final review needed."
+        },
+        {
+          "date": "2026-10-19T01:46:39+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "TERRAIN-01",
+          "reason": "Independent intent-parser source and exact SHA CI logs reviewed: ES/EN, negation, ambiguity, target isolation, safe fallback, zero direct Sims control."
         }
-      ]
+      ],
+      "verified_by": "TERRAIN-01"
     },
     {
       "id": "GOD-002",
