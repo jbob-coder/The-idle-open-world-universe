@@ -32,6 +32,57 @@ const hash=(x,y)=>((Math.imul(x+91,374761393)^Math.imul(y+37,668265263))>>>0);
 function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
 function dot(x,y,c){rect(x,y,1,1,c);}
 const assets=window.GodseedAssets,terrain=window.GodseedTerrain,visualFx=window.GodseedFX.create(),Living=window.GodseedLiving;
+
+const Door=window.GodseedInteriors,RoomArt=window.GodseedInteriorView;
+let chosenBuildingId=null,observedRoomId=null;
+function buildingAt(x,y){
+ if(!s.living)return null;
+ for(const t of s.living.towns)for(const b of t.buildings){
+  if(x>=b.x&&x<b.x+(b.w||1)&&y>=b.y&&y<b.y+(b.h||1))return b;
+  const d=Door.outerDoor(s,b);if(d&&d.x===x&&d.y===y)return b;
+ }
+ return null;
+}
+function renderRoom(){
+ if(!observedRoomId)return;
+ const r=Door.room(s,observedRoomId);
+ if(!r){observedRoomId=null;$('roomExit').hidden=true;$('interiorCanvas').hidden=true;return;}
+ const residents=Door.occupants(s,observedRoomId);
+ RoomArt.render($('interiorCanvas'),r,residents);
+ $('roomDescription').textContent='Capa interior segura · '+r.layout.width+' × '+r.layout.height+
+  ' casillas a '+r.layout.tileMetres+' m = '+(r.layout.width*r.layout.tileMetres)+' × '+
+  (r.layout.height*r.layout.tileMetres)+' m. Sin enemigos dentro.';
+ $('roomResidents').textContent=residents.length?'Dentro: '+residents.map(p=>p.name+' — '+p.activity).join(' · '):
+  'Interior vacío; los habitantes entrarán cuando lo decidan.';
+}
+function selectBuilding(id){
+ const b=Door.building(s,id);if(!b)return false;
+ chosenBuildingId=id;$('buildingInspector').hidden=false;$('buildingName').textContent=
+  ({house:'Casa',farm:'Granja',workshop:'Herrería',market:'Mercado',well:'Pozo',watchtower:'Torre de guardia'}[b.type]||'Edificio')+' · '+id;
+ const door=Door.outerDoor(s,b);
+ $('buildingInfo').textContent='Edificio exterior: '+(b.w||1)+' × '+(b.h||1)+
+  ' casillas; '+(2*(b.w||1))+' × '+(2*(b.h||1))+' m · Techo '+b.roof+
+  (door?' · Puerta ('+door.x+','+door.y+')':' · Sin acceso exterior habilitado');
+ $('roomEnter').disabled=!door;
+ if(observedRoomId&&observedRoomId!==id){
+  observedRoomId=null;$('interiorCanvas').hidden=true;$('roomExit').hidden=true;$('roomEnter').hidden=false;
+  $('roomResidents').textContent='';$('roomDescription').textContent='';
+ }
+ return true;
+}
+function observeBuilding(id){
+ if(!selectBuilding(id))return false;
+ const r=Door.room(s,id);if(!r)return false;
+ observedRoomId=id;$('roomEnter').hidden=true;$('roomExit').hidden=false;
+ $('interiorCanvas').hidden=false;renderRoom();return true;
+}
+$('roomEnter').addEventListener('click',()=>{if(chosenBuildingId)observeBuilding(chosenBuildingId);});
+$('roomExit').addEventListener('click',()=>{
+ observedRoomId=null;$('roomEnter').hidden=false;$('roomExit').hidden=true;
+ $('interiorCanvas').hidden=true;$('roomDescription').textContent='';
+ $('roomResidents').textContent='';
+});
+
 const motionQuery=window.matchMedia('(prefers-reduced-motion: reduce)');let reducedMotion=motionQuery.matches;
 $('reduceMotion').checked=reducedMotion;$('reduceMotion').addEventListener('change',e=>{reducedMotion=e.target.checked;if(s.settings.speed===0)draw();});
 assets.loaded.then(()=>{document.querySelectorAll('[data-power]').forEach(button=>{const slot=button.querySelector('.ico,.power-icon');if(!slot)return;slot.textContent='';const c=document.createElement('canvas');c.width=c.height=16;c.className='power-pixel';c.setAttribute('aria-hidden','true');slot.appendChild(c);const f=assets.manifest.atlases[2].symbols.find(f=>f.name===button.dataset.power);if(f)assets.blit(c.getContext('2d'),2,f.rect,0,0);});const portrait=$('portrait');const f=assets.manifest.atlases[1].frames[0];assets.blit(portrait.getContext('2d'),1,f.rect,0,0);oldCells.fill(-99);draw();}).catch(e=>notify(e.message));
@@ -58,6 +109,15 @@ function updateScenery(){
 function positionCamera(){if(s.settings.follow){camX=Math.max(0,Math.min(A.W-VW,s.bot.x-(VW>>1)));camY=Math.max(0,Math.min(A.H-VH,s.bot.y-(VH>>1)));}}
 function draw(){screenRedraws++;positionCamera();const b=s.bot;updateScenery();
  ctx.drawImage(scenery,0,0);
+ // Door thresholds link physical outdoor buildings with separately drawn rooms.
+ if(s.living)for(const t of s.living.towns)for(const build of t.buildings){
+  const door=Door.outerDoor(s,build);
+  if(door&&door.x>=camX&&door.x<camX+VW&&door.y>=camY&&door.y<camY+VH&&
+     godSeesTown(build.x,build.y)){
+   rect((door.x-camX)*16+5,(door.y-camY)*16+5,6,6,'#dbb86d');
+   rect((door.x-camX)*16+7,(door.y-camY)*16+7,2,2,'#513a2b');
+  }
+ }
  // Physical settlements are persistent Canvas actors, not symbolic village tiles.
  if(s.living)for(const town of s.living.towns)for(const building of town.buildings){
   if(building.x+(building.w||1)>camX&&building.x<camX+VW&&
@@ -149,7 +209,7 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('powers').querySelectorAll('[data-power]').forEach(el=>{const c=A.COST[el.dataset.power];if(c!==undefined)el.classList.toggle('unaffordable',c>s.faith);});
  document.querySelectorAll('[data-speed]').forEach(el=>{const n=Number(el.dataset.speed);el.classList.toggle('active',s.settings.speed===n);el.setAttribute('aria-pressed',String(s.settings.speed===n));});
  $('follow').classList.toggle('active',s.settings.follow);$('follow').setAttribute('aria-pressed',String(s.settings.follow));
- drawMini();}
+ renderRoom();drawMini();}
 function save(){try{localStorage.setItem(SAVE_KEY,A.serialize(s));$('saveState').textContent='Saved locally';return true;}catch(e){$('saveState').textContent='Local saving blocked. Use Export.';return false;}}
 function exportSave(){const blob=new Blob([A.serialize(s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`godseed-day-${s.day}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),500);notify('World exported to JSON.');}
 function backupDialog(kind){
@@ -176,7 +236,7 @@ $('saveApply').addEventListener('click',()=>{
  const restored=A.restore($('saveText').value);if(!restored){notify('Invalid world backup.');return;}
  confirmAction('Replace current world with the pasted backup?',()=>{if(!commitRestored(restored))return;hud();draw();$('saveDialog').hidden=true;notify('World backup restored.');});
 });
-function commitRestored(data){try{localStorage.setItem(SAVE_KEY,A.serialize(data));}catch(e){notify('Storage full or unavailable. Current world preserved.');return false;}s=data;acc=0;frameLast=0;oldCells.fill(-99);return true;}
+function commitRestored(data){try{localStorage.setItem(SAVE_KEY,A.serialize(data));}catch(e){notify('Storage full or unavailable. Current world preserved.');return false;}s=data;chosenBuildingId=null;observedRoomId=null;$('buildingInspector').hidden=true;$('interiorCanvas').hidden=true;$('roomExit').hidden=true;$('roomEnter').hidden=false;acc=0;frameLast=0;oldCells.fill(-99);return true;}
 function importSave(file){if(!file||file.size>1000000){notify('Invalid or oversized save file.');return;}const reader=new FileReader();reader.onload=()=>{const data=A.restore(reader.result);if(!data){notify('Save rejected: incompatible world.');return;}if(!commitRestored(data))return;hud();draw();notify('World restored.');};reader.readAsText(file);}
 function tileFromPointer(e){return window.GodseedCamera.pointerToWorld({x:camX,y:camY,width:VW,height:VH},canvas.getBoundingClientRect(),e.clientX,e.clientY);}
 let drag=null,suppressClick=false;
@@ -186,7 +246,7 @@ canvas.addEventListener('pointermove',e=>{if(!drag)return;const scale=window.God
  if(dx||dy){suppressClick=true;s.settings.follow=false;camX=Math.max(0,Math.min(A.W-VW,drag.cx-dx));camY=Math.max(0,Math.min(A.H-VH,drag.cy-dy));draw();}});
 canvas.addEventListener('pointerup',()=>{drag=null;});canvas.addEventListener('pointercancel',()=>{drag=null;suppressClick=true;});
 canvas.addEventListener('pointermove',e=>{const next=tileFromPointer(e);if(!hover||next.x!==hover.x||next.y!==hover.y){hover=next;if(s.settings.speed===0)draw();}});canvas.addEventListener('pointerleave',()=>{if(hover){hover=null;if(s.settings.speed===0)draw();}});
-canvas.addEventListener('click',e=>{if(suppressClick){suppressClick=false;return;}let {x,y}=tileFromPointer(e);if(!A.inside(x,y))return;if(mode==='inspect'){const known=s.seen[A.idx(x,y)],near=known?s.enemies.find(z=>z.x===x&&z.y===y):null,person=known?(s.npcs||[]).find(z=>z.x===x&&z.y===y):null,t=A.TILE_NAMES[s.map[A.idx(x,y)]];let message=`(${x},${y}) ${s.seen[A.idx(x,y)]?t+' · '+A.regionAt(s,x,y).name:'Unexplored'}`+(near?` · ${near.type} ${near.hp} HP`:'')+(person?` · ${person.name} (${person.role}) · ${person.mood} · Trust ${Math.round(person.trust)}`:'');notify(message);$('inspect').textContent=message;return;}
+canvas.addEventListener('click',e=>{if(suppressClick){suppressClick=false;return;}let {x,y}=tileFromPointer(e);if(!A.inside(x,y))return;if(mode==='inspect'){const known=s.seen[A.idx(x,y)],near=known?s.enemies.find(z=>z.x===x&&z.y===y):null,person=known?(s.npcs||[]).find(z=>z.x===x&&z.y===y):null,t=A.TILE_NAMES[s.map[A.idx(x,y)]];const building=buildingAt(x,y);if(building&&godSeesTown(building.x,building.y)){selectBuilding(building.id);notify('Puerta / edificio: '+building.type);return;}let message=`(${x},${y}) ${s.seen[A.idx(x,y)]?t+' · '+A.regionAt(s,x,y).name:'Unexplored'}`+(near?` · ${near.type} ${near.hp} HP`:'')+(person?` · ${person.name} (${person.role}) · ${person.mood} · Trust ${Math.round(person.trust)}`:'');notify(message);$('inspect').textContent=message;return;}
  const r=A.power(s,mode,x,y);notify(r.ok?`${mode.toUpperCase()} used. -${r.cost} Faith`:r.why);if(r.ok){save();hud();draw();}});
 mini.addEventListener('click',e=>{const r=mini.getBoundingClientRect(),x=Math.floor((e.clientX-r.left)*A.W/r.width),y=Math.floor((e.clientY-r.top)*A.H/r.height);s.settings.follow=false;camX=Math.max(0,Math.min(A.W-VW,x-(VW>>1)));camY=Math.max(0,Math.min(A.H-VH,y-(VH>>1)));hud();draw();});
 document.querySelectorAll('[data-power]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.power)));
@@ -223,5 +283,5 @@ function frame(ts){requestAnimationFrame(frame);if(!active)return;if(!frameLast)
  if(ts-lastSave>16000){save();lastSave=ts;}
  if(flashUntil&&Date.now()>flashUntil){$('toast').classList.remove('show');flashUntil=0;}}
 setMode('inspect');hud();draw();requestAnimationFrame(frame);
-window.GodseedDebug={getState:()=>s,getRenderStats:()=>({sceneryRedraws,screenRedraws,atlasesReady:assets.ready,decodedBytes:assets.decodedBytes,activeEffects:visualFx.list(performance.now()).length,reducedMotion}),draw,getCamera:()=>({x:camX,y:camY,width:VW,height:VH,zoom:ZOOMS[zoomIndex].name}),setZoom:(i)=>{setZoom(i);hud();draw();},setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
+window.GodseedDebug={observeBuilding,readRoom:(id)=>Door.room(s,id),getState:()=>s,getRenderStats:()=>({sceneryRedraws,screenRedraws,atlasesReady:assets.ready,decodedBytes:assets.decodedBytes,activeEffects:visualFx.list(performance.now()).length,reducedMotion}),draw,getCamera:()=>({x:camX,y:camY,width:VW,height:VH,zoom:ZOOMS[zoomIndex].name}),setZoom:(i)=>{setZoom(i);hud();draw();},setSpeed:(n)=>{s.settings.speed=n;hud();},step:(n)=>{for(let i=0;i<n;i++)A.tick(s);hud();draw();},newWorld:(seed)=>{s=A.create(seed);hud();draw();}};
 })();
