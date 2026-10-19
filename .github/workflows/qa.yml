@@ -56,6 +56,7 @@ jobs:
           python tests/chapter_two_browser_acceptance.py
           python tests/chapter_three_browser_acceptance.py
           python tests/living_world_browser_acceptance.py
+          python tests/god_consent_browser_acceptance.py
           python tests/capture_android_layouts.py
           python tests/native_storage_ui_acceptance.py
       - name: Preserve v1 APK and actual browser screenshots
