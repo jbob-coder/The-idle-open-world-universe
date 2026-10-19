@@ -115,6 +115,32 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
    return p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity+
     ' | Why: '+c.why+' | Alternative: '+alternative+' | Result: '+c.consequence;
   }).join('\n');
+  const residents=s.living.citizens,picker=$('residentJournalSelect');
+  if(picker.options.length!==residents.length||
+      residents.some((p,i)=>picker.options[i].value!==String(p.id))){
+   const previous=picker.value;
+   picker.innerHTML=residents.map(p=>'<option value="'+html(String(p.id))+'">'+
+      html(p.name)+' ('+html(p.role)+')</option>').join('');
+   picker.value=residents.some(p=>String(p.id)===previous)?previous:
+      (residents.length?String(residents[0].id):'');
+  }
+  const selected=residents.find(p=>String(p.id)===picker.value);
+  if(selected&&selected.journal){
+   const journal=selected.journal,chron=window.GodseedChronicles;
+   const entries=journal.entries.slice(-5).reverse().map(e=>
+    'Day '+(1+Math.floor(e.tick/240))+' · '+e.choice+' / '+e.moral+
+    '\nReason: '+e.reason+
+    '\nAlternative: '+(e.alternative||'none')+
+    '\nResult: '+e.consequence+
+    '\nImpact: '+chron.describeImpact(e.impact)).join('\n\n');
+   $('residentJournal').textContent=selected.name+' · '+selected.role+
+    '\nGoal: '+chron.describeGoal(journal.goal)+
+    ' ('+journal.progress+'/'+journal.goalTarget+')'+
+    '\nValues: Care '+journal.ethics.care+' · Duty '+journal.ethics.duty+
+    ' · Curiosity '+journal.ethics.curiosity+
+    '\nMemories ('+journal.entries.length+')'+
+    (entries?'\n\n'+entries:'\nNo personal experience recorded yet.');
+  }else $('residentJournal').textContent='No resident chronicle available.';
   const recent=s.living.whispers[s.living.whispers.length-1];
   $('godFeedback').textContent=recent?('Interpreted as: '+recent.label+'. '+recent.decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join('; ')+(recent.nimAgree?'; Nim is considering it.':'')):'Speak your intention; residents decide how to respond.';
  }
@@ -200,6 +226,7 @@ document.querySelectorAll('[data-speed]').forEach(b=>b.addEventListener('click',
 $('follow').addEventListener('click',()=>{s.settings.follow=!s.settings.follow;hud();draw();});
 $('zoom').addEventListener('click',()=>{setZoom(zoomIndex+1);hud();draw();notify('Cámara '+ZOOMS[zoomIndex].name+' · Nim sigue actuando solo.');});
 $('zoomDock').addEventListener('click',()=>$('zoom').click());
+$('residentJournalSelect').addEventListener('change',()=>hud());
 $('godSubmit').addEventListener('click',()=>{
   const field=$('godMessage'),result=A.whisper(s,field.value);
   if(!result.ok){$('godFeedback').textContent=result.reason;notify(result.reason);return;}

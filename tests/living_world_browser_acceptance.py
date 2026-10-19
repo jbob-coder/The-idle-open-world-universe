@@ -38,6 +38,25 @@ with sync_playwright() as pw:
     assert len(choices)==4 and all(c and c['why'] and c['consequence'] and len(c['alternatives'])==2 for c in choices),choices
     decision_text=page.locator('#citizenLives').inner_text()
     assert all(label in decision_text for label in ['Why:', 'Alternative:', 'Result:']),decision_text
+    assert page.locator('#residentJournalSelect option').count()==4
+    assert page.evaluate("GodseedDebug.getState().living.citizens.every(p=>p.journal && p.journal.version===1 && p.journal.entries.length>0)")
+    saved_journals=page.evaluate("GodseedDebug.getState().living.citizens.map(p=>JSON.stringify(p.journal))")
+    before_inspect=page.evaluate("()=>({tick:GodseedDebug.getState().tick, nim:[GodseedDebug.getState().bot.x,GodseedDebug.getState().bot.y], residents:GodseedDebug.getState().living.citizens.map(p=>[p.x,p.y])})")
+    page.locator('#residentJournalSelect').select_option('21')  # Rowan
+    journal_text=page.locator('#residentJournal').inner_text()
+    assert all(word in journal_text for word in ['Rowan', 'Goal:', 'Memories', 'Reason:', 'Result:', 'Impact:']),journal_text
+    after_inspect=page.evaluate("()=>({tick:GodseedDebug.getState().tick, nim:[GodseedDebug.getState().bot.x,GodseedDebug.getState().bot.y], residents:GodseedDebug.getState().living.citizens.map(p=>[p.x,p.y])})")
+    assert before_inspect==after_inspect,'Inspecting a resident must never move people or advance time'
+    injected_markup=page.evaluate("""() => {
+      const p=GodseedDebug.getState().living.citizens[0],original=p.id;
+      p.id='20"><img id="journal-injection" src="x">';
+      GodseedDebug.step(0);
+      const injected=!!document.getElementById('journal-injection');
+      p.id=original;
+      GodseedDebug.step(0);
+      return injected;
+    }""")
+    assert not injected_markup,'Untrusted saved citizen IDs must not create HTML elements'
     assert page.evaluate('GodseedSim.finaleStatus(GodseedDebug.getState()).completed')
     page.evaluate("window.scrollTo(0,0)")
     page.screenshot(path=str(SHOT),full_page=True)
@@ -46,6 +65,9 @@ with sync_playwright() as pw:
     assert page.evaluate('GodseedDebug.getState().living.towns.every(t=>t.buildings.length>=6)')
     assert page.evaluate('GodseedDebug.getState().living.citizens.length')==4
     assert page.evaluate('GodseedDebug.getState().living.whispers.length')==1
+    assert page.evaluate("GodseedDebug.getState().living.citizens.map(p=>JSON.stringify(p.journal))")==saved_journals
+    page.locator('#residentJournalSelect').select_option('21')
+    assert 'Rowan' in page.locator('#residentJournal').inner_text()
     assert not errors,errors
     assert not outbound,outbound
     browser.close()

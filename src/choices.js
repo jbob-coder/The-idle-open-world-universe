@@ -1,9 +1,9 @@
 /* GODSEED utility-based citizen choices. Offline, deterministic, bounded v1 trace. */
 (function(root, factory) {
- const api = factory();
+ const api = factory(typeof module!=='undefined'&&module.exports?require('./chronicles.js'):root.GodseedChronicles);
  if (typeof module !== 'undefined' && module.exports) module.exports = api;
  root.GodseedChoices = api;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function() {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function(Chronicles) {
  'use strict';
  const INTENTS = Object.freeze(['work', 'explore', 'help', 'rest',
   'seek_safety', 'eat', 'sleep', 'wash', 'warm', 'socialize']);
@@ -24,7 +24,7 @@
   const phase = bounded(c.phase, 0, 239, 0);
   const working = c.working === true;
   const company = c.company === true;
-  const options = [
+  const options = Chronicles.bias(p, [
    {intent:'work', score: working ? 150 + Math.round(20*diligence) : -10,
     why:'Scheduled work and diligence support the village'},
    {intent:'explore', score: phase >= 185 ? 5 :
@@ -35,7 +35,7 @@
     why:'Kindness favors checking on another resident'},
    {intent:'rest', score: 36 + .7*(100-energy) + (phase >= 185 ? 80 : 0),
     why:'Energy and the time of day favor resting at home'}
-  ];
+  ]);
   options.sort((a,b) => b.score-a.score ||
    INTENTS.indexOf(a.intent)-INTENTS.indexOf(b.intent));
   let chosen = options[0];
