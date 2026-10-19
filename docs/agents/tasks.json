@@ -2330,7 +2330,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "Replace direct god power toolbar with indirect consequence-based divine influence",
-      "status": "in_progress",
+      "status": "blocked",
       "owner": "FORGE-27",
       "work_branch": "feat/god-006-forge-27-indirect-influence",
       "depends": [
@@ -2340,7 +2340,9 @@
       "acceptance": "Read-only observer UI and contextual god influence rules; every action shows scope, costs, agency effects and side effects; 10 God guidance tests and no direct sim steering.",
       "issue": null,
       "pr": null,
-      "evidence": [],
+      "evidence": [
+        "Code candidate Git object aead479e55d1f24a545eb69347a816448ab8c2ab exists but is UNREFERENCED: branch feat/god-006-forge-27-indirect-influence remains at 7de364157e45260e4d728daa1c3558be79dacd39 after an OpenAI/GitHub connector safety block on publishing. NOT TESTED, NOT PR, NOT INTEGRATED. Requires authorized branch publication and fresh tests."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -2369,6 +2371,13 @@
           "to": "in_progress",
           "actor": "FORGE-27",
           "reason": "Build pure guidance preview/decision engine plus contextual god observatory UI, with ≥10 Node guidance cases and offline browser acceptance. Keep runtime God-002 and ART-007 branches isolated, no actor movement or v1 save schema changes."
+        },
+        {
+          "date": "2026-10-19T02:27:48.478Z",
+          "from": "in_progress",
+          "to": "blocked",
+          "actor": "FORGE-27",
+          "reason": "Implementation tree prepared but code commit reference update blocked by connector safety checks; no branch publication or CI evidence; do not claim complete or attempt unsafe overwrite."
         }
       ]
     },

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "task_id": "GOD-006",
+  "retiring_bot": "FORGE-27",
+  "reason": "blocked",
+  "created_utc": "2026-10-19T02:27:48.478Z",
+  "last_known_status": "blocked",
+  "owner_at_handoff": "FORGE-27",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "adfd0bd67b5d28f9bb002d4967267cb8c0b29484",
+  "work_branch": "feat/god-006-forge-27-indirect-influence",
+  "work_sha": "aead479e55d1f24a545eb69347a816448ab8c2ab",
+  "pr_url": null,
+  "summary": "Designed isolated pure guidance + contextual read-only observer UI, and reviewed legacy direct-power browser regressions. A Git code object exists at the candidate SHA, but its branch reference update was explicitly blocked by connector safety. No part of this code is on the work branch, no PR/CI; treat as unpublished and unverified.",
+  "changed_files": [
+    "src/divine/intent.js",
+    "src/living.js",
+    "tests/intent.test.js",
+    "src/divine/guidance.js",
+    "src/guidance_ui.js",
+    "src/ui.js",
+    "build.py"
+  ],
+  "tests": [
+    "NOT_RUN: Node God guidance acceptance tests — not yet written or executed.",
+    "NOT_RUN: Offline Chromium, Android emulator and physical 2–3 GB hardware tests — code branch not published.",
+    "NOT_RUN: Prior legacy browser direct-power tests need safe adaptation to the new indirect influence semantics."
+  ],
+  "blockers": [
+    "OpenAI/GitHub connector safety refused update_ref to work branch; candidate commit exists only as unreferenced Git object.",
+    "No accepted PR or CI for candidate changes, and the old browser tests would need updating to the new interface contract."
+  ],
+  "risks": [
+    "Unreferenced Git object may be garbage-collected; do not claim reliable branch storage.",
+    "Porting verified GOD-001 parser into GOD-004 introduces future stacked-merge considerations.",
+    "Changing old direct power UI requires updating old mobile/browser acceptance tests rather than hiding failures."
+  ],
+  "save_notes": "Candidate aimed to leave sim power API, v1 save key and schema unchanged, but it has not been tested. No claim of verified migration or saved-state compatibility.",
+  "next_actions": [
+    "Resolve connector publication limitation through authorized tooling without bypassing safety checks.",
+    "After safely publishing source, add >=10 deterministic God guidance Node tests, update legacy browser acceptance, run full offline and native Android CI at exact HEAD.",
+    "Review scope/costs/agency wording and integration with GOD-002 consent and ART-007 UI; create PR only after evidence.",
+    "Once independently reviewed and tested, transition blocked -> ready and re-claim through governance; do not jump from blocked to in_review."
+  ],
+  "do_not_repeat": [
+    "Do not mark GOD-006 as in_review or verified based on the unreferenced code object.",
+    "Do not force push or move another agent's branch.",
+    "Do not change direct Sim behavior silently or claim social actions completed from a whisper."
+  ],
+  "unpublished_changes": true,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact."
+}
