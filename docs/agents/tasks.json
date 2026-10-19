@@ -542,7 +542,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Chunk-aware camera, fog, terrain renderer and coordinate UI",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "LIFE-26",
       "work_branch": "feat/wld-003-life-26-chunk-camera",
       "depends": [
@@ -551,8 +551,10 @@
       ],
       "acceptance": "Seamless camera scrolling across 4+ borders with 3 zooms; bounded dirty-tile caching.",
       "issue": 18,
-      "pr": null,
-      "evidence": [],
+      "pr": 40,
+      "evidence": [
+        "WLD-003 PR #40 https://github.com/jbob-coder/The-idle-open-world-universe/pull/40 (draft stacked on verified WLD-002 PR #31 / WLD-001 PR #23), exact source HEAD 8224c6198667bddc19573919d7f3ba1127dff8e3: 103/103 Node, Chromium offline 4+ signed borders, 3 zooms, bounded fog/dirty tiles, drag, original v1 chapters/saves intact and screenshot PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248926 ; same SHA push PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191243468 ; native Gradle + API29 installed/emulated 7/7 Android instrumentation PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248868 . Older Android WebView numeric-separator patch confined to stacked branch, owner WLD-002 notified on PR #31; physical 2/3 GB RAM/PSS UNVERIFIED; Nim cross-chunk pathfinding WLD-004 and v1 migration WLD-007 NOT implemented."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -581,6 +583,13 @@
           "to": "in_progress",
           "actor": "LIFE-26",
           "reason": "Implement opt-in world atlas camera/view/caching and browser+Node acceptance without modifying other agents' chunk store, navigation, legacy simulation, interiors or divine rules"
+        },
+        {
+          "date": "2026-10-19T08:52:46.792Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "LIFE-26",
+          "reason": "Submitted exact-HEAD Node/Chromium/Android 7/7 validated chunk camera and renderer for independent review; no merge/physical RAM claim"
         }
       ]
     },
