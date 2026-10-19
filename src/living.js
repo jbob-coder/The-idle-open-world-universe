@@ -1,5 +1,5 @@
 /* GODSEED Living Settlements: bounded, deterministic offline agency. No external AI. */
-(function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./divine/intent.js'):root.GodseedIntent);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Intent){
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
@@ -265,31 +265,15 @@ function personTick(s,p){
   p.role==='Apothecary'?'Preparing remedies':p.role==='Squire'?'Guarding the road':'Studying old history';
  return true;
 }
-const COMMANDS=[
- {intent:'remodel',re:/\b(renovat|redesign|rebuild|remodel|appearance|roof|rediseñar|remodel|renovar|tejado|techos?|apariencia)\w*/i,label:'consider redesigning homes'},
- {intent:'housing',re:/\b(hous(?:e|ing)|shelter|home|casas?|viviendas?|edificios?)\b/i,label:'build homes'},
- {intent:'food',re:/\b(farm|crop|food|harvest|grain|cultivar|granja|comida|agricultur|alimento|cosecha)\w*/i,label:'grow food'},
- {intent:'defense',re:/\b(defend|protect|guard|wolves|wolf|wall|defender|proteger|lobos?|vigil|muralla)\w*/i,label:'protect residents'},
- {intent:'craft',re:/\b(craft|tool|workshop|smith|invent|forge|herramient|taller|forja|investig)\w*/i,label:'develop crafts'},
- {intent:'trade',re:/\b(trade|market|commerce|exchange|mercado|comercio|intercambi)\w*/i,label:'develop trade'},
- {intent:'explore',re:/\b(explore|travel|discover|journey|wander|explorar|viajar|descubri|aventura)\w*/i,label:'explore freely'},
- {intent:'housing',re:/\b(build|construct|construir)\w*/i,label:'build homes'},
- {intent:'rest',re:/\b(rest|sleep|recover|descansa|dormir|dorm|repos|curar)\w*/i,label:'rest'}
-];
-function interpret(message){
- const text=String(message||'').trim().slice(0,220);
- // A limited offline parser must never invert a negative instruction into a positive command.
- const denied=/\b(don.t|do not|never|avoid|no construy|no edifi|no hag|nunca|eviten|prohibi)\w*/i.test(text);
- const match=denied?null:COMMANDS.find(a=>a.re.test(text));
- return {text,intent:match?match.intent:'unknown',label:match?match.label:'unrecognized request'};
-}
+function interpret(message){return Intent.interpret(message);}
 function whisper(s,message){
  if(!s.living)return {ok:false,reason:'World is still awakening'};
  const m=interpret(message);
  if(!m.text||m.text.length<3)return {ok:false,reason:'Write a short intention first'};
- if(m.intent==='unknown')return {ok:false,reason:'This offline version understands building, food, defense, crafts, trade, exploring and rest. No order was issued.'};
+ if(m.status!=='recognized')return {ok:false,reason:m.reason};
+ if(m.target&&m.target.kind==='person')return {ok:false,reason:'Individual guidance requires a separate citizen consent system. No order was issued.'};
  if(s.living.whispers.length&&s.tick-s.living.whispers[s.living.whispers.length-1].tick<12)return {ok:false,reason:'Let the world consider the previous whisper'};
- const towns=s.living.towns,decisions=[];
+ const towns=m.target&&m.target.kind==='town'?s.living.towns.filter(t=>t.id===m.target.id):s.living.towns,decisions=[];
  for(const t of towns){
   const workers=s.living.citizens.filter(c=>c.townId===t.id);
   const independence=workers.reduce((n,c)=>n+c.independence,0)/workers.length;
@@ -299,10 +283,10 @@ function whisper(s,message){
   if(agree&&m.intent==='remodel')t.renovateAfter=s.tick+48;
   decisions.push({name:t.name,agree,reason:agree?'Residents will consider this within their needs and supplies.':'Residents are prioritizing survival or independence.'});
  }
- const nimAgree=s.bot.hunger>=30&&s.bot.energy>=25&&
+ const nimAgree=!m.target&&s.bot.hunger>=30&&s.bot.energy>=25&&
   (m.intent==='explore'||m.intent==='rest'||m.intent==='food')&&(hash(s.worldSeed,s.tick,m.text.length)%10)<Math.floor(s.bot.personality.curiosity*10);
  if(nimAgree)s.living.nimWish={intent:m.intent,until:s.tick+120};
- const entry={id:s.living.nextWhisper++,tick:s.tick,message:m.text,intent:m.intent,label:m.label,decisions,nimAgree};
+ const entry={id:s.living.nextWhisper++,tick:s.tick,message:m.text,intent:m.intent,label:m.label,target:m.target,decisions,nimAgree};
  s.living.whispers.push(entry);if(s.living.whispers.length>12)s.living.whispers.shift();
  log(s,'The god whispers',m.text+' · '+decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join(', ')+(nimAgree?' · Nim is curious.':' · Nim has other plans.'));
  return {ok:true,entry};
