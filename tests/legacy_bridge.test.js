@@ -170,3 +170,10 @@ test("different seeds and mixed older v1 saves do not alias expanded worlds",()=
   assert.deepEqual(restored.legacyState().chapterTwo,a.legacyState().chapterTwo);
   assert.deepEqual(restored.legacyState().finale,a.legacyState().finale);
 });
+
+test("offline chunk-store source avoids numeric separators unsupported by older API29 WebViews",()=>{
+  const fs=require("node:fs"),path=require("node:path");
+  const source=fs.readFileSync(path.join(__dirname,"../src/world/chunk_store.js"),"utf8");
+  assert.doesNotMatch(source,/\b\d[\d_]*_\d+\b/,
+    "embedded chunk store must parse on Chrome/WebView 74, not only desktop Chromium");
+});
