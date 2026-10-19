@@ -1083,7 +1083,7 @@
       "priority": "P0",
       "area": "civilization",
       "title": "Metric 3×3–6×6 medieval blueprint library and zoning",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "TERRAIN-01",
       "work_branch": "feat/civ-001-terrain-01-metric-blueprints",
       "depends": [
@@ -1091,8 +1091,10 @@
       ],
       "acceptance": "Blueprints have size, door orientation, road adjacency, materials, style and terrain constraints; no overlaps.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 35,
+      "evidence": [
+        "CIV-001 PR #35 https://github.com/jbob-coder/The-idle-open-world-universe/pull/35 exact HEAD adbe40831b1595465c68cd00342309f43f01b173; offline QA COMPLETED SUCCESS 89/89 Node tests including seven CIV-001 cases and Chromium/HTML/APK structure https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386197 ; native Android API29 Gradle and emulator COMPLETED SUCCESS 6/6 instrumentation and screenshot/log artifacts 12159181583 + 12158649413 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386188 ; physical 2–3 GB QA NOT TESTED; only opt-in plans/zoning module, no game-world integration or merge."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -1121,6 +1123,13 @@
           "to": "in_progress",
           "actor": "TERRAIN-01",
           "reason": "Implement real area/door/approach/terrain/road/collision validation with deterministic tests; do not alter existing 2x2 runtime or v1 saves."
+        },
+        {
+          "date": "2026-10-19T02:11:19+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "TERRAIN-01",
+          "reason": "Delivered eight metric blueprints and safe zoning; exact HEAD offline CI 89/89 PASS and native API29 6/6 PASS. Await independent review; no merge."
         }
       ]
     },
