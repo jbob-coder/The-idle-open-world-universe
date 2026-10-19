@@ -1540,7 +1540,7 @@
       "priority": "P0",
       "area": "qa",
       "title": "Gradle host + API29 emulator instrumentation and artifacts",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "TERRAIN-01",
       "work_branch": "test/qa-003-terrain-01-native-acceptance",
       "depends": [
@@ -1571,6 +1571,13 @@
           "to": "claimed",
           "actor": "TERRAIN-01",
           "reason": "Reserve native Android API29 instrumentation and exact SHA evidence; isolate tests/workflow from other bot code; no hardware claims."
+        },
+        {
+          "date": "2026-10-19T01:32:47+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "TERRAIN-01",
+          "reason": "Read native workflow and API29 instrumentation, test real pause/resume/offline/save using isolated QA-003 branch; preserve v1 game saves."
         }
       ]
     },
