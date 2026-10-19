@@ -2777,7 +2777,7 @@
       "priority": "P0",
       "area": "art",
       "title": "Redesign GODSEED mobile god-view into map-first coherent pixel interface",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "LIFE-26",
       "work_branch": "feat/art-007-life-26-godview-layout",
       "depends": [
@@ -2785,8 +2785,10 @@
       ],
       "acceptance": "640x360 and 720x400 responsive real browser screens prioritize visible world, one contextual inspector, hierarchical tabs, legible portraits, consistent icons and no obstructive overlays.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 46,
+      "evidence": [
+        "ART-007 PR #46 https://github.com/jbob-coder/The-idle-open-world-universe/pull/46 (DRAFT, stacked on independently verified GOD-004 PR #28) exact source HEAD 0a2e82923983111db3ef2b03f34f5364e459235b: offline Node 86/86, Chromium genuine 640x360,720x400,960x540 map-first >=65% stage/7 accessible tabs/GOD-004 inspector/Pause, Bless+Inspire faith, Chapters I-III, JSON backups/v1 save unchanged and 0 network/JS errors + screenshots PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39229640024 ; same-SHA push QA PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39229633613 ; Gradle+API29 native WebView 7/7 instrumentation PASS and emulator screenshot https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39229640058 . WebView GOD-004 observer replaceChildren compatibility fixed ONLY in ART-007 stacked branch (commit 69beccf), GOD-004 owner notified PR #28; physical 2/3GB RAM/PSS NOT VERIFIED, family/kingdoms/GOD-006 powers NOT implemented, no merge."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -2815,6 +2817,13 @@
           "to": "in_progress",
           "actor": "LIFE-26",
           "reason": "Implement responsive map-first 640x360/720x400 shell, hierarchical navigation, single contextual GOD-004 inspector and working offscreen legacy controls with browser+Android regression tests"
+        },
+        {
+          "date": "2026-10-19T09:28:00.863Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "LIFE-26",
+          "reason": "Submit real map-first mobile game UI with exact-SHA offline Chromium/86 Node and native API29 7/7 evidence for independent verification; no merge/hardware claims"
         }
       ]
     },
