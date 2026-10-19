@@ -730,7 +730,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Map existing 64×48 version-1 saves into expanded world",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "FORGE-27",
       "work_branch": "feat/wld-007-forge-27-v1-migration",
       "depends": [
@@ -742,7 +742,8 @@
       "pr": 44,
       "evidence": [
         "PR #44 https://github.com/jbob-coder/The-idle-open-world-universe/pull/44 ; exact work HEAD f5037388cf0fb159346b09c5ab6c17feb78c8039, stacked on independently verified WLD-002 (2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e). Current-head offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205388 COMPLETED SUCCESS: 108/108 Node tests incl 12 WLD-007 legacy map/save/corruption roundtrips, actual Chromium offline 640x360 WLD-007 migration PASS, chapter I-II-III/backup/viewport regression, APK prototype checks, screenshots artifact. Native Android Gradle/API29 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205499 completed / failure at transition; physical 2–3GB phone NOT TESTED. Import API opt-in, NOT live 4-border playable world; v1 key/schema untouched; no merge.",
-        "Native Android API29 exact source SHA f5037388cf0fb159346b09c5ab6c17feb78c8039 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205499 attempt 1: Gradle build PASS but emulator tests 3/6 FAIL (Game JavaScript not ready, page not loaded). One bounded failed-job rerun requested; root cause not yet determined. Reopen to investigate legacy chunk-store WebView compatibility; prior offline 108/108 PASS remains valid for exact earlier SHA."
+        "Native Android API29 exact source SHA f5037388cf0fb159346b09c5ab6c17feb78c8039 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205499 attempt 1: Gradle build PASS but emulator tests 3/6 FAIL (Game JavaScript not ready, page not loaded). One bounded failed-job rerun requested; root cause not yet determined. Reopen to investigate legacy chunk-store WebView compatibility; prior offline 108/108 PASS remains valid for exact earlier SHA.",
+        "PR #44 https://github.com/jbob-coder/The-idle-open-world-universe/pull/44 exact HEAD 0f226e4b6730d492b5f129d555138431de0064d9; API29 numeric separator compatibility patch after first emulator fail; exact-head offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227321946 and https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227332209 COMPLETED SUCCESS (109/109 Node and real offline mobile 640×360 browser + Chapters I–III). Gradle host success, but exact-head native API29 emulator https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227332311 RUNNING/NOT VERIFIED at this checkpoint; independent reviewer must wait native result, if fails reopen in_progress. Physical phone NOT TESTED. v1 save untouched; PR unmerged; does not claim global navigation."
       ],
       "status_history": [
         {
@@ -786,6 +787,13 @@
           "to": "in_progress",
           "actor": "FORGE-27",
           "reason": "Native Android API29 first attempt 3/6 failed WebView initialization; reopen source for compatibility diagnostics and full exact-SHA rerun, do not self-verify."
+        },
+        {
+          "date": "2026-10-19T09:22:13.489Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FORGE-27",
+          "reason": "Submitted exact-head parser compatibility patch, 109/109 Node + Chromium offline clean, guarded legacy save import PR #44; native Gradle passed, emulator pending separate acceptance and independent reviewer."
         }
       ]
     },

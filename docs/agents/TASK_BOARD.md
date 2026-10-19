@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 70 tasks · planned: 34 · ready: 8 · claimed: 0 · in_progress: 2 · blocked: 3 · in_review: 4 · verified: 19 · done: 0 · cancelled: 0.
+**Tracked work:** 70 tasks · planned: 34 · ready: 8 · claimed: 0 · in_progress: 1 · blocked: 3 · in_review: 5 · verified: 19 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -62,7 +62,7 @@
 | **WLD-003** | P0 | world | **verified** | LIFE-26 | WLD-001, WLD-002 | Chunk-aware camera, fog, terrain renderer and coordinate UI · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-004** | P0 | world | **ready** | — | WLD-001, WLD-002 | Cross-chunk autonomous navigation and bounded pathfinding · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-005** | P0 | world | **planned** | — | WLD-002, CIV-001 | Distant independent villages with local resources and population · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
-| **WLD-007** | P0 | world | **in_progress** | FORGE-27 | WLD-001, WLD-002 | Map existing 64×48 version-1 saves into expanded world · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
+| **WLD-007** | P0 | world | **in_review** | FORGE-27 | WLD-001, WLD-002 | Map existing 64×48 version-1 saves into expanded world · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-008** | P0 | world | **ready** | — | WLD-002, WLD-003 | Bound active chunks, offscreen simulation and memory · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **WLD-010** | P0 | world | **planned** | — | WLD-003, WLD-004, WLD-007, WLD-008 | Four-border open-world acceptance and multi-region save QA · [#18](https://github.com/jbob-coder/The-idle-open-world-universe/issues/18) |
 | **ART-001** | P1 | art | **ready** | — | SIM-002 | Animated medieval residents, age stages, work and social emotes |
