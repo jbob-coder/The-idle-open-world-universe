@@ -1400,9 +1400,9 @@
       "priority": "P0",
       "area": "qa",
       "title": "Node state-machine regression for life, worlds and migration",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "GDS-KESTREL-1810",
+      "work_branch": "test/qa-001-kestrel-node-regressions",
       "depends": [],
       "acceptance": "CI runs seeded state/ownership/saves/scene validation and reports exact SHA.",
       "issue": null,
@@ -1422,6 +1422,13 @@
           "to": "ready",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-19T01:01:44.708+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Own QA-001: add genuine seeded state-machine/save regression tests without changing runtime subsystems owned by other bots"
         }
       ]
     },
