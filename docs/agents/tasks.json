@@ -1,0 +1,1500 @@
+{
+  "schema_version": 1,
+  "project": "GODSEED — Living World",
+  "coordinator_branch": "docs/godseed-agent-task-governance-v1",
+  "implementation_base": "integration/godseed-living-society-multitile-architecture",
+  "baseline_pr": 21,
+  "as_of": "2026-10-18",
+  "status_values": [
+    "planned",
+    "ready",
+    "claimed",
+    "in_progress",
+    "blocked",
+    "in_review",
+    "verified",
+    "done",
+    "cancelled"
+  ],
+  "note": "Registry is authoritative task metadata. DOCS TASK_BOARD.md generated from it; no task is done solely because code exists in an unmerged branch.",
+  "tasks": [
+    {
+      "id": "GOV-001",
+      "priority": "P0",
+      "area": "governance",
+      "title": "Repository task registry, bot lifecycle, automation and handoff",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [],
+      "acceptance": "Machine-readable task board, transition validator, ownership protocol, bot prompt and PR; validators green.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        }
+      ]
+    },
+    {
+      "id": "INT-001",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Safe layers, metric grid, doors and interiors technical contract",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [],
+      "acceptance": "Normative contract defines grids, transition, saves, safety, deterministic tests and explicit non-goals.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        }
+      ]
+    },
+    {
+      "id": "INT-002",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-001"
+      ],
+      "acceptance": "Blueprint variants use real footprint collision and protected roads/sites; stable old 1×1/2×2 saves.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-003",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Persist interior IDs, furnishings and entry/return anchors",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-001"
+      ],
+      "acceptance": "Version-1 compatible optional space data; restore old, malformed and multi-building saves without losing progress.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-004",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Implement safe, atomic door entry and exit",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-002",
+        "INT-003"
+      ],
+      "acceptance": "NPC autonomous door crossings load correct space, safe spawn, return anchor; no duplicate/time jump; pause/relaunch pass.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-005",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Render indoor pixel rooms, furniture and 3 camera zoom levels",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-003",
+        "INT-004"
+      ],
+      "acceptance": "Separate interior grid, collision, room display and scene layer with integer pixel scaling and no remote assets.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-006",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Assign households, beds and private spaces to each citizen",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-003",
+        "SIM-001"
+      ],
+      "acceptance": "Residents own beds and homes, nighttime path safely enters their building; households persist across reload.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-007",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Autonomous sleep, food, shelter and social actions indoors",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-004",
+        "INT-006"
+      ],
+      "acceptance": "At least 4 residents choose useful indoor activities for needs; recover realistically; no god-controlled joystick.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-008",
+      "priority": "P1",
+      "area": "interiors",
+      "title": "Workplace interiors: forge, tavern, granary, shrine and hall",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-005",
+        "SIM-005"
+      ],
+      "acceptance": "Distinct functional furnishings/workplaces, work queues, role access, appropriate capacity; QA saves inside.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-009",
+      "priority": "P1",
+      "area": "interiors",
+      "title": "God-level house inspector and door/floor UI",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-005",
+        "GOD-004"
+      ],
+      "acceptance": "God can observe indoor events and UI state without forcing NPC action; touch and accessibility tests.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-010",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Interior transitions: adversarial Android and save regression",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-004",
+        "INT-005"
+      ],
+      "acceptance": "Enter/exit 100× and save during crossing; out-of-bounds, stale anchors, invalid IDs rejected safely.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-001",
+      "priority": "P0",
+      "area": "world",
+      "title": "Seeded world coordinate system and 32×32 chunk generator",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [],
+      "acceptance": "Stable procedural adjacent chunks; tests for negative and 1000+ tile coordinates; no full-world allocation.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        }
+      ]
+    },
+    {
+      "id": "WLD-002",
+      "priority": "P0",
+      "area": "world",
+      "title": "Sparse modified-terrain deltas and chunk persistence",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-001"
+      ],
+      "acceptance": "Edits and settlements survive eviction/reentry while untouched chunks regenerate identically.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-003",
+      "priority": "P0",
+      "area": "world",
+      "title": "Chunk-aware camera, fog, terrain renderer and coordinate UI",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-001",
+        "WLD-002"
+      ],
+      "acceptance": "Seamless camera scrolling across 4+ borders with 3 zooms; bounded dirty-tile caching.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-004",
+      "priority": "P0",
+      "area": "world",
+      "title": "Cross-chunk autonomous navigation and bounded pathfinding",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-001",
+        "WLD-002"
+      ],
+      "acceptance": "Nim and citizens can cross 4+ sectors without teleport/menu; hazards/path blockers respected.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-005",
+      "priority": "P0",
+      "area": "world",
+      "title": "Distant independent villages with local resources and population",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-002",
+        "CIV-001"
+      ],
+      "acceptance": "At least 2 separate distant villages develop while offscreen and persist when visited.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-006",
+      "priority": "P1",
+      "area": "world",
+      "title": "Streaming biome ecology, climate, water and landmarks",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-001"
+      ],
+      "acceptance": "Biome identity, non-breaking routes, renewable resources and persistent ruins/church sites are deterministic.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-007",
+      "priority": "P0",
+      "area": "world",
+      "title": "Map existing 64×48 version-1 saves into expanded world",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-001",
+        "WLD-002"
+      ],
+      "acceptance": "Imported Nim/world/villages, all 3 chapters and structures unchanged; bad data rejected.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-008",
+      "priority": "P0",
+      "area": "world",
+      "title": "Bound active chunks, offscreen simulation and memory",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-002",
+        "WLD-003"
+      ],
+      "acceptance": "LRU and low-frequency offscreen tick, no memory growth from travel distance; measured budgets logged.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-009",
+      "priority": "P1",
+      "area": "world",
+      "title": "God's regional atlas and village discovery UX",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-003"
+      ],
+      "acceptance": "Bird's-eye view, undiscovered fog, site links and marker inspection work across chunks.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-010",
+      "priority": "P0",
+      "area": "world",
+      "title": "Four-border open-world acceptance and multi-region save QA",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-003",
+        "WLD-004",
+        "WLD-007",
+        "WLD-008"
+      ],
+      "acceptance": "Automated 4-chunk traversal, changed tile revisit, save/reload and bounded-memory evidence.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-001",
+      "priority": "P0",
+      "area": "people",
+      "title": "Need profile: hunger, energy, comfort, safety, social, hygiene",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [],
+      "acceptance": "Needs bounded, serialized, degrade/recover via actions, priorities and safety precede divine suggestions.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        }
+      ]
+    },
+    {
+      "id": "SIM-002",
+      "priority": "P0",
+      "area": "people",
+      "title": "Utility-based choices with visible why/alternative/consequence",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-001"
+      ],
+      "acceptance": "Distinct personalities independently choose work, explore, rest, help; event trace explains outcomes.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-003",
+      "priority": "P0",
+      "area": "people",
+      "title": "Homes, household membership, work IDs and inventories",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-001",
+        "INT-003"
+      ],
+      "acceptance": "No homeless default when capacity exists; home/jobs persisted and validated.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-004",
+      "priority": "P1",
+      "area": "people",
+      "title": "Affection, friendship, conflict, families and child growth",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-003"
+      ],
+      "acceptance": "Relationships change from actual social events; birth/age constraints and opt-in design; bounded persistence.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-005",
+      "priority": "P0",
+      "area": "people",
+      "title": "Profession schedules and workplace resource delivery",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-001",
+        "CIV-001"
+      ],
+      "acceptance": "Workers reach work sites, carry supplies, consume materials, rest and independently change jobs.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-006",
+      "priority": "P1",
+      "area": "people",
+      "title": "Education, learned skills and non-combat life progression",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002",
+        "SIM-005"
+      ],
+      "acceptance": "No repetition-only combat XP; study and occupation unlock persistent capabilities.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-007",
+      "priority": "P1",
+      "area": "people",
+      "title": "Personal journals, memories, long goals and moral decisions",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002"
+      ],
+      "acceptance": "Event→choice→reason→impact chronicle per person; user can inspect without directing.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-008",
+      "priority": "P1",
+      "area": "people",
+      "title": "Generations, inheritance and meaningful mortality",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-004",
+        "SIM-007"
+      ],
+      "acceptance": "Aging, natural death and succession handled without save invalidation or population explosion.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-009",
+      "priority": "P1",
+      "area": "people",
+      "title": "Contextual resident social interaction and visible animations",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002",
+        "SIM-004"
+      ],
+      "acceptance": "Talk/trade/argue/emote with nearby real agents, historical memory and no popup-only illusion.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-010",
+      "priority": "P0",
+      "area": "people",
+      "title": "Long life-soak regression: agency, finite population and persistence",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002",
+        "SIM-005"
+      ],
+      "acceptance": "Multi-seed 20k+ ticks, cap agents, no starvation loops, stable saves and evidence.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-001",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Metric 3×3–6×6 medieval blueprint library and zoning",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-001"
+      ],
+      "acceptance": "Blueprints have size, door orientation, road adjacency, materials, style and terrain constraints; no overlaps.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-002",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Construction sites, builders, work orders and interruptions",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-001",
+        "SIM-005"
+      ],
+      "acceptance": "Build progresses from materials/work delivered; stop/restart safe, costs cannot duplicate.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-003",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Path streets, roads, fields and districts based on settlement needs",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-001",
+        "WLD-001"
+      ],
+      "acceptance": "Roads connect real door anchors and farms; traversability tests and reroute on changes.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-004",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Markets, home stores, trade caravans and local shortages",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-002",
+        "SIM-005"
+      ],
+      "acceptance": "Stocks and transfers conserved; scarcity changes actions; no infinite material exploits.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-005",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Medieval technology and era advancement with real prerequisites",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-006",
+        "CIV-002"
+      ],
+      "acceptance": "Era change follows research/production/buildings, not elapsed ticks or arbitrary level.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-006",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Council approvals, autonomy, refusals and architectural remodeling",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002",
+        "CIV-001"
+      ],
+      "acceptance": "Households/council may relocate, alter style or reject plan based on actual constraints.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-007",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Building wear, fires, repairs and shelters during attacks",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-004",
+        "CIV-002"
+      ],
+      "acceptance": "Damage risk bounded; citizens self-protect; materials repair persistent physical sites.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-008",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Distinct functional medieval public buildings and services",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-001",
+        "INT-008"
+      ],
+      "acceptance": "Forge, tavern, chapel, market and hall serve actual gameplay routines.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "GOD-001",
+      "priority": "P0",
+      "area": "divine",
+      "title": "Multilingual intent parsing with negation, target and ambiguity",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [],
+      "acceptance": "English/Spanish recognized categories, unsupported text refused clearly; do-not obey negations.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        }
+      ]
+    },
+    {
+      "id": "GOD-002",
+      "priority": "P0",
+      "area": "divine",
+      "title": "Per-person belief, safety and autonomy acceptance engine",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-001",
+        "GOD-001"
+      ],
+      "acceptance": "People evaluate each message, decline, explain and do not auto-complete objectives.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "GOD-003",
+      "priority": "P0",
+      "area": "divine",
+      "title": "Nonblocking suggestions lifecycle: heard→considered→action→result",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "GOD-002",
+        "SIM-002"
+      ],
+      "acceptance": "No fake outcomes; action trace and resource results persist across reload.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "GOD-004",
+      "priority": "P0",
+      "area": "divine",
+      "title": "God view: inspect life, building, village, memories and intent",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [],
+      "acceptance": "Read-only per-person and settlement UI, not a Sims control panel; safe on Android.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        }
+      ]
+    },
+    {
+      "id": "GOD-005",
+      "priority": "P2",
+      "area": "divine",
+      "title": "Optional advanced offline language understanding feasibility",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "GOD-001",
+        "QA-004"
+      ],
+      "acceptance": "Physical low-RAM measurements and strict opt-in required; no cloud-required play.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "ART-001",
+      "priority": "P1",
+      "area": "art",
+      "title": "Animated medieval residents, age stages, work and social emotes",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002"
+      ],
+      "acceptance": "Square pixel sprites and visible work/sleep/talking; role and cultural variants and bounded atlases.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "ART-002",
+      "priority": "P0",
+      "area": "art",
+      "title": "Tile-coherent roofs, doors, interior walls and furnishings",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-001",
+        "CIV-001"
+      ],
+      "acceptance": "32–96px tile-aligned exteriors, readable doorway, floor/wall/furniture atlas with nearest-neighbor.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "ART-003",
+      "priority": "P1",
+      "area": "art",
+      "title": "Responsive world/indoor HUD and accessible mobile controls",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-009",
+        "GOD-004"
+      ],
+      "acceptance": "Touch 640×360, 720×400, 960×540; no clipping; focused UI and correct camera transform.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "ART-004",
+      "priority": "P2",
+      "area": "art",
+      "title": "Medieval biome props, weather/time and seasonal differences",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-006"
+      ],
+      "acceptance": "Visuals reflect simulated conditions and never mutate simulation.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "ART-005",
+      "priority": "P1",
+      "area": "art",
+      "title": "Automated visual regressions of rooms, buildings and villagers",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-005",
+        "ART-002"
+      ],
+      "acceptance": "Deterministic Chromium screenshots all zoom levels and no texture bleed.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "QA-001",
+      "priority": "P0",
+      "area": "qa",
+      "title": "Node state-machine regression for life, worlds and migration",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [],
+      "acceptance": "CI runs seeded state/ownership/saves/scene validation and reports exact SHA.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        }
+      ]
+    },
+    {
+      "id": "QA-002",
+      "priority": "P0",
+      "area": "qa",
+      "title": "Chromium offline Android-layout interaction acceptance",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-001"
+      ],
+      "acceptance": "Real browser UI tap, door enter/exit, one sim day, save; 0 remote requests.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "QA-003",
+      "priority": "P0",
+      "area": "qa",
+      "title": "Gradle host + API29 emulator instrumentation and artifacts",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-001"
+      ],
+      "acceptance": "Native launch, offline, pause/exit handshake and save restoration; APK artifacts exact SHA.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "QA-004",
+      "priority": "P0",
+      "area": "qa",
+      "title": "Physical Android 2 GB and 3 GB 20-minute soak",
+      "status": "blocked",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-003"
+      ],
+      "acceptance": "Phone screenshots/video, app+WebView PSS/RSS, FPS, thermal, resume, saves; hardware evidence attached.",
+      "issue": 13,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "blocked",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Cannot certify until physical 2 GB and 3 GB Android evidence; issue #13"
+        }
+      ]
+    },
+    {
+      "id": "REL-001",
+      "priority": "P1",
+      "area": "release",
+      "title": "Stable Android signing identity and save-safe upgrade",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-003"
+      ],
+      "acceptance": "Signed identity controlled, upgrade without losing save, backups documented, no private key in repo.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "REL-002",
+      "priority": "P2",
+      "area": "release",
+      "title": "Real optional offline content pack streaming and disk budgets",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-008"
+      ],
+      "acceptance": "Useful core content toward 1GB if created, optional 5GB cap, never pad or hold disk packs in RAM.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "REL-003",
+      "priority": "P1",
+      "area": "release",
+      "title": "Integrate stacked PRs, QA gate and tagged Android beta",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-002",
+        "QA-003",
+        "REL-001"
+      ],
+      "acceptance": "Reviewed merge plan, no Codex overwrite, tagged assets, SHA evidence, release notes.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    }
+  ]
+}
