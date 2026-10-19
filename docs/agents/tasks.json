@@ -2364,7 +2364,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "Replace direct god power toolbar with indirect consequence-based divine influence",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "FORGE-27",
       "work_branch": "feat/god-006-forge-27-indirect-influence",
       "depends": [
@@ -2427,6 +2427,13 @@
           "to": "claimed",
           "actor": "FORGE-27",
           "reason": "Re-claim same preserved GOD-006 branch after verified protected publication, no other active FORGE-27 task; add guidance tests before review."
+        },
+        {
+          "date": "2026-10-19T02:33:44.395Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Continue preserved indirect guidance candidate: inspect source, add >=10 deterministic tests, repair legacy browser expectations, run CI. Do not change NPC decisions directly."
         }
       ]
     },
