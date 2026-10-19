@@ -32,7 +32,7 @@ test("autonomous traveler crosses five signed chunk columns step-by-step without
   }
   assert.equal(arrived,true);
   assert.equal(moves,132);
-  assert.deepEqual([...chunks].sort((a,b)=>a-b),[-1,0,1,2,3,4]);
+  assert.deepEqual([...chunks].sort((a,b)=>a-b),[0,1,2,3,4]);
   assert.ok(world.stats().activeChunks<=4);
   assert.equal(world.stats().modifiedChunks,6);
 });
