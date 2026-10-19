@@ -15,6 +15,8 @@ with sync_playwright() as pw:
     page.route('http://godseed.test/',lambda route:route.fulfill(status=200,content_type='text/html',body=(ROOT/'GODSEED-Play.html').read_text(encoding='utf-8')))
     page.goto('http://godseed.test/',wait_until='load')
     page.evaluate('GodseedDebug.newWorld(41);GodseedDebug.setSpeed(0)')
+    page.locator('#godviewTab-lives').click()
+    page.locator('#godviewLifeDetails summary').click()
     assert page.locator('#finalePanel').is_hidden()
     page.evaluate('GodseedDebug.step(1100)')
     assert page.evaluate('GodseedSim.finaleStatus(GodseedDebug.getState()).completed')
@@ -32,8 +34,11 @@ with sync_playwright() as pw:
     page.evaluate('GodseedDebug.step(150)')
     assert page.evaluate('GodseedDebug.getState().finale.completedAt')==snap['ending']
     # Use the actual visible Save button and reload, not a fabricated history marker.
+    page.locator('#godviewTab-settings').click()
     page.locator('#save').click()
     page.reload()
+    page.locator('#godviewTab-lives').click()
+    page.locator('#godviewLifeDetails summary').click()
     assert page.evaluate('GodseedSim.finaleStatus(GodseedDebug.getState()).completed')
     assert page.locator('#finalePanel').is_visible()
     assert 'THE END' in page.locator('#finaleStep').inner_text()
