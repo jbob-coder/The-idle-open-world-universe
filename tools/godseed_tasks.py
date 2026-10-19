@@ -217,8 +217,19 @@ def main():
        for d in t["depends"]
     ):
         p.error("Blocked by dependency tasks not yet verified")
-    if t.get("owner") and t["owner"] != args.actor and args.to_status not in {"ready", "blocked"}:
+    if t.get("owner") and t["owner"] != args.actor and args.to_status not in {"ready", "blocked", "verified", "done"}:
         p.error(f"Already owned by {t['owner']}; cannot steal a task")
+    if args.to_status == "claimed" and any(
+        other["id"] != t["id"] and other.get("owner") == args.actor and
+        other["status"] in {"claimed", "in_progress", "in_review"}
+        for other in db["tasks"]
+    ):
+        p.error("Bot already owns an active task; finish, block or release it before claiming another")
+    if args.to_status == "verified":
+        if t.get("owner") == args.actor:
+            p.error("Independent reviewer required; owner cannot self-verify")
+        if not args.evidence:
+            p.error("Verification needs fresh reviewer evidence for the exact commit/CI")
     if args.to_status in {"in_review", "verified", "done"} and not (t["evidence"] or args.evidence):
         p.error("Need tangible evidence: PR, exact commit SHA and CI run")
     if args.to_status == "done" and args.actor not in {"OWNER", "INTEGRATOR"}:
@@ -226,8 +237,15 @@ def main():
     if args.to_status == "done" and not any("merged" in e.lower() for e in t["evidence"] + args.evidence):
         p.error("Done requires merged PR evidence")
     if args.to_status in {"claimed", "in_progress", "in_review", "verified", "done"}:
-        t["owner"] = args.actor
+        # Verification and merge are distinct roles: never overwrite the
+        # task owner's identity when someone else reviews or integrates it.
+        if args.to_status not in {"verified", "done"}:
+            t["owner"] = args.actor
         t["work_branch"] = args.branch or t.get("work_branch")
+        if args.to_status == "verified":
+            t["verified_by"] = args.actor
+        if args.to_status == "done":
+            t["integrated_by"] = args.actor
         if not t["work_branch"]:
             p.error("Claim must identify work branch")
     if args.to_status == "ready":
