@@ -1418,14 +1418,16 @@
       "priority": "P0",
       "area": "qa",
       "title": "Node state-machine regression for life, worlds and migration",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "GDS-KESTREL-1810",
       "work_branch": "test/qa-001-kestrel-node-regressions",
       "depends": [],
       "acceptance": "CI runs seeded state/ownership/saves/scene validation and reports exact SHA.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 24,
+      "evidence": [
+        "PR #24 https://github.com/jbob-coder/The-idle-open-world-universe/pull/24; implementation HEAD 654081fe91a6c9a1cca763472beacb637074d038; QA Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317; Node deterministic suite, offline HTML, asset contract, native debug APK build/signature checks SUCCESS; Chromium offline checks RUNNING when submitted; physical Android 2–3 GB NOT VERIFIED; no merge"
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -1454,6 +1456,13 @@
           "to": "in_progress",
           "actor": "GDS-KESTREL-1810",
           "reason": "Starting isolated QA-001 tests covering deterministic autonomy state and version-1 save restoration, with CI verification at exact HEAD"
+        },
+        {
+          "date": "2026-10-19T01:07:09.134+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Delivered six new deterministic Node state and v1 save regressions in PR #24, exact HEAD verified; awaiting full QA checks and independent review"
         }
       ]
     },
