@@ -1,6 +1,8 @@
 # GODSEED — Primera tanda de bots y tareas paralelizables
 **Estado:** propuesta de lanzamiento, no reserva. Las tareas `ready` deben reclamarse en `tasks.json` antes de modificar código; una sugerencia aquí **NO** asigna propietario. Consultar [TASK_BOARD.md](./TASK_BOARD.md) en GitHub en vivo.
 
+**Ejecución ♾️:** usa el [prompt de automatización continua](./INFINITY_AUTOMATION_PROMPT.md) para que cada bot actualice tareas, entregue resultados y continúe con otra tarea independiente dentro de su sesión activa. Este documento es solo una propuesta inicial de tareas y no un registro de propiedad.
+
 ## Recomendación para cinco bots independientes
 
 | Identificador propuesto | Tarea disponible actualmente | Primera entrega comprobable | Aislamiento sugerido |
