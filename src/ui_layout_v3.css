@@ -1,0 +1,272 @@
+/* ART-007 GODSEED map-first UI: one real world, one contextual inspector.
+ * Native square pixels and read-only Divine Observatory remain authoritative.
+ * Designed for 640x360, 720x400, 960x540 AND accessible portrait fallback.
+ * No map occlusion while inspecting nothing; drawers only on explicit request.
+ */
+body.godseed-mapfirst {
+  background:#101b1b;
+  color:#f2e7cf;
+  padding:0;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+  font-family:ui-monospace,Consolas,monospace;
+}
+.godseed-mapfirst .site {
+  box-sizing:border-box;
+  height:100vh;
+  height:100dvh;
+  max-width:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  overflow:hidden;
+}
+.godseed-mapfirst header {
+  flex:0 0 35px;
+  height:35px;
+  min-height:35px;
+  border:0;
+  border-bottom:2px solid #806f53;
+  padding:2px 9px;
+  margin:0;
+  display:flex;
+  gap:9px;
+  flex-wrap:nowrap;
+  background:#192c29;
+  justify-content:space-between;
+  overflow:hidden;
+}
+.godseed-mapfirst header .sigil,
+.godseed-mapfirst header .eyebrow,
+.godseed-mapfirst header .brand p,
+.godseed-mapfirst header .header-meta,
+.godseed-mapfirst header h1 span {display:none}
+.godseed-mapfirst header .brand {min-width:0;gap:0}
+.godseed-mapfirst header h1 {font-size:18px;line-height:29px;letter-spacing:.13em;color:#f3d89e;white-space:nowrap}
+.godseed-mapfirst #godviewSummary {
+  display:flex;align-items:center;justify-content:flex-end;
+  white-space:nowrap;min-width:0;overflow:hidden;gap:10px;font-size:11px;
+}
+.godseed-mapfirst #godviewSummary span {overflow:hidden;text-overflow:ellipsis}
+.godseed-mapfirst #godviewSummary .faith {color:#e6c685}
+.godseed-mapfirst #godviewPause {
+  min-height:30px;height:30px;min-width:58px;
+  padding:1px 9px;border-color:#948561;
+  background:#33433c;color:#f8e7bc;
+  font-size:11px;white-space:nowrap
+}
+.godseed-mapfirst main {
+  display:block;flex:1 1 auto;min-height:0;min-width:0;
+  margin:0;padding:0;position:relative;overflow:hidden;
+}
+.godseed-mapfirst .maincol {width:100%;height:100%;min-height:0;display:flex;flex-direction:column;gap:0}
+.godseed-mapfirst .maincol>.panel:first-child {
+  display:flex;flex:1 1 auto;min-height:0;width:100%;
+  background:#172b28;border:0;border-radius:0;
+  flex-direction:column;margin:0;box-shadow:inset 0 0 0 1px #293e34;
+}
+.godseed-mapfirst .maincol>.panel:first-child>.panelhead {display:none}
+.godseed-mapfirst .worldframe {
+  flex:1 1 auto;min-height:0;width:100%;height:100%;
+  margin:0;padding:0;position:relative;display:flex;
+  justify-content:center;align-items:center;
+  background:#142320;
+  border:0;overflow:hidden;
+}
+.godseed-mapfirst #world {
+  width:auto;height:100%;max-width:100%;max-height:100%;
+  display:block;aspect-ratio:auto;object-fit:contain;
+  border:0;outline:0;border-radius:0;
+  image-rendering:pixelated;image-rendering:crisp-edges;
+  touch-action:none;flex:none;
+}
+.godseed-mapfirst .worldtop,
+.godseed-mapfirst .underworld {display:none}
+.godseed-mapfirst .maincol>section:not(:first-child),
+.godseed-mapfirst .maincol>.panel:not(:first-child),
+.godseed-mapfirst .sidecol,
+.godseed-mapfirst footer {display:none}
+.godseed-mapfirst #androidDock {display:none!important}
+.godseed-mapfirst #godviewTabs {
+  order:3;
+  flex:0 0 51px;
+  height:51px;
+  display:flex;
+  overflow-x:auto;
+  overflow-y:hidden;
+  overscroll-behavior-x:contain;
+  background:#1a2b29;
+  border-top:2px solid #8b7c5e;
+  padding:2px 5px;
+  gap:3px;
+  scrollbar-width:none;
+}
+.godseed-mapfirst #godviewTabs::-webkit-scrollbar{display:none}
+.godseed-mapfirst #godviewTabs button {
+  flex:1 0 65px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:1px solid transparent;
+  border-radius:0;
+  background:#233733;
+  padding:2px 5px;
+  min-width:65px;
+  min-height:44px;
+  height:44px;
+  line-height:1.03;
+  color:#bfd1c6;
+  font-size:10px;
+  touch-action:manipulation;
+}
+.godseed-mapfirst #godviewTabs button.active,
+.godseed-mapfirst #godviewTabs button[aria-selected="true"] {
+  border-color:#d4be86;
+  background:#465040;
+  color:#ffe2a3;
+}
+.godseed-mapfirst #godviewTabs canvas {
+  width:18px;height:18px;image-rendering:pixelated;
+  display:block;margin-bottom:2px;
+}
+.godseed-mapfirst #godviewDrawer[hidden] {display:none!important}
+.godseed-mapfirst #godviewDrawer {
+  position:fixed;z-index:11;
+  top:35px;right:0;bottom:51px;
+  box-sizing:border-box;
+  width:52vw;
+  max-width:440px;
+  min-width:240px;
+  border-left:2px solid #b5a376;
+  background:#1a2c2a;
+  color:#f4e9cf;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow:-5px 0 0 #0b1b1b33;
+}
+.godseed-mapfirst #godviewDrawerHead{
+  min-height:38px;
+  flex:0 0 38px;
+  display:flex;align-items:center;gap:8px;
+  justify-content:space-between;
+  background:#263a34;
+  padding:2px 8px;
+  border-bottom:1px solid #788b72;
+}
+.godseed-mapfirst #godviewDrawerTitle{font-size:12px;letter-spacing:.03em;color:#efd49e;font-weight:bold}
+.godseed-mapfirst #godviewDrawerClose {
+  height:32px;min-height:32px;min-width:60px;
+  font-size:11px;border-color:#baae8c;background:#3b4940;padding:3px 8px
+}
+.godseed-mapfirst #godviewDrawerBody{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;padding:10px;overscroll-behavior:contain}
+.godseed-mapfirst #godviewDrawerBody>.godview-section[hidden]{display:none!important}
+.godseed-mapfirst #godviewDrawerBody>.godview-section{display:block;max-width:100%}
+.godseed-mapfirst .godview-intro {font-size:11px;line-height:1.35;color:#c4d6cc;margin:2px 0 8px}
+.godseed-mapfirst #godviewDrawer #godObservatory{
+  border:1px solid #849786;
+  margin:8px 0 0;
+  padding:9px;
+  background:#20332f;
+}
+.godseed-mapfirst #godviewDrawer #godObservatory h3{color:#ecd098}
+.godseed-mapfirst #godviewDrawer #godObservatory select{font-size:13px}
+.godseed-mapfirst #godviewDrawer #godObservatory .ob-list {max-height:none;font-size:11px}
+.godseed-mapfirst #godviewDrawer .herohead {
+  border:1px solid #677c6a;background:#23382f;
+  padding:6px;margin-bottom:8px;
+  display:flex;align-items:center;gap:9px;
+}
+.godseed-mapfirst #godviewDrawer .portrait {
+  width:42px;height:54px;
+  background:#31453c;display:grid;place-items:center;
+  border:1px solid #a4a383;
+}
+.godseed-mapfirst #godviewDrawer #portrait {width:32px;height:48px;image-rendering:pixelated}
+.godseed-mapfirst #godviewDrawer .herohead h2{font-size:15px;margin:0}
+.godseed-mapfirst #godviewDrawer .herohead small{font-size:11px;color:#dbd29f}
+.godseed-mapfirst #godviewDrawer #godWhisper{display:block;margin:0;background:#1d3430;border:1px solid #80947b;padding:9px}
+.godseed-mapfirst #godviewDrawer #godWhisper h2{font-size:13px}
+.godseed-mapfirst #godviewDrawer #godMessage{min-height:66px;font-size:13px}
+.godseed-mapfirst #godviewDrawer .panel{
+  display:block!important;
+  width:auto;margin:0!important;
+  padding:0;
+  overflow:visible;
+  background:transparent;border:0;
+}
+.godseed-mapfirst #godviewDrawer .panelhead{padding:7px 2px;border-bottom:1px solid #637565}
+.godseed-mapfirst #godviewDrawer .panelhead h2{font-size:11px;color:#e7d6a0}
+.godseed-mapfirst #godviewDrawer .timebox,
+.godseed-mapfirst #godviewDrawer .savebuttons {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;
+  padding:8px 0
+}
+.godseed-mapfirst #godviewDrawer button {
+  min-height:44px;
+  font-size:12px;
+  touch-action:manipulation
+}
+.godseed-mapfirst #godviewDrawer .powers-grid {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px
+}
+.godseed-mapfirst #godviewDrawer .power{min-height:54px;padding:6px}
+.godseed-mapfirst #godviewDrawer #minimap{width:160px;height:120px;max-width:100%;object-fit:contain}
+.godseed-mapfirst #godviewDrawer #townStatus,
+.godseed-mapfirst #godviewDrawer #citizenLives{font-size:11px;line-height:1.5;white-space:pre-wrap}
+.godseed-mapfirst #godviewDrawer .events{max-height:none;min-height:80px;overflow:visible}
+.godseed-mapfirst #godviewDrawer .logpanel{margin:0!important}
+.godseed-mapfirst #godviewDrawer .side-lower{padding:4px 0}
+.godseed-mapfirst #godviewDrawer .minigroup{display:flex;gap:9px;align-items:start;flex-wrap:wrap}
+.godseed-mapfirst #godviewDrawer .memory{font-size:11px}
+.godseed-mapfirst #godviewDrawer .tiny{font-size:11px}
+.godseed-mapfirst #godviewDrawer .section-title{
+  color:#e6d5a6;font-size:11px;margin:10px 0 4px
+}
+.godseed-mapfirst #godviewDrawer .stathead{font-size:11px}
+.godseed-mapfirst #godviewDrawer #godviewSettings .save-note{
+  padding:4px 2px;color:#c6d5c9;font-size:11px
+}
+.godseed-mapfirst #godviewDrawer #godviewSettings button.danger{color:#ffbdb1}
+.godseed-mapfirst #godviewDrawer #godviewPowers .powers-foot{font-size:11px}
+.godseed-mapfirst #godviewDrawer #godviewPowers .power-grid{font-size:12px}
+.godseed-mapfirst #godviewDrawer #godviewContextBadge{
+  display:inline-block;color:#c9d7bb;background:#35463c;
+  padding:2px 5px;border:1px solid #718b70;margin:6px 0;font-size:10px;
+}
+.godseed-mapfirst .godview-section h3{
+  color:#f0d49c;font-size:13px;margin:9px 0 7px
+}
+.godseed-mapfirst #godviewDrawer #godviewLifeFacts{
+  font-size:12px;line-height:1.5;white-space:pre-wrap;color:#e4e7d0;
+  border-left:3px solid #91a885;padding-left:8px
+}
+.godseed-mapfirst #godviewDrawer .godview-unavailable{
+  color:#c2c8ad;padding:9px;border:1px dashed #667b70;font-size:11px
+}
+.godseed-mapfirst #saveDialog,
+.godseed-mapfirst #confirmDialog {z-index:30}
+.godseed-mapfirst #toast{z-index:20}
+.godseed-mapfirst button:focus-visible{outline:2px solid #eccc8b;outline-offset:1px}
+@media (max-width:740px){
+ .godseed-mapfirst header {flex-basis:31px;height:31px;min-height:31px;padding:1px 6px}
+ .godseed-mapfirst header h1{font-size:16px;line-height:26px}
+ .godseed-mapfirst #godviewSummary{font-size:10px;gap:6px}
+ .godseed-mapfirst #godviewSummary .population{display:none}
+ .godseed-mapfirst #godviewDrawer{top:31px;bottom:49px;width:55vw;min-width:245px}
+ .godseed-mapfirst #godviewTabs{height:49px;flex-basis:49px}
+ .godseed-mapfirst #godviewTabs button{font-size:10px}
+ .godseed-mapfirst #godviewDrawerHead{min-height:34px;flex-basis:34px}
+}
+@media (max-width:560px){
+ .godseed-mapfirst #godviewTabs button{flex-basis:72px;min-width:72px}
+ .godseed-mapfirst #godviewDrawer{width:90vw;min-width:0}
+ .godseed-mapfirst #godviewSummary .faith{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+ .godseed-mapfirst #godviewDrawer,.godseed-mapfirst #godviewTabs button{transition:none}
+}
