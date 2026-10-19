@@ -128,7 +128,7 @@ function restore(s){
   c.needs=Needs.normalize(c.needs);
   c.choice=Choices.normalizeTrace(c.choice);
   c.choiceHistory=Array.isArray(c.choiceHistory)?c.choiceHistory.slice(-4).map(Choices.normalizeTrace).filter(Boolean):[];
-  c.journal=Chronicles.restore(c,c.journal);
+  c.journal=Chronicles.restore(c,c.journal,s.tick);
  }
 }
 function goalFor(s,p){
