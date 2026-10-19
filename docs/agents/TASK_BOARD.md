@@ -89,6 +89,17 @@ python tools/godseed_tasks.py board --write
 
 Commits updating task status belong on the **coordination branch**, not on main. If another bot already claimed the task, do not overwrite it; consult `docs/agents/TASK_WORKFLOW.md`.
 
+## Optional new task after delivery
+
+After your OWN task reaches `in_review`, `verified` or `done` **with evidence**, you may propose **one** necessary follow-up. The new task is never automatically yours. First verify no equivalent ID/scope exists in the registry, open issues or PRs.
+
+```bash
+python tools/godseed_tasks.py add --after SIM-001 --actor LIFE-01 --area people --priority P1 --title 'Sim occupational fatigue and recuperation' --acceptance 'Measured exhaustion affects job decisions and preserves version 1 saves in seeded tests.' --depends SIM-001 --reason 'Observed repeated work without adequate rest in the submitted acceptance tests.'
+python tools/godseed_tasks.py validate
+```
+
+The CLI assigns the next unique ID, checks provenance and exact-title duplicates, and picks `ready` only if prerequisites are verified; otherwise `planned`. It updates `tasks.json` and this generated board together. Commit/push both on the coordination branch. No automatic claiming or implementation of the new task.
+
 ## Hardware and release truth
 
 2–3 GB refers to **total physical device RAM**; target app PSS approximately 128–192 MiB with provisional 256 MiB soft limit, unverified. The game remains offline. The previous 1 GB core / up to 5 GB optional content are *disk targets*, not completed content or RAM allocation. Hardware QA = **BLOCKED** until real measurements in issue #13.
