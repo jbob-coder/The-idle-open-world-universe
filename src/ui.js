@@ -108,7 +108,13 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
     $('lifeTimeline').textContent=life.events.slice(-4).map(e=>'Day '+(1+Math.floor(e.tick/240))+': '+e.text).join(' • ');
   }
   $('townStatus').textContent=s.living.towns.map(t=>t.name+' · '+t.age+' / '+(t.technology?t.technology.era:'Founding Age')+' · '+t.buildings.length+' buildings · '+t.stock.food+' food · '+t.stock.wood+' wood · '+t.stock.stone+' stone').join(' | ');
-  $('citizenLives').textContent=s.living.citizens.map(p=>p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity).join(' • ');
+  $('citizenLives').textContent=s.living.citizens.map(p=>{
+   const c=p.choice;
+   if(!c)return p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity;
+   const alternative=c.alternatives.length?c.alternatives[0].intent:'none';
+   return p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity+
+    ' | Why: '+c.why+' | Alternative: '+alternative+' | Result: '+c.consequence;
+  }).join('\n');
   const recent=s.living.whispers[s.living.whispers.length-1];
   $('godFeedback').textContent=recent?('Interpreted as: '+recent.label+'. '+recent.decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join('; ')+(recent.nimAgree?'; Nim is considering it.':'')):'Speak your intention; residents decide how to respond.';
  }
