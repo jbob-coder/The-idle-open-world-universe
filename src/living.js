@@ -62,7 +62,12 @@ function build(s,town,type,starting=false){
  if(!starting){town.stock.wood-=bp.wood;town.stock.stone-=bp.stone;}
  const shapes=['oak','reed','stone'],roof=shapes[(hash(pos.x,pos.y,town.seed)+town.buildings.length)%3];
  town.buildings.push({id:town.id+'-'+(town.buildings.length+1),type,x:pos.x,y:pos.y,w:2,h:2,roof,builtAt:s.tick});
- if(!starting){log(s,town.name+' built '+bp.label, 'Residents chose a '+roof+' style '+bp.label.toLowerCase()+' near the old roads.');}
+ if(!starting){
+  log(s,town.name+' built '+bp.label, 'Residents chose a '+roof+' style '+bp.label.toLowerCase()+' near the old roads.');
+  Lifecycle.observeTown(s,town,{kind:'build',buildingType:type,
+   buildingId:town.buildings[town.buildings.length-1].id,amount:1,
+   detail:town.name+' actually constructed a '+type+' using stored materials'});
+ }
  return true;
 }
 function create(s){
@@ -327,6 +332,10 @@ function tick(s){
  // Villages exchange surplus instead of waiting forever for absent professions.
  if(s.tick%120===0){const [west,east]=s.living.towns;
   if(west.stock.wood>=8&&east.stock.stone>=8){west.stock.wood-=3;east.stock.wood+=3;east.stock.stone-=3;west.stock.stone+=3;
+   Lifecycle.observeTown(s,west,{kind:'trade',amount:3,
+    detail:'Briarford traded three real units of wood for stone'});
+   Lifecycle.observeTown(s,east,{kind:'trade',amount:3,
+    detail:'Emberwick traded three real units of stone for wood'});
    if(s.tick%480===0)log(s,'Trading caravan','Briarford timber and Emberwick stone crossed the old road.');}
  }
  for(const t of s.living.towns){
@@ -357,6 +366,8 @@ function tick(s){
    const b=t.buildings.find(q=>q.type==='house');
    if(b){const styles=['oak','reed','stone'];b.roof=styles[(styles.indexOf(b.roof)+1)%styles.length];
     b.updatedAt=s.tick;t.stock.wood-=2;t.stock.stone-=1;
+    Lifecycle.observeTown(s,t,{kind:'remodel',amount:1,buildingId:b.id,
+     detail:t.name+' replaced an existing roof using 2 wood and 1 stone'});
     log(s,t.name+' renovates a home','The residents chose '+b.roof+' roofing as their village matures.');
    }
   }
