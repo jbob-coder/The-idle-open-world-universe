@@ -1,5 +1,5 @@
 /* GODSEED Living Settlements: bounded, deterministic offline agency. No external AI. */
-(function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./needs.js'):root.GodseedNeeds);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Needs){
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
@@ -85,7 +85,7 @@ function create(s){
   const [name,role,townId,diligence,kindness,independence]=identities[i],t=townOf(s,townId);
   living.citizens.push({id:20+i,name,role,townId,x:t.x,y:t.y,homeX:t.x,homeY:t.y,
    facing:'south',movedAt:-100,age:19+i*3,skill:1,skillXP:0,trust:35,
-   kindness,diligence,independence,mood:'calm',activity:'Getting ready',relationships:{},life:[],actions:0});
+   kindness,diligence,independence,mood:'calm',activity:'Getting ready',relationships:{},life:[],actions:0,needs:Needs.normalize()});
  }
  log(s,'Two communities awaken','Briarford and Emberwick have working residents, limited supplies and homes. They choose how to grow.');
  return living;
@@ -124,6 +124,7 @@ function restore(s){
   if(!Number.isInteger(c.x)||!Number.isInteger(c.y)||c.x<1||c.y<1||c.x>=W-1||c.y>=H-1){c.x=t.x;c.y=t.y;}
   c.life=Array.isArray(c.life)?c.life.slice(-6):[];c.relationships=c.relationships&&typeof c.relationships==='object'?c.relationships:{};
   c.actions=Number(c.actions)||0;c.skillXP=Number(c.skillXP)||0;c.skill=Number(c.skill)||1;
+  c.needs=Needs.normalize(c.needs);
  }
 }
 function goalFor(s,p){
@@ -138,6 +139,49 @@ function goalFor(s,p){
  return {x:building?building.x:t.x,y:building?building.y:t.y,
   activity:p.role==='Farmer'?'Tending fields':p.role==='Forager'?'Foraging near the farms':
    p.role==='Mason'?'Working at the workshop':'Building and maintaining homes'};
+}
+// A resident may abandon a routine when basic wellbeing is at risk.
+function dangerNear(s,p){
+ return Array.isArray(s.enemies)&&s.enemies.some(e=>distance(e.x,e.y,p.x,p.y)<=3);
+}
+function needGoal(s,p,decision){
+ if(!decision)return null;
+ const town=townOf(s,p.townId);if(!town)return null;
+ let x,y,activity;
+ switch(decision.action){
+  case 'seek_safety': x=p.homeX;y=p.homeY;activity='Seeking safety at home';break;
+  case 'sleep': x=p.homeX;y=p.homeY;activity='Returning home to sleep';break;
+  case 'warm': x=p.homeX;y=p.homeY;activity='Seeking warmth at home';break;
+  case 'eat': x=town.x;y=town.y;activity='Seeking food at the settlement';break;
+  case 'socialize': x=town.x;y=town.y;activity='Seeking company';break;
+  case 'wash': {
+   const well=town.buildings.find(b=>b.type==='well');
+   if(!well)return null; // Do not pretend washing is possible without a water site.
+   x=well.x;y=well.y;activity='Walking to wash at the well';break;
+  }
+  default:return null;
+ }
+ return {x,y,activity,needAction:decision.action};
+}
+function completeNeed(s,p,goal){
+ if(!goal.needAction||distance(p.x,p.y,goal.x,goal.y)>1)return false;
+ const town=townOf(s,p.townId);
+ const action=goal.needAction;
+ const result=Needs.act(p.needs,action,{
+  sheltered:['seek_safety','sleep','warm'].includes(action),
+  foodAvailable:!!town&&town.stock.food>=1,
+  atWell:action==='wash'&&town.buildings.some(b=>b.type==='well'&&distance(p.x,p.y,b.x,b.y)<=1),
+  company:action==='socialize'&&s.living.citizens.some(q=>q!==p&&distance(p.x,p.y,q.x,q.y)<=2)
+ });
+ if(!result.performed)return false;
+ if(action==='eat')town.stock.food-=1; // Consume a real ration, never free food.
+ p.needs=result.needs;
+ p.activity={
+  seek_safety:'Sheltering for safety',sleep:'Sleeping at home',
+  warm:'Warming at home',eat:'Eating a town ration',
+  socialize:'Talking with neighbors',wash:'Washing at the well'
+ }[action];
+ return true;
 }
 function walk(s,p,goal){
  if(!goal)return;
@@ -187,8 +231,13 @@ function tick(s){
  if(!s.living||s.tick%12!==0)return;
  if(s.tick%240===0)advanceLife(s);
  for(const p of s.living.citizens){
-  const task=goalFor(s,p);p.activity=task.activity;walk(s,p,task);
-  if((s.tick+p.id*23)%240<90)work(s,p);
+  const working=(s.tick+p.id*23)%240<90;
+  const threatened=dangerNear(s,p);
+  p.needs=Needs.decay(p.needs,{working,danger:threatened});
+  const task=needGoal(s,p,Needs.priority(p.needs,{danger:threatened}))||goalFor(s,p);
+  p.activity=task.activity;walk(s,p,task);
+  completeNeed(s,p,task);
+  if(working&&!task.needAction)work(s,p);
   if(s.tick%240===0){p.age+=1/12;p.mood=p.actions%5===0?'content':'calm';}
  }
  // Villages exchange surplus instead of waiting forever for absent professions.
@@ -293,8 +342,10 @@ function whisper(s,message){
  for(const t of towns){
   const workers=s.living.citizens.filter(c=>c.townId===t.id);
   const independence=workers.reduce((n,c)=>n+c.independence,0)/workers.length;
-  const urgent=t.stock.food<3;
-  const agree=!urgent||m.intent==='food'?independence<.75||hash(s.tick,t.x,m.text.length)%4!==0:m.intent==='food';
+  const hungry=t.stock.food<3||workers.some(c=>c.needs&&c.needs.hunger<=15);
+  const unsafe=workers.some(c=>c.needs&&c.needs.safety<=15);
+  const safeIntent=(!hungry||m.intent==='food')&&(!unsafe||m.intent==='defense');
+  const agree=safeIntent&&(independence<.75||hash(s.tick,t.x,m.text.length)%4!==0);
   if(agree&&['housing','food','defense','craft','trade'].includes(m.intent))t.agenda=m.intent;
   if(agree&&m.intent==='remodel')t.renovateAfter=s.tick+48;
   decisions.push({name:t.name,agree,reason:agree?'Residents will consider this within their needs and supplies.':'Residents are prioritizing survival or independence.'});
