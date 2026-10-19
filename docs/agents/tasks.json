@@ -1235,7 +1235,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "God view: inspect life, building, village, memories and intent",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "FORGE-27",
       "work_branch": "feat/god-004-forge-27-observer",
       "depends": [],
@@ -1264,6 +1264,13 @@
           "to": "claimed",
           "actor": "FORGE-27",
           "reason": "Reserve read-only God observer inspector; inspect citizens, settlements and buildings without direct control."
+        },
+        {
+          "date": "2026-10-19T01:21:00Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Begin read-only God observer inspector; isolated module, offline UI, deterministic tests. Avoid shared UI conflicts and direct Sim controls."
         }
       ]
     },
