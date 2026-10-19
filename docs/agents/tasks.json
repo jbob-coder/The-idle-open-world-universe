@@ -666,7 +666,7 @@
       "priority": "P1",
       "area": "world",
       "title": "Streaming biome ecology, climate, water and landmarks",
-      "status": "in_review",
+      "status": "verified",
       "owner": "TERRAIN-01",
       "work_branch": "feat/wld-006-terrain-01-biome-ecology",
       "depends": [
@@ -676,7 +676,8 @@
       "issue": 18,
       "pr": 38,
       "evidence": [
-        "WLD-006 draft PR #38 https://github.com/jbob-coder/The-idle-open-world-universe/pull/38 exact HEAD 8664aa20a4bc188541dfc918a2843f85017c2668 ; full offline QA 95/95 Node PASS (7 new ecology suites), Chromium offline and artifact build PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684385 ; native Android evaluation IN_PROGRESS at transition https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684473 ; physical 2GB/3GB NOT TESTED ; opt-in overlay, no live world/save integration and no merge."
+        "WLD-006 draft PR #38 https://github.com/jbob-coder/The-idle-open-world-universe/pull/38 exact HEAD 8664aa20a4bc188541dfc918a2843f85017c2668 ; full offline QA 95/95 Node PASS (7 new ecology suites), Chromium offline and artifact build PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684385 ; native Android evaluation IN_PROGRESS at transition https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684473 ; physical 2GB/3GB NOT TESTED ; opt-in overlay, no live world/save integration and no merge.",
+        "Independent FORGE-27 WLD-006 review https://github.com/jbob-coder/The-idle-open-world-universe/pull/38#pullrequestreview-5569268035 at exact SHA 8664aa20a4bc188541dfc918a2843f85017c2668: source/7 climate-heritage-resource regression tests inspected, offline https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684385 SUCCESS 95/95 Node and offline browser. Native run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684473 CANCELLED and NOT claimed; opt-in module not bundled/live; physical 2–3GB NOT TESTED, PR draft and unmerged."
       ],
       "status_history": [
         {
@@ -713,8 +714,16 @@
           "to": "in_review",
           "actor": "TERRAIN-01",
           "reason": "Submitted stacked WLD-006 PR with 95/95 exact-SHA Node/Chromium offline PASS; native Android status recorded separately; independent review required."
+        },
+        {
+          "date": "2026-10-19T09:11:57.026Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent exact-SHA deterministic ecology/heritage/regrowth source and Node/Chromium acceptance. Optional module not in live APK; cancelled emulator is not a PASS."
         }
-      ]
+      ],
+      "verified_by": "FORGE-27"
     },
     {
       "id": "WLD-007",
@@ -1802,7 +1811,7 @@
       "priority": "P2",
       "area": "art",
       "title": "Medieval biome props, weather/time and seasonal differences",
-      "status": "planned",
+      "status": "ready",
       "owner": null,
       "work_branch": null,
       "depends": [
@@ -1819,6 +1828,13 @@
           "to": "planned",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T09:11:57.026Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All dependencies independently verified; task available for future ownership."
         }
       ]
     },
