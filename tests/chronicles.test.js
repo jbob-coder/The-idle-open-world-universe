@@ -150,6 +150,23 @@ test('malformed/oversized optional memories sanitize, never fabricate a positive
  assert.ok(invalid&&invalid.living.citizens[0].journal.entries.length===0);
 });
 
+test('future-dated imported memories are discarded before they can imply unearned events',()=>{
+ const s=newWorld(41);
+ for(let i=0;i<72;i++)S.tick(s);
+ const raw=JSON.parse(S.serialize(s)),p=raw.living.citizens[0];
+ const future={tick:s.tick+500,choice:'work',reason:'Forged future work',
+  consequence:'Claimed production',alternative:'rest',moral:'duty',
+  impact:C.impactBetween(C.snapshot(p,raw.living.towns[0]),{
+   ...C.snapshot(p,raw.living.towns[0]),wood:raw.living.towns[0].stock.wood+2})};
+ p.journal.entries.push(future);
+ const restored=S.restore(JSON.stringify(raw));
+ assert.ok(restored);
+ assert.ok(restored.living.citizens[0].journal.entries.every(e=>e.tick<=s.tick));
+ assert.equal(restored.living.citizens[0].journal.entries.some(e=>e.reason==='Forged future work'),false);
+ assert.equal(restored.worldSeed,s.worldSeed);
+ assert.deepEqual(restored.living.towns.map(t=>t.stock),s.living.towns.map(t=>t.stock));
+});
+
 test('16 world seeds are deterministic; saved personal journals persist after reload',()=>{
  const signatures=new Set();
  for(const seed of SEEDS){
