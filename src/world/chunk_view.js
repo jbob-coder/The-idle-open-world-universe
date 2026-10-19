@@ -103,8 +103,9 @@
     fogChunks:explored.size,maxFogChunks:maxFog,store:store.stats()};
   }
   reveal();
+  function invalidate(){forced=true;}
   return Object.freeze({camera,setCenter:update,setZoom,pan,renderFrame,
-   reveal,known,setTile,stats,store,ZOOMS});
+   reveal,known,setTile,stats,store,ZOOMS,invalidate});
  }
  return Object.freeze({ZOOMS,MAX_COORD,REVEAL_RADIUS,create});
 });
