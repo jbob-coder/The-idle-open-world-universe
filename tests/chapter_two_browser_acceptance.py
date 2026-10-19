@@ -16,6 +16,8 @@ with sync_playwright() as pw:
     page.route('http://godseed.test/',lambda r:r.fulfill(status=200,content_type='text/html',body=(ROOT/'GODSEED-Play.html').read_text()))
     page.goto('http://godseed.test/')
     page.evaluate('GodseedDebug.newWorld(41);GodseedDebug.setSpeed(0)')
+    page.locator('#godviewTab-lives').click()
+    page.locator('#godviewLifeDetails summary').click()
     assert page.locator('#chapterTwoPanel').is_hidden()
     page.evaluate("""() => {
       const s=GodseedDebug.getState();s.chapter={version:1,stage:3,completedAt:s.tick,rewarded:true};
