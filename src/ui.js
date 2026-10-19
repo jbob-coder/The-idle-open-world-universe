@@ -23,7 +23,7 @@ function setZoom(next){
  const status=$('zoomStatus');if(status)status.textContent=ZOOMS[zoomIndex].name+' · '+VW+' × '+VH+' casillas';
 }
 setZoom(0);
-const setMode=v=>{mode=v;document.querySelectorAll('[data-power]').forEach(b=>{b.classList.toggle('active',b.dataset.power===mode);b.setAttribute('aria-pressed',String(b.dataset.power===mode));});$('instruction').textContent=(v==='inspect'?'Inspect a tile by clicking the world.':`Select a tile to use ${v.toUpperCase()}.`);if(s.settings.speed===0)draw();};
+const setMode=v=>{if(window.GodseedGuidanceMode&&v!=='inspect')v='inspect';mode=v;document.querySelectorAll('[data-power]').forEach(b=>{b.classList.toggle('active',b.dataset.power===mode);b.setAttribute('aria-pressed',String(b.dataset.power===mode));});$('instruction').textContent=(v==='inspect'?'Inspect a tile by clicking the world.':`Select a tile to use ${v.toUpperCase()}.`);if(s.settings.speed===0)draw();};
 const html=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function notify(message){flashMessage=message;flashUntil=Date.now()+2700;$('toast').textContent=message;$('toast').classList.add('show');}
 function stamp(s){const hour=Math.floor((s.tick%240)/10),min=Math.floor((s.tick%10)*6);return `DAY ${s.day} · ${String(hour).padStart(2,'0')}:${String(min).padStart(2,'0')}`;}
