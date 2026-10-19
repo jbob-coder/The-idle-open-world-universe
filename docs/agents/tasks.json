@@ -1067,7 +1067,7 @@
       "priority": "P1",
       "area": "people",
       "title": "Personal journals, memories, long goals and moral decisions",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "CORTEX-19",
       "work_branch": "feat/sim-007-cortex-19-personal-chronicles",
       "depends": [
@@ -1098,6 +1098,13 @@
           "to": "claimed",
           "actor": "CORTEX-19",
           "reason": "Reserve SIM-007 real per-citizen chronicles, long goals, moral tradeoffs and inspectable consequences on isolated verified SIM-002 base."
+        },
+        {
+          "date": "2026-10-19T08:53:50.519Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "CORTEX-19",
+          "reason": "Implement bounded resident personal journals with persisted goals, moral choice context and real observed consequence deltas; add browser inspector and save-v1/16-seed tests; no God direct control."
         }
       ]
     },

@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 70 tasks · planned: 38 · ready: 5 · claimed: 1 · in_progress: 1 · blocked: 3 · in_review: 6 · verified: 16 · done: 0 · cancelled: 0.
+**Tracked work:** 70 tasks · planned: 38 · ready: 5 · claimed: 0 · in_progress: 2 · blocked: 3 · in_review: 6 · verified: 16 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -79,7 +79,7 @@
 | **INT-009** | P1 | interiors | **planned** | — | INT-005, GOD-004 | God-level house inspector and door/floor UI |
 | **SIM-004** | P1 | people | **planned** | — | SIM-003 | Affection, friendship, conflict, families and child growth · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-006** | P1 | people | **planned** | — | SIM-002, SIM-005 | Education, learned skills and non-combat life progression · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
-| **SIM-007** | P1 | people | **claimed** | CORTEX-19 | SIM-002 | Personal journals, memories, long goals and moral decisions · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
+| **SIM-007** | P1 | people | **in_progress** | CORTEX-19 | SIM-002 | Personal journals, memories, long goals and moral decisions · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-008** | P1 | people | **planned** | — | SIM-004, SIM-007 | Generations, inheritance and meaningful mortality · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **SIM-009** | P1 | people | **planned** | — | SIM-002, SIM-004 | Contextual resident social interaction and visible animations · [#19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19) |
 | **QA-005** | P1 | qa | **verified** | LIFE-26 | — | Diagnose and stabilize paused divine FX render timing in Chromium CI |
