@@ -12,6 +12,8 @@
 | [Protocolo de los bots](TASK_WORKFLOW.md) | Reclamar antes de editar, cambiar estados, resolver conflictos y cerrar | **Obligatorio** |
 | [Prompt maestro](BOT_MASTER_PROMPT.md) | Instrucciones reproducibles para Codex y otros agentes | **Copiar para activar bots** |
 | [Modo automático ♾️](INFINITY_AUTOMATION_PROMPT.md) | Continuar tareas sucesivas por sesión con límites y evidencia | **Copiar para bots autónomos** |
+| [Relevo de chat / CONTEXTO_AGOTADO](CHAT_RETIRE_AND_RESUME.md) | Prompt doble: bot que se retira y bot sucesor; cómo no perder el trabajo | **Obligatorio al terminar un chat con tarea activa** |
+| [Archivo de relevos](handoffs/README.md) | Estado verificable por tarea, ramas, SHA, pruebas, próximos pasos | **Leer al heredar trabajo** |
 | [Arquitectura de puertas seguras](SAFE_INTERIOR_ARCHITECTURE.md) | Métricas m², huellas, hogares, puertas, transición y guardados | **Diseño pendiente de aceptación** |
 | [Orden de desarrollo](EXECUTION_PLAN.md) | Fases, trabajo paralelo seguro, bloqueos | Guía de planificación |
 | [Matriz de aceptación](ACCEPTANCE_MATRIX.md) | Pruebas mínimas por subsistema y evidencia física | Contrato de verificación |
@@ -31,6 +33,10 @@
 ## Modo ♾️ para bots autónomos
 
 El [prompt de automatización ♾️](./INFINITY_AUTOMATION_PROMPT.md) describe cómo repetir ciclos de ejecución durante una sesión activa: elegir tarea `ready`, reclamar, desarrollar, probar, entregar PR, actualizar estado y pasar a otra. Se admite **una tarea activa** por bot y un máximo de dos PRs propios en revisión; a partir de ese límite, detener el ciclo para revisión. Si la sesión termina, se reanuda únicamente mediante una nueva invocación o un ejecutor externo explícitamente configurado.
+
+## Relevo entre chats — contexto agotado
+
+Cuando un bot no puede continuar por agotamiento del contexto de su chat, use [`CHAT_RETIRE_AND_RESUME.md`](./CHAT_RETIRE_AND_RESUME.md) **MODO A** para guardar el estado real en `docs/agents/handoffs/<TASK_ID>.json`, validarlo, publicar commit y liberar la tarea `claimed/in_progress → ready` **solo si el trabajo se preservó**. Su mensaje final declara honestamente que ya no puede continuar esa conversación y entrega ID, commits y ruta. **En un chat nuevo**, pegar el **MODO B**, que empieza leyendo el [README](./README.md), el [prompt inicial](./BOT_MASTER_PROMPT.md) y el registro antes de reclamar. Relevos no conceden propiedad automáticamente, no hacen merges ni configuran ejecución en segundo plano.
 
 ## Comienza aquí si eres un bot
 
