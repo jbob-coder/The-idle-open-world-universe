@@ -1,3 +1,9 @@
+# V3 DESIGN CONTRACT — GODSEED LIVING CIVILIZATIONS
+
+If working on God gameplay, sim intelligence/personality, households, hereditary traits, colonies, kings, kingdom politics, Android LOD or UI, read `docs/design/README.md` and its linked V3 design contracts first. This documentation is a planned vision, not proof that features exist. Read live task ownership and CI from `docs/godseed-agent-task-governance-v1`, do not overwrite other bots' PRs.
+
+---
+
 # GODSEED — current agents entry point (October 2026)
 
 **New chats, new bots, retirement and task claims:** start with `docs/agents/README.md`, then `docs/agents/BOT_MASTER_PROMPT.md`, `docs/agents/TASK_WORKFLOW.md`, `docs/agents/tasks.json` and the generated `docs/agents/TASK_BOARD.md` **from the coordination branch** `docs/godseed-agent-task-governance-v1` (PR #22). This is the current governance for GODSEED living-world development; verify GitHub current HEAD.
