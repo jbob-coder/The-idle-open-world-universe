@@ -147,16 +147,18 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "in_progress",
-      "owner": "FORGE-27",
-      "work_branch": "feat/int-002-forge-27-metric-buildings",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
       "depends": [
         "INT-001"
       ],
       "acceptance": "Blueprint variants use real footprint collision and protected roads/sites; stable old 1×1/2×2 saves.",
       "issue": null,
       "pr": null,
-      "evidence": [],
+      "evidence": [
+        "Owner-requested FORGE-27 definitive retirement handoff committed at ec178b9bc5dfeaaaeffee6940ce4553b36f9d545; code branch feat/int-002-forge-27-metric-buildings remains identical to base a5919223ec9092bb8f2ec4c4a35cc2576021c817; no new game code, tests or PR. New 3D Pixel Squares design in PR #47 must be evaluated."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -185,6 +187,13 @@
           "to": "in_progress",
           "actor": "FORGE-27",
           "reason": "Implement genuine multi-tile construction and pixel art exterior for homes/workshops/market/hall, safe footprint/road/landmark checks and stable v1 save restore, seeded Node and Chromium tests."
+        },
+        {
+          "date": "2026-10-19T16:58:55.680Z",
+          "from": "in_progress",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Owner requested permanent retirement. Machine-validated handoff docs/agents/handoffs/INT-002.json was committed and CI checked; original branch equals baseline a5919223ec9092bb8f2ec4c4a35cc2576021c817 with no code to lose; release the task for a separately authorized successor."
         }
       ]
     },
