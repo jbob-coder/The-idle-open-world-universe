@@ -113,8 +113,30 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 #godSubmit{min-height:44px;padding:7px 17px;background:#526d58;color:#fff5da;border:2px solid #c7b783}
 #godFeedback{margin-top:9px;white-space:pre-wrap}
 #townStatus,#citizenLives{color:#d0dabc;font-size:10px;line-height:1.55;margin:5px 0}
+/*SPLASH_STYLE*/
 </style>
-</head><body><div class="site">
+</head><body>
+<div id="godseedSplash" aria-label="GODSEED está cargando el mundo" aria-busy="true" role="status">
+ <div class="splash-scene" aria-hidden="true"><!--SPLASH_ART--></div>
+ <div class="splash-vignette" aria-hidden="true"></div>
+ <div class="splash-content">
+  <div class="splash-head">
+   <div class="splash-symbol" aria-hidden="true">✦</div>
+   <h1 class="splash-title">GODSEED</h1>
+   <p class="splash-subtitle">A World for One</p>
+  </div>
+  <div class="splash-bottom">
+   <div id="splashProgress" class="splash-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progreso de carga">
+    <div id="splashFill" class="splash-fill"></div>
+   </div>
+   <p id="splashStatus" class="splash-status" aria-live="polite">Despertando el mundo...</p>
+   <p id="splashPercent" class="splash-progress">0%</p>
+   <button type="button" id="splashRetry" hidden>Reintentar sin conexión</button>
+   <button type="button" id="splashEnter" hidden>Entrar al mundo</button>
+  </div>
+ </div>
+</div>
+<div class="site">
 <header><div class="brand"><div class="sigil">✦</div><div><div class="eyebrow">A FORGOTTEN KINGDOM LIVES WITHOUT YOUR COMMAND</div><h1>GODSEED <span style="font-size:12px;color:#a7bca3">/ CRÓNICAS DEL REINO OLVIDADO</span></h1><p>Fantasía medieval · Observa una vida. Inspira a un reino.</p></div></div><div class="header-meta"><span><i class="statusdot"></i> OFFLINE SIMULATION</span><span class="key">v1 experimental</span></div></header>
 <main><section class="maincol">
 <div class="panel"><div class="panelhead"><h2>01 / The Forgotten Kingdom</h2><span class="tiny muted" id="clock">DAY 1</span></div>
@@ -214,6 +236,7 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 <p id="nativeStorageNotice" role="status"></p>
 </div></div>
 <div id="toast" role="status"></div>
+<script>/*SPLASH_SOURCE*/</script>
 <script>/*SIM_SOURCE*/</script>
 <script>/*UI_SOURCE*/</script>
 
