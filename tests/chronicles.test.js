@@ -65,7 +65,7 @@ test('real production advances only relevant long goal and yields factual stock 
  assert.equal(e.impact.skill,1);
  assert.equal(e.observed,true);
  assert.equal(p.journal.progress,1);
- for(let i=0;i<10;i++)C.record(p,choose('work'),old,changed,24+i*12);
+ for(let i=0;i<11;i++)C.record(p,choose('work'),old,changed,24+i*12);
  assert.equal(p.journal.progress,5);
  assert.equal(p.journal.entries.length,12);
  assert.equal(s.living.towns[0].stock.wood,old.wood,
