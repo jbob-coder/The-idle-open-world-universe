@@ -37,7 +37,7 @@ with sync_playwright() as pw:
     choices=page.evaluate("""() => GodseedDebug.getState().living.citizens.map(c => c.choice)""")
     assert len(choices)==4 and all(c and c['why'] and c['consequence'] and len(c['alternatives'])==2 for c in choices),choices
     decision_text=page.locator('#citizenLives').inner_text()
-    assert all(label in decision_text for label in ['Why:', 'Alternative:', 'Result:']),decision_text
+    assert all(label in decision_text for label in ['Why:', 'Alternative:', 'Result:', 'Mind I:', 'Plan ']),decision_text
     assert page.evaluate('GodseedSim.finaleStatus(GodseedDebug.getState()).completed')
     page.evaluate("window.scrollTo(0,0)")
     page.screenshot(path=str(SHOT),full_page=True)

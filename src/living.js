@@ -1,5 +1,5 @@
 /* GODSEED Living Settlements: bounded, deterministic offline agency. No external AI. */
-(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./needs.js'):root.GodseedNeeds,typeof module!=='undefined'&&module.exports?require('./choices.js'):root.GodseedChoices);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Needs,Choices){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./needs.js'):root.GodseedNeeds,typeof module!=='undefined'&&module.exports?require('./choices.js'):root.GodseedChoices,typeof module!=='undefined'&&module.exports?require('./cognition.js'):root.GodseedCognition);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Needs,Choices,Cognition){
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
@@ -87,6 +87,7 @@ function create(s){
    facing:'south',movedAt:-100,age:19+i*3,skill:1,skillXP:0,trust:35,
    kindness,diligence,independence,mood:'calm',activity:'Getting ready',relationships:{},life:[],actions:0,needs:Needs.normalize(),choice:null,choiceHistory:[]});
  }
+ for(const p of living.citizens)p.cognition=Cognition.profile(s.worldSeed,p);
  log(s,'Two communities awaken','Briarford and Emberwick have working residents, limited supplies and homes. They choose how to grow.');
  return living;
 }
@@ -125,6 +126,7 @@ function restore(s){
   c.life=Array.isArray(c.life)?c.life.slice(-6):[];c.relationships=c.relationships&&typeof c.relationships==='object'?c.relationships:{};
   c.actions=Number(c.actions)||0;c.skillXP=Number(c.skillXP)||0;c.skill=Number(c.skill)||1;
   c.needs=Needs.normalize(c.needs);
+  c.cognition=Cognition.profile(s.worldSeed,c,c.cognition);
   c.choice=Choices.normalizeTrace(c.choice);
   c.choiceHistory=Array.isArray(c.choiceHistory)?c.choiceHistory.slice(-4).map(Choices.normalizeTrace).filter(Boolean):[];
  }
@@ -283,15 +285,17 @@ function tick(s){
   const oldX=p.x,oldY=p.y,oldNeeds={...p.needs};
   p.activity=task.activity;walk(s,p,task);
   const recovered=completeNeed(s,p,task);
-  let consequence='Continuing the chosen route';
+  let consequence='Continuing the chosen route',observation=null;
   if(task.needAction){
    if(recovered){
     const key={eat:'hunger',sleep:'energy',wash:'hygiene',warm:'comfort',
      seek_safety:'safety',socialize:'social'}[task.needAction];
     consequence='Recovered '+key+' (+'+(p.needs[key]-oldNeeds[key])+')';
+    observation={action:task.needAction,result:'recovered',tick:s.tick};
    }else consequence='Traveling toward '+task.needAction;
   }else if(working&&decision.intent==='work'){
    const produced=work(s,p);
+   if(produced&&produced.amount>0)observation={action:'work',result:'produced',tick:s.tick};
    consequence=produced?'Produced '+produced.amount+' '+produced.resource:
     'Traveling to a real worksite';
   }else if(decision.intent==='help'&&partner){
@@ -301,11 +305,15 @@ function tick(s){
     p.needs.social=Math.min(100,p.needs.social+2);
     partner.needs.social=Math.min(100,partner.needs.social+2);
     consequence='Supported '+partner.name+'; mutual trust improved';
+    observation={action:'help',result:'supported',tick:s.tick};
    }else consequence='Visiting '+partner.name+' to offer support';
   }else if(decision.intent==='explore'){
+   if(p.x!==oldX||p.y!==oldY)observation={action:'explore',result:'surveyed',tick:s.tick};
    consequence=p.x!==oldX||p.y!==oldY?'Walked to survey nearby land':
     'Observing the nearby paths';
   }else if(decision.intent==='rest') consequence='Returning to a resting place';
+  Cognition.rememberPlan(p,decision.thinking);
+  if(observation)Cognition.observe(p,observation);
   const previous=p.choice&&p.choice.intent;
   p.choice=Choices.normalizeTrace({...decision,tick:s.tick,consequence});
   if(!Array.isArray(p.choiceHistory))p.choiceHistory=[];
