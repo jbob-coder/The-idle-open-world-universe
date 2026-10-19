@@ -3,13 +3,25 @@ set -euo pipefail
 APK="android/gradle/app/build/outputs/apk/debug/app-debug.apk"
 TEST_APK="android/gradle/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
 mkdir -p qa-screenshots
+# Preserve logs even on timeout/failing assertions; the workflow uploads them.
+capture_failed_context() {
+  local rc=$?
+  if [ "$rc" -ne 0 ]; then
+    adb logcat -d -t 1200 > qa-screenshots/android-emulator-logcat.txt 2>/dev/null || true
+    adb shell dumpsys meminfo io.godseed.one > qa-screenshots/android-emulator-memory.txt 2>/dev/null || true
+    echo "QA-003 native acceptance failed (exit $rc); diagnostic logs retained" >&2
+  fi
+}
+trap capture_failed_context EXIT
 test -s "$APK"
 test -s "$TEST_APK"
 adb install -r "$APK"
 adb install -r "$TEST_APK"
 adb shell pm list packages | grep -q 'package:io.godseed.one'
 set +e
-adb shell am instrument -w -r io.godseed.one.test/androidx.test.runner.AndroidJUnitRunner | tee qa-screenshots/android-emulator-instrumentation.txt
+# Bound ADB instrumentation separately from the overall emulator job timeout.
+# Seven tests include real WebView cold starts; fail with artifacts, not a 38m hang.
+timeout --signal=TERM --kill-after=15s 480s adb shell am instrument -w -r io.godseed.one.test/androidx.test.runner.AndroidJUnitRunner | tee qa-screenshots/android-emulator-instrumentation.txt
 res=${PIPESTATUS[0]}
 set -e
 test "$res" -eq 0
