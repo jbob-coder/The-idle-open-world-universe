@@ -2476,7 +2476,7 @@
       "priority": "P0",
       "area": "people",
       "title": "Individual intelligence, cognition, learning styles and personality effect on choices",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "CORTEX-19",
       "work_branch": "feat/sim-011-cortex-19-cognition",
       "depends": [
@@ -2485,8 +2485,10 @@
       ],
       "acceptance": "Seeded stat vector, needs/traits/skills/knowledge distinction, bounded multi-goal utility, intelligence changes planning and learning not raw universal success; independent decision traces and 16-seed outcomes.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 41,
+      "evidence": [
+        "SIM-011 draft-to-ready PR #41 https://github.com/jbob-coder/The-idle-open-world-universe/pull/41 (OPEN, NOT MERGED), exact source HEAD cb6ef3f89343a4456e3403db5a3230185be67660 stacked on independently verified SIM-002 66bcf93440f0293eef4d7a0c05832d1b5904d73f; full offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106721 COMPLETED SUCCESS, 109/109 Node PASS incl 9 new SIM-011 tests and 16 seed simulations, Chromium offline visible cognition/plan, mobile 640x360/720x400/960x540, stories I-III/save with 0 JS/errors/remote requests. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106704 COMPLETED SUCCESS, Gradle/WebView APK and Android API29 emulator 6/6 instrumentation PASS, screenshot/logcat artifacts 12159677864 and 12160520171. Outer save v1 preserved; 4 current resident Sims only. Physical 2/3GB RAM/PSS, real device heat/20 minute soak NOT VERIFIED. Independent review required; no merge authorized."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -2515,6 +2517,13 @@
           "to": "in_progress",
           "actor": "CORTEX-19",
           "reason": "Build actual seeded cognition, bounded learning and personal plans on verified SIM-002; retain v1 compatibility; acceptance across 16 seeds."
+        },
+        {
+          "date": "2026-10-19T02:45:32.779Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "CORTEX-19",
+          "reason": "Submitted deterministic resident cognition/learning v1 and visible planning in PR #41: exact source Node 109/109, Chromium and Gradle Android emulator 6/6 PASS; independent reviewer required; physical low RAM not tested."
         }
       ]
     },
