@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "task_id": "CIV-001",
+  "retiring_bot": "TERRAIN-01",
+  "reason": "owner_request",
+  "created_utc": "2026-10-19T16:57:33+00:00",
+  "last_known_status": "in_review",
+  "owner_at_handoff": "TERRAIN-01",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "9e988714ba66a2f2927dee337aefdf76c22b2638",
+  "work_branch": "feat/civ-001-terrain-01-metric-blueprints",
+  "work_sha": "adbe40831b1595465c68cd00342309f43f01b173",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/35",
+  "summary": "Owner-directed final retirement: CIV-001 eight deterministic standalone 3x3–6x6 medieval 2D-era metric building blueprints, safe door geometry, explicit style/material catalog, valid terrain/roads and zero-overlap/zoning checks are implemented on draft PR #35 but NOT integrated into gameplay. An independent reviewer must assess; no game/branch merge. Owner's new approved product vision (PR #47) is 3D point of view with Pixel Squares aesthetic and autonomous NPC-created societies; legacy 2D contracts may require reconciliation. Other TERRAIN-01 verified tasks are preserved in related_verified_tasks and a separately committed retirement inventory.",
+  "changed_files": [
+    "src/civilization/blueprints.js",
+    "tests/civilization_blueprints.test.js",
+    "docs/CIV-001_BLUEPRINT_LIBRARY.md"
+  ],
+  "tests": [
+    "PASS: node --test tests/*.test.js: 89/89 PASS including 7 CIV-001 tests at exact SHA adbe40831b1595465c68cd00342309f43f01b173; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386197",
+    "PASS: node --test tests/civilization_blueprints.test.js as part of exact SHA CI; eight types, four doors, terrain, road approach and non-overlapping reservations.",
+    "PASS: Gradle offline Android host build and API29 emulator six instrumentation tests at exact SHA adbe40831b1595465c68cd00342309f43f01b173; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386188 ; native APK artifact 12159181583, emulator screenshot/log artifact 12158649413.",
+    "NOT_RUN: physical 2GB/3GB Android device 20-minute soak / app PSS/RSS / FPS / heat / stable production release signing.",
+    "NOT_RUN: integrated NPC construction/3D viewport, actual spatial room entry/exit and cross-chunk autonomous movement; stand-alone planning API only."
+  ],
+  "blockers": [
+    "Await independent technical review of PR #35; governance requires in_review remain owned, not returned to ready, and not marked verified/done by its author.",
+    "New owner-approved 3D Pixel Squares direction in introduction branch PR #47 contradicts legacy 2D-only pixel/camera mandates. Reconcile render/architecture contracts prior to integrating or expanding 2D building visuals; do not discard verified old assets without transition plan.",
+    "Physical Android 2-3GB QA remains blocked (QA-004).",
+    "INT-003 separate PR #36 has independent door-anchor mismatch review reported at https://github.com/jbob-coder/The-idle-open-world-universe/pull/36#issuecomment-6258352474; successor must resolve before relying on real door transitions."
+  ],
+  "risks": [
+    "Legacy planAt returns 2D footprint measured as 2m per tile (3x3–6x6), interiors 1m per cell; this is historical implementation and NOT approval of mandatory 2D camera, sprite dimensions, voxel/engine or final 3D geometry.",
+    "Committing or integrating building library as live renderer before 3D migration plan can conflict with PR #47 and INT-002/INT-003/ART-007 streams.",
+    "Proposals are pure and read-only; no actual game building, stock cost deduction, resident agency or save compatibility integration has been tested for CIV-001.",
+    "PR #35 is draft on unmerged base PR #21, and must be reviewed independently, not force-merged."
+  ],
+  "save_notes": "CIV-001 does not edit live src/sim.js, src/living.js, build.py or v1 serialization. It adds standalone src/civilization/blueprints.js, tests and docs only, so current saved v1 game remains unchanged. No claim of future 3D save migration. Other QA-003 tests check actual WebView save/reload, but low-RAM physical devices have NOT been measured.",
+  "next_actions": [
+    "Read new owner design contract docs/agents/INTRODUCCION_AL_PROYECTO_PROMPT.md at branch introduccion-al-proyecto (SHA 61b0721f1b3e255ae07a8a76d103e4b015960b8c) and primary owner decision PR #47; classify original 2D metrics as legacy, not irrevocable approved 3D constraints.",
+    "Read docs/agents/tasks.json and TASK_BOARD.md from latest coordination SHA; CIV-001 remains in_review, owned by TERRAIN-01. Do not reclaim as ready; arrange an independent PR #35 reviewer and document findings.",
+    "Inspect original code and tests at PR #35 SHA adbe40831b1595465c68cd00342309f43f01b173; confirm exact HEAD CI and run local seeded tests before changes. Preserve branch/commit.",
+    "Plan a reversible 3D mapping/adaptation of medieval blueprint geometry and validate door clearance + zoning with existing INT-001/INT-002/INT-003 owners; resolve mismatch noted in PR #36 before consuming door anchor coordinates.",
+    "Only after independent verification and approved integration direction should a new properly claimed task integrate planning into NPC self-construction. Keep v1 saves/Android offline, NO auto-merge and NO physical hardware PASS claims."
+  ],
+  "do_not_repeat": [
+    "Do not recreate the eight 3x3–6x6 blueprints, collision-safe validator and seven seed tests already saved in PR #35.",
+    "Do not repeat WLD-001 signed 32x32 chunk core in PR #23 or WLD-006 climate/heritage/berry overlays in PR #38; they are verified but not merged or live.",
+    "Do not repeat QA-003 exact-SHA Android API29 pause-save/provenance instrumentation already verified on PR #30; physical Android remains undone.",
+    "Do not read any old 2D-only prompt as current owner approval: Oct 19 2026 direction is 3D Pixel Squares visual presentation; 2D legacy code may be reused cautiously.",
+    "Do not mutate original PR branches, silently reassign retired TERRAIN-01 review ownership, re-run ♾️ or claim new tasks using this chat's identity."
+  ],
+  "unpublished_changes": false,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact.",
+  "current_registry_status": "in_review",
+  "related_verified_tasks": [
+    {
+      "id": "WLD-001",
+      "registry_status": "verified",
+      "owner": "TERRAIN-01",
+      "verified_by": "GDS-KESTREL-1810",
+      "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/23",
+      "branch": "feat/wld-001-seeded-chunks-terrain-01",
+      "work_sha": "955338f2d10a16a89ad97bd5dc6917f8660809ed",
+      "files": [
+        "src/world/chunks.js",
+        "tests/chunks.test.js"
+      ],
+      "evidence": [
+        "PASS: node --test tests/*.test.js, 88/88; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183510756",
+        "NOT_RUN: API29 run 39183510322 finished CANCELLED, not an instrumentation pass.",
+        "NOT_RUN: physical 2GB/3GB device certification."
+      ],
+      "not_implemented": "No actual live world streaming, v1 saves still baseline; chunk API standalone."
+    },
+    {
+      "id": "QA-003",
+      "registry_status": "verified",
+      "owner": "TERRAIN-01",
+      "verified_by": "FORGE-27",
+      "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/30",
+      "branch": "test/qa-003-terrain-01-native-acceptance",
+      "work_sha": "ff8374a8118a625de72c4816e021adeef294acf5",
+      "files": [
+        ".github/workflows/native-android.yml",
+        "android/gradle/app/src/androidTest/java/io/godseed/one/NativeAndroidSmokeTest.java",
+        "tests/native/android_emulator_evidence.py",
+        "tests/native/run-emulator-acceptance.sh",
+        "tests/native/test_android_emulator_evidence.py"
+      ],
+      "evidence": [
+        "PASS: offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569230",
+        "PASS: Gradle and API29 emulator 7/7 instrumentation, screenshot/logcat/provenance https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569278, APK artifacts 12157844452, test/log artifacts 12158810382",
+        "PASS: python -m unittest tests/native/test_android_emulator_evidence.py 3/3 as recorded in PR",
+        "NOT_RUN: 2GB/3GB physical phone, 20-minute soak, measured PSS/heat/fps."
+      ],
+      "not_implemented": "No production release signing or low-end physical hardware certification; PR #30 depends on PR #24."
+    },
+    {
+      "id": "WLD-006",
+      "registry_status": "verified",
+      "owner": "TERRAIN-01",
+      "verified_by": "FORGE-27",
+      "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/38",
+      "branch": "feat/wld-006-terrain-01-biome-ecology",
+      "work_sha": "8664aa20a4bc188541dfc918a2843f85017c2668",
+      "files": [
+        "src/world/ecology.js",
+        "tests/ecology.test.js",
+        "docs/WLD_006_ECOLOGY.md"
+      ],
+      "evidence": [
+        "PASS: node --test tests/*.test.js 95/95, including seven ecology tests; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684385",
+        "NOT_RUN: native API29 run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684473 CANCELLED, cannot claim a pass.",
+        "NOT_RUN: physical 2GB/3GB device."
+      ],
+      "not_implemented": "Opt-in climate/biome/heritage/berry overlay only; not loaded by live game; harvest persistence, navigation, 3D renderer absent; stacked on WLD-001 PR #23."
+    }
+  ],
+  "owner_direction": {
+    "source_branch": "introduccion-al-proyecto",
+    "source_sha": "61b0721f1b3e255ae07a8a76d103e4b015960b8c",
+    "direction": "3D viewpoint / Pixel Squares style, worlds/civilization constructed by independent NPC Sims, god observer",
+    "owner_pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/47",
+    "owner_pr_state": "OPEN, NOT MERGED",
+    "outdated_contracts": "Legacy docs still require 2D; preserve code until coordinated review."
+  }
+}
