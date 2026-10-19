@@ -91,6 +91,16 @@ El estado inicial es `ready` solamente si **todas** las dependencias están `ver
 
 En cada reporte final: `NEW_TASK_CREATED: <ID/estado/razón/commit>` o `none: no justified follow-up`.
 
+## Retiro de chat y reasignación después de agotar contexto
+
+Consultar [`CHAT_RETIRE_AND_RESUME.md`](./CHAT_RETIRE_AND_RESUME.md) y [`handoffs/README.md`](./handoffs/README.md).
+
+Antes de salir, un bot con tarea activa debe guardar **un relevo verificado en GitHub**, incluyendo su `BOT_ID`, `TASK_ID`, estado, rama/HEAD SHA, PR, pruebas `PASS/FAIL/NOT_RUN`, fallos, riesgos de save y primer paso de continuación. `python tools/godseed_handoff.py write ...` escribe un archivo `handoffs/<TASK_ID>.json` validable con `check --task <ID>`. **NO cambia automáticamente el dueño**.
+
+Una vez preservado el código y el relevo (commits confirmados por read-back), usar la transición permitida `claimed → ready` o `in_progress → ready`, con nota al handoff y publicar juntos `tasks.json` y `TASK_BOARD.md`. No liberar una tarea cuyos cambios solo residen en el contexto que está muriendo; informar bloqueo si no es posible respaldar. `in_review` permanece en revisión y nunca se reabre falsamente; `blocked` mantiene su bloqueo.
+
+El bot entrante empieza leyendo `README.md`, `BOT_MASTER_PROMPT.md`, `tasks.json`, el handoff y sus referencias **directamente en GitHub**, verifica que el estado sea `ready` sin dueño y las dependencias estén satisfechas, crea una rama nueva desde el SHA de trabajo guardado y reclama mediante protocolo. No se apropia de un bot `claimed/in_progress` simplemente por ver un JSON de relevo.
+
 ## Modo ♾️ — continuidad responsable dentro de la sesión
 
 **Fuente para bots:** [`INFINITY_AUTOMATION_PROMPT.md`](./INFINITY_AUTOMATION_PROMPT.md). El mensaje `♾️` activa el ciclo `consultar → seleccionar → reclamar → implementar → probar → entregar → registrar → siguiente`. No instala una automatización programada ni permite actuar fuera de una sesión activa.
