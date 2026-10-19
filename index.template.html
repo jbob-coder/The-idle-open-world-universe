@@ -105,6 +105,17 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 #finaleObjective{font-size:10px;line-height:1.45;margin:5px 0 0;color:#e1d7ba}
 #finalePanel.complete{border-color:#e8cb83}
 
+
+/* Spatially honest medieval buildings: world tile = 2 m; floor-plan tile = .5 m. */
+#buildingInspector[hidden],#interiorCanvas[hidden],#roomExit[hidden]{display:none!important}
+#buildingInspector{margin-top:10px;background:#192b27;border:2px solid #a9956d;padding:10px}
+#buildingInspector h3{color:#e6d49f;font-size:12px;margin:0 0 6px}
+#buildingInfo,#roomDescription,#roomResidents{color:#cbd1ba;font-size:11px;line-height:1.5;margin:6px 0}
+#buildingInspector .doorActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+#buildingInspector button{flex:1;min-width:135px;padding:8px;border:2px solid #a49573;background:#354537;color:#eee4c8}
+#interiorCanvas{max-width:min(100%,350px);width:auto;max-height:320px;height:auto;border:2px solid #bba179;image-rendering:pixelated;background:#2a342b;display:block;margin:10px auto}
+#interiorCanvas:focus-visible{outline:2px solid #efd99e}
+
 /* Living settlements / God messages: compact square-pixel, touch-first controls. */
 #godWhisper{margin-top:12px;border:2px solid #829e87;background:#172b29;padding:12px}
 #godWhisper h2{font-size:15px;color:#ead6a1;margin:0 0 6px}
@@ -120,7 +131,18 @@ canvas.power-pixel{width:16px;height:16px;image-rendering:pixelated;display:bloc
 <div class="panel"><div class="panelhead"><h2>01 / The Forgotten Kingdom</h2><span class="tiny muted" id="clock">DAY 1</span></div>
 <div class="worldframe"><div class="worldtop"><span>THE FORGOTTEN BORDERLANDS <span style="color:#819f97">/ 64 × 48</span></span><span class="right">WEATHER <b id="weather">CLEAR</b> · <span id="zoomStatus">Panorama · 32 × 20 casillas</span></span></div>
 <canvas id="world" width="512" height="320" aria-label="Low resolution pixel world; click to inspect or use god powers"></canvas>
-<div class="underworld"><span id="coordinates">32,24</span><span><span class="key">CLICK</span> interact with world · <span class="key">F</span> follow</span></div></div></div>
+<div class="underworld"><span id="coordinates">32,24</span><span><span class="key">CLICK</span> inspect a door or building · <span class="key">F</span> follow</span></div>
+<div id="buildingInspector" hidden aria-label="Inspect a medieval building and its safe interior">
+ <h3 id="buildingName">Vivienda medieval</h3>
+ <p id="buildingInfo">Selecciona un edificio en el mapa.</p>
+ <div class="doorActions">
+  <button id="roomEnter" type="button">Observar interior</button>
+  <button id="roomExit" type="button" hidden>Volver al exterior</button>
+ </div>
+ <p id="roomDescription" aria-live="polite"></p>
+ <canvas id="interiorCanvas" width="144" height="144" hidden aria-label="Plano interior medieval, escala cuadrada de medio metro"></canvas>
+ <p id="roomResidents" aria-live="polite"></p>
+</div></div></div>
 <section id="godWhisper" aria-label="Write a message to the living world">
  <h2>GOD'S WHISPER · Your voice, their choices</h2>
  <p class="whisper-note">Diles qué deseas: «Construyan casas», «Cultiven más comida», «Protejan el pueblo». Los habitantes pueden aceptar, cambiar los planos o negarse. No controlas sus movimientos.</p>
