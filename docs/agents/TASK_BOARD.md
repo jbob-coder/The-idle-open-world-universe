@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 60 tasks · planned: 39 · ready: 7 · claimed: 1 · in_progress: 1 · blocked: 1 · in_review: 6 · verified: 5 · done: 0 · cancelled: 0.
+**Tracked work:** 60 tasks · planned: 39 · ready: 6 · claimed: 2 · in_progress: 1 · blocked: 1 · in_review: 6 · verified: 5 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -21,7 +21,7 @@
 | ID | P | Area | State | Owner | Depends on | Definition of done (short) |
 |---|---|---|---|---|---|---|
 | **ART-002** | P0 | art | **planned** | — | INT-001, CIV-001 | Tile-coherent roofs, doors, interior walls and furnishings |
-| **CIV-001** | P0 | civilization | **ready** | — | INT-001 | Metric 3×3–6×6 medieval blueprint library and zoning |
+| **CIV-001** | P0 | civilization | **claimed** | TERRAIN-01 | INT-001 | Metric 3×3–6×6 medieval blueprint library and zoning |
 | **CIV-002** | P0 | civilization | **planned** | — | CIV-001, SIM-005 | Construction sites, builders, work orders and interruptions |
 | **CIV-005** | P0 | civilization | **planned** | — | SIM-006, CIV-002 | Medieval technology and era advancement with real prerequisites |
 | **GOD-001** | P0 | divine | **verified** | FORGE-27 | — | Multilingual intent parsing with negation, target and ambiguity |

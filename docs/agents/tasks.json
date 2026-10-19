@@ -1007,9 +1007,9 @@
       "priority": "P0",
       "area": "civilization",
       "title": "Metric 3×3–6×6 medieval blueprint library and zoning",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "TERRAIN-01",
+      "work_branch": "feat/civ-001-terrain-01-metric-blueprints",
       "depends": [
         "INT-001"
       ],
@@ -1031,6 +1031,13 @@
           "to": "ready",
           "actor": "FORGE-27",
           "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T01:50:43+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "TERRAIN-01",
+          "reason": "Reserve metric medieval blueprint and zero-overlap zoning catalog, anchored to verified INT-001 contract; new isolated files only."
         }
       ]
     },
