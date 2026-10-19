@@ -147,7 +147,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "FORGE-27",
       "work_branch": "feat/int-002-forge-27-metric-buildings",
       "depends": [
@@ -178,6 +178,13 @@
           "to": "claimed",
           "actor": "FORGE-27",
           "reason": "Claim real metric 3×3–6×6 exterior houses/public buildings; footprint-safe autonomous site selection, pixel-scaled facades and v1 1×1/2×2 compatibility. Do not touch owner branches or interiors."
+        },
+        {
+          "date": "2026-10-19T09:24:23.943Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Implement genuine multi-tile construction and pixel art exterior for homes/workshops/market/hall, safe footprint/road/landmark checks and stable v1 save restore, seeded Node and Chromium tests."
         }
       ]
     },
