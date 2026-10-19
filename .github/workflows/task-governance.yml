@@ -7,13 +7,13 @@ on:
     paths:
       - 'docs/agents/**'
       - 'tools/godseed_tasks.py'
-      - 'tests/test_task_governance.py'
+      - 'tests/test_task_*.py'
       - '.github/workflows/task-governance.yml'
   pull_request:
     paths:
       - 'docs/agents/**'
       - 'tools/godseed_tasks.py'
-      - 'tests/test_task_governance.py'
+      - 'tests/test_task_*.py'
       - '.github/workflows/task-governance.yml'
 
 permissions:
@@ -28,4 +28,4 @@ jobs:
       - name: Validate machine registry and generated board
         run: python3 tools/godseed_tasks.py validate
       - name: Test state-machine invariants
-        run: python3 -m unittest discover -s tests -p 'test_task_governance.py' -v
+        run: python3 -m unittest discover -s tests -p 'test_task_*.py' -v
