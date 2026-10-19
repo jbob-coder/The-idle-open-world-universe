@@ -3,6 +3,8 @@
 
 **Ejecución ♾️:** usa el [prompt de automatización continua](./INFINITY_AUTOMATION_PROMPT.md) para que cada bot actualice tareas, entregue resultados y continúe con otra tarea independiente dentro de su sesión activa. Este documento es solo una propuesta inicial de tareas y no un registro de propiedad.
 
+**Para una nueva conversación sucesora:** usar el **MODO B** de [`CHAT_RETIRE_AND_RESUME.md`](./CHAT_RETIRE_AND_RESUME.md), leyendo el [índice de relevos](./handoffs/README.md) y la tarea actualmente asignable. No reutilizar el nombre ni los permisos de propiedad del bot saliente.
+
 ## Recomendación para cinco bots independientes
 
 | Identificador propuesto | Tarea disponible actualmente | Primera entrega comprobable | Aislamiento sugerido |
