@@ -1,5 +1,5 @@
 /* GODSEED Living Settlements: bounded, deterministic offline agency. No external AI. */
-(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./needs.js'):root.GodseedNeeds);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Needs){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./needs.js'):root.GodseedNeeds,typeof module!=='undefined'&&module.exports?require('./choices.js'):root.GodseedChoices);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Needs,Choices){
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
@@ -85,7 +85,7 @@ function create(s){
   const [name,role,townId,diligence,kindness,independence]=identities[i],t=townOf(s,townId);
   living.citizens.push({id:20+i,name,role,townId,x:t.x,y:t.y,homeX:t.x,homeY:t.y,
    facing:'south',movedAt:-100,age:19+i*3,skill:1,skillXP:0,trust:35,
-   kindness,diligence,independence,mood:'calm',activity:'Getting ready',relationships:{},life:[],actions:0,needs:Needs.normalize()});
+   kindness,diligence,independence,mood:'calm',activity:'Getting ready',relationships:{},life:[],actions:0,needs:Needs.normalize(),choice:null,choiceHistory:[]});
  }
  log(s,'Two communities awaken','Briarford and Emberwick have working residents, limited supplies and homes. They choose how to grow.');
  return living;
@@ -125,6 +125,8 @@ function restore(s){
   c.life=Array.isArray(c.life)?c.life.slice(-6):[];c.relationships=c.relationships&&typeof c.relationships==='object'?c.relationships:{};
   c.actions=Number(c.actions)||0;c.skillXP=Number(c.skillXP)||0;c.skill=Number(c.skill)||1;
   c.needs=Needs.normalize(c.needs);
+  c.choice=Choices.normalizeTrace(c.choice);
+  c.choiceHistory=Array.isArray(c.choiceHistory)?c.choiceHistory.slice(-4).map(Choices.normalizeTrace).filter(Boolean):[];
  }
 }
 function goalFor(s,p){
@@ -210,18 +212,20 @@ function walk(s,p,goal){
  }
 }
 function work(s,p){
- const t=townOf(s,p.townId);if(!t)return;
+ const t=townOf(s,p.townId);if(!t)return null;
  // Supplies are earned only by people who actually arrived at their work sites.
  const workspace=goalFor(s,p);
  if(distance(p.x,p.y,workspace.x,workspace.y)>2)return;
  let gainType=t.stock.food<5?'food':t.stock.wood<6?'wood':t.stock.stone<6?'stone':
   p.role==='Farmer'||p.role==='Forager'?'food':p.role==='Mason'?'stone':'wood';
+ const stockBefore=t.stock[gainType];
  t.stock[gainType]=Math.min(999,t.stock[gainType]+1+(p.skill>=4&&s.tick%48===0?1:0));
  p.skillXP++;p.actions++;
  if(p.skillXP>=12+p.skill*4&&p.skill<12){p.skillXP=0;p.skill++;p.life.push('Became a level '+p.skill+' '+p.role);p.life=p.life.slice(-6);log(s,p.name+' improves at '+p.role,p.name+' learned by working, not by combat.');}
  if(p.actions%9===0){const other=s.living.citizens.find(q=>q!==p&&q.townId===p.townId);
   if(other){p.relationships[other.name]=Math.min(100,(p.relationships[other.name]||25)+2);other.relationships[p.name]=Math.min(100,(other.relationships[p.name]||25)+1);}
  }
+ return {resource:gainType,amount:t.stock[gainType]-stockBefore};
 }
 function blueprintFor(t){
  if(t.stock.food<4)return 'farm';
@@ -238,26 +242,77 @@ function blueprintFor(t){
  if(!count('watchtower')&&t.technology.level>=1)return 'watchtower';
  return count('house')<4?'house':count('farm')<3?'farm':null;
 }
+// Four real off-duty pursuits use map sites or nearby people, not teleportation.
+function choiceGoal(s,p,intent,partner){
+ const t=townOf(s,p.townId);if(!t)return goalFor(s,p);
+ if(intent==='work')return goalFor(s,p);
+ if(intent==='rest')return {x:p.homeX,y:p.homeY,activity:'Resting at home',needAction:'sleep'};
+ if(intent==='help'&&partner)return {x:partner.x,y:partner.y,
+  activity:'Checking on '+partner.name};
+ if(intent==='explore'){
+  const offsets=[[4,0],[-4,0],[0,4],[0,-4],[3,3],[-3,3],[3,-3],[-3,-3]];
+  const first=hash(s.worldSeed,p.id,Math.floor((s.tick+p.id*23)/240))%offsets.length;
+  for(let i=0;i<offsets.length;i++){
+   const offset=offsets[(first+i)%offsets.length],x=t.x+offset[0],y=t.y+offset[1];
+   if(x>1&&y>1&&x<W-1&&y<H-1&&GROUND.has(s.map[y*W+x])&&!occupied(s,x,y)){
+    return {x,y,activity:'Surveying nearby paths'};
+   }
+  }
+ }
+ return goalFor(s,p);
+}
 function tick(s){
  if(!s.living||s.tick%12!==0)return;
  if(s.tick%240===0)advanceLife(s);
  for(const p of s.living.citizens){
-  const working=(s.tick+p.id*23)%240<90;
+  const phase=(s.tick+p.id*23)%240,working=phase<90;
   const threatened=dangerNear(s,p);
   if(s.tick%48===0||threatened){
-   // Resident needs change at a slower life cadence than tactical movement.
-   // Otherwise hunger/energy monopolize the work loop before villages can
-   // generate replacement food, leading to a self-sustaining starvation lock.
+   // Slow life cadence preserves village production without ignoring emergencies.
    p.needs=Needs.decay(p.needs,{working:s.tick%48===0&&working,danger:threatened});
   }
   const need=Needs.priority(p.needs,{danger:threatened});
   const survival=need&&['seek_safety','eat','sleep'].includes(need.action);
-  // Hygiene/comfort/social upkeep is handled outside work hours unless urgent
-  // survival takes precedence; this prevents stalled production loops.
-  const task=((!working||survival)&&needGoal(s,p,need))||goalFor(s,p);
+  // An available survival action outranks every personality score. Unavailable
+  // resources cannot supply a fictitious recovery or freeze production.
+  const urgentGoal=(!working||survival)&&needGoal(s,p,need);
+  const partner=s.living.citizens.find(q=>q!==p&&q.townId===p.townId);
+  const decision=Choices.decide(p,{phase,working,company:!!partner,
+   priority:urgentGoal?need:null});
+  const task=urgentGoal||choiceGoal(s,p,decision.intent,partner);
+  const oldX=p.x,oldY=p.y,oldNeeds={...p.needs};
   p.activity=task.activity;walk(s,p,task);
-  completeNeed(s,p,task);
-  if(working&&!task.needAction)work(s,p);
+  const recovered=completeNeed(s,p,task);
+  let consequence='Continuing the chosen route';
+  if(task.needAction){
+   if(recovered){
+    const key={eat:'hunger',sleep:'energy',wash:'hygiene',warm:'comfort',
+     seek_safety:'safety',socialize:'social'}[task.needAction];
+    consequence='Recovered '+key+' (+'+(p.needs[key]-oldNeeds[key])+')';
+   }else consequence='Traveling toward '+task.needAction;
+  }else if(working&&decision.intent==='work'){
+   const produced=work(s,p);
+   consequence=produced?'Produced '+produced.amount+' '+produced.resource:
+    'Traveling to a real worksite';
+  }else if(decision.intent==='help'&&partner){
+   if(distance(p.x,p.y,partner.x,partner.y)<=2&&s.tick%48===0){
+    p.relationships[partner.name]=Math.min(100,(p.relationships[partner.name]||25)+2);
+    partner.relationships[p.name]=Math.min(100,(partner.relationships[p.name]||25)+2);
+    p.needs.social=Math.min(100,p.needs.social+2);
+    partner.needs.social=Math.min(100,partner.needs.social+2);
+    consequence='Supported '+partner.name+'; mutual trust improved';
+   }else consequence='Visiting '+partner.name+' to offer support';
+  }else if(decision.intent==='explore'){
+   consequence=p.x!==oldX||p.y!==oldY?'Walked to survey nearby land':
+    'Observing the nearby paths';
+  }else if(decision.intent==='rest') consequence='Returning to a resting place';
+  const previous=p.choice&&p.choice.intent;
+  p.choice=Choices.normalizeTrace({...decision,tick:s.tick,consequence});
+  if(!Array.isArray(p.choiceHistory))p.choiceHistory=[];
+  if(s.tick%48===0||previous!==p.choice.intent){
+   p.choiceHistory.push(p.choice);
+   if(p.choiceHistory.length>4)p.choiceHistory.shift();
+  }
   if(s.tick%240===0){p.age+=1/12;p.mood=p.actions%5===0?'content':'calm';}
  }
  // Villages exchange surplus instead of waiting forever for absent professions.
