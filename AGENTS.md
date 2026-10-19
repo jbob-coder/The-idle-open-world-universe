@@ -1,3 +1,14 @@
+# GODSEED — current agents entry point (October 2026)
+
+**New chats, new bots, retirement and task claims:** start with `docs/agents/README.md`, then `docs/agents/BOT_MASTER_PROMPT.md`, `docs/agents/TASK_WORKFLOW.md`, `docs/agents/tasks.json` and the generated `docs/agents/TASK_BOARD.md` **from the coordination branch** `docs/godseed-agent-task-governance-v1` (PR #22). This is the current governance for GODSEED living-world development; verify GitHub current HEAD.
+
+- When your existing chat cannot reliably continue: **MODO A** of `docs/agents/CHAT_RETIRE_AND_RESUME.md` to save `docs/agents/handoffs/<TASK_ID>.json` and safely release a task only after preservation.
+- When entering in a fresh chat as a successor: **MODO B** of the same document, read the start prompt and handoff before requesting the claim.
+- The implementation baseline is `integration/godseed-living-society-multitile-architecture` (PR #21), not `main`. Do not merge or overwrite Codex/other bots' branches without owner authorization.
+- The notes below are **historical instructions for the earlier Codex prep/skyview branch**; do not use its old default development branch or scope to supersede the current task registry.
+
+---
+
 # GODSEED — instructions for Codex Cloud
 Repository authority: this repository. Target handoff branch: `prep/codex-skyworld-v0.5`. Integration base: `feat/skyview-zoom-v0.4`, not main (v0.2, v0.3, v0.4 are stacked experimental PRs).
 
