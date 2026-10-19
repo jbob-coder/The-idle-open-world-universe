@@ -1,5 +1,5 @@
 # INT-001 — Contrato técnico de edificios medievales habitables y capas interiores seguras
-**Estado de este archivo:** especificación normativa, **NO función implementada**. El prototipo del PR #21 tiene edificios exteriores 2×2 con arquitectura pixelada; no hay puertas atravesables, espacios interiores, hogares funcionales ni cambio real de capa. Documento asociado a **INT-001** del registro `docs/agents/tasks.json`. Toda afirmación de implementación requiere pruebas de código y cambio de estado aparte.
+**Estado de este archivo:** anexo técnico de implementación, **NO función implementada**. Para catálogo y medidas definitivas prevalece `docs/agents/SAFE_INTERIOR_ARCHITECTURE.md` (contrato normativo); las dimensiones alternativas aquí son ideas futuras y no sustituyen ese contrato. El prototipo del PR #21 tiene edificios exteriores 2×2 con arquitectura pixelada; no hay puertas atravesables, espacios interiores, hogares funcionales ni cambio real de capa. Documento asociado a **INT-001** del registro `docs/agents/tasks.json`. Toda afirmación de implementación requiere pruebas de código y cambio de estado aparte.
 
 ## A. Reglas no negociables
 - GODSEED es un **simulador de vida de fantasía medieval**, 2D top-down, pixel art de cuadrados enteros, sin joystick para Nim, habitantes autónomos, juego Android offline.
