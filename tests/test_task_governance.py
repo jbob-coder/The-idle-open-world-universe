@@ -18,6 +18,17 @@ class RegistryTests(unittest.TestCase):
     def setUp(self):
         self.db=bot.load()
 
+    def reviewed_contract_fixture(self):
+        """Use an in-review INT-001 snapshot even after the live task is verified."""
+        current=copy.deepcopy(self.db)
+        task=next(t for t in current["tasks"] if t["id"]=="INT-001")
+        while task["status_history"][-1]["to"]!="in_review":
+            task["status_history"].pop()
+        task["status"]="in_review"
+        task.pop("verified_by",None)
+        task.pop("integrated_by",None)
+        return current
+
     def test_registered_board_and_task_dag_are_valid(self):
         self.assertEqual([],bot.validate(self.db))
         self.assertEqual(bot.BOARD.read_text(encoding="utf-8"),bot.render(self.db))
@@ -56,7 +67,7 @@ class RegistryTests(unittest.TestCase):
 
 
     def test_independent_reviewer_keeps_original_owner(self):
-        current=copy.deepcopy(self.db)
+        current=self.reviewed_contract_fixture()
         t=next(t for t in current["tasks"] if t["id"]=="INT-001")
         self.assertEqual(t["status"],"in_review")
         self.assertEqual(t["owner"],"DOORKEEPER")
@@ -76,7 +87,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(item["status_history"][-1]["actor"],"REVIEW-01")
 
     def test_owner_cannot_self_verify(self):
-        current=copy.deepcopy(self.db)
+        current=self.reviewed_contract_fixture()
         with patch.object(bot,"load",return_value=current), \
              patch("sys.argv",["godseed_tasks.py","transition","INT-001","verified",
                  "--expect","in_review","--actor","DOORKEEPER","--note","self-review",
@@ -86,7 +97,7 @@ class RegistryTests(unittest.TestCase):
                 bot.main()
 
     def test_integrator_does_not_erase_implementation_owner(self):
-        current=copy.deepcopy(self.db)
+        current=self.reviewed_contract_fixture()
         task=next(x for x in current["tasks"] if x["id"]=="INT-001")
         task["status"]="verified"
         task["verified_by"]="REVIEW-01"

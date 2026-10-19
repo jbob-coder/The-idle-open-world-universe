@@ -33,7 +33,14 @@ class Followups(TestCase):
         return loaded
 
     def test_followup_waits_for_unverified_dependency(self):
-        nextdb = self.execute(copy.deepcopy(self.db), self.common + ["--depends", "INT-001"])
+        db=copy.deepcopy(self.db)
+        source=next(t for t in db["tasks"] if t["id"]=="INT-001")
+        while source["status_history"][-1]["to"]!="in_review":
+            source["status_history"].pop()
+        source["status"]="in_review"
+        source.pop("verified_by",None)
+        source.pop("integrated_by",None)
+        nextdb = self.execute(db, self.common + ["--depends", "INT-001"])
         added = next(t for t in nextdb["tasks"] if t.get("origin_task") == "INT-001")
         self.assertEqual("INT-011", added["id"])
         self.assertEqual("planned", added["status"])
@@ -57,8 +64,11 @@ class Followups(TestCase):
     def test_unfinished_source_cannot_add_followup(self):
         db = copy.deepcopy(self.db)
         source = next(t for t in db["tasks"] if t["id"] == "INT-001")
+        while source["status_history"][-1]["to"]!="in_progress":
+            source["status_history"].pop()
         source["status"] = "in_progress"
-        source["status_history"].pop()
+        source.pop("verified_by",None)
+        source.pop("integrated_by",None)
         with patch.object(cli, "load", return_value=db), patch("sys.argv", self.common):
             with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
                 cli.main()
