@@ -109,9 +109,23 @@ class RegistryTests(unittest.TestCase):
 
     def test_one_bot_cannot_claim_multiple_active_tasks(self):
         current=copy.deepcopy(self.db)
+        # Synthetic isolated ready tasks; real agents may claim the actual
+        # ready IDs at any time, which must not make this regression flaky.
+        for suffix in ("901","902"):
+            t=copy.deepcopy(next(x for x in current["tasks"] if x["id"]=="GOV-001"))
+            t.update(id="GOV-"+suffix,status="ready",owner=None,work_branch=None,depends=[],evidence=[])
+            t["status_history"]=[
+                {"date":"2026-10-18","from":None,"to":"planned","actor":"TEST","reason":"fixture"},
+                {"date":"2026-10-18","from":"planned","to":"ready","actor":"TEST","reason":"fixture"}]
+            current["tasks"].append(t)
+        active=next(t for t in current["tasks"] if t["id"]=="GOV-901")
+        active.update(status="in_progress",owner="ACTIVE-BOT",work_branch="feat/one")
+        active["status_history"].extend([
+            {"date":"2026-10-18","from":"ready","to":"claimed","actor":"ACTIVE-BOT","reason":"fixture"},
+            {"date":"2026-10-18","from":"claimed","to":"in_progress","actor":"ACTIVE-BOT","reason":"fixture"}])
         with patch.object(bot,"load",return_value=current), \
-             patch("sys.argv",["godseed_tasks.py","transition","GOD-001","claimed",
-                 "--expect","ready","--actor","ARCHIVIST","--branch","feat/stolen",
+             patch("sys.argv",["godseed_tasks.py","transition","GOV-902","claimed",
+                 "--expect","ready","--actor","ACTIVE-BOT","--branch","feat/two",
                  "--note","second concurrent task"]), \
              redirect_stderr(io.StringIO()):
             with self.assertRaises(SystemExit):
