@@ -142,7 +142,11 @@ function goalFor(s,p){
 }
 // A resident may abandon a routine when basic wellbeing is at risk.
 function dangerNear(s,p){
- return Array.isArray(s.enemies)&&s.enemies.some(e=>distance(e.x,e.y,p.x,p.y)<=3);
+ // Ordinary hostiles currently target Nim, not settlement residents.
+ // Only an explicitly targeted NPC threat may override citizen work. This
+ // prevents unkillable pseudo-threats from trapping villages in shelter mode.
+ return Array.isArray(s.enemies)&&s.enemies.some(e=>
+  e.targetCitizenId===p.id&&distance(e.x,e.y,p.x,p.y)<=3);
 }
 function needGoal(s,p,decision){
  if(!decision)return null;

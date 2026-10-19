@@ -52,3 +52,26 @@ test('v1 saves without needs migrate without resetting original progress or addi
  assert.equal(restored.chapterTwo.stage,legacy.chapterTwo.stage);
  assert.equal(restored.finale.stage,legacy.finale.stage);
 });
+
+test('Nim-only nearby enemies do not disable village labor, targeted threats do',()=>{
+ const s=S.create(1),p=s.living.citizens[0],t=s.living.towns.find(q=>q.id===p.townId);
+ p.x=p.homeX;p.y=p.homeY;
+ p.needs=Needs.normalize({safety:95,energy:100,hunger:100,comfort:100,social:100,hygiene:100});
+ s.enemies=[{id:999,type:'Wolf',x:p.x+1,y:p.y,hp:50,defense:0,attack:1,cooldown:500}];
+ for(let i=0;i<12;i++)S.tick(s);
+ assert.notMatch(p.activity,/Sheltering for safety/,'incidental Nim-only enemy must not paralyze village labor');
+ p.needs.safety=95;
+ s.enemies[0].targetCitizenId=p.id;
+ for(let i=0;i<12;i++)S.tick(s);
+ assert.match(p.activity,/safety|shelter/i,'explicitly targeted citizen threat must outrank ordinary routines');
+});
+
+test('all seeded villages continue real production despite Nim-only nearby enemies',()=>{
+ for(const seed of [1,41,99,2026]){
+  const s=S.create(seed);
+  for(let i=0;i<2500;i++)S.tick(s);
+  assert.ok(s.living.towns.reduce((n,t)=>n+t.buildings.length,0)>=16,
+   'seed '+seed+': needs must not stall settlement construction');
+  assert.ok(s.living.citizens.every(c=>Object.values(c.needs).every(v=>v>=0&&v<=100)));
+ }
+});
