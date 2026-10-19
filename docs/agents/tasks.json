@@ -2364,9 +2364,9 @@
       "priority": "P0",
       "area": "divine",
       "title": "Replace direct god power toolbar with indirect consequence-based divine influence",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "FORGE-27",
+      "work_branch": "feat/god-006-forge-27-indirect-influence",
       "depends": [
         "GOD-004",
         "GOD-001"
@@ -2420,6 +2420,13 @@
           "to": "ready",
           "actor": "FORGE-27",
           "reason": "Connector publication blocker resolved via non-force one-commit fast-forward with exact expected SHA; source safely preserved, tests not yet executed. Release then re-claim for ordinary work."
+        },
+        {
+          "date": "2026-10-19T02:33:20.505Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Re-claim same preserved GOD-006 branch after verified protected publication, no other active FORGE-27 task; add guidance tests before review."
         }
       ]
     },
