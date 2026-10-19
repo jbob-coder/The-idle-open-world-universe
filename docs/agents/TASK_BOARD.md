@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 58 tasks · planned: 48 · ready: 0 · claimed: 2 · in_progress: 1 · blocked: 1 · in_review: 6 · verified: 0 · done: 0 · cancelled: 0.
+**Tracked work:** 58 tasks · planned: 48 · ready: 0 · claimed: 1 · in_progress: 2 · blocked: 1 · in_review: 6 · verified: 0 · done: 0 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -30,7 +30,7 @@
 | **GOD-004** | P0 | divine | **claimed** | FORGE-27 | — | God view: inspect life, building, village, memories and intent |
 | **GOV-001** | P0 | governance | **in_review** | ARCHIVIST | — | Repository task registry, bot lifecycle, automation and handoff |
 | **GOV-002** | P0 | governance | **in_review** | ORBIT-01 | — | ♾️ Continuous bot work-loop prompt, lifecycle automation and safe handoffs |
-| **GOV-003** | P0 | governance | **claimed** | RELAY-01 | — | Context-limit retirement and new-chat successor handoff |
+| **GOV-003** | P0 | governance | **in_progress** | RELAY-01 | — | Context-limit retirement and new-chat successor handoff |
 | **INT-001** | P0 | interiors | **in_review** | DOORKEEPER | — | Safe layers, metric grid, doors and interiors technical contract |
 | **INT-002** | P0 | interiors | **planned** | — | INT-001 | Enlarge exterior homes and public buildings to 3×3–6×6 cells |
 | **INT-003** | P0 | interiors | **planned** | — | INT-001 | Persist interior IDs, furnishings and entry/return anchors |
