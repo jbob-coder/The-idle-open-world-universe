@@ -23,14 +23,16 @@
       "priority": "P0",
       "area": "governance",
       "title": "Repository task registry, bot lifecycle, automation and handoff",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "ARCHIVIST",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
       "acceptance": "Machine-readable task board, transition validator, ownership protocol, bot prompt and PR; validators green.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 22,
+      "evidence": [
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; governance CLI and tests commit a9cf45644b2c729902e507885a2fef83efc3eace; governance CI SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39182635075; general offline QA pending; no merge"
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -59,6 +61,13 @@
           "to": "in_progress",
           "actor": "ARCHIVIST",
           "reason": "ARCHIVIST is authoring validator, agent lifecycle docs, bot handoff, and GitHub QA"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "ARCHIVIST",
+          "reason": "Bot registry, generated board, status CLI/ownership validation, prompt and workflow delivered for independent PR review"
         }
       ]
     },
