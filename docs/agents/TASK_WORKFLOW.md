@@ -87,9 +87,23 @@ git commit -m "docs(tasks): propose follow-up after SIM-001"
 git push origin HEAD:docs/godseed-agent-task-governance-v1
 ```
 
-El estado inicial es `ready` solamente si **todas** las dependencias están `verified` o `done`; de lo contrario queda `planned`. Si no hay dependencias, puede quedar `ready`. La tarea nueva **no se autoasigna**; el bot debe completar/revisar su tarea anterior antes de reclamar otra. Si otra entidad creó trabajo equivalente, no crearlo nuevamente. Si la rama de coordinación cambió, refetch + comprobar SHA, nunca sobrescribir registros ajenos. El tablero es generado por CLI, nunca editado a mano.
+El estado inicial es `ready` solamente si **todas** las dependencias están `verified` o `done`; de lo contrario queda `planned`. Si no hay dependencias, puede quedar `ready`. La tarea nueva **no se autoasigna**; el bot debe entregar su tarea anterior a revisión y respetar el límite de dos PRs propios pendientes antes de reclamar otra. Si otra entidad creó trabajo equivalente, no crearlo nuevamente. Si la rama de coordinación cambió, refetch + comprobar SHA, nunca sobrescribir registros ajenos. El tablero es generado por CLI, nunca editado a mano.
 
 En cada reporte final: `NEW_TASK_CREATED: <ID/estado/razón/commit>` o `none: no justified follow-up`.
+
+## Modo ♾️ — continuidad responsable dentro de la sesión
+
+**Fuente para bots:** [`INFINITY_AUTOMATION_PROMPT.md`](./INFINITY_AUTOMATION_PROMPT.md). El mensaje `♾️` activa el ciclo `consultar → seleccionar → reclamar → implementar → probar → entregar → registrar → siguiente`. No instala una automatización programada ni permite actuar fuera de una sesión activa.
+
+Una tarea `in_review` con PR y evidencia ha sido entregada a un **revisor independiente**. El bot puede iniciar otra tarea `ready` independiente si:
+
+- No posee otra tarea `claimed` ni `in_progress`.
+- Tiene **menos de dos** tareas propias pendientes en `in_review`; si alcanza dos, debe detener nuevos reclamos y solicitar revisión.
+- Todas las dependencias de la nueva tarea están `verified` o `done`.
+- Registra y publica `tasks.json` y `TASK_BOARD.md` en cada transición; nunca usurpa tareas ajenas.
+- No se autopromueve a `verified` ni fusione el trabajo sin autorización.
+
+La CLI valida el límite, con tests en `tests/test_task_infinity.py`. Un bot puede entregar varios PRs en una sesión activa; no puede prometer trabajo después de que esa sesión termine. Debe dejar un handoff reproducible para otro bot cuando alcance límites o no existan tareas disponibles.
 
 ## Selección automática de la siguiente tarea
 
