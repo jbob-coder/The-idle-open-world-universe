@@ -20,6 +20,9 @@ with sync_playwright() as pw:
         status=200,content_type='text/html',body=(ROOT/'GODSEED-Play.html').read_text()))
     page.goto('http://godseed.test/')
     page.evaluate('GodseedDebug.newWorld(41);GodseedDebug.setSpeed(0)')
+    page.locator('#godviewTab-lives').click()
+    page.locator('#godviewLifeDetails summary').click()
+    assert page.locator('#chapterPanel').is_visible()
     title=page.locator('#chapterTitle').inner_text()
     assert 'MOSSBOUND OATH' in title,title
     assert page.locator('#chapterProgress').get_attribute('aria-valuenow')=='0'

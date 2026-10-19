@@ -31,6 +31,7 @@ with sync_playwright() as pw:
     page.evaluate('GodseedDebug.setSpeed(0)')
     raw=page.evaluate('GodseedSim.serialize(GodseedDebug.getState())')
     page.evaluate("()=>{Storage.prototype.setItem=function(){throw new DOMException('Full','QuotaExceededError')}}")
+    page.locator('#godviewTab-settings').click()
     page.locator('#save').click()
     assert 'Save failed' in page.locator('#toast').inner_text(),'manual Save must not falsely claim success'
     assert 'Local saving blocked' in page.locator('#saveState').inner_text()

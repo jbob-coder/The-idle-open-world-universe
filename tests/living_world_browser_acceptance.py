@@ -23,8 +23,13 @@ with sync_playwright() as pw:
       tick:GodseedDebug.getState().tick
     })""")
     assert initial['towns']==2 and initial['citizens']==4 and min(initial['buildings'])>=2,initial
+    page.locator('#godviewTab-villages').click()
+    assert page.locator('#townStatus').is_visible()
     assert 'Briarford' in page.locator('#townStatus').inner_text()
+    page.locator('#godviewTab-lives').click()
+    assert page.locator('#citizenLives').is_visible()
     assert 'Elin' in page.locator('#citizenLives').inner_text()
+    page.locator('#godviewTab-council').click()
     page.locator('#godMessage').fill('Por favor protejan los pueblos contra lobos')
     page.locator('#godSubmit').click()
     assert 'protect residents' in page.locator('#godFeedback').inner_text(),page.locator('#godFeedback').inner_text()
@@ -35,8 +40,10 @@ with sync_playwright() as pw:
     assert all(t['buildings']>=6 for t in towns),towns
     assert page.evaluate('GodseedDebug.getState().living.citizens.every(c=>c.skill>1)')
     assert page.evaluate('GodseedSim.finaleStatus(GodseedDebug.getState()).completed')
+    page.locator('#godviewTab-world').click()
     page.evaluate("window.scrollTo(0,0)")
     page.screenshot(path=str(SHOT),full_page=True)
+    page.locator('#godviewTab-settings').click()
     page.locator('#save').click()
     page.reload()
     assert page.evaluate('GodseedDebug.getState().living.towns.every(t=>t.buildings.length>=6)')

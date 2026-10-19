@@ -17,12 +17,15 @@ with sync_playwright() as pw:
         for zoom,tiles in enumerate([(32,20),(24,15),(16,10)]):
             page.evaluate("(z)=>{GodseedDebug.newWorld(20261017);GodseedDebug.step(100);GodseedDebug.setSpeed(0);GodseedDebug.setZoom(z);document.querySelector('#toast').classList.remove('show');window.scrollTo(0,0)}",zoom)
             camera=page.evaluate('GodseedDebug.getCamera()');assert (camera['width'],camera['height'])==tiles
-            assert page.locator('#androidDock button').count()==10
-            assert page.evaluate("[...document.querySelectorAll('#androidDock button')].every(b=>{const r=b.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&r.height>=40})")
+            assert page.locator('#godviewTabs button').count()==7
+            assert page.locator('#androidDock').is_hidden()
+            assert page.evaluate("[...document.querySelectorAll('#godviewTabs button')].every(b=>{const r=b.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&r.height>=44})")
             page.screenshot(path=str(OUT/f'chromium-{width}x{height}-{tiles[0]}x{tiles[1]}.png'))
             # Every camera maps an actual click to the intended visible NPC.
             page.evaluate('()=>{const s=GodseedDebug.getState(),p=s.npcs[0];s.bot.x=p.x;s.bot.y=p.y;s.seen[GodseedSim.idx(p.x,p.y)]=1;s.faith=50;p.favorUntil=0;GodseedDebug.step(0)}')
-            page.locator('#androidDock [data-power=inspire]').click()
+            page.locator('#godviewTab-miracles').click()
+            page.locator('#powers [data-power=inspire]').click()
+            assert page.locator('#godviewDrawer').is_hidden()
             pos=page.evaluate("()=>{const p=GodseedDebug.getState().npcs[0];return GodseedCamera.worldToPointer(GodseedDebug.getCamera(),document.querySelector('#world').getBoundingClientRect(),p.x,p.y)}")
             page.mouse.click(pos['x'],pos['y']);assert page.evaluate('GodseedDebug.getState().faith')==45,(width,height,zoom,pos,page.locator('#toast').inner_text(),page.evaluate('(p)=>document.elementFromPoint(p.x,p.y)?.id',pos))
         page.screenshot(path=str(OUT/f'chromium-{width}x{height}-inspire-success.png'))
@@ -42,7 +45,7 @@ with sync_playwright() as pw:
             page.evaluate("(dir)=>{const s=GodseedDebug.getState();s.bot.x=10;s.bot.y=13;s.bot.facing=dir;s.bot.movedAt=s.tick;s.npcs.forEach((p,i)=>{p.x=9+i;p.y=14;p.facing=dir});s.enemies=[{id:100,type:'Wolf',x:8,y:13,hp:11,attack:2,defense:0,cooldown:1},{id:101,type:'Boar',x:12,y:13,hp:17,attack:4,defense:2,cooldown:1}];GodseedDebug.setZoom(2);GodseedDebug.draw();document.querySelector('#toast').classList.remove('show')}",direction)
             page.screenshot(path=str(OUT/f'chromium-{width}x{height}-actors-{direction}.png'))
         assert not errors,errors
-        evidence.append({'viewport':[width,height],'zooms':3,'touch_targets':10,'errors':errors})
+        evidence.append({'viewport':[width,height],'zooms':3,'touch_targets':7,'errors':errors})
         context.close()
     browser.close()
 (OUT/'RESULTS.json').write_text(json.dumps({'source':'Running desktop Chromium, not Android; regional scenes reveal fog for QA','checks':evidence},indent=2)+'\n')
