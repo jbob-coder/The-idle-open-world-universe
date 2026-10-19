@@ -67,14 +67,16 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Safe layers, metric grid, doors and interiors technical contract",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "DOORKEEPER",
       "work_branch": "docs/godseed-agent-task-governance-v1",
       "depends": [],
       "acceptance": "Normative contract defines grids, transition, saves, safety, deterministic tests and explicit non-goals.",
       "issue": null,
-      "pr": null,
-      "evidence": [],
+      "pr": 22,
+      "evidence": [
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; interior metric/door contracts docs/agents/SAFE_INTERIOR_ARCHITECTURE.md + docs/agents/INTERIORS_SYSTEM_SPEC.md; CI review pending; gameplay interiors NOT implemented"
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -103,6 +105,13 @@
           "to": "in_progress",
           "actor": "DOORKEEPER",
           "reason": "Writing precise interior layer safety, entry anchors, simulation and save migration specifications"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "DOORKEEPER",
+          "reason": "Interior metric contract and safe door transition specifications delivered in PR #22; awaiting independent review and CI"
         }
       ]
     },
