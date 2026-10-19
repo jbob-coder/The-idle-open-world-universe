@@ -25,7 +25,9 @@ with sync_playwright() as pw:
         assert s['steps']>3,s
         # Bless Nim, then verify Faith spent; proceed through UI click and world event.
         initial=page.evaluate('GodseedDebug.getState().faith')
-        page.locator('[data-power="bless"]').first.click()
+        page.locator('#godviewTab-miracles').click()
+        page.locator('#powers [data-power="bless"]').click()
+        assert page.locator('#godviewDrawer').is_hidden()
         box=page.locator('#world').bounding_box()
         page.locator('#world').click(position={'x':int(box['width']/2),'y':int(box['height']/2)})
         after=page.evaluate('GodseedDebug.getState().faith')
