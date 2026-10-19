@@ -21,7 +21,7 @@ with sync_playwright() as playwright:
         content_type='text/html',body=(ROOT/'GODSEED-Play.html').read_text(encoding='utf-8')))
     page.goto('http://godseed.test/',wait_until='load')
     page.evaluate('GodseedDebug.newWorld(41);GodseedDebug.setSpeed(0)')
-    page.wait_for_selector('#observerTarget')
+    page.wait_for_selector('#observerTarget',state='attached')
     page.locator('#godviewTab-lives').click()
     assert page.locator('#godObservatory').is_visible()
     assert page.locator('#godObservatory').count()==1
