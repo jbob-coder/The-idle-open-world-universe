@@ -2,6 +2,11 @@ from pathlib import Path
 import json, base64
 p=Path(__file__).parent
 h=(p/'index.template.html').read_text()
+# The loading illustration is embedded into the single offline HTML on every build.
+# No external URL, startup image request, or additional Android asset dependency.
+h=h.replace('/*SPLASH_STYLE*/',(p/'assets/ui/godseed-loading.css').read_text())
+h=h.replace('<!--SPLASH_ART-->',(p/'assets/ui/godseed-loading-village.svg').read_text())
+h=h.replace('/*SPLASH_SOURCE*/',(p/'src/splash.js').read_text())
 region_data='window.GodseedRegionData='+json.dumps(json.loads((p/'data/world-regions.v1.json').read_text()),separators=(',',':'))+';\n'
 h=h.replace('/*SIM_SOURCE*/',region_data+(p/'src/world/regions.js').read_text()+'\n'+(p/'src/living.js').read_text()+'\n'+(p/'src/sim.js').read_text())
 manifest=json.loads((p/'assets/asset-manifest.json').read_text())
