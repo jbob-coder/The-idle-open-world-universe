@@ -1235,9 +1235,9 @@
       "priority": "P0",
       "area": "divine",
       "title": "God view: inspect life, building, village, memories and intent",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "FORGE-27",
+      "work_branch": "feat/god-004-forge-27-observer",
       "depends": [],
       "acceptance": "Read-only per-person and settlement UI, not a Sims control panel; safe on Android.",
       "issue": null,
@@ -1257,6 +1257,13 @@
           "to": "ready",
           "actor": "GODSEED-COORDINATOR",
           "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Reserve read-only God observer inspector; inspect citizens, settlements and buildings without direct control."
         }
       ]
     },
