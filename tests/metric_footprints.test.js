@@ -145,3 +145,39 @@ test('INT-002: later construction cannot cut the last short road route to a door
  assert.equal(Living.site(s,t,'market'),null,
   'do not construct a new wall across the only road-connected access');
 });
+
+test('INT-002: sparse v1 building IDs cannot be reused by later autonomous construction',()=>{
+ const s=world(31),t=s.living.towns[0];
+ t.buildings.push({id:t.id+'-7',type:'house',x:5,y:5,w:2,h:2});
+ s.tick=12;Living.tick(s);
+ assert.equal(t.buildings.length,2,'residents built a new structure');
+ assert.equal(t.buildings[1].id,t.id+'-8','ID advances beyond highest existing suffix');
+ assert.equal(new Set(t.buildings.map(b=>b.id)).size,t.buildings.length);
+ assert.equal(t.nextBuildingId,9,'next ID stored as monotonic durable state');
+ const restored=Sim.restore(Sim.serialize(s));
+ assert.ok(restored,'existing version-1 save still restores');
+ const rt=restored.living.towns[0];
+ assert.equal(rt.nextBuildingId,9,'building sequence is saved and restored');
+ rt.nextBuild=24;restored.tick=24;
+ Living.tick(restored);
+ assert.ok(rt.buildings.some(b=>b.id===t.id+'-9'),'new building gets a fresh ID after reload');
+ assert.equal(new Set(rt.buildings.map(b=>b.id)).size,rt.buildings.length);
+});
+
+test('INT-002: deleted building IDs and stale sequence imports never collide',()=>{
+ const s=world(31),t=s.living.towns[0];
+ // A former settlement once constructed ID 41 and later demolished it.
+ t.nextBuildingId=42;
+ s.tick=12;Living.tick(s);
+ assert.equal(t.buildings[0].id,t.id+'-42','do not recycle removed building identifiers');
+ let copy=JSON.parse(Sim.serialize(s));
+ copy.living.towns[0].nextBuildingId=1; // malformed/stale older save
+ const restored=Sim.restore(copy);
+ assert.ok(restored);
+ const rt=restored.living.towns[0];
+ assert.equal(rt.nextBuildingId,43,'restore reconciles stale counter against building IDs');
+ rt.nextBuild=24;restored.tick=24;
+ Living.tick(restored);
+ assert.ok(rt.buildings.some(b=>b.id===t.id+'-43'));
+ assert.equal(new Set(rt.buildings.map(b=>b.id)).size,rt.buildings.length);
+});
