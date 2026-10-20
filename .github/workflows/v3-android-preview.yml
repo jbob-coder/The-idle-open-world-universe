@@ -7,6 +7,7 @@ on:
       - 'src/v3/**'
       - 'v3/**'
       - 'build_v3.py'
+      - 'tests/v3_apk_static_acceptance.py'
       - '.github/workflows/v3-android-preview.yml'
   workflow_dispatch:
 jobs:
@@ -123,3 +124,29 @@ jobs:
           path: |
             qa-screenshots/v3-android-webgl-log.txt
             qa-screenshots/v3-android-emulator.png
+
+  # Independent from the Android emulator: a simulator boot timeout does not
+  # invalidate a signature/offline-manifest validation of the exact APK.
+  v3-apk-static-independent:
+    needs: build-v3-debug
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          name: godseed-v3-isolated-android-debug-apk
+          path: v3-android-apk
+      - name: Locate binary-manifest and APK signature inspection tools
+        run: |
+          SDKROOT="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDKMANAGER="$(command -v sdkmanager || find "$SDKROOT/cmdline-tools" -name sdkmanager -type f | sort -V | tail -1)"
+          test -n "$SDKMANAGER"
+          "$SDKMANAGER" --install 'build-tools;35.0.0'
+      - name: Independently verify built APK package, launcher, no permissions, signed v2, and exact offline HTML
+        run: python tests/v3_apk_static_acceptance.py v3-android-apk/app-debug.apk GODSEED-V3-Play.html
