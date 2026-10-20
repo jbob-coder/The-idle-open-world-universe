@@ -146,7 +146,36 @@ def run():
         assert not errors, "society browser JavaScript errors: "+"; ".join(errors)
         page.screenshot(path=str(CAPTURE/"godseed-v3-society-640x360.png"))
         print("PASS V3 autonomous society: crafted axe, 3 structures, 3 citizens, elected leader, isolated save")
+        page.get_by_role("button",name="Modo Aria sola").click()
+        wait_for_state(page,"() => window.GodseedV3Debug && GodseedV3Debug.mode()==='solo'",20)
+        assert page.evaluate("GodseedV3Debug.storageKey") == "godseed-v3-prototype-v1"
+        assert page.evaluate("localStorage.getItem('godseed-v3-society-v1')") is not None, "mode switch erased saved society"
         page.close()
+        # Low-end fallback must render the SAME society snapshots and preserve leadership.
+        fallback=browser.new_page(viewport={"width":640,"height":360})
+        fallback_errors=[]
+        fallback.on("pageerror",lambda error:fallback_errors.append(str(error)))
+        fallback.route("http://**/*",lambda route:route.abort())
+        fallback.route("https://**/*",lambda route:route.abort())
+        fallback.goto(HTML.as_uri()+"?mode=society&renderer=2d",wait_until="load")
+        wait_for_state(fallback,"() => Boolean(window.GodseedV3Debug)",20)
+        assert fallback.evaluate("GodseedV3Debug.rendererMode()")=="canvas-2d-fallback"
+        outcome=fallback.evaluate("""() => {
+            const d=GodseedV3Debug;
+            d.newWorld(14);d.pause();
+            for(let i=0;i<260;i++)d.step();
+            return d.getState();
+        }""")
+        assert len(outcome["structures"])==3 and outcome["settlement"]["leaderId"]
+        assert fallback.evaluate("GodseedV3Debug.save()")
+        fallback.reload(wait_until="load")
+        wait_for_state(fallback,"() => Boolean(window.GodseedV3Debug)",20)
+        assert fallback.evaluate("GodseedV3Debug.getState()")==outcome
+        assert fallback.evaluate("GodseedV3Debug.rendererMode()")=="canvas-2d-fallback"
+        assert not fallback_errors, "society fallback errors: "+"; ".join(fallback_errors)
+        fallback.screenshot(path=str(CAPTURE/"godseed-v3-society-canvas-640x360.png"))
+        print("PASS V3 society Canvas2D fallback and separate mode switch without save loss")
+        fallback.close()
         browser.close()
 
 if __name__=="__main__":
