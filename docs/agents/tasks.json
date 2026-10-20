@@ -1682,7 +1682,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "Nonblocking suggestions lifecycle: heard→considered→action→result",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "FIX-62",
       "work_branch": "feat/god-003-fix-62-lifecycle",
       "depends": [
@@ -1735,6 +1735,13 @@
           "to": "claimed",
           "actor": "FIX-62",
           "reason": "Recover LIFE-26 handoff for test-driven GOD-003 lifecycle hardening on isolated successor branch"
+        },
+        {
+          "date": "2026-10-20T15:14:46Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Begin inherited lifecycle fixes: deterministic factual outcome tests, v1 save restore and optional UI. Preserve LIFE-26 branch."
         }
       ]
     },
