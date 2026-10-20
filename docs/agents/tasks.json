@@ -147,7 +147,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "in_review",
+      "status": "in_progress",
       "owner": "FIX-62",
       "work_branch": "feat/int-002-fix-62-footprints",
       "depends": [
@@ -246,6 +246,13 @@
           "to": "in_review",
           "actor": "FIX-62",
           "reason": "Doorstep and short access routes preserved by new construction; 107/107 Node tests, offline QA success, 7/7 API29 emulator tests success on PR #56 HEAD; independent review pending."
+        },
+        {
+          "date": "2026-10-20T22:48:37Z",
+          "from": "in_review",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Owner-authorized existing INT-002 continuation: prevent duplicate building identifiers after sparse legacy v1 saves, deletion and reload; add persisted sequence tests. No third task claim."
         }
       ]
     },
