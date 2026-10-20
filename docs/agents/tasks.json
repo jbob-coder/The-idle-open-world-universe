@@ -147,7 +147,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "FIX-62",
       "work_branch": "feat/int-002-fix-62-footprints",
       "depends": [
@@ -155,9 +155,10 @@
       ],
       "acceptance": "Blueprint variants use real footprint collision and protected roads/sites; stable old 1×1/2×2 saves.",
       "issue": null,
-      "pr": null,
+      "pr": 56,
       "evidence": [
-        "Owner-requested FORGE-27 definitive retirement handoff committed at ec178b9bc5dfeaaaeffee6940ce4553b36f9d545; code branch feat/int-002-forge-27-metric-buildings remains identical to base a5919223ec9092bb8f2ec4c4a35cc2576021c817; no new game code, tests or PR. New 3D Pixel Squares design in PR #47 must be evaluated."
+        "Owner-requested FORGE-27 definitive retirement handoff committed at ec178b9bc5dfeaaaeffee6940ce4553b36f9d545; code branch feat/int-002-forge-27-metric-buildings remains identical to base a5919223ec9092bb8f2ec4c4a35cc2576021c817; no new game code, tests or PR. New 3D Pixel Squares design in PR #47 must be evaluated.",
+        "PR #56 https://github.com/jbob-coder/The-idle-open-world-universe/pull/56 ; exact head e424f104db4d56bf91b81e0788ed1eba7ef57be6 ; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503260440 SUCCESS: 103/103 Node tests (4 new INT-002), 0 failures, offline browser PASS ; native Android https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503260367 SUCCESS: Gradle, local assets, API29 emulator 7/7 instrumentation PASS. Physical 2/3 GB devices NOT_RUN. In review, not verified or merged."
       ],
       "status_history": [
         {
@@ -208,6 +209,13 @@
           "to": "in_progress",
           "actor": "FIX-62",
           "reason": "Begin isolated footprint collision, placement, legacy save and Node/Android acceptance work. Do not edit other owners' branches."
+        },
+        {
+          "date": "2026-10-20T21:53:43Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FIX-62",
+          "reason": "PR #56 safe geometric footprints; exact-HEAD 103/103 Node and 7/7 Android instrumentation PASS; awaiting independent acceptance."
         }
       ]
     },
