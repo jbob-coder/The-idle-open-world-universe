@@ -9,7 +9,7 @@ Authority: owner direction is an offline, autonomous medieval 3D Pixel Squares a
 1. Start with **Aria only**. She independently seeks food, rests, collects a finite tree resource, crafts a tool at real material cost, travels to a site, and constructs a shelter. A placed structure must occupy a distinct map position.
 2. Once a shelter exists, at most two named outsiders can arrive at different times. This is a **scripted bounded migration demonstration**, **not** reproduction or a claim of a realistic population model.
 3. Residents exchange real social interactions while near one another, raising bilateral trust and contributing to a persistent relationship ledger. Personal skills/contributions can differ.
-4. Given 3 residents and sufficient interaction, citizens vote autonomously on a leader. Votes are inspectable and persist. A leader has a recorded role, not magical authority; future policy/leadership effects remain a separate task.
+4. Given 3 residents and sufficient interaction, citizens vote autonomously on a leader. Votes are inspectable and persist. Electing a leader **unlocks council approval of the third communal building (storehouse)**. Wider laws, delegation, political legitimacy and succession remain future tasks.
 5. If labor and materials permit, inhabitants add a workshop and a storehouse on separate sites. Each project consumes the inventory exactly once. No prefab city and no player command is required.
 
 ## Isolation and compatibility
@@ -25,7 +25,7 @@ Authority: owner direction is an offline, autonomous medieval 3D Pixel Squares a
 | --- | --- | --- |
 | World | 20×20 seeded finite trees, 4 reusable berry bushes, 3 fixed *candidate* sites | Site positions must not overlap trees or one another; no building without accumulated material |
 | Inventory | `wood = harvested - craftedWood - spentWood`, `food = gathered - eaten` | Validate before persistence; no negative balances |
-| Crafting | Stone axe: 2 harvested wood → 1 shared tool, at most once | Event includes crafter, recipe and resource cost |
+| Crafting | Primitive wooden work tool: 2 harvested wood → 1 shared tool (internal recipe ID `axe`), at most once | Event includes crafter, recipe and resource cost |
 | Building | Hut 4 wood, workshop 6 wood, storehouse 4 wood; crafting prerequisite | Build at reachable, distinct location; event names worker and cost |
 | Individual | Stable ID, role/trait, hunger, health, energy, skill/contribution, goal | Autonomous bounded priority rules; no owner clicks |
 | Society | At most 3 villagers, paired trust scores, proximity conversations | Symmetric, bounded persisted relationship state |
