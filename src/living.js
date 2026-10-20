@@ -37,7 +37,10 @@ function legacySite(s,town,type){
   for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){
    const tx=x+dx,ty=y+dy,n=ty*W+tx,tile=s.map[n];
    if(!GROUND.has(tile)||occupied(s,tx,ty)||s.living.heritage.includes(n)||
-      s.npcs.some(p=>p.homeX===tx&&p.homeY===ty))clear=false;
+      s.npcs.some(p=>(p.homeX===tx&&p.homeY===ty)||(p.x===tx&&p.y===ty))||
+      s.living.citizens.some(p=>p.x===tx&&p.y===ty)||
+      s.enemies.some(p=>p.x===tx&&p.y===ty)||
+      (s.bot.x===tx&&s.bot.y===ty))clear=false;
    if(tile===6)meadow++;
   }
   if(!clear)continue;
