@@ -92,10 +92,12 @@ test("100 seeds autonomously forage, eat and regenerate only accountable food",(
   }
 });
 test("old V3 schema1 save preserves original tree, wood, positions, shelter and events",()=>{
-  const game=V3.create(14);game.advance(151);
-  const previous=game.snapshot();previous.schemaVersion=1;
-  for(const f of ["berries","food","foraged","eaten","grown"])delete previous[f];
-  previous.citizens.forEach(c=>delete c.hunger);
+  // This is a committed, authentic JSON snapshot generated at pre-food
+  // V3 HEAD d49fd4965453a1dba7136b540c14a34f52ef51c1.
+  const previous=require("./fixtures/v3_schema1_seed14.json");
+  assert.equal(previous.schemaVersion,1);
+  assert.equal(previous.tick,151);
+  assert.equal(previous.citizens[0].hunger,undefined);
   const migrated=V3.restore(JSON.stringify(previous)).snapshot();
   assert.equal(migrated.schemaVersion,2);
   for(const f of ["seed","tick","wood","harvested","spent","forest","structures","events"])
