@@ -147,7 +147,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "in_review",
+      "status": "in_progress",
       "owner": "FIX-62",
       "work_branch": "feat/int-002-fix-62-footprints",
       "depends": [
@@ -216,6 +216,13 @@
           "to": "in_review",
           "actor": "FIX-62",
           "reason": "PR #56 safe geometric footprints; exact-HEAD 103/103 Node and 7/7 Android instrumentation PASS; awaiting independent acceptance."
+        },
+        {
+          "date": "2026-10-20T22:00:50Z",
+          "from": "in_review",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Author self-audit of PR #56 found two reproducible coverage gaps: compact fallback can occupy actor coordinates and minimap reveals undiscovered structures. Re-open same owned task for targeted correction and regression tests."
         }
       ]
     },
