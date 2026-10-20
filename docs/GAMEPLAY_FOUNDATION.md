@@ -1,3 +1,5 @@
+> **LEGACY GAMEPLAY BASELINE (2026-10-20):** Preserve Nim/2D save and simulation invariants; fixed camera, old population and task counts are not final 3D product mandates. Consult [authority and corrected reference precedence](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
 # GODSEED — Minimum Playable Systems: Foundation Before World Expansion
 **Status: prioritized planning, NOT implemented work.** The source already supports several of these mechanics in basic form, so the task is to **validate, stabilize and connect** them into a reliable play loop, not write duplicate engines.
 
