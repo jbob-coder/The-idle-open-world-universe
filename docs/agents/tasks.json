@@ -147,7 +147,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "FIX-62",
       "work_branch": "feat/int-002-fix-62-footprints",
       "depends": [
@@ -158,7 +158,8 @@
       "pr": 56,
       "evidence": [
         "Owner-requested FORGE-27 definitive retirement handoff committed at ec178b9bc5dfeaaaeffee6940ce4553b36f9d545; code branch feat/int-002-forge-27-metric-buildings remains identical to base a5919223ec9092bb8f2ec4c4a35cc2576021c817; no new game code, tests or PR. New 3D Pixel Squares design in PR #47 must be evaluated.",
-        "PR #56 https://github.com/jbob-coder/The-idle-open-world-universe/pull/56 ; exact head e424f104db4d56bf91b81e0788ed1eba7ef57be6 ; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503260440 SUCCESS: 103/103 Node tests (4 new INT-002), 0 failures, offline browser PASS ; native Android https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503260367 SUCCESS: Gradle, local assets, API29 emulator 7/7 instrumentation PASS. Physical 2/3 GB devices NOT_RUN. In review, not verified or merged."
+        "PR #56 https://github.com/jbob-coder/The-idle-open-world-universe/pull/56 ; exact head e424f104db4d56bf91b81e0788ed1eba7ef57be6 ; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503260440 SUCCESS: 103/103 Node tests (4 new INT-002), 0 failures, offline browser PASS ; native Android https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503260367 SUCCESS: Gradle, local assets, API29 emulator 7/7 instrumentation PASS. Physical 2/3 GB devices NOT_RUN. In review, not verified or merged.",
+        "PR #56 https://github.com/jbob-coder/The-idle-open-world-universe/pull/56 ; exact HEAD 24be2d641acee93a84ef2745cf75bec03fc7d746 ; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39505156448 COMPLETED SUCCESS: 105/105 Node tests including 2 new INT-002 actor-overlap/fog tests, offline browser QA PASS ; native Android https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39505156491 COMPLETED SUCCESS: Gradle offline build PASS, API29 instrumentation OK (7 tests). Physical 2/3 GB RAM PSS/FPS/thermal NOT_RUN. IN_REVIEW pending independent acceptance. Save v1 unchanged, main untouched."
       ],
       "status_history": [
         {
@@ -223,6 +224,13 @@
           "to": "in_progress",
           "actor": "FIX-62",
           "reason": "Author self-audit of PR #56 found two reproducible coverage gaps: compact fallback can occupy actor coordinates and minimap reveals undiscovered structures. Re-open same owned task for targeted correction and regression tests."
+        },
+        {
+          "date": "2026-10-20T22:08:42Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FIX-62",
+          "reason": "Repaired actor-overlap in compact construction and undiscovered minimap building leak, added 2 regression tests, all 105 Node and 7 emulator tests passed on exact PR #56 HEAD. Independent reviewer required."
         }
       ]
     },
