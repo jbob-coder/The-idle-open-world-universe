@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -44,6 +45,16 @@ public final class MainActivity extends Activity {
         settings.setSupportMultipleWindows(false);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         web.setWebViewClient(new WebViewClient() {
+            @Override public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if (!GAME_URL.equals(url)) return;
+                // Diagnostic for emulator acceptance only: validates a real
+                // in-WebView WebGL context, not merely a successful APK install.
+                view.evaluateJavascript(
+                    "(function(){return Boolean(window.GodseedV3Debug && " +
+                    "GodseedV3Debug.hasWebGL())})()",
+                    result -> Log.i("GODSEED_V3", "WEBGL_CONTEXT=" + result));
+            }
             @Override public boolean shouldOverrideUrlLoading(
                     WebView view, WebResourceRequest request) {
                 return !trusted(request.getUrl());

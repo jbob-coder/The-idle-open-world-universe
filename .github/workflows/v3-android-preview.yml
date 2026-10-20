@@ -69,3 +69,57 @@ jobs:
           retention-days: 14
           if-no-files-found: error
           path: android/v3/app/build/outputs/apk/debug/app-debug.apk
+
+  v3-emulator-webgl-launch:
+    needs: build-v3-debug
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: godseed-v3-isolated-android-debug-apk
+          path: v3-android-apk
+      - name: Enable KVM when available
+        run: |
+          if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Install and launch Android V3 offline WebGL in API29 emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          force-avd-creation: true
+          emulator-boot-timeout: 900
+          disable-animations: true
+          script: |
+            set -e
+            test -s v3-android-apk/app-debug.apk
+            adb install -r v3-android-apk/app-debug.apk
+            adb logcat -c
+            adb shell am start -W -n io.godseed.v3preview/.MainActivity
+            mkdir -p qa-screenshots
+            for attempt in $(seq 1 30); do
+              adb logcat -d -s GODSEED_V3:I > qa-screenshots/v3-android-webgl-log.txt
+              if grep -q 'WEBGL_CONTEXT=true' qa-screenshots/v3-android-webgl-log.txt; then break; fi
+              sleep 2
+            done
+            grep -q 'WEBGL_CONTEXT=true' qa-screenshots/v3-android-webgl-log.txt
+            adb shell pidof io.godseed.v3preview
+            adb shell screencap -p /sdcard/godseed-v3-preview.png
+            adb pull /sdcard/godseed-v3-preview.png qa-screenshots/v3-android-emulator.png
+            test -s qa-screenshots/v3-android-emulator.png
+            echo 'PASS: V3 package installed, launched and created WebGL context (API29 emulator)'
+      - name: Preserve native emulator evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: godseed-v3-android-emulator-evidence
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            qa-screenshots/v3-android-webgl-log.txt
+            qa-screenshots/v3-android-emulator.png
