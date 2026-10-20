@@ -194,6 +194,7 @@ function restore(s){
    if(!b||!BLUEPRINTS[b.type]||!Number.isInteger(b.x)||!Number.isInteger(b.y))return false;
    const w=Number.isInteger(b.w)&&b.w>=1&&b.w<=6?b.w:1;
    const h=Number.isInteger(b.h)&&b.h>=1&&b.h<=6?b.h:1;
+   if(w<=2&&h<=2)return b.x>1&&b.x<W-2&&b.y>1&&b.y<H-2;
    return b.x>1&&b.y>1&&b.x+w<=W-2&&b.y+h<=H-2;
   }).map(b=>({...b,
    w:Number.isInteger(b.w)&&b.w>=1&&b.w<=6?b.w:1,
