@@ -39,15 +39,15 @@ def run():
             wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
             assert page.evaluate("GodseedV3Debug.hasWebGL()"), "WebGL 3D context unavailable"
             assert page.evaluate("typeof Element.prototype.replaceChildren") == "undefined"
-            assert page.locator("#stats dt").count() == 7
-            assert page.locator("#citizens .person").count() == 2
+            assert page.locator("#stats dt").count() == 10
+            assert page.locator("#citizens .person").count() == 1
             initial=page.evaluate("""() => {
                 const s=GodseedV3Debug.newWorld(14);
                 GodseedV3Debug.pause();
                 return s;
             }""")
             assert initial["tick"]==0, "reset must be atomic before frame-driven stepping"
-            assert len(initial["citizens"])==2
+            assert len(initial["citizens"])==1 and initial["citizens"][0]["alive"]
             page.get_by_role("button",name="Acercar +").click()
             page.get_by_role("button",name="Alejar −").click()
             page.mouse.move(150,180)
@@ -61,7 +61,7 @@ def run():
             page.evaluate("GodseedV3Debug.pause()")
             built=page.evaluate("GodseedV3Debug.getState()")
             assert built["spent"]==4 and built["wood"]==built["harvested"]-4
-            assert len(built["structures"])==1
+            assert len(built["structures"])==1 and len(built["citizens"])==1 and built["citizens"][0]["alive"]
             assert page.evaluate("GodseedV3Debug.save()"), "V3 persistence failed"
             page.reload(wait_until="load")
             wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
@@ -100,6 +100,7 @@ def run():
         }""")
         assert len(built["structures"]) == 1, "Autonomous shelter remains functional"
         assert built["wood"] == built["harvested"]-4
+        assert len(built["citizens"])==1 and built["citizens"][0]["alive"]
         assert page.evaluate("GodseedV3Debug.save()")
         page.reload(wait_until="load")
         wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)

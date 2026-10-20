@@ -3,7 +3,7 @@
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   if(root)root.GodseedV3Sim=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
-  const VERSION=1,SIZE=20,STORAGE_KEY="godseed-v3-prototype-v1";
+  const VERSION=2,SIZE=20,STORAGE_KEY="godseed-v3-prototype-v1";
   const copy=x=>JSON.parse(JSON.stringify(x));
   const pos=(x,z)=>Number.isSafeInteger(x)&&Number.isSafeInteger(z)&&x>=0&&z>=0&&x<SIZE&&z<SIZE;
   const uint32=x=>Number.isSafeInteger(x)&&x>=0&&x<=0xffffffff;
@@ -33,40 +33,72 @@
     }
     return best;
   }
+  // Four renewable patches inside the treeless village clearing; no randomness per tick.
+  const GROVE=[{x:3,z:4},{x:4,z:6},{x:6,z:4},{x:7,z:6}];
+  function groveFor(){return GROVE.map(p=>({x:p.x,z:p.z,berries:3}));}
+  function nearestBush(c,bushes){
+    let best=null,dist=Infinity;
+    for(const b of bushes)if(b.berries>0){
+      const d=distance(c,b);
+      if(d<dist){dist=d;best=b;}
+    }
+    return best;
+  }
+  function walk(c,target){
+    if(c.x!==target.x)c.x+=Math.sign(target.x-c.x);
+    else c.z+=Math.sign(target.z-c.z);
+    c.energy=Math.max(0,c.energy-1);
+  }
   function act(s,c){
-    if(c.energy<5){c.energy=Math.min(20,c.energy+8);c.goal="descansar";return;}
+    if(!c.alive){c.goal="sin vida";return;}
+    if(c.hunger<=60&&s.food>0){
+      s.food--;s.foodEaten++;c.hunger=Math.min(100,c.hunger+38);
+      c.goal="comer";record(s,c,"eat",{foodSpent:1});return;
+    }
+    if(c.energy<5&&!(c.hunger<20&&s.food===0)){
+      c.energy=Math.min(20,c.energy+8);c.goal="descansar";
+      record(s,c,"rest",{energy:c.energy});return;
+    }
+    // Food takes priority over building and wood reserves.
+    if(s.food<2||c.hunger<=60){
+      const bush=nearestBush(c,s.bushes);
+      if(bush){
+        if(distance(c,bush)<=1){
+          bush.berries--;s.food++;s.foodGathered++;
+          c.energy=Math.max(0,c.energy-2);c.goal="recolectar bayas";
+          record(s,c,"forage",{x:bush.x,z:bush.z,foodProduced:1});
+        }else{walk(c,bush);c.goal="buscar alimento";}
+        return;
+      }
+      if(c.hunger<=60){
+        c.energy=Math.min(20,c.energy+1);c.goal="esperar frutos";return;
+      }
+    }
     if(!s.structures.length&&s.wood>=4){
       s.wood-=4;s.spent+=4;s.structures.push({id:"first_shelter",type:"house",x:5,z:5});
-      c.energy-=2;c.goal="construir refugio";
+      c.energy=Math.max(0,c.energy-2);c.goal="construir refugio";
       record(s,c,"build",{id:"first_shelter",woodSpent:4});return;
     }
-    // Keep a finite timber reserve instead of cutting every tree after founding.
-    // Settlers remain autonomous: replenish if needed, then return to their home.
-    if(s.structures.length&&s.wood>=4){
-      const home=s.structures[0];
-      if(distance(c,home)>1){
-        if(c.x!==home.x)c.x+=Math.sign(home.x-c.x);
-        else c.z+=Math.sign(home.z-c.z);
-        c.energy--;c.goal="regresar al refugio";
-      }else{
-        c.energy=Math.min(20,c.energy+2);c.goal="cuidar refugio";
+    if(!s.structures.length||s.wood<4){
+      const tree=nearestTree(c,s.forest);
+      if(tree){
+        if(distance(c,tree)<=1){
+          const i=s.forest.findIndex(t=>t.x===tree.x&&t.z===tree.z);
+          if(i<0)throw new Error("resource ownership conflict");
+          s.forest.splice(i,1);s.wood++;s.harvested++;c.harvested++;
+          c.energy=Math.max(0,c.energy-3);c.goal="recolectar madera";
+          record(s,c,"harvest",{x:tree.x,z:tree.z,woodProduced:1});
+        }else{walk(c,tree);c.goal="caminar hacia recurso";}
+        return;
       }
-      return;
+      c.goal="sin madera";c.energy=Math.min(20,c.energy+1);return;
     }
-    const tree=nearestTree(c,s.forest);
-    if(!tree){c.goal=s.structures.length?"mantener aldea":"sin madera";c.energy=Math.min(20,c.energy+1);return;}
-    if(distance(c,tree)<=1){
-      const i=s.forest.findIndex(t=>t.x===tree.x&&t.z===tree.z);
-      if(i<0)throw new Error("resource ownership conflict");
-      s.forest.splice(i,1);s.wood++;s.harvested++;c.harvested++;
-      c.energy=Math.max(0,c.energy-3);c.goal="recolectar madera";
-      record(s,c,"harvest",{x:tree.x,z:tree.z,woodProduced:1});return;
-    }
-    if(c.x!==tree.x)c.x+=Math.sign(tree.x-c.x);else c.z+=Math.sign(tree.z-c.z);
-    c.energy--;c.goal="caminar hacia recurso";
+    const home=s.structures[0];
+    if(distance(c,home)>1){walk(c,home);c.goal="regresar al refugio";}
+    else{c.energy=Math.min(20,c.energy+2);c.goal="cuidar refugio";}
   }
-  function validate(s){
-    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
+    function validateLegacy(s){
+    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==1||
       !uint32(s.seed)||!Number.isSafeInteger(s.tick)||s.tick<0||
       !Array.isArray(s.citizens)||s.citizens.length!==2||
       !Array.isArray(s.forest)||!Array.isArray(s.structures)||s.structures.length>1||
@@ -99,11 +131,72 @@
     }
     return true;
   }
+  // Validation is the authority for both persisted and in-memory V2 states.
+  function validate(s){
+    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
+       !uint32(s.seed)||!Number.isSafeInteger(s.tick)||s.tick<0||
+       !Array.isArray(s.citizens)||s.citizens.length!==1||
+       !Array.isArray(s.forest)||!Array.isArray(s.structures)||s.structures.length>1||
+       !Array.isArray(s.bushes)||s.bushes.length!==GROVE.length||
+       !Array.isArray(s.events)||s.events.length>48)return false;
+    for(const key of ["wood","harvested","spent","legacyHarvested",
+      "food","foodGathered","foodEaten","foodGrown"]){
+      if(!Number.isSafeInteger(s[key])||s[key]<0)return false;
+    }
+    if(s.wood!==s.harvested-s.spent||s.food!==s.foodGathered-s.foodEaten)return false;
+    const original=forestFor(s.seed),keys=new Set();
+    if(s.harvested+s.forest.length!==original.length)return false;
+    for(const t of s.forest){
+      if(!t||!pos(t.x,t.z)||!original.some(p=>p.x===t.x&&p.z===t.z))return false;
+      const key=t.x+","+t.z;if(keys.has(key))return false;keys.add(key);
+    }
+    const c=s.citizens[0];
+    if(!c||c.id!=="sim_aria"||c.name!=="Aria"||c.trait!=="explorer"||
+       !pos(c.x,c.z)||!Number.isInteger(c.energy)||c.energy<0||c.energy>20||
+       !Number.isInteger(c.hunger)||c.hunger<0||c.hunger>100||
+       !Number.isInteger(c.health)||c.health<0||c.health>100||
+       typeof c.alive!=="boolean"||c.alive!==(c.health>0)||
+       !Number.isSafeInteger(c.harvested)||c.harvested<0||
+       c.harvested+s.legacyHarvested!==s.harvested||
+       typeof c.goal!=="string"||c.goal.length>80)return false;
+    let berries=0;
+    for(let i=0;i<GROVE.length;i++){
+      const b=s.bushes[i],p=GROVE[i];
+      if(!b||b.x!==p.x||b.z!==p.z||!Number.isInteger(b.berries)||
+         b.berries<0||b.berries>3)return false;
+      berries+=b.berries;
+    }
+    if(s.foodGathered+berries!==GROVE.length*3+s.foodGrown)return false;
+    if(s.structures.length){
+      const b=s.structures[0];
+      if(!b||b.id!=="first_shelter"||b.type!=="house"||
+         b.x!==5||b.z!==5||s.spent!==4)return false;
+    }else if(s.spent!==0)return false;
+    for(const e of s.events){
+      if(!e||!Number.isSafeInteger(e.tick)||e.tick<0||e.tick>s.tick||
+        !["sim_aria","sim_bran"].includes(e.actor)||
+        !["build","harvest","forage","eat","rest"].includes(e.action))return false;
+    }
+    return true;
+  }
   function instance(state){
     function snapshot(){return copy(state);}
     function advance(n){
       if(!Number.isSafeInteger(n)||n<0||n>20000)throw new RangeError("invalid steps");
-      for(let i=0;i<n;i++){state.tick++;for(const c of state.citizens)act(state,c);}
+      for(let i=0;i<n;i++){
+        state.tick++;
+        if(state.tick%15===0)for(const b of state.bushes){
+          if(b.berries<3){b.berries++;state.foodGrown++;}
+        }
+        for(const c of state.citizens){
+          if(!c.alive)continue;
+          c.hunger=Math.max(0,c.hunger-1);
+          if(c.hunger===0)c.health=Math.max(0,c.health-2);
+          else if(c.hunger>65)c.health=Math.min(100,c.health+1);
+          c.alive=c.health>0;
+          act(state,c);
+        }
+      }
       return snapshot();
     }
     function serialize(){
@@ -116,16 +209,28 @@
   function create(seed){
     if(!uint32(seed))throw new RangeError("seed must be uint32");
     return instance({schemaVersion:VERSION,seed,tick:0,
-      citizens:[
-        {id:"sim_aria",name:"Aria",trait:"explorer",x:4,z:4,energy:20,harvested:0,goal:"explorar"},
-        {id:"sim_bran",name:"Bran",trait:"builder",x:6,z:4,energy:20,harvested:0,goal:"fundar"}],
-      forest:forestFor(seed),wood:0,harvested:0,spent:0,structures:[],events:[]});
+      citizens:[{id:"sim_aria",name:"Aria",trait:"explorer",x:4,z:4,
+        energy:20,hunger:85,health:100,alive:true,harvested:0,goal:"explorar"}],
+      forest:forestFor(seed),wood:0,harvested:0,spent:0,legacyHarvested:0,
+      bushes:groveFor(),food:0,foodGathered:0,foodEaten:0,foodGrown:0,
+      structures:[],events:[]});
   }
-  function restore(raw){
+  // Old prototype saves are accepted only when they pass their original validation.
+  // Bran's past harvesting stays attributed to an archived resource ledger.
+  function migrateLegacy(s){
+    if(!validateLegacy(s))throw new RangeError("corrupt V3 legacy save");
+    const a=copy(s.citizens[0]),bran=s.citizens[1];
+    a.hunger=85;a.health=100;a.alive=true;
+    return Object.assign({},s,{schemaVersion:VERSION,citizens:[a],
+      legacyHarvested:bran.harvested,bushes:groveFor(),
+      food:0,foodGathered:0,foodEaten:0,foodGrown:0});
+  }
+    function restore(raw){
     if(typeof raw!=="string"||raw.length>64000)throw new RangeError("invalid V3 save");
-    const state=JSON.parse(raw);
+    let state=JSON.parse(raw);
+    if(state&&state.schemaVersion===1)state=migrateLegacy(state);
     if(!validate(state))throw new RangeError("corrupt V3 save");
     return instance(copy(state));
   }
-  return Object.freeze({VERSION,SIZE,STORAGE_KEY,create,restore,validate});
+    return Object.freeze({VERSION,SIZE,STORAGE_KEY,create,restore,validate});
 });

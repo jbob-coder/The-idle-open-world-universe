@@ -76,17 +76,22 @@
       statsPair(stats,"Madera recolectada",state.harvested);
       statsPair(stats,"Madera gastada",state.spent);
       statsPair(stats,"Refugios construidos",state.structures.length);
+      statsPair(stats,"Comida disponible",state.food);
+      statsPair(stats,"Bayas recolectadas",state.foodGathered);
+      statsPair(stats,"Raciones consumidas",state.foodEaten);
       const people=el("citizens");people.textContent="";
       for(const c of state.citizens){
         const div=document.createElement("div");div.className="person";
         const title=document.createElement("strong");title.textContent=c.name+" · "+c.trait;
-        const desc=document.createElement("div");desc.textContent="Objetivo: "+c.goal+" | Energía "+c.energy+"/20 | Madera "+c.harvested;
+        const desc=document.createElement("div");desc.textContent="Objetivo: "+c.goal+" | Salud "+c.health+"/100 | Hambre "+c.hunger+"/100 | Energía "+c.energy+"/20 | Madera "+c.harvested;
         div.appendChild(title);div.appendChild(desc);people.appendChild(div);
       }
       const events=el("events");events.textContent="";
       for(const e of state.events.slice(-6).reverse()){
         const div=document.createElement("div");
-        div.textContent="Día "+e.tick+" · "+e.actor+": "+(e.action==="build"?"construyó refugio":"recolectó madera");
+        const labels={build:"construyó refugio",harvest:"recolectó madera",
+          forage:"recolectó bayas",eat:"comió",rest:"descansó"};
+        div.textContent="Ciclo "+e.tick+" · "+e.actor+": "+(labels[e.action]||e.action);
         events.appendChild(div);
       }
       lastShownTick=state.tick;
