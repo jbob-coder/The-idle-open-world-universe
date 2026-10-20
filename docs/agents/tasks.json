@@ -1967,7 +1967,7 @@
       "priority": "P0",
       "area": "qa",
       "title": "Node state-machine regression for life, worlds and migration",
-      "status": "verified",
+      "status": "done",
       "owner": "GDS-KESTREL-1810",
       "work_branch": "test/qa-001-kestrel-node-regressions",
       "depends": [],
@@ -1977,7 +1977,8 @@
       "evidence": [
         "PR #24 https://github.com/jbob-coder/The-idle-open-world-universe/pull/24; implementation HEAD 654081fe91a6c9a1cca763472beacb637074d038; QA Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317; Node deterministic suite, offline HTML, asset contract, native debug APK build/signature checks SUCCESS; Chromium offline checks RUNNING when submitted; physical Android 2–3 GB NOT VERIFIED; no merge",
         "Full CI SUCCESS at exact implementation SHA 654081fe91a6c9a1cca763472beacb637074d038: 88/88 Node tests PASS (including six QA-001 new regressions), 0 failures; offline HTML, asset reproducibility, native debug APK rebuild/structure/signature, offline Chromium mobile/3-chapter/save/touch tests PASS with 0 JS errors/external requests; screenshots and debug APK artifact 12156824428; run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317. Emulator and physical 2–3 GB hardware not claimed by this run; PR #24 remains unmerged, awaiting independent review.",
-        "Independent TERRAIN-01 review of QA-001 PR #24 exact SHA 654081fe91a6c9a1cca763472beacb637074d038; inspected 6 real Sim state/save/autonomy regressions and CI run job log https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317: 88/88 Node PASS, Chromium offline layout/chapters/save tests PASS, Android package/signature PASS. Physical Android device QA NOT TESTED; PR not merged."
+        "Independent TERRAIN-01 review of QA-001 PR #24 exact SHA 654081fe91a6c9a1cca763472beacb637074d038; inspected 6 real Sim state/save/autonomy regressions and CI run job log https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317: 88/88 Node PASS, Chromium offline layout/chapters/save tests PASS, Android package/signature PASS. Physical Android device QA NOT TESTED; PR not merged.",
+        "OWNER requested selective verified PR integration. PR #24 merged into integration/godseed-living-society-multitile-architecture on 4f53ed3738824273fbc5f17c531221d52bc9758d (https://github.com/jbob-coder/The-idle-open-world-universe/pull/24); exact merged-SHA offline QA SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39445365722 and https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39445373561. Independent original QA-001 review TERRAIN-01 preserved. Node/Chromium checks only; physical Android not certified."
       ],
       "status_history": [
         {
@@ -2021,6 +2022,13 @@
           "to": "verified",
           "actor": "TERRAIN-01",
           "reason": "Independent source and exact-SHA Actions log review: six regression suites, 88/88 Node tests, browser offline tests and APK structure pass; not asserting physical hardware."
+        },
+        {
+          "date": "2026-10-20T15:09:31.832Z",
+          "from": "verified",
+          "to": "done",
+          "actor": "OWNER",
+          "reason": "Owner-authorized acceptance of independently verified QA-001 after PR #24 merged into designated integration branch and exact merged-SHA offline QA PASS."
         }
       ],
       "verified_by": "TERRAIN-01"

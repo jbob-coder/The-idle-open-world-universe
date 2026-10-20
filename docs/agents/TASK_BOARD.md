@@ -3,7 +3,7 @@
 > **Source of truth:** `docs/agents/tasks.json`. NEVER manually edit this board; regenerate with `python tools/godseed_tasks.py board --write` and commit BOTH files.
 > The status is about a TASK, not the percentage of the whole game. `in_review` or a green PR is **not** `done` until integration is merged and accepted.
 
-**Tracked work:** 71 tasks · planned: 34 · ready: 6 · claimed: 0 · in_progress: 1 · blocked: 3 · in_review: 7 · verified: 20 · done: 0 · cancelled: 0.
+**Tracked work:** 71 tasks · planned: 34 · ready: 6 · claimed: 0 · in_progress: 1 · blocked: 3 · in_review: 7 · verified: 19 · done: 1 · cancelled: 0.
 
 **Coordination branch:** `docs/godseed-agent-task-governance-v1`  
 **Implementation baseline:** `integration/godseed-living-society-multitile-architecture` (PR #21).
@@ -52,7 +52,7 @@
 | **SIM-011** | P0 | people | **verified** | CORTEX-19 | SIM-001, SIM-002 | Individual intelligence, cognition, learning styles and personality effect on choices |
 | **SIM-012** | P0 | people | **planned** | — | SIM-004, SIM-011 | Family inheritance, kinship transmission and intergenerational variation |
 | **SIM-013** | P0 | people | **planned** | — | SIM-011, WLD-008 | Low-RAM population simulation LOD and offscreen event aggregation |
-| **QA-001** | P0 | qa | **verified** | GDS-KESTREL-1810 | — | Node state-machine regression for life, worlds and migration |
+| **QA-001** | P0 | qa | **done** | GDS-KESTREL-1810 | — | Node state-machine regression for life, worlds and migration |
 | **QA-002** | P0 | qa | **blocked** | — | QA-001 | Chromium offline Android-layout interaction acceptance |
 | **QA-003** | P0 | qa | **verified** | TERRAIN-01 | QA-001 | Gradle host + API29 emulator instrumentation and artifacts |
 | **QA-004** | P0 | qa | **blocked** | — | QA-003 | Physical Android 2 GB and 3 GB 20-minute soak · [#13](https://github.com/jbob-coder/The-idle-open-world-universe/issues/13) |
