@@ -147,9 +147,9 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "in_progress",
-      "owner": "FIX-62",
-      "work_branch": "feat/int-002-fix-62-footprints",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
       "depends": [
         "INT-001"
       ],
@@ -253,6 +253,13 @@
           "to": "in_progress",
           "actor": "FIX-62",
           "reason": "Owner-authorized existing INT-002 continuation: prevent duplicate building identifiers after sparse legacy v1 saves, deletion and reload; add persisted sequence tests. No third task claim."
+        },
+        {
+          "date": "2026-10-20T23:15:36.075Z",
+          "from": "in_progress",
+          "to": "ready",
+          "actor": "FIX-62",
+          "reason": "Owner-requested retirement; validated handoff in 43192e67. PR #56 and work SHA 3c23fef preserved; Android emulator pending. Released to successor, not verified or done."
         }
       ]
     },
