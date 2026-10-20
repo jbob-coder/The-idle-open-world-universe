@@ -47,6 +47,7 @@ function legacySite(s,town,type){
   const nearby=s.living.towns.flatMap(t=>t.buildings);
   if(nearby.some(b=>x<b.x+(b.w||1)&&x+2>b.x&&
     y<b.y+(b.h||1)&&y+2>b.y))continue;
+  if(!preservesEntrances(s,x,y,2,2))continue;
   let nearestRoad=4;
   for(let yy=y-2;yy<=y+3;yy++)for(let xx=x-2;xx<=x+3;xx++){
    if(xx<0||xx>=W||yy<0||yy>=H)continue;
@@ -79,6 +80,25 @@ function approachRoadDistance(s,ax,ay,x,y,w,h){
   }
  }
  return Infinity;
+}
+// Preserve previously accessible doorstep cells and their bounded two-step
+// road paths. A later building must not strand a resident at an old home.
+// The local check keeps seeded settlement growth inexpensive.
+function preservesEntrances(s,x,y,w,h){
+ for(const town of s.living.towns)for(const b of town.buildings){
+  const approach=b.entrance&&b.entrance.approachWorld;
+  if(!approach||!Number.isInteger(approach.x)||!Number.isInteger(approach.y))continue;
+  const ax=approach.x,ay=approach.y;
+  if(ax<x-2||ax>=x+w+2||ay<y-2||ay>=y+h+2)continue;
+  if(ax>=x&&ax<x+w&&ay>=y&&ay<y+h)return false;
+  // Only demand an access route if the saved doorway still had one before
+  // this candidate; legacy/corrupt saves may already contain disconnected
+  // buildings and should not stop all unrelated construction.
+  const prior=approachRoadDistance(s,ax,ay,-1,-1,0,0);
+  if(Number.isFinite(prior)&&
+     !Number.isFinite(approachRoadDistance(s,ax,ay,x,y,w,h)))return false;
+ }
+ return true;
 }
 function entranceFor(s,town,x,y,w,h){
  let best=null,bestScore=Infinity;
@@ -128,7 +148,7 @@ function site(s,town,type,starting=false){
        s.bot.x===px&&s.bot.y===py){clear=false;break;}
     if(tile===6)meadow++;
    }
-   if(!clear)continue;
+   if(!clear||!preservesEntrances(s,x,y,w,h))continue;
    const entrance=entranceFor(s,town,x,y,w,h);
    if(!entrance)continue;
    const preference=type==='farm'?meadow*2:type==='watchtower'?radius*.5:0;
