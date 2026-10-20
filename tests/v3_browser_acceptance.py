@@ -62,6 +62,9 @@ def run():
             built=page.evaluate("GodseedV3Debug.getState()")
             assert built["spent"]==4 and built["wood"]==built["harvested"]-4
             assert len(built["structures"])==1 and len(built["citizens"])==1 and built["citizens"][0]["alive"]
+            assert built["schemaVersion"] == 3
+            assert len(built["citizens"][0]["mind"]["memories"]) >= 2
+            assert page.locator("#memories").count() == 1
             assert page.evaluate("GodseedV3Debug.save()"), "V3 persistence failed"
             page.reload(wait_until="load")
             wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
@@ -101,6 +104,7 @@ def run():
         assert len(built["structures"]) == 1, "Autonomous shelter remains functional"
         assert built["wood"] == built["harvested"]-4
         assert len(built["citizens"])==1 and built["citizens"][0]["alive"]
+        assert len(built["citizens"][0]["mind"]["memories"]) >= 2
         assert page.evaluate("GodseedV3Debug.save()")
         page.reload(wait_until="load")
         wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)

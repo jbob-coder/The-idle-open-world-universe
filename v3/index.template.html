@@ -18,7 +18,7 @@
 #panel dt{color:#b4caba}#panel dd{margin:0;font-weight:650;text-align:right}
 #citizens{border-top:1px solid #64766f55;margin-top:7px;padding-top:5px}
 .person{padding:4px 0;border-bottom:1px solid #ffffff12}
-.person strong{color:#eacb87}#events{font-size:11px;color:#bed3ca;max-height:100px;overflow:auto}
+.person strong{color:#eacb87}#events,#memories{font-size:11px;color:#bed3ca;max-height:100px;overflow:auto}
 #bottom{position:fixed;left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:6px;flex-wrap:wrap;pointer-events:auto}
 button{background:#213731;border:1px solid #a5cbb26b;color:#fff2d5;border-radius:7px;padding:9px 11px;font-size:12px;font-weight:600;min-height:40px;cursor:pointer}
 button:focus-visible{outline:2px solid #f5da92}
@@ -26,7 +26,7 @@ button[aria-pressed="true"]{background:#6e6138}
 #hint{position:fixed;left:10px;top:48px;font-size:11px;color:#d6e1d5;background:#101a1fc9;padding:6px 9px;border-radius:6px;max-width:38vw}
 #warning{display:none;position:fixed;inset:30% 15%;background:#1d2631;border:2px solid #f5cf8f;padding:16px;text-align:center}
 @media(max-width:670px){#panel{width:min(205px,42vw);font-size:11px;top:38px;max-height:calc(100% - 100px);padding:6px}
-#panel h2{font-size:12px}#events{max-height:48px}#hint{display:none}#top strong{font-size:11px}
+#panel h2{font-size:12px}#events,#memories{max-height:48px}#hint{display:none}#top strong{font-size:11px}
 #bottom button{padding:7px;font-size:11px;min-height:35px}}
 </style>
 </head>
@@ -37,6 +37,7 @@ button[aria-pressed="true"]{background:#6e6138}
 <aside id="panel" aria-label="Observatorio del mundo">
 <h2>Observatorio divino</h2><dl id="stats"></dl>
 <div id="citizens" aria-live="off"></div>
+<h2>Recuerdos de Aria</h2><div id="memories"></div>
 <h2>Crónica de decisiones</h2><div id="events"></div>
 </aside>
 <div id="bottom">

@@ -83,14 +83,32 @@
       for(const c of state.citizens){
         const div=document.createElement("div");div.className="person";
         const title=document.createElement("strong");title.textContent=c.name+" · "+c.trait;
-        const desc=document.createElement("div");desc.textContent="Objetivo: "+c.goal+" | Salud "+c.health+"/100 | Hambre "+c.hunger+"/100 | Energía "+c.energy+"/20 | Madera "+c.harvested;
+        const desc=document.createElement("div");
+        const mind=c.mind;
+        desc.textContent="Objetivo: "+c.goal+
+          " | Salud "+c.health+"/100 | Hambre "+c.hunger+"/100 | Energía "+c.energy+"/20"+
+          " | Ánimo "+mind.emotions.contentment+"/100 | Estrés "+mind.emotions.stress+"/100"+
+          " | Curiosidad "+mind.personality.curiosity+"/100 | Prudencia "+mind.personality.caution+"/100"+
+          " | Experiencia recolectando "+mind.skills.foraging+"/100"+
+          " | Lugares conocidos "+mind.visited.length+" | Recuerdos "+mind.memories.length;
         div.appendChild(title);div.appendChild(desc);people.appendChild(div);
       }
       const events=el("events");events.textContent="";
+      const memoryPanel=el("memories");memoryPanel.textContent="";
+      const mind=state.citizens[0].mind;
+      const memoryLabels={build:"Su primer refugio",forage:"Encontró comida",
+        eat:"Su primera comida",discover:"Descubrió un lugar",
+        reflect:"Pensó en su hogar",hardship:"Pasó hambre"};
+      for(const entry of mind.memories.slice(-4).reverse()){
+        const div=document.createElement("div");
+        div.textContent="Ciclo "+entry.tick+" · "+(memoryLabels[entry.kind]||entry.kind);
+        memoryPanel.appendChild(div);
+      }
       for(const e of state.events.slice(-6).reverse()){
         const div=document.createElement("div");
         const labels={build:"construyó refugio",harvest:"recolectó madera",
-          forage:"recolectó bayas",eat:"comió",rest:"descansó"};
+          forage:"recolectó bayas",eat:"comió",rest:"descansó",
+          discover:"descubrió un lugar",reflect:"reflexionó",hardship:"pasó hambre"};
         div.textContent="Ciclo "+e.tick+" · "+e.actor+": "+(labels[e.action]||e.action);
         events.appendChild(div);
       }

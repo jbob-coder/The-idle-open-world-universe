@@ -5,7 +5,7 @@ const V3=require("../src/v3/sim.js");
 test("isolated V3 identity and exactly one living autonomous citizen",()=>{
   assert.equal(V3.STORAGE_KEY,"godseed-v3-prototype-v1");
   assert.notEqual(V3.STORAGE_KEY,"godseed-one-small-life-v1");
-  assert.equal(V3.VERSION,2);
+  assert.equal(V3.VERSION,3);
   const s=V3.create(14).snapshot();
   assert.equal(s.citizens.length,1);
   assert.equal(s.citizens[0].name,"Aria");
@@ -58,7 +58,7 @@ test("restore V3 schema 1, retaining exact resources and Bran's archived contrib
     forest:a.forest,wood:a.wood,harvested:a.harvested,spent:a.spent,
     structures:a.structures,events:[{tick:100,actor:"sim_bran",action:"harvest",details:{woodProduced:1}}]};
   const restored=V3.restore(JSON.stringify(legacy)).snapshot();
-  assert.equal(restored.schemaVersion,2);
+  assert.equal(restored.schemaVersion,3);
   assert.equal(restored.citizens.length,1);
   assert.equal(restored.legacyHarvested,2);
   assert.equal(restored.citizens[0].harvested,a.harvested-2);
@@ -91,4 +91,73 @@ test("different update cadence never changes authoritative state",()=>{
   once.advance(240);
   for(let i=0;i<240;i++)many.advance(1);
   assert.deepEqual(once.snapshot(),many.snapshot());
+});
+
+
+test("personality affects exploration and prudence without player commands",()=>{
+  const careful=V3.create(14).snapshot(),adventurous=V3.create(14).snapshot();
+  const cautiousMind=careful.citizens[0].mind;
+  const activeMind=adventurous.citizens[0].mind;
+  assert.equal(typeof activeMind.personality.curiosity,"number");
+  assert.notEqual(V3.create(14).snapshot().citizens[0].mind.personality.curiosity,
+    V3.create(15).snapshot().citizens[0].mind.personality.curiosity);
+  const n=V3.create(14).advance(1400);
+  const m=n.citizens[0].mind;
+  assert.ok(m.memories.length>=3,"must retain autobiographical events");
+  assert.ok(m.memories.some(x=>x.kind==="build"),"foundation remembered");
+  assert.ok(m.memories.some(x=>x.kind==="eat"),"first meal remembered");
+  assert.ok(m.skills.foraging>0,"learned from gathering");
+  assert.ok(m.visited.length>=3,"real places remembered");
+  assert.equal(V3.validate(n),true);
+});
+test("stress causes deliberate reflection, with persisted emotional consequence",()=>{
+  const game=V3.create(14);
+  const mature=game.advance(750);
+  const state=JSON.parse(JSON.stringify(mature));
+  const c=state.citizens[0];
+  c.x=5;c.z=5;c.energy=20;c.hunger=95;
+  c.mind.emotions.stress=90;
+  c.mind.visited.push(5+5*V3.SIZE);
+  c.mind.visited=[...new Set(c.mind.visited)];
+  state.food=Math.max(state.food,5);
+  state.foodGathered=state.food+state.foodEaten;
+  state.foodGrown=state.foodGathered+state.bushes.reduce((n,b)=>n+b.berries,0)-12;
+  assert.equal(V3.validate(state),true);
+  const restored=V3.restore(JSON.stringify(state)),next=restored.advance(1);
+  assert.equal(next.citizens[0].goal,"reflexionar en refugio");
+  assert.ok(next.citizens[0].mind.emotions.stress<90);
+  assert.equal(next.citizens[0].mind.reflections,state.citizens[0].mind.reflections+1);
+  assert.deepEqual(V3.restore(restored.serialize()).snapshot(),next);
+});
+test("V3 v2 save migrates without changing survival counters or world resources",()=>{
+  const current=V3.create(42).advance(300);
+  const legacy=JSON.parse(JSON.stringify(current));
+  legacy.schemaVersion=2;
+  delete legacy.citizens[0].mind;
+  const loaded=V3.restore(JSON.stringify(legacy)).snapshot();
+  assert.equal(loaded.schemaVersion,3);
+  assert.equal(loaded.tick,legacy.tick);
+  assert.equal(loaded.wood,legacy.wood);
+  assert.equal(loaded.food,legacy.food);
+  assert.equal(loaded.citizens[0].health,legacy.citizens[0].health);
+  assert.equal(loaded.citizens[0].hunger,legacy.citizens[0].hunger);
+  assert.equal(loaded.citizens[0].harvested,legacy.citizens[0].harvested);
+  assert.deepEqual(loaded.forest,legacy.forest);
+  assert.ok(loaded.citizens[0].mind.skills.foraging>0);
+  assert.equal(V3.validate(loaded),true);
+});
+test("memory stays bounded and tampering is rejected across 20k ticks",()=>{
+  for(const seed of [1,14,42,100,65535]){
+    const game=V3.create(seed);game.advance(20000);
+    const s=game.snapshot();
+    assert.equal(s.citizens[0].alive,true);
+    assert.ok(s.citizens[0].mind.memories.length<=20);
+    assert.ok(s.citizens[0].mind.visited.length<=400);
+    assert.ok(game.serialize().length<64000);
+    assert.deepEqual(V3.restore(game.serialize()).snapshot(),s);
+    const corrupt=game.snapshot();
+    corrupt.citizens[0].mind.memories[0].tick=s.tick+1;
+    assert.equal(V3.validate(corrupt),false);
+    assert.throws(()=>V3.restore(JSON.stringify(corrupt)),RangeError);
+  }
 });
