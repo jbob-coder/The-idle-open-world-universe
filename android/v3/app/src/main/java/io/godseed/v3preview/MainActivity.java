@@ -38,7 +38,23 @@ public final class MainActivity extends Activity {
         "canvas:!!c,canvasWidth:c?c.width:0,canvasHeight:c?c.height:0," +
         "warning:w&&w.style.display==='block'?w.textContent:''," +
         "userAgent:navigator.userAgent})})()";
+    private static final String SNAPSHOT_SCRIPT =
+        "(function(){var d=window.GodseedV3Debug;" +
+        "if(!d)return 'UNAVAILABLE';var s=d.getState();" +
+        "return [s.seed,s.tick,s.harvested,s.spent,s.wood," +
+        "s.structures.length].join(':')})()";
     private WebView web;
+
+    private void logSnapshot(WebView active, String label, Runnable complete) {
+        if (web != active || isDestroyed()) {
+            if (complete != null) complete.run();
+            return;
+        }
+        active.evaluateJavascript(SNAPSHOT_SCRIPT, result -> {
+            Log.i(TAG, "STATE_" + label + "=" + result);
+            if (complete != null) complete.run();
+        });
+    }
 
     private void inspectRuntime(WebView active, int attempt) {
         if (web != active || isDestroyed() || isFinishing()) return;
@@ -94,6 +110,9 @@ public final class MainActivity extends Activity {
                 // renderer initialized. Probe a bounded number of times.
                 // Never report a fabricated success when WebGL is unavailable.
                 Handler handler = new Handler(Looper.getMainLooper());
+                // This state is read-only. Restored V3 saves start paused,
+                // allowing an exact resource/tick comparison after relaunch.
+                handler.postDelayed(() -> logSnapshot(view, "LOADED", null), 1200);
                 for (int attempt = 0; attempt < 5; attempt++) {
                     final int number = attempt;
                     handler.postDelayed(() -> inspectRuntime(view, number),
@@ -129,8 +148,16 @@ public final class MainActivity extends Activity {
         // holding up WebView pause indefinitely if JS is unavailable.
         final WebView active = web;
         if (active != null) {
-            active.evaluateJavascript(SAVE_SCRIPT, ignored -> {
-                if (web == active) active.onPause();
+            active.evaluateJavascript(SAVE_SCRIPT, result -> {
+                Log.i(TAG, "LIFECYCLE_SAVE=" + result);
+                if (web != active) return;
+                if ("true".equals(result)) {
+                    logSnapshot(active, "SAVED", () -> {
+                        if (web == active) active.onPause();
+                    });
+                } else {
+                    active.onPause();
+                }
             });
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if (web == active) active.onPause();

@@ -39,6 +39,40 @@ done
 adb shell screencap -p /sdcard/godseed-v3-preview.png
 adb pull /sdcard/godseed-v3-preview.png "$SCREEN"
 test -s "$SCREEN"
+
+# Independently verify Activity onPause -> V3 local save -> full process
+# restart -> paused state restore, even on an emulator without usable WebGL.
+# The simulated world does not need the graphics pipeline to stay persistent.
+adb shell input keyevent 3
+saved=""
+for attempt in $(seq 1 15); do
+  adb logcat -d -s GODSEED_V3:I > "$LOG"
+  saved="$(sed -n 's/.*STATE_SAVED=//p' "$LOG" | tail -n 1)"
+  if [[ -n "$saved" ]]; then break; fi
+  sleep 1
+done
+if [[ -z "$saved" ]]; then
+  echo "FAIL: Android V3 onPause did not record saved state" >&2
+  cat "$LOG" >&2
+  exit 1
+fi
+adb shell am force-stop "$PACKAGE"
+adb shell am start -W -n "$PACKAGE/.MainActivity"
+restored=""
+for attempt in $(seq 1 20); do
+  adb logcat -d -s GODSEED_V3:I > "$LOG"
+  restored="$(sed -n 's/.*STATE_LOADED=//p' "$LOG" | tail -n 1)"
+  count="$(grep -c 'STATE_LOADED=' "$LOG" || true)"
+  if [[ "$count" -ge 2 && -n "$restored" ]]; then break; fi
+  sleep 1
+done
+if [[ "$saved" != "$restored" || "$count" -lt 2 ]]; then
+  echo "FAIL: native V3 world changed or was lost across Activity restart" >&2
+  echo "SAVED=$saved RESTORED=$restored LOADED_COUNT=$count" >&2
+  cat "$LOG" >&2
+  exit 1
+fi
+echo "PASS: Android lifecycle preserved seed,tick,harvest,spent,wood,shelters"
 if [[ "$found" -ne 1 ]]; then
   echo "FAIL: V3 APK launched but never reported a verified WebGL context" >&2
   cat "$LOG" >&2
