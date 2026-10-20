@@ -1,3 +1,5 @@
+> **REGISTRO HISTÓRICO (2026-10-20):** Las identidades/tareas sugeridas aquí no representan propietarios ni disponibilidad actuales. No activar bots directamente desde esta tabla; leer [autoridad de producto y referencias](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) y el registro vivo de tareas.
+
 # GODSEED — Primera tanda de bots y tareas paralelizables
 **Estado:** propuesta de lanzamiento, no reserva. Las tareas `ready` deben reclamarse en `tasks.json` antes de modificar código; una sugerencia aquí **NO** asigna propietario. Consultar [TASK_BOARD.md](./TASK_BOARD.md) en GitHub en vivo.
 

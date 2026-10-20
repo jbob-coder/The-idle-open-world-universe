@@ -174,5 +174,9 @@
     "gameScreenshotsMustBeRealRuntime": true,
     "conceptScreenshotsAreNotProof": true,
     "physicalAndroidQARequiredForRelease": true
-  }
+  },
+  "referenceScope": "legacy-canvas2d-source-art-validation-only",
+  "ownerProductTarget": "3D Pixel Squares autonomous medieval society; renderer/engine undecided",
+  "currentProductAuthority": "docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md on docs/godseed-agent-task-governance-v1",
+  "compatibilityNote": "Preserve tested 2D sprite rules for legacy Canvas output; not a mandate banning a future 3D renderer."
 }

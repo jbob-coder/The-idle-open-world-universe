@@ -1,3 +1,5 @@
+> **PLAN DE DEPENDENCIAS HISTÓRICO (2026-10-20):** La visión del producto ahora es **3D Pixel Squares + civilización autónoma**, con Canvas 2D como compatibilidad existente. La integración real depende del registro actualizado, no de este plan de 2026-10-18. Consultar [autoridad de producto y referencias](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
 # GODSEED — Plan de ejecución integrado y dependencias
 
 **Horizonte de producto:** simulador medieval visual de vida, poblaciones y civilizaciones con mundo espacialmente continuo. **No es solo un RPG de combates y capítulos.**  
