@@ -1,0 +1,25 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'io.godseed.v3preview'
+    compileSdk 35
+    defaultConfig {
+        // Separate package and data directory from the old GODSEED V1 application.
+        applicationId 'io.godseed.v3preview'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '0.1.0-preview'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets { main { assets.srcDirs += ["$buildDir/generated/v3Assets"] } }
+}
+tasks.register('copyV3OfflineGame', Copy) {
+    from file('../../../GODSEED-V3-Play.html')
+    into layout.buildDirectory.dir('generated/v3Assets')
+    rename { ignored -> 'index.html' }
+}
+tasks.named('preBuild') { dependsOn tasks.named('copyV3OfflineGame') }

@@ -1,0 +1,71 @@
+name: GODSEED V3 isolated Android APK
+on:
+  push:
+    paths:
+      - 'android/v3/**'
+      - 'GODSEED-V3-Play.html'
+      - 'src/v3/**'
+      - 'v3/**'
+      - 'build_v3.py'
+      - '.github/workflows/v3-android-preview.yml'
+  workflow_dispatch:
+jobs:
+  build-v3-debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify packaged HTML remains reproducible
+        run: |
+          python build_v3.py
+          git diff --exit-code -- GODSEED-V3-Play.html
+      - name: Install SDK 35
+        shell: bash
+        run: |
+          SDKROOT="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDKMANAGER="$(command -v sdkmanager || find "$SDKROOT/cmdline-tools" -name sdkmanager -type f | sort -V | tail -1)"
+          test -n "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" --install 'platforms;android-35' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Assemble separately installable V3 Android debug package
+        run: gradle -p android/v3 :app:assembleDebug --no-daemon --stacktrace
+      - name: Verify offline asset and isolated application identity
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile
+          import xml.etree.ElementTree as ET
+          path=Path("android/v3/app/build/outputs/apk/debug/app-debug.apk")
+          assert path.is_file(),path
+          with zipfile.ZipFile(path) as archive:
+              assert archive.testzip() is None
+              assert archive.read("assets/index.html")==Path("GODSEED-V3-Play.html").read_bytes()
+              assert any(p.startswith("classes") and p.endswith(".dex") for p in archive.namelist())
+          root=ET.parse("android/v3/app/src/main/AndroidManifest.xml").getroot()
+          android="{http://schemas.android.com/apk/res/android}"
+          permissions=[x.get(android+"name") for x in root.findall("uses-permission")]
+          assert not permissions,permissions
+          build=Path("android/v3/app/build.gradle").read_text()
+          assert "io.godseed.v3preview" in build and "io.godseed.one" not in build
+          print("PASS isolated offline GODSEED V3 APK structure",path.stat().st_size,"bytes")
+          PY
+      - name: Publish installable experimental APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: godseed-v3-isolated-android-debug-apk
+          retention-days: 14
+          if-no-files-found: error
+          path: android/v3/app/build/outputs/apk/debug/app-debug.apk
