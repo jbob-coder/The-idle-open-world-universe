@@ -839,9 +839,9 @@
       "priority": "P0",
       "area": "world",
       "title": "Bound active chunks, offscreen simulation and memory",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "SENTRY-58",
+      "work_branch": "feat/wld-008-sentry-offscreen",
       "depends": [
         "WLD-002",
         "WLD-003"
@@ -864,6 +864,13 @@
           "to": "ready",
           "actor": "FORGE-27",
           "reason": "All prerequisites independently verified; task available to claim; no implementation claimed."
+        },
+        {
+          "date": "2026-10-20T13:23:46.552Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SENTRY-58",
+          "reason": "Owner-authorized recovery: bounded offscreen simulation and deterministic autonomous settlement proof on a separately tested branch; existing save/runtime untouched."
         }
       ]
     },
