@@ -1,3 +1,17 @@
+# GODSEED V3 — ACTIVE AGENT INSTRUCTIONS (2026-10-20)
+
+**The owner's current direction is the offline Android 3D Pixel Squares autonomous-civilization game.** The old instructions under the separator are **historical Canvas 2D compatibility guidance**, not a prohibition on WebGL/3D, nor a standing assignment to the 2010s-era Codex branches. Resolve all conflicts through the [current project authority](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and the latest direct owner decisions. This override applies **before** any prior “hard,” “binding,” or “non-negotiable” statement below.
+
+**Active V3 source:** `src/v3/sim.js` (seeded simulation), `src/v3/view.js` (offline WebGL), `src/v3/app.js` (controls/save), `v3/index.template.html`, `build_v3.py`, `tests/v3_sim.test.js`, `tests/v3_browser_acceptance.py`, and `.github/workflows/v3-3d-proof.yml`. Baseline and planned features must be verified at the exact branch HEAD, not inferred from old documentation.
+
+**Boundaries:** This is a separate, opt-in 20×20 WebGL prototype with two simulated settlers and finite timber. Its save key is `godseed-v3-prototype-v1`; the old game uses `godseed-one-small-life-v1`. Never overwrite legacy saves, silently replace the existing Android host, select a new renderer engine, or claim physical-Android FPS/memory results from desktop Chromium. Maintain strict CSP rather than introducing `unsafe-eval`; browser automation must not require dynamic evaluation disallowed by CSP.
+
+**Verification:** run `node --test tests/v3_sim.test.js`, `python build_v3.py`, `python tests/v3_browser_acceptance.py`, and verify exact-commit workflow results. The [V3 offline WebGL workflow](https://github.com/jbob-coder/The-idle-open-world-universe/actions/workflows/v3-3d-proof.yml) verifies browser output and save/reload, **not** a 3D APK. The older art validator remains applicable to the 2D assets only. Treat old unmerged feature branches and outdated task counts as historical/reference scope; coordinate assignments with the current task registry before claiming a task.
+
+---
+
+## Historical 2D Codex instructions (retained for compatibility; superseded as V3 product policy)
+
 # GODSEED — instructions for Codex Cloud
 Repository authority: this repository. Target handoff branch: `prep/codex-skyworld-v0.5`. Integration base: `feat/skyview-zoom-v0.4`, not main (v0.2, v0.3, v0.4 are stacked experimental PRs).
 
