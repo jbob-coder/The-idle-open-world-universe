@@ -39,7 +39,7 @@ def run():
             wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
             assert page.evaluate("GodseedV3Debug.hasWebGL()"), "WebGL 3D context unavailable"
             assert page.evaluate("typeof Element.prototype.replaceChildren") == "undefined"
-            assert page.locator("#stats dt").count() == 7
+            assert page.locator("#stats dt").count() == 11
             assert page.locator("#citizens .person").count() == 2
             initial=page.evaluate("""() => {
                 const s=GodseedV3Debug.newWorld(14);
@@ -48,6 +48,7 @@ def run():
             }""")
             assert initial["tick"]==0, "reset must be atomic before frame-driven stepping"
             assert len(initial["citizens"])==2
+            assert initial["schemaVersion"]==2 and len(initial["berries"])==8
             page.get_by_role("button",name="Acercar +").click()
             page.get_by_role("button",name="Alejar −").click()
             page.mouse.move(150,180)
@@ -62,6 +63,7 @@ def run():
             built=page.evaluate("GodseedV3Debug.getState()")
             assert built["spent"]==4 and built["wood"]==built["harvested"]-4
             assert len(built["structures"])==1
+            assert built["food"]==built["foraged"]-built["eaten"]
             assert page.evaluate("GodseedV3Debug.save()"), "V3 persistence failed"
             page.reload(wait_until="load")
             wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
