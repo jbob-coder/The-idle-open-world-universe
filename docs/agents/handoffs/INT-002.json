@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "retiring_bot": "FIX-62",
+  "reason": "owner_request",
+  "created_utc": "2026-10-20T23:13:32.245Z",
+  "owner_at_handoff": "FIX-62",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "7863edd87fe28de3b24664b921aa0a2cd40fd86a",
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact.",
+  "unpublished_changes": false,
+  "task_id": "INT-002",
+  "last_known_status": "in_progress",
+  "work_branch": "feat/int-002-fix-62-footprints",
+  "work_sha": "3c23fef53da15e536400831a05e3f1989912bbda",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/56",
+  "source_base_branch": "integration/godseed-living-society-multitile-architecture",
+  "source_base_sha": "a03d7825b98000ef28fd6712dec8db0f46da6af9",
+  "dependencies": [
+    "INT-001"
+  ],
+  "related_prs": [
+    "#35 CIV-001 metric zoning",
+    "#36 INT-003 interior persistence",
+    "#21 2D settlement baseline"
+  ],
+  "summary": "FIX-62 owner-requested retirement. Actual INT-002 exterior geometries and collision implemented on preserved successor branch: 3x3–6x6 building sizes with seeded descending safe-size selection and compact 2x2 fallback; access-to-road doorway protection; dynamic actor collision guards; per-cell fog/minimap visibility; exact legacy v1 footprint restore; saved monotonic town.nextBuildingId to prevent duplicate IDs after deleted or sparse legacy structures. PR #56 ready for independent review but still open/unmerged. Existing 2D Canvas renderer is compatibility baseline, NOT a production 3D scene. The retirement request supersedes continued coding in this chat.",
+  "changed_files": [
+    "src/living.js",
+    "src/sim.js",
+    "src/ui.js",
+    "tests/metric_footprints.test.js",
+    "tests/multitile_settlement.test.js"
+  ],
+  "tests": [
+    "PASS: exact PR #56 head 3c23fef53da15e536400831a05e3f1989912bbda, node --test tests/*.test.js: 109/109 pass, 0 fail; browser/offline smoke PASS. https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39510936020",
+    "PASS: exact PR #56 head 3c23fef53da15e536400831a05e3f1989912bbda; Android Gradle build and offline local-asset checks PASS in job gradle-webview-and-storage. https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39510936001",
+    "NOT_RUN: Completed native Android API29 instrumentation RESULT is unavailable at handoff; emulator-launch-and-pack-install job remained in_progress in run 39510936001. Success of Gradle build alone is not an emulator acceptance pass. Re-query job and logs.",
+    "NOT_RUN: physical Android devices with 2GB/3GB total RAM, PSS/RSS/FPS, thermals and 20-minute soak.",
+    "NOT_RUN: independent source review, approved integration merge and 3D renderer feasibility."
+  ],
+  "blockers": [
+    "Owner requested FIX-62 definitive retirement. INT-002 still in_progress at this handoff; preserve work then legally release to ready only if retirement workflow and concurrency checks permit.",
+    "Native Android API29 emulator instrumentation was still running at observed checkpoint. Do not claim finished Android acceptance until exact-head result is SUCCESS.",
+    "No independent reviewer submitted PR #56 review; do not mark verified or done."
+  ],
+  "risks": [
+    "save version 1 must preserve building identity and legacy 1x1/2x2 dimensions; new town.nextBuildingId is an optional persisted field.",
+    "Very dense terrain can require 2x2 fallback rather than always 3x3–6x6; review causal build access and collision interactions with CIV-001 and INT-003.",
+    "Legacy Canvas/WebView 2D implementation is not owner-approved final 3D Pixel Squares observer. PR #50 remains unassigned feasibility proposal.",
+    "Physical Android low-memory performance and combined PR integration not yet certified."
+  ],
+  "save_notes": "Storage remains godseed-one-small-life-v1 / outer state v1, legacy 1x1 and 2x2 footprints survive restore. New monotonic town.nextBuildingId reconciles against persisted building suffixes; verified with 2 exact-head Node save/restore regression tests. No forced schema migration, key change, Android signing change or network permission. The fully assembled integration has not been independently accepted.",
+  "next_actions": [
+    "Read latest tasks.json and this handoff; check exact PR #56 SHA and Android Actions run #39510936001 for emulator PASS/FAIL. On fail, authorized new owner must claim after ready and repair on a fresh branch; on pass, record evidence and request independent review.",
+    "Verify deterministic v1 saves, actor collision, door access, 3x3–6x6 exterior variants and missing physical-Android QA using actual captured measurements.",
+    "Obtain independent code review of PR #56, coordinate merge order with CIV-001/INT-003, and only then mark verified or done as documented; do not merge without integrator approval.",
+    "Preserve current branch/commit; successor should create distinct BOT_ID and fresh branch from saved work SHA after a real legal ready→claimed→in_progress transition."
+  ],
+  "do_not_repeat": [
+    "Do not re-create FORGE-27's empty predecessor branch or overwrite it; FIX-62 PR #56 has the actual code and 109 exact-head passing Node tests.",
+    "Do not duplicate PR #56 or reopen the work as a new task solely to release an owner's claim.",
+    "Do not change legacy saved building IDs or remove compact 2x2 fallback without separate migration/QA.",
+    "Do not claim that the 2D runtime is a completed 3D game, or that emulator build success proves actual low-memory device acceptance."
+  ]
+}

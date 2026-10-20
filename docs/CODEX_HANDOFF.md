@@ -1,3 +1,5 @@
+> **SUPERSEDED CODING HANDOFF (2026-10-20):** Earlier 2D Codex prep snapshot, not the present bot launch order or current task totals. Future product is 3D Pixel Squares autonomous societies. Consult [authority and corrected reference precedence](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and live coordination.
+
 # Exact handoff state (2026-10-17)
 
 Repo: `jbob-coder/The-idle-open-world-universe`.

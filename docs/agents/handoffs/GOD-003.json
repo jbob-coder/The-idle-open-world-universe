@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "retiring_bot": "FIX-62",
+  "reason": "owner_request",
+  "created_utc": "2026-10-20T23:13:32.245Z",
+  "owner_at_handoff": "FIX-62",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "7863edd87fe28de3b24664b921aa0a2cd40fd86a",
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact.",
+  "unpublished_changes": false,
+  "task_id": "GOD-003",
+  "last_known_status": "in_review",
+  "work_branch": "feat/god-003-fix-62-lifecycle",
+  "work_sha": "0a2c1b1ec12e1831c64b16e652926c9deab32865",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/55",
+  "source_base_branch": "feat/god-002-forge-27-autonomy",
+  "source_base_sha": "a9822e8c6037b7f0baa07b55e9a7ea95fbb49905",
+  "dependencies": [
+    "GOD-002",
+    "SIM-002"
+  ],
+  "summary": "FIX-62 owner-requested retirement. Recovered LIFE-26 unpublished-to-integration lifecycle work from c06af2b, published on new branch as PR #55. Real observed non-coercive divine guidance phases, finite completed outcome validation, tamper-resistant refusal on v1 restore, actor identity/duplicate event defense, expiry, read-only no-HTML HUD and WebView-compatible JavaScript. Seven new GOD-003 regression tests, source and API29 emulator on exact feature HEAD passed. PR is open, in_review; independent reviewer and integration remain pending. Does not implement a 3D renderer.",
+  "changed_files": [
+    "build.py",
+    "index.template.html",
+    "src/choices.js",
+    "src/divine/lifecycle.js",
+    "src/living.js",
+    "src/ui.js",
+    "tests/god_guidance_lifecycle.test.js"
+  ],
+  "tests": [
+    "PASS: exact PR #55 head 0a2c1b1ec12e1831c64b16e652926c9deab32865, node --test tests/*.test.js: 115/115 pass, 0 fail, 7 GOD-003 regressions; offline Chromium smoke PASS. https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39448389758",
+    "PASS: exact PR #55 head 0a2c1b1ec12e1831c64b16e652926c9deab32865; Gradle native Android host built, API29 emulator 6/6 instrumentation PASS (load/restore/exit). https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39448389780",
+    "FAIL: earlier superseded HUD code at ca7b9f39c8eccbddb0406bf89adcb1a61c728bd2 had 3/6 API29 instrumentation failures; repaired by removing optional-chain syntax and confirmed in latest passing exact-head Android run. https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39447351757",
+    "NOT_RUN: physical low-RAM Android phone 2/3GB PSS/RSS, 20-minute soak, thermal and battery benchmarks.",
+    "NOT_RUN: independent review, merged integrated product, full 3D God-view compatibility."
+  ],
+  "blockers": [
+    "No independent reviewer has submitted approval for PR #55; in_review must stay in_review, not ready/verified/done.",
+    "GOD-003 branch targets its GOD-002 dependency chain; combined current 3D integration selection remains open."
+  ],
+  "risks": [
+    "Correlated observed action does not prove divine suggestion caused the act: UI uses factual wording, not causal attribution.",
+    "Preserve citizen consent, legacy v1 whisper records and their non-forgeable action evidence across migration.",
+    "The previous optional chaining WebView parser regression is repaired at exact final source HEAD; avoid reintroducing unsupported syntax.",
+    "Legacy 2D renderer is transitional, not owner's final 3D Pixel Squares observer."
+  ],
+  "save_notes": "Preserves localStorage key godseed-one-small-life-v1 and outer save version 1. Tests protect previously declined citizens from forged result and prevent duplicate/resource-zero evidence. Android API29 emulator launch/reload tests passed, physical low-memory QA still NOT_RUN.",
+  "next_actions": [
+    "Do not release GOD-003 to ready. Keep PR #55 in_review and ask a reviewer other than FIX-62 to examine exact source HEAD and evidence.",
+    "Reviewer must confirm refusal/consent and actor-specific observed outcomes survive v1 save/restore, read-only text rendering, zero false credit and exact-head CI pass.",
+    "Integrate GOD-003 only after review and approved dependency merge order with #34, #41/#45 and newer owner 3D requirements; do not self-verify.",
+    "A successor in a new chat must use a distinct bot identity and consult current coordination registry, rather than inheriting FIX-62 permissions."
+  ],
+  "do_not_repeat": [
+    "Do not restart GOD-003 from the original LIFE-26 handoff/commit c06af2b; PR #55 already contains recovered improvements and seven passing regressions.",
+    "Do not assume earlier failed WebView build means latest PR #55 Android build failed; use the passing exact-head run.",
+    "Do not label the 2D HUD or old whisper interface as final 3D God powers."
+  ]
+}

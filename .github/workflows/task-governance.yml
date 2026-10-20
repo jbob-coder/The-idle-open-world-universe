@@ -1,0 +1,35 @@
+name: GODSEED Agent Task Governance
+
+on:
+  push:
+    branches:
+      - docs/godseed-agent-task-governance-v1
+    paths:
+      - 'docs/agents/**'
+      - 'tools/godseed_tasks.py'
+      - 'tools/godseed_handoff.py'
+      - 'tests/test_task_*.py'
+      - '.github/workflows/task-governance.yml'
+  pull_request:
+    paths:
+      - 'docs/agents/**'
+      - 'tools/godseed_tasks.py'
+      - 'tools/godseed_handoff.py'
+      - 'tests/test_task_*.py'
+      - '.github/workflows/task-governance.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  task-governance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate machine registry and generated board
+        run: python3 tools/godseed_tasks.py validate
+      - name: Validate preserved chat handoffs
+        run: python3 tools/godseed_handoff.py check
+      - name: Test state-machine invariants
+        run: python3 -m unittest discover -s tests -p 'test_task_*.py' -v

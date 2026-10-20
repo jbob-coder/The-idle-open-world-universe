@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "task_id": "WLD-008",
+  "retiring_bot": "SENTRY-58",
+  "reason": "owner_request",
+  "created_utc": "2026-10-20T23:15:25.416Z",
+  "last_known_status": "in_review",
+  "owner_at_handoff": "SENTRY-58",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "43192e67e4ff15ff30134f0ee4fa58a87f77225a",
+  "work_branch": "feat/wld-008-sentry-offscreen",
+  "work_sha": "52a5a12dd35cc31a659c15055d5e058009dfd206",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/51",
+  "summary": "Owner-requested SENTRY-58 retirement with WLD-008 opt-in offline society published and in review. Two autonomous settlers consume finite forest timber, build persistent hamlet/shelter, operate on reduced offscreen cadence, bounded chunk cache/event history and separately versioned save. 100-seed disconnected-start regression fixed; NOT integrated into actual 3D Android gameplay.",
+  "changed_files": [
+    "src/world/offscreen_society.js",
+    "tests/offscreen_society.test.js",
+    "docs/WLD_008_OFFSCREEN_PROOF.md"
+  ],
+  "tests": [
+    "PASS: exact-head offline Node/Chromium QA on 52a5a12dd35cc31a659c15055d5e058009dfd206, https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39432294118",
+    "PASS: exact-head emulator build workflow on 52a5a12dd35cc31a659c15055d5e058009dfd206, https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39432398173 (not evidence of V3 gameplay integration)",
+    "PASS: isolated 100-seed V8 founding, wood ledger and save/restore sweep plus repository regression",
+    "NOT_RUN: combined legacy V1 overlay + WLD-008 + current V3 runtime; low-RAM physical Android soak"
+  ],
+  "blockers": [
+    "Draft PR #51 awaits independent reviewer.",
+    "WLD-007 protects 64x48 old map but 34 of 100 WLD-008 founding pairs overlap under naive integration (issue #54)."
+  ],
+  "risks": [
+    "WLD-001/002/003 stacked dependency chain and lack of unified renderer-neutral world store.",
+    "Proof has only two simulated residents; do not label as population-scale LOD."
+  ],
+  "save_notes": "Separate WLD-008 schemaVersion:1 opt-in save; original v1 localStorage identity and data unchanged. Combined migration untested.",
+  "next_actions": [
+    "Independently review PR #51 at actual current HEAD, test 100-seed conservation and isolated save integrity.",
+    "Plan canonical world store and frontier-only founding locations outside protected old map; test combined save compatibility.",
+    "Prove low-memory Android hardware performance before acceptance."
+  ],
+  "do_not_repeat": [
+    "Do not merge draft PR #51 or self-verify SENTRY-58 work.",
+    "Do not remove historic 64x48 terrain or treat this module as installed V3 gameplay."
+  ],
+  "unpublished_changes": false,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact."
+}

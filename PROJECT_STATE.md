@@ -1,3 +1,5 @@
+> **HISTORICAL ENGINEERING LOG (2026-10-20 NOTICE):** Entries below record older branches and milestones, not the current product authority or task roster. Later owner intent is **3D Pixel Squares with autonomous civilizations**; existing Canvas 2D remains a migration baseline. Treat dated "current objective", 2D prohibitions, test counts and 25/30/45 task totals as historical. Refer to [project authority and reference corrections](docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and live [task registry](docs/agents/tasks.json).
+
 ## Chapter I autonomous playable milestone — 2026-10-18
 
 BRANCH: `feat/godseed-chapter-one-complete`, based on `feat/godseed-android-storage-host` (PR #6), based on GODSEED v1 PR #5. No merge to `main`.

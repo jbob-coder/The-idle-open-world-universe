@@ -1,3 +1,5 @@
+> **SUPERSEDED BUILD PROMPT (2026-10-20):** Older Canvas 2D skyview instructions below, including "not 3D", are historical. The owner's target is an autonomous 3D Pixel Squares society, not the old Codex task scope. See [GODSEED authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and live task ownership before doing any work.
+
 > **Updated handoff:** The complete prompt to paste into Codex Cloud is now [CODEX_CLOUD_READY_PROMPT.md](CODEX_CLOUD_READY_PROMPT.md). This earlier prompt remains supporting implementation guidance. Treat [GODSEED_INTENDED_GAME.md](GODSEED_INTENDED_GAME.md), [ANDROID_HTML_APK_SPEC.md](ANDROID_HTML_APK_SPEC.md), and [HANDOFF_READINESS.md](HANDOFF_READINESS.md) as additional authority.
 
 # Copy/paste into Codex Cloud — implement GODSEED medieval skyworld

@@ -1,0 +1,3132 @@
+{
+  "schema_version": 1,
+  "project": "GODSEED — Living World",
+  "coordinator_branch": "docs/godseed-agent-task-governance-v1",
+  "implementation_base": "integration/godseed-living-society-multitile-architecture",
+  "baseline_pr": 21,
+  "as_of": "2026-10-18",
+  "status_values": [
+    "planned",
+    "ready",
+    "claimed",
+    "in_progress",
+    "blocked",
+    "in_review",
+    "verified",
+    "done",
+    "cancelled"
+  ],
+  "note": "Registry is authoritative task metadata. DOCS TASK_BOARD.md generated from it; no task is done solely because code exists in an unmerged branch.",
+  "tasks": [
+    {
+      "id": "GOV-001",
+      "priority": "P0",
+      "area": "governance",
+      "title": "Repository task registry, bot lifecycle, automation and handoff",
+      "status": "verified",
+      "owner": "ARCHIVIST",
+      "work_branch": "docs/godseed-agent-task-governance-v1",
+      "depends": [],
+      "acceptance": "Machine-readable task board, transition validator, ownership protocol, bot prompt and PR; validators green.",
+      "issue": null,
+      "pr": 22,
+      "evidence": [
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; governance CLI and tests commit a9cf45644b2c729902e507885a2fef83efc3eace; governance CI SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39182635075; general offline QA pending; no merge",
+        "Independent scoped GOV-001 review on PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22#pullrequestreview-5566342411 at reviewed source SHA aae4db1dc6c759e7edf88928bba57b61c0e4c4dc; subsequent commits through b4ba72d5e2f83a9e3438a83e90506df3625ad42a change only tasks.json/TASK_BOARD.md; exact current HEAD governance CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39190405487 COMPLETED SUCCESS, schema/DAG/history generated board, handoff check and 25/25 unit tests. Repository coordination protocol verified; no background executor/merge, draft PR #22 remains unmerged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "ARCHIVIST",
+          "reason": "ARCHIVIST reserves governance task before touching workflow files; same-file SHA lock"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "ARCHIVIST",
+          "reason": "ARCHIVIST is authoring validator, agent lifecycle docs, bot handoff, and GitHub QA"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "ARCHIVIST",
+          "reason": "Bot registry, generated board, status CLI/ownership validation, prompt and workflow delivered for independent PR review"
+        },
+        {
+          "date": "2026-10-19T02:32:09.587Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent exact-source review of task registry, CLI transitions, bot ownership protocol and tests; current SHA governance CI passed. No merge authorization."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "INT-001",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Safe layers, metric grid, doors and interiors technical contract",
+      "status": "verified",
+      "owner": "DOORKEEPER",
+      "work_branch": "docs/godseed-agent-task-governance-v1",
+      "depends": [],
+      "acceptance": "Normative contract defines grids, transition, saves, safety, deterministic tests and explicit non-goals.",
+      "issue": null,
+      "pr": 22,
+      "evidence": [
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; interior metric/door contracts docs/agents/SAFE_INTERIOR_ARCHITECTURE.md + docs/agents/INTERIORS_SYSTEM_SPEC.md; CI review pending; gameplay interiors NOT implemented",
+        "Independent scoped INT-001 verification by FORGE-27 (different from owner DOORKEEPER): reviewed normative docs/agents/SAFE_INTERIOR_ARCHITECTURE.md + docs/agents/INTERIORS_SYSTEM_SPEC.md; 2m/1m grids, 3×3–6×6 exterior plans, validated entry/exit and rollback, optional v1 save migration, actor autonomy, error/Android/deterministic test contracts and explicit non-goals. Review https://github.com/jbob-coder/The-idle-open-world-universe/pull/22#pullrequestreview-5566118348 anchored at 18bcf9924b59cb71da8004e2a50be3170278e39f; HEAD fba2204fa5054328eeea90475e12ad70782777fb only changes coordination registry/board since reviewed SHA. Exact-HEAD governance CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186385206 COMPLETED SUCCESS. INT-001 documentation contract only: doors/interiors NOT implemented, physical device NOT TESTED, draft PR #22 NOT MERGED."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "DOORKEEPER",
+          "reason": "DOORKEEPER reserves metric-grid interior/door contract; no gameplay implementation claimed"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "DOORKEEPER",
+          "reason": "Writing precise interior layer safety, entry anchors, simulation and save migration specifications"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "DOORKEEPER",
+          "reason": "Interior metric contract and safe door transition specifications delivered in PR #22; awaiting independent review and CI"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent scoped documentation contract review; exact-HEAD governance CI successful; design not gameplay implementation."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "INT-002",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-001"
+      ],
+      "acceptance": "Blueprint variants use real footprint collision and protected roads/sites; stable old 1×1/2×2 saves.",
+      "issue": null,
+      "pr": 56,
+      "evidence": [
+        "Owner-requested FORGE-27 definitive retirement handoff committed at ec178b9bc5dfeaaaeffee6940ce4553b36f9d545; code branch feat/int-002-forge-27-metric-buildings remains identical to base a5919223ec9092bb8f2ec4c4a35cc2576021c817; no new game code, tests or PR. New 3D Pixel Squares design in PR #47 must be evaluated.",
+        "PR #56 https://github.com/jbob-coder/The-idle-open-world-universe/pull/56 ; exact head e424f104db4d56bf91b81e0788ed1eba7ef57be6 ; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503260440 SUCCESS: 103/103 Node tests (4 new INT-002), 0 failures, offline browser PASS ; native Android https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503260367 SUCCESS: Gradle, local assets, API29 emulator 7/7 instrumentation PASS. Physical 2/3 GB devices NOT_RUN. In review, not verified or merged.",
+        "PR #56 https://github.com/jbob-coder/The-idle-open-world-universe/pull/56 ; exact HEAD 24be2d641acee93a84ef2745cf75bec03fc7d746 ; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39505156448 COMPLETED SUCCESS: 105/105 Node tests including 2 new INT-002 actor-overlap/fog tests, offline browser QA PASS ; native Android https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39505156491 COMPLETED SUCCESS: Gradle offline build PASS, API29 instrumentation OK (7 tests). Physical 2/3 GB RAM PSS/FPS/thermal NOT_RUN. IN_REVIEW pending independent acceptance. Save v1 unchanged, main untouched.",
+        "PR #56 https://github.com/jbob-coder/The-idle-open-world-universe/pull/56 ; HEAD 5af0698f73111a821fafad45a951877e052483ec ; exact-head GODSEED offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39509545137 COMPLETED SUCCESS: 107/107 Node tests (two new door/road protection cases), offline browser QA PASS ; exact-head native Android https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39509545140 COMPLETED SUCCESS: debug Gradle WebView host and API29 emulator 7/7 instrumentation PASS. Independent reviewer required. Physical 2-3GB Android phone FPS/PSS/thermals NOT_RUN; v1 save identity preserved; no integration merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T09:23:42.419Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Claim real metric 3×3–6×6 exterior houses/public buildings; footprint-safe autonomous site selection, pixel-scaled facades and v1 1×1/2×2 compatibility. Do not touch owner branches or interiors."
+        },
+        {
+          "date": "2026-10-19T09:24:23.943Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Implement genuine multi-tile construction and pixel art exterior for homes/workshops/market/hall, safe footprint/road/landmark checks and stable v1 save restore, seeded Node and Chromium tests."
+        },
+        {
+          "date": "2026-10-19T16:58:55.680Z",
+          "from": "in_progress",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Owner requested permanent retirement. Machine-validated handoff docs/agents/handoffs/INT-002.json was committed and CI checked; original branch equals baseline a5919223ec9092bb8f2ec4c4a35cc2576021c817 with no code to lose; release the task for a separately authorized successor."
+        },
+        {
+          "date": "2026-10-20T21:35:33Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FIX-62",
+          "reason": "Owner-requested successor to retired FORGE-27: preserve original branch and v1 saves; implement safe 3x3-6x6 physical footprints with evidence"
+        },
+        {
+          "date": "2026-10-20T21:35:44Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Begin isolated footprint collision, placement, legacy save and Node/Android acceptance work. Do not edit other owners' branches."
+        },
+        {
+          "date": "2026-10-20T21:53:43Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FIX-62",
+          "reason": "PR #56 safe geometric footprints; exact-HEAD 103/103 Node and 7/7 Android instrumentation PASS; awaiting independent acceptance."
+        },
+        {
+          "date": "2026-10-20T22:00:50Z",
+          "from": "in_review",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Author self-audit of PR #56 found two reproducible coverage gaps: compact fallback can occupy actor coordinates and minimap reveals undiscovered structures. Re-open same owned task for targeted correction and regression tests."
+        },
+        {
+          "date": "2026-10-20T22:08:42Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FIX-62",
+          "reason": "Repaired actor-overlap in compact construction and undiscovered minimap building leak, added 2 regression tests, all 105 Node and 7 emulator tests passed on exact PR #56 HEAD. Independent reviewer required."
+        },
+        {
+          "date": "2026-10-20T22:36:28Z",
+          "from": "in_review",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Owned INT-002 review hardening: subsequent constructions can cover an earlier building's doorway approach or sever its road connection. Preserve accessible site reservations and add regression evidence."
+        },
+        {
+          "date": "2026-10-20T22:43:13Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FIX-62",
+          "reason": "Doorstep and short access routes preserved by new construction; 107/107 Node tests, offline QA success, 7/7 API29 emulator tests success on PR #56 HEAD; independent review pending."
+        },
+        {
+          "date": "2026-10-20T22:48:37Z",
+          "from": "in_review",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Owner-authorized existing INT-002 continuation: prevent duplicate building identifiers after sparse legacy v1 saves, deletion and reload; add persisted sequence tests. No third task claim."
+        },
+        {
+          "date": "2026-10-20T23:15:36.075Z",
+          "from": "in_progress",
+          "to": "ready",
+          "actor": "FIX-62",
+          "reason": "Owner-requested retirement; validated handoff in 43192e67. PR #56 and work SHA 3c23fef preserved; Android emulator pending. Released to successor, not verified or done."
+        }
+      ]
+    },
+    {
+      "id": "INT-003",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Persist interior IDs, furnishings and entry/return anchors",
+      "status": "in_review",
+      "owner": "GDS-KESTREL-1810",
+      "work_branch": "feat/int-003-kestrel-interior-save-state",
+      "depends": [
+        "INT-001"
+      ],
+      "acceptance": "Version-1 compatible optional space data; restore old, malformed and multi-building saves without losing progress.",
+      "issue": null,
+      "pr": 36,
+      "evidence": [
+        "INT-003 PR #36 https://github.com/jbob-coder/The-idle-open-world-universe/pull/36 (OPEN, NOT DRAFT, NOT MERGED), source SHA e1ccce37b90b24dff027f60414f15d6f96bf4ee3; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188588604 SUCCESS: 91/91 Node tests incl 9 new interior-save regressions, Chromium offline chapters I-III/save/layout/pixel UI with 0 JS errors/remote requests, artifact 12158848844. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188588615 SUCCESS: Gradle offline APK, Android API29 emulator 6/6 instrumentation and screenshot/logcat artifact 12159336172. First SHA 746c4afd failed 1 overly strict raw JSON regression test; corrected and rerun green at exact HEAD. Physical Android 2-3GB NOT VERIFIED; data-only interior persistence, doors/render/AI interior routines NOT implemented; no merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T01:57:04+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Reserve INT-003 optional validated interior IDs/furniture/door anchors and legacy v1 save preservation. Separate module and minimal simulation save bridge; no door movement, no existing building expansion."
+        },
+        {
+          "date": "2026-10-19T01:57:59+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Begin isolated INT-003 optional spaces persistence + strict v1 migration; Node acceptance for multi-building records/anchors/furniture, save/restore without moving actors; no door-entry gameplay claimed."
+        },
+        {
+          "date": "2026-10-19T02:13:58+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Submitted nine validated v1-compatible interior persistence regressions at exact source HEAD, Node 91/91 and native API29 6/6 PASS; awaiting independent review, no door gameplay claimed."
+        }
+      ]
+    },
+    {
+      "id": "INT-004",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Implement safe, atomic door entry and exit",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-002",
+        "INT-003"
+      ],
+      "acceptance": "NPC autonomous door crossings load correct space, safe spawn, return anchor; no duplicate/time jump; pause/relaunch pass.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-005",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Render indoor pixel rooms, furniture and 3 camera zoom levels",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-003",
+        "INT-004"
+      ],
+      "acceptance": "Separate interior grid, collision, room display and scene layer with integer pixel scaling and no remote assets.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-006",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Assign households, beds and private spaces to each citizen",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-003",
+        "SIM-001"
+      ],
+      "acceptance": "Residents own beds and homes, nighttime path safely enters their building; households persist across reload.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-007",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Autonomous sleep, food, shelter and social actions indoors",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-004",
+        "INT-006"
+      ],
+      "acceptance": "At least 4 residents choose useful indoor activities for needs; recover realistically; no god-controlled joystick.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-008",
+      "priority": "P1",
+      "area": "interiors",
+      "title": "Workplace interiors: forge, tavern, granary, shrine and hall",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-005",
+        "SIM-005"
+      ],
+      "acceptance": "Distinct functional furnishings/workplaces, work queues, role access, appropriate capacity; QA saves inside.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-009",
+      "priority": "P1",
+      "area": "interiors",
+      "title": "God-level house inspector and door/floor UI",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-005",
+        "GOD-004"
+      ],
+      "acceptance": "God can observe indoor events and UI state without forcing NPC action; touch and accessibility tests.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "INT-010",
+      "priority": "P0",
+      "area": "interiors",
+      "title": "Interior transitions: adversarial Android and save regression",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-004",
+        "INT-005"
+      ],
+      "acceptance": "Enter/exit 100× and save during crossing; out-of-bounds, stale anchors, invalid IDs rejected safely.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-001",
+      "priority": "P0",
+      "area": "world",
+      "title": "Seeded world coordinate system and 32×32 chunk generator",
+      "status": "verified",
+      "owner": "TERRAIN-01",
+      "work_branch": "feat/wld-001-seeded-chunks-terrain-01",
+      "depends": [],
+      "acceptance": "Stable procedural adjacent chunks; tests for negative and 1000+ tile coordinates; no full-world allocation.",
+      "issue": 18,
+      "pr": 23,
+      "evidence": [
+        "WLD-001 PR #23 https://github.com/jbob-coder/The-idle-open-world-universe/pull/23 ; exact implementation SHA 955338f2d10a16a89ad97bd5dc6917f8660809ed ; offline QA SUCCESS including node --test tests/*.test.js https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183510756 ; Android native evaluation run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183510322 was IN PROGRESS at transition; physical 2-3GB tests NOT VERIFIED; complete open world not implemented.",
+        "Independent GDS-KESTREL-1810 review https://github.com/jbob-coder/The-idle-open-world-universe/pull/23#issuecomment-6257825664 exact SHA 955338f2d10a16a89ad97bd5dc6917f8660809ed: Node 88/88 PASS including six WLD-001 chunk tests, offline Chromium and v1 save PASS, fixed 1024-byte tiles. https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183510756 completed SUCCESS; separate native API29 run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183510322 IN_PROGRESS at review, NOT claimed. No runtime world streaming or physical device QA, no merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-19T00:59:12+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "TERRAIN-01",
+          "reason": "Reserve deterministic 32×32 world-chunk generation; isolated module and seeded boundary tests (issue #18)"
+        },
+        {
+          "date": "2026-10-19T00:59:41+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "TERRAIN-01",
+          "reason": "Implement isolated seeded chunk API with negative world coordinates and bounded 32×32 generation tests; preserve existing v1 game runtime."
+        },
+        {
+          "date": "2026-10-19T01:05:24+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "TERRAIN-01",
+          "reason": "Delivered isolated deterministic chunk API and seeded tests; full offline QA success at exact SHA; Android native/independent review pending."
+        },
+        {
+          "date": "2026-10-19T01:39:42+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Independent review of exact WLD-001 source and successful Node/Chromium CI at SHA 955338f2d10a16a89ad97bd5dc6917f8660809ed; native emulator run pending and no claim of live open world/physical Android."
+        }
+      ],
+      "verified_by": "GDS-KESTREL-1810"
+    },
+    {
+      "id": "WLD-002",
+      "priority": "P0",
+      "area": "world",
+      "title": "Sparse modified-terrain deltas and chunk persistence",
+      "status": "verified",
+      "owner": "GDS-KESTREL-1810",
+      "work_branch": "feat/wld-002-kestrel-sparse-persistence",
+      "depends": [
+        "WLD-001"
+      ],
+      "acceptance": "Edits and settlements survive eviction/reentry while untouched chunks regenerate identically.",
+      "issue": 18,
+      "pr": 31,
+      "evidence": [
+        "WLD-002 PR #31 https://github.com/jbob-coder/The-idle-open-world-universe/pull/31; exact HEAD 2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045231 SUCCESS, 96/96 Node PASS including 8 new sparse persistent chunk tests, browser offline and saves PASS, artifact 12158597071; native Gradle+API29 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045283 SUCCESS, 6/6 emulator instrumentation, screenshots/logcat artifact 12158097881; opt-in API not live world integration; physical low-RAM Android NOT VERIFIED; PR unmerged; independent review pending.",
+        "Independent FORGE-27 code+test review WLD-002 PR #31 at exact HEAD 2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e: https://github.com/jbob-coder/The-idle-open-world-universe/pull/31#pullrequestreview-5566248763 ; reviewed standalone signed-chunk sparse delta/cache/site IDs and v1 isolation; 8 new regression cases, 96/96 Node PASS and browser/offline from Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045231 ; separate Gradle/API29 6/6 emulator PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39187045283 ; NOT integrated into live gameplay, NOT physical low-RAM device tested, PR unmerged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T01:42:29+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Own isolated WLD-002 sparse tile/settlement delta store and persisted regeneration tests, based on independently verified WLD-001; no runtime/UI/other owner edits."
+        },
+        {
+          "date": "2026-10-19T01:43:39+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Begin WLD-002: stateless bounded chunk cache with sparse terrain/site edits and deterministic v1-independent persistence; preserve live sim, old saves and other bot files."
+        },
+        {
+          "date": "2026-10-19T01:54:11+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Submitted opt-in sparse chunk/settlement persistence and 8 regression tests in stacked PR #31; exact SHA Node 96/96 and native API29 6/6 passed; awaiting independent review, not a live open world."
+        },
+        {
+          "date": "2026-10-19T02:10:40.660Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent review of exact-HEAD opt-in sparse chunk persistence and site metadata, 96/96 Node/offline and 6/6 API29 emulator passes; gameplay integration remains future work."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "WLD-003",
+      "priority": "P0",
+      "area": "world",
+      "title": "Chunk-aware camera, fog, terrain renderer and coordinate UI",
+      "status": "verified",
+      "owner": "LIFE-26",
+      "work_branch": "feat/wld-003-life-26-chunk-camera",
+      "depends": [
+        "WLD-001",
+        "WLD-002"
+      ],
+      "acceptance": "Seamless camera scrolling across 4+ borders with 3 zooms; bounded dirty-tile caching.",
+      "issue": 18,
+      "pr": 40,
+      "evidence": [
+        "WLD-003 PR #40 https://github.com/jbob-coder/The-idle-open-world-universe/pull/40 (draft stacked on verified WLD-002 PR #31 / WLD-001 PR #23), exact source HEAD 8224c6198667bddc19573919d7f3ba1127dff8e3: 103/103 Node, Chromium offline 4+ signed borders, 3 zooms, bounded fog/dirty tiles, drag, original v1 chapters/saves intact and screenshot PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248926 ; same SHA push PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191243468 ; native Gradle + API29 installed/emulated 7/7 Android instrumentation PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248868 . Older Android WebView numeric-separator patch confined to stacked branch, owner WLD-002 notified on PR #31; physical 2/3 GB RAM/PSS UNVERIFIED; Nim cross-chunk pathfinding WLD-004 and v1 migration WLD-007 NOT implemented.",
+        "Independent FORGE-27 scoped WLD-003 review PR #40 https://github.com/jbob-coder/The-idle-open-world-universe/pull/40#pullrequestreview-5569247528 exact HEAD 8224c6198667bddc19573919d7f3ba1127dff8e3. Source inspected chunk_view camera/fog/dirty tile, chunk_surface 16px paint, ui_chunk_atlas mobile pan/keyboard/drag and 7 Node tests + Chromium acceptance. Exact source offline CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248926 SUCCESS, 103/103 Node PASS and real Chromium signed borders/3 zooms/offline screenshot PASS. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191248868 SUCCESS, API29 Gradle and 7/7 emulator PASS. Opt-in God-view atlas only, NOT NPC global navigation or legacy migration, NOT physical 2–3GB certification, PR draft/unmerged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:10:40.660Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available for separate claim, not implemented."
+        },
+        {
+          "date": "2026-10-19T02:16:20+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "LIFE-26",
+          "reason": "Reserve deterministic bounded 32x32 chunk camera and offline God-view atlas viewport with true cross-border rendering, fog, zoom and safe legacy save isolation"
+        },
+        {
+          "date": "2026-10-19T02:16:27+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement opt-in world atlas camera/view/caching and browser+Node acceptance without modifying other agents' chunk store, navigation, legacy simulation, interiors or divine rules"
+        },
+        {
+          "date": "2026-10-19T08:52:46.792Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "LIFE-26",
+          "reason": "Submitted exact-HEAD Node/Chromium/Android 7/7 validated chunk camera and renderer for independent review; no merge/physical RAM claim"
+        },
+        {
+          "date": "2026-10-19T09:10:03.122Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent exact-SHA source/Node/Chromium and 7/7 API29 emulator review; isolated observable atlas, no gameplay travel or physical low-RAM certification."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "WLD-004",
+      "priority": "P0",
+      "area": "world",
+      "title": "Cross-chunk autonomous navigation and bounded pathfinding",
+      "status": "in_progress",
+      "owner": "PATH-34",
+      "work_branch": "feat/wld-004-path-34-autonomous-travel",
+      "depends": [
+        "WLD-001",
+        "WLD-002"
+      ],
+      "acceptance": "Nim and citizens can cross 4+ sectors without teleport/menu; hazards/path blockers respected.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:10:40.660Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available for separate claim, not implemented."
+        },
+        {
+          "date": "2026-10-19T16:16:51.681+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "PATH-34",
+          "reason": "WLD-004 libre; implemento navegación autónoma global desacoplada de render 2D para futura vista 3D aprobada."
+        },
+        {
+          "date": "2026-10-19T16:17:10.220+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "PATH-34",
+          "reason": "Implementación de navegación y viajeros voluntarios entre chunks, con obstáculos, límites de búsqueda y pruebas reproducibles."
+        }
+      ]
+    },
+    {
+      "id": "WLD-005",
+      "priority": "P0",
+      "area": "world",
+      "title": "Distant independent villages with local resources and population",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-002",
+        "CIV-001"
+      ],
+      "acceptance": "At least 2 separate distant villages develop while offscreen and persist when visited.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "WLD-006",
+      "priority": "P1",
+      "area": "world",
+      "title": "Streaming biome ecology, climate, water and landmarks",
+      "status": "verified",
+      "owner": "TERRAIN-01",
+      "work_branch": "feat/wld-006-terrain-01-biome-ecology",
+      "depends": [
+        "WLD-001"
+      ],
+      "acceptance": "Biome identity, non-breaking routes, renewable resources and persistent ruins/church sites are deterministic.",
+      "issue": 18,
+      "pr": 38,
+      "evidence": [
+        "WLD-006 draft PR #38 https://github.com/jbob-coder/The-idle-open-world-universe/pull/38 exact HEAD 8664aa20a4bc188541dfc918a2843f85017c2668 ; full offline QA 95/95 Node PASS (7 new ecology suites), Chromium offline and artifact build PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684385 ; native Android evaluation IN_PROGRESS at transition https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684473 ; physical 2GB/3GB NOT TESTED ; opt-in overlay, no live world/save integration and no merge.",
+        "Independent FORGE-27 WLD-006 review https://github.com/jbob-coder/The-idle-open-world-universe/pull/38#pullrequestreview-5569268035 at exact SHA 8664aa20a4bc188541dfc918a2843f85017c2668: source/7 climate-heritage-resource regression tests inspected, offline https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684385 SUCCESS 95/95 Node and offline browser. Native run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189684473 CANCELLED and NOT claimed; opt-in module not bundled/live; physical 2–3GB NOT TESTED, PR draft and unmerged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T02:15:13+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "TERRAIN-01",
+          "reason": "Isolated deterministic biome/landmark and route-safe resource overlay; WLD-001 verified; no conflicts with chunk storage files."
+        },
+        {
+          "date": "2026-10-19T02:15:42+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "TERRAIN-01",
+          "reason": "Develop pure world biome/climate sampling, route-preserving water and stable non-overlapping heritage/renewable resource overlays; add seeded tests without touching live runtime."
+        },
+        {
+          "date": "2026-10-19T02:25:41+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "TERRAIN-01",
+          "reason": "Submitted stacked WLD-006 PR with 95/95 exact-SHA Node/Chromium offline PASS; native Android status recorded separately; independent review required."
+        },
+        {
+          "date": "2026-10-19T09:11:57.026Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent exact-SHA deterministic ecology/heritage/regrowth source and Node/Chromium acceptance. Optional module not in live APK; cancelled emulator is not a PASS."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "WLD-007",
+      "priority": "P0",
+      "area": "world",
+      "title": "Map existing 64×48 version-1 saves into expanded world",
+      "status": "in_review",
+      "owner": "FORGE-27",
+      "work_branch": "feat/wld-007-forge-27-v1-migration",
+      "depends": [
+        "WLD-001",
+        "WLD-002"
+      ],
+      "acceptance": "Imported Nim/world/villages, all 3 chapters and structures unchanged; bad data rejected.",
+      "issue": 18,
+      "pr": 44,
+      "evidence": [
+        "PR #44 https://github.com/jbob-coder/The-idle-open-world-universe/pull/44 ; exact work HEAD f5037388cf0fb159346b09c5ab6c17feb78c8039, stacked on independently verified WLD-002 (2d0de82cf9a0527a6aad7a0950e42c0dde55dd7e). Current-head offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205388 COMPLETED SUCCESS: 108/108 Node tests incl 12 WLD-007 legacy map/save/corruption roundtrips, actual Chromium offline 640x360 WLD-007 migration PASS, chapter I-II-III/backup/viewport regression, APK prototype checks, screenshots artifact. Native Android Gradle/API29 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205499 completed / failure at transition; physical 2–3GB phone NOT TESTED. Import API opt-in, NOT live 4-border playable world; v1 key/schema untouched; no merge.",
+        "Native Android API29 exact source SHA f5037388cf0fb159346b09c5ab6c17feb78c8039 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39226205499 attempt 1: Gradle build PASS but emulator tests 3/6 FAIL (Game JavaScript not ready, page not loaded). One bounded failed-job rerun requested; root cause not yet determined. Reopen to investigate legacy chunk-store WebView compatibility; prior offline 108/108 PASS remains valid for exact earlier SHA.",
+        "PR #44 https://github.com/jbob-coder/The-idle-open-world-universe/pull/44 exact HEAD 0f226e4b6730d492b5f129d555138431de0064d9; API29 numeric separator compatibility patch after first emulator fail; exact-head offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227321946 and https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227332209 COMPLETED SUCCESS (109/109 Node and real offline mobile 640×360 browser + Chapters I–III). Gradle host success, but exact-head native API29 emulator https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39227332311 RUNNING/NOT VERIFIED at this checkpoint; independent reviewer must wait native result, if fails reopen in_progress. Physical phone NOT TESTED. v1 save untouched; PR unmerged; does not claim global navigation."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:10:40.660Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available for separate claim, not implemented."
+        },
+        {
+          "date": "2026-10-19T08:46:25.566Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Independently claim legacy 64×48 v1 save import as opt-in world-window adapter over verified WLD-002; preserve all progress and reject bad data; avoid WLD-003 camera and other bots."
+        },
+        {
+          "date": "2026-10-19T08:47:11.764Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Implement opt-in canonical v1/64×48 window import with lossless structures/progression and deterministic chunk store outside window; reject mismatched/corrupt data and test roundtrip."
+        },
+        {
+          "date": "2026-10-19T08:58:53.550Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FORGE-27",
+          "reason": "Delivered lossless v1 64x48 window migration with 12 new Node tests, mobile offline Chromium, compatibility/negative tests and current SHA full offline CI green; native emulator result tracked separately; independent review requested."
+        },
+        {
+          "date": "2026-10-19T09:03:30.491Z",
+          "from": "in_review",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Native Android API29 first attempt 3/6 failed WebView initialization; reopen source for compatibility diagnostics and full exact-SHA rerun, do not self-verify."
+        },
+        {
+          "date": "2026-10-19T09:22:13.489Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FORGE-27",
+          "reason": "Submitted exact-head parser compatibility patch, 109/109 Node + Chromium offline clean, guarded legacy save import PR #44; native Gradle passed, emulator pending separate acceptance and independent reviewer."
+        }
+      ]
+    },
+    {
+      "id": "WLD-008",
+      "priority": "P0",
+      "area": "world",
+      "title": "Bound active chunks, offscreen simulation and memory",
+      "status": "in_review",
+      "owner": "SENTRY-58",
+      "work_branch": "feat/wld-008-sentry-offscreen",
+      "depends": [
+        "WLD-002",
+        "WLD-003"
+      ],
+      "acceptance": "LRU and low-frequency offscreen tick, no memory growth from travel distance; measured budgets logged.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [
+        "Draft PR #51 https://github.com/jbob-coder/The-idle-open-world-universe/pull/51; implementation source SHA 52a5a12dd35cc31a659c15055d5e058009dfd206; exact-HEAD offline QA SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39432294118. 100-seed no-input settlement proof and 5 Node regressions (now 6 tests), resource conservation and save roundtrip. Not merged; no 3D/Android physical gameplay, independent reviewer pending."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T09:10:03.122Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available to claim; no implementation claimed."
+        },
+        {
+          "date": "2026-10-20T13:23:46.552Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SENTRY-58",
+          "reason": "Owner-authorized recovery: bounded offscreen simulation and deterministic autonomous settlement proof on a separately tested branch; existing save/runtime untouched."
+        },
+        {
+          "date": "2026-10-20T13:24:24.197Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "SENTRY-58",
+          "reason": "Implement isolated opt-in deterministic offscreen settlement simulation, stable snapshots, cache bounds, no-render progression and Node regressions; preserve current 2D playable world and v1 saves."
+        },
+        {
+          "date": "2026-10-20T13:42:18.047Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SENTRY-58",
+          "reason": "Deliver bounded opt-in offscreen society proof with full exact-SHA offline QA success in draft PR #51; request independent review; no main integration or release claim."
+        }
+      ]
+    },
+    {
+      "id": "WLD-009",
+      "priority": "P1",
+      "area": "world",
+      "title": "God's regional atlas and village discovery UX",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-003"
+      ],
+      "acceptance": "Bird's-eye view, undiscovered fog, site links and marker inspection work across chunks.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T09:10:03.122Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available to claim; no implementation claimed."
+        }
+      ]
+    },
+    {
+      "id": "WLD-010",
+      "priority": "P0",
+      "area": "world",
+      "title": "Four-border open-world acceptance and multi-region save QA",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-003",
+        "WLD-004",
+        "WLD-007",
+        "WLD-008"
+      ],
+      "acceptance": "Automated 4-chunk traversal, changed tile revisit, save/reload and bounded-memory evidence.",
+      "issue": 18,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-001",
+      "priority": "P0",
+      "area": "people",
+      "title": "Need profile: hunger, energy, comfort, safety, social, hygiene",
+      "status": "verified",
+      "owner": "LIFE-26",
+      "work_branch": "feat/sim-001-life-26-needs",
+      "depends": [],
+      "acceptance": "Needs bounded, serialized, degrade/recover via actions, priorities and safety precede divine suggestions.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [
+        "PR #26 (draft) | commit 553ef5c2068c48ddd83d0d70bf971d6234156bf0 | Node regression 92/92 passed, browser/Android structure rerun attempt 2 passed: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625841 | Gradle+Android emulator success: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625780 | attempt 1 paused FX render timing failure retained as known risk | physical Android RAM/PSS not verified",
+        "Independent GDS-KESTREL-1810 review https://github.com/jbob-coder/The-idle-open-world-universe/pull/26#issuecomment-6257801934 at exact source SHA 553ef5c2068c48ddd83d0d70bf971d6234156bf0: 94/94 Node PASS, full offline Chromium PASS, native Gradle + API29 6 tests PASS. CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625841 (attempt 2) and https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39184625780 (attempt 1). Caveat QA-005 paused FX flake, 2-3GB physical device NOT VERIFIED; PR #26 remains open/unmerged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-19T01:00:09+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "LIFE-26",
+          "reason": "Reserve deterministic citizen needs profile with safe priorities and version-1-compatible serialization; independent new module; issue #19"
+        },
+        {
+          "date": "2026-10-19T01:01:31+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement isolated needs model and deterministic Node tests without touching shared simulation systems."
+        },
+        {
+          "date": "2026-10-19T01:25:23+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "LIFE-26",
+          "reason": "Submit implemented and tested citizen-need model as draft PR #26 for independent verification; Node and Android emulator jobs green at exact SHA; first browser FX timing attempt was flaky; physical low-memory QA pending."
+        },
+        {
+          "date": "2026-10-19T01:37:23+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Independent exact-SHA review of SIM-001: six bounded needs, resident choices, real food costs, v1 migration and CI 94/94 Node plus offline Chromium and native API29 6/6 on SHA 553ef5c2068c48ddd83d0d70bf971d6234156bf0; known paused-FX flake tracked as QA-005; no physical hardware claims."
+        }
+      ],
+      "verified_by": "GDS-KESTREL-1810"
+    },
+    {
+      "id": "SIM-002",
+      "priority": "P0",
+      "area": "people",
+      "title": "Utility-based choices with visible why/alternative/consequence",
+      "status": "verified",
+      "owner": "LIFE-26",
+      "work_branch": "feat/sim-002-life-26-utility-decisions",
+      "depends": [
+        "SIM-001"
+      ],
+      "acceptance": "Distinct personalities independently choose work, explore, rest, help; event trace explains outcomes.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [
+        "PR #33 (draft stacked on SIM-001 PR #26) | commit 66bcf93440f0293eef4d7a0c05832d1b5904d73f | 100/100 Node + offline Chromium browser and save acceptance PASS: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188383945 | same-SHA PR QA PASS: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386706 | native Gradle+API29 emulator PASS: https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386682 | physical 2/3GB Android PSS NOT VERIFIED | predecessor negative-index failure fixed",
+        "Independent reviewer GDS-KESTREL-1810 on PR #33: https://github.com/jbob-coder/The-idle-open-world-universe/pull/33#issuecomment-6258248994; exact head 66bcf93440f0293eef4d7a0c05832d1b5904d73f, inspected src/choices.js, living choice execution, HUD, v1 trace migration and 6 focused tests; GitHub Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386706 Node 100/100 PASS, offline Chromium mobile/story/save PASS, artifact 12159037505; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386682 Gradle native + API29 emulator 6/6 PASS, artifact 12159072649. Physical Android RAM/PSS NOT VERIFIED, long-term intelligence, families, indoor interaction, global world travel NOT implemented; PR #33 stacked/open/draft, not merged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T01:55:11+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "LIFE-26",
+          "reason": "Reserve utility-scored autonomous decisions with transparent alternatives, outcome traces and v1-compatible bounded serialization; depending on verified SIM-001."
+        },
+        {
+          "date": "2026-10-19T01:55:19+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement independent decision engine + visible citizen rationale/outcomes; preserve food/work production, safe needs overrides, and offline Android compatibility."
+        },
+        {
+          "date": "2026-10-19T02:11:02+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "LIFE-26",
+          "reason": "Independent review requested after exact-SHA 100/100 Node, offline Chromium and native API29 emulator CI successes; SIM-001 integration still outstanding and hardware PSS unverified."
+        },
+        {
+          "date": "2026-10-19T02:18:18+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Independent scoped acceptance review exact source 66bcf93440f0293eef4d7a0c05832d1b5904d73f: deterministic utility choices with personal traits/needs, bounded v1 traces, real consequences, Node 100/100, offline Chromium and Android emulator 6/6 PASS; no physical low-memory hardware or merge claim."
+        }
+      ],
+      "verified_by": "GDS-KESTREL-1810"
+    },
+    {
+      "id": "SIM-003",
+      "priority": "P0",
+      "area": "people",
+      "title": "Homes, household membership, work IDs and inventories",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-001",
+        "INT-003"
+      ],
+      "acceptance": "No homeless default when capacity exists; home/jobs persisted and validated.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-004",
+      "priority": "P1",
+      "area": "people",
+      "title": "Affection, friendship, conflict, families and child growth",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-003"
+      ],
+      "acceptance": "Relationships change from actual social events; birth/age constraints and opt-in design; bounded persistence.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-005",
+      "priority": "P0",
+      "area": "people",
+      "title": "Profession schedules and workplace resource delivery",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-001",
+        "CIV-001"
+      ],
+      "acceptance": "Workers reach work sites, carry supplies, consume materials, rest and independently change jobs.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-006",
+      "priority": "P1",
+      "area": "people",
+      "title": "Education, learned skills and non-combat life progression",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002",
+        "SIM-005"
+      ],
+      "acceptance": "No repetition-only combat XP; study and occupation unlock persistent capabilities.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-007",
+      "priority": "P1",
+      "area": "people",
+      "title": "Personal journals, memories, long goals and moral decisions",
+      "status": "in_review",
+      "owner": "CORTEX-19",
+      "work_branch": "feat/sim-007-cortex-19-personal-chronicles",
+      "depends": [
+        "SIM-002"
+      ],
+      "acceptance": "Event→choice→reason→impact chronicle per person; user can inspect without directing.",
+      "issue": 19,
+      "pr": 45,
+      "evidence": [
+        "PR #45 https://github.com/jbob-coder/The-idle-open-world-universe/pull/45 OPEN, NOT MERGED, ready for independent review. Code HEAD cff468e5095a6adb602143df403149acb2ffcdd6 stacked on verified SIM-002 66bcf93440f0293eef4d7a0c05832d1b5904d73f. GitHub Actions offline https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39228008994 COMPLETED SUCCESS exact SHA: 111/111 Node PASS (11 SIM-007 Node tests including 16 seeds), Chromium 640x360, 720x400, 960x540, real per-person journal interaction + safe imported IDs + saved journal roundtrip, Chapters I-III, 0 JS errors/remote requests, evidence artifact 12176780158. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39228008972 COMPLETED SUCCESS exact SHA: Gradle Android WebView APK and API29 emulator 6/6 instrumented tests PASS, screenshots/logcat 12176065833 and APK 12175041617. Initial source failed one off-by-one test expectation and was fixed/rerun. World save remains version 1/offline; no physical 2-3GB Android PSS/heat/soak. Own SIM-011 PR #41 concurrently in_review; integrated PRs require reconciled shared changes and combined CI. Independent reviewer required; no merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:21:23+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Dependencies SIM-002 independently verified. Open for a fresh exclusive bot claim; no ownership reserved and no implementation performed by this transition."
+        },
+        {
+          "date": "2026-10-19T08:53:22.237Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "CORTEX-19",
+          "reason": "Reserve SIM-007 real per-citizen chronicles, long goals, moral tradeoffs and inspectable consequences on isolated verified SIM-002 base."
+        },
+        {
+          "date": "2026-10-19T08:53:50.519Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "CORTEX-19",
+          "reason": "Implement bounded resident personal journals with persisted goals, moral choice context and real observed consequence deltas; add browser inspector and save-v1/16-seed tests; no God direct control."
+        },
+        {
+          "date": "2026-10-19T09:15:07.489Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "CORTEX-19",
+          "reason": "Submitted playable per-resident journal, factual outcomes and moral long goals, with 111/111 exact-SHA Node and offline Chromium PASS and Android API29 6/6 PASS; waiting independent review, no physical hardware claims."
+        }
+      ]
+    },
+    {
+      "id": "SIM-008",
+      "priority": "P1",
+      "area": "people",
+      "title": "Generations, inheritance and meaningful mortality",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-004",
+        "SIM-007"
+      ],
+      "acceptance": "Aging, natural death and succession handled without save invalidation or population explosion.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-009",
+      "priority": "P1",
+      "area": "people",
+      "title": "Contextual resident social interaction and visible animations",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002",
+        "SIM-004"
+      ],
+      "acceptance": "Talk/trade/argue/emote with nearby real agents, historical memory and no popup-only illusion.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "SIM-010",
+      "priority": "P0",
+      "area": "people",
+      "title": "Long life-soak regression: agency, finite population and persistence",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002",
+        "SIM-005"
+      ],
+      "acceptance": "Multi-seed 20k+ ticks, cap agents, no starvation loops, stable saves and evidence.",
+      "issue": 19,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-001",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Metric 3×3–6×6 medieval blueprint library and zoning",
+      "status": "in_review",
+      "owner": "TERRAIN-01",
+      "work_branch": "feat/civ-001-terrain-01-metric-blueprints",
+      "depends": [
+        "INT-001"
+      ],
+      "acceptance": "Blueprints have size, door orientation, road adjacency, materials, style and terrain constraints; no overlaps.",
+      "issue": null,
+      "pr": 35,
+      "evidence": [
+        "CIV-001 PR #35 https://github.com/jbob-coder/The-idle-open-world-universe/pull/35 exact HEAD adbe40831b1595465c68cd00342309f43f01b173; offline QA COMPLETED SUCCESS 89/89 Node tests including seven CIV-001 cases and Chromium/HTML/APK structure https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386197 ; native Android API29 Gradle and emulator COMPLETED SUCCESS 6/6 instrumentation and screenshot/log artifacts 12159181583 + 12158649413 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188386188 ; physical 2–3 GB QA NOT TESTED; only opt-in plans/zoning module, no game-world integration or merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T01:50:43+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "TERRAIN-01",
+          "reason": "Reserve metric medieval blueprint and zero-overlap zoning catalog, anchored to verified INT-001 contract; new isolated files only."
+        },
+        {
+          "date": "2026-10-19T01:50:55+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "TERRAIN-01",
+          "reason": "Implement real area/door/approach/terrain/road/collision validation with deterministic tests; do not alter existing 2x2 runtime or v1 saves."
+        },
+        {
+          "date": "2026-10-19T02:11:19+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "TERRAIN-01",
+          "reason": "Delivered eight metric blueprints and safe zoning; exact HEAD offline CI 89/89 PASS and native API29 6/6 PASS. Await independent review; no merge."
+        }
+      ]
+    },
+    {
+      "id": "CIV-002",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Construction sites, builders, work orders and interruptions",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-001",
+        "SIM-005"
+      ],
+      "acceptance": "Build progresses from materials/work delivered; stop/restart safe, costs cannot duplicate.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-003",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Path streets, roads, fields and districts based on settlement needs",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-001",
+        "WLD-001"
+      ],
+      "acceptance": "Roads connect real door anchors and farms; traversability tests and reroute on changes.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-004",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Markets, home stores, trade caravans and local shortages",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-002",
+        "SIM-005"
+      ],
+      "acceptance": "Stocks and transfers conserved; scarcity changes actions; no infinite material exploits.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-005",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Medieval technology and era advancement with real prerequisites",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-006",
+        "CIV-002"
+      ],
+      "acceptance": "Era change follows research/production/buildings, not elapsed ticks or arbitrary level.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-006",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Council approvals, autonomy, refusals and architectural remodeling",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002",
+        "CIV-001"
+      ],
+      "acceptance": "Households/council may relocate, alter style or reject plan based on actual constraints.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-007",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Building wear, fires, repairs and shelters during attacks",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-004",
+        "CIV-002"
+      ],
+      "acceptance": "Damage risk bounded; citizens self-protect; materials repair persistent physical sites.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "CIV-008",
+      "priority": "P1",
+      "area": "civilization",
+      "title": "Distinct functional medieval public buildings and services",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-001",
+        "INT-008"
+      ],
+      "acceptance": "Forge, tavern, chapel, market and hall serve actual gameplay routines.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "GOD-001",
+      "priority": "P0",
+      "area": "divine",
+      "title": "Multilingual intent parsing with negation, target and ambiguity",
+      "status": "done",
+      "owner": "FORGE-27",
+      "work_branch": "feat/god-001-forge-27-intent-parser",
+      "depends": [],
+      "acceptance": "English/Spanish recognized categories, unsupported text refused clearly; do-not obey negations.",
+      "issue": null,
+      "pr": 25,
+      "evidence": [
+        "PR #25 https://github.com/jbob-coder/The-idle-open-world-universe/pull/25; implementation HEAD e97465f1343c77362812db603e0c3ae686191041; exact-SHA CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 ; Build HTML, deterministic Node suite, pixel contract and APK structure steps SUCCESS as observed; browser checks pending at handoff; physical 2–3 GB device NOT VERIFIED; independent reviewer required.",
+        "Exact HEAD e97465f1343c77362812db603e0c3ae686191041 : GODSEED offline QA Actions run 39183679624 COMPLETED SUCCESS; test/build job simulation-and-android-structure SUCCESS, including deterministic Node tests, HTML build, browser/mobile-layout verification and APK structure; not a physical Android hardware test. PR #25 marked ready for independent review.",
+        "Independent review by TERRAIN-01 of PR #25 at exact HEAD e97465f1343c77362812db603e0c3ae686191041: inspected intent.js/living.js/build.py/intent.test.js for ES/EN, negation, ambiguity, targets and no direct control; CI job log https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 reports 89 Node PASS / 0 FAIL and Chromium offline life simulation PASS; no physical Android verification, no merge.",
+        "Owner-authorized selective integration: PR #25 merged to integration/godseed-living-society-multitile-architecture at 9bc3a795cefc82b6a9ec5dc273146f3289a012ff. Exact merged-SHA offline QA PASS runs #39448753049, #39448761283; native API29 emulator PASS #39448761269. Prior independent review TERRAIN-01 preserved. No 3D runtime or real low-RAM phone proof."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-19T01:00:19Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Implement bounded offline English/Spanish God-Whisper intent parsing, negation, explicit target, ambiguity rejection and regression tests; no independent NPC override."
+        },
+        {
+          "date": "2026-10-19T01:00:43Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Inspect existing Living.interpret and whisper contract; implement independent pure offline bilingual parser, integrate without altering save schema; add deterministic Node tests."
+        },
+        {
+          "date": "2026-10-19T01:06:40Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FORGE-27",
+          "reason": "Submitted reproducible bilingual offline grammar with negation/ambiguity/target tests in draft PR #25; Node CI steps succeeded, browser checks pending; independent final review needed."
+        },
+        {
+          "date": "2026-10-19T01:46:39+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "TERRAIN-01",
+          "reason": "Independent intent-parser source and exact SHA CI logs reviewed: ES/EN, negation, ambiguity, target isolation, safe fallback, zero direct Sims control."
+        },
+        {
+          "date": "2026-10-20T15:33:17.394Z",
+          "from": "verified",
+          "to": "done",
+          "actor": "OWNER",
+          "reason": "Owner-directed completion after independently reviewed GOD-001 merged and exact merged SHA passed offline and native emulator tests."
+        }
+      ],
+      "verified_by": "TERRAIN-01"
+    },
+    {
+      "id": "GOD-002",
+      "priority": "P0",
+      "area": "divine",
+      "title": "Per-person belief, safety and autonomy acceptance engine",
+      "status": "verified",
+      "owner": "FORGE-27",
+      "work_branch": "feat/god-002-forge-27-autonomy",
+      "depends": [
+        "SIM-001",
+        "GOD-001"
+      ],
+      "acceptance": "People evaluate each message, decline, explain and do not auto-complete objectives.",
+      "issue": null,
+      "pr": 34,
+      "evidence": [
+        "PR #34 https://github.com/jbob-coder/The-idle-open-world-universe/pull/34; exact HEAD a9822e8c6037b7f0baa07b55e9a7ea95fbb49905, stacked on verified SIM-001 PR #26 (553ef5c) with GOD-001 parser PR #25 (e97465f) integrated. CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188140209 COMPLETED SUCCESS: 108/108 Node PASS, offline HTML, pixel/art assets, debug APK structure/signature, 640x360 Chromium mobile consent/no NPC puppet/save regression and screenshots. Separate native Android evaluation run 39188273888 emulator pending at handoff, Gradle build PASS. Physical low-RAM device unverified; independent review required; no merge.",
+        "TERRAIN-01 independent source, consent tests and browser acceptance review of GOD-002 PR #34 exact HEAD a9822e8c6037b7f0baa07b55e9a7ea95fbb49905 ; deterministic per-person needs/openness refusal, targeted consent and non-puppet scheduling inspected in src/divine/consent.js, src/living.js, tests/consent.test.js, tests/god_consent_browser_acceptance.py ; 108/108 Node PASS, Chromium offline mobile named-consent/serialization/no-direct-action PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188140209 ; exact-SHA offline CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188273873 SUCCESS, native API29 emulator and Gradle https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188273888 SUCCESS ; physical Android 2/3GB NOT TESTED, GOD-003 execution lifecycle not implemented; no merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:47:10+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "TERRAIN-01",
+          "reason": "Both dependency tasks GOD-001 and SIM-001 independently verified; safe per-person acceptance engine now available to claim."
+        },
+        {
+          "date": "2026-10-19T01:53:52.734Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Own GOD-002 per-person belief, safety gate and independent choice; explicitly integrate verified GOD-001 parser and SIM-001 needs without overriding their PRs."
+        },
+        {
+          "date": "2026-10-19T01:54:36.709Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Implement offline per-person belief/safety/autonomy evaluator; integrate verified SIM-001 needs and GOD-001 parser; deterministic refusal, named targets, save v1, HTML and Node/Android regression."
+        },
+        {
+          "date": "2026-10-19T02:08:23.133Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FORGE-27",
+          "reason": "Delivered named-person voluntary divine beliefs, safety/refusal responses, bounded v1-compatible memory and CI verified offline/browser test in PR #34; independent verification pending."
+        },
+        {
+          "date": "2026-10-19T02:29:43+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "TERRAIN-01",
+          "reason": "Independently inspected exact-SHA consent/targeting tests and native/browser CI; per-person refusal and no direct quest execution; source PR remains unmerged."
+        }
+      ],
+      "verified_by": "TERRAIN-01"
+    },
+    {
+      "id": "GOD-003",
+      "priority": "P0",
+      "area": "divine",
+      "title": "Nonblocking suggestions lifecycle: heard→considered→action→result",
+      "status": "in_review",
+      "owner": "FIX-62",
+      "work_branch": "feat/god-003-fix-62-lifecycle",
+      "depends": [
+        "GOD-002",
+        "SIM-002"
+      ],
+      "acceptance": "No fake outcomes; action trace and resource results persist across reload.",
+      "issue": null,
+      "pr": 55,
+      "evidence": [
+        "PR #55 https://github.com/jbob-coder/The-idle-open-world-universe/pull/55 ; HEAD ca7b9f39c8eccbddb0406bf89adcb1a61c728bd2 ; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39447351756 completed SUCCESS; 114/114 Node tests including six GOD-003 lifecycle regressions; offline browser PASS. Native Android run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39447351757 IN_PROGRESS at submission, not yet acceptance; physical devices NOT_RUN. Await independent review.",
+        "PR #55 https://github.com/jbob-coder/The-idle-open-world-universe/pull/55 ; exact head 0a2c1b1ec12e1831c64b16e652926c9deab32865 ; GODSEED offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39448389758 COMPLETED SUCCESS: 115/115 Node (7 GOD-003 tests), offline Chromium PASS ; GODSEED native Android https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39448389780 COMPLETED SUCCESS: Gradle package PASS, API29 emulator 6/6 tests PASS including load/save/recreate/exit. Physical 2-3GB devices NOT_RUN. Independent review and integration pending; NOT verified/done."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:30:49+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "TERRAIN-01",
+          "reason": "GOD-002 independently verified at exact SHA; SIM-002 already verified. Release task for independent bot, not an ownership claim."
+        },
+        {
+          "date": "2026-10-19T09:31:55.642Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "LIFE-26",
+          "reason": "Reserve real god whisper action/result lifecycle, consent and resident utility integration without false completions"
+        },
+        {
+          "date": "2026-10-19T09:32:07.655Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement bounded evidence-driven personal advice ledger, observed actions, safe v1 migration, offline UI and exact-SHA tests"
+        },
+        {
+          "date": "2026-10-19T16:57:17.385Z",
+          "from": "in_progress",
+          "to": "ready",
+          "actor": "LIFE-26",
+          "reason": "Owner-requested retirement; preserved GOD-003 code c06af2bf400de41b7eb5c04162a6db0dce202383 and validated machine handoff docs/agents/handoffs/GOD-003.json commit 947692010fb776a31be829810eee9ceec8e3be63. No PR and acceptance tests unfinished; new BOT_ID must read handoff/reclaim legally."
+        },
+        {
+          "date": "2026-10-20T15:13:59Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FIX-62",
+          "reason": "Recover LIFE-26 handoff for test-driven GOD-003 lifecycle hardening on isolated successor branch"
+        },
+        {
+          "date": "2026-10-20T15:14:46Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Begin inherited lifecycle fixes: deterministic factual outcome tests, v1 save restore and optional UI. Preserve LIFE-26 branch."
+        },
+        {
+          "date": "2026-10-20T15:23:30Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FIX-62",
+          "reason": "Submitted PR #55 with source fixes, six new regressions, bounded UI and passing exact-head offline QA; native Android and independent review not yet verified"
+        }
+      ]
+    },
+    {
+      "id": "GOD-004",
+      "priority": "P0",
+      "area": "divine",
+      "title": "God view: inspect life, building, village, memories and intent",
+      "status": "verified",
+      "owner": "FORGE-27",
+      "work_branch": "feat/god-004-forge-27-observer",
+      "depends": [],
+      "acceptance": "Read-only per-person and settlement UI, not a Sims control panel; safe on Android.",
+      "issue": null,
+      "pr": 28,
+      "evidence": [
+        "PR #28 https://github.com/jbob-coder/The-idle-open-world-universe/pull/28; exact implementation HEAD 7de364157e45260e4d728daa1c3558be79dacd39; GODSEED offline QA run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185439491 COMPLETED SUCCESS, including Node tests, browser GOD-004 observer interaction/no-mutation/XSS safety, offline HTML, simulated/mobile layout and APK structure/signature. Native Android emulator workflow pending separately; physical 2–3 GB Android device NOT VERIFIED; independent review required.",
+        "Native exact-HEAD 7de364157e45260e4d728daa1c3558be79dacd39: GitHub Actions 39185442827 COMPLETED SUCCESS — separate Gradle/WebView build, APK asset verification, Android emulator install/tests and artifacts. https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185442827 . Physical Android 2–3 GB RAM hardware benchmark still NOT VERIFIED.",
+        "Independent review GDS-KESTREL-1810 https://github.com/jbob-coder/The-idle-open-world-universe/pull/28#issuecomment-6258032813 at exact SHA 7de364157e45260e4d728daa1c3558be79dacd39: 86/86 Node PASS incl 4 observer tests, offline Chromium 640x360 inspector and XSS/no-mutation PASS, browser CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185439491 SUCCESS, Gradle API29 emulator 6/6 PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185442827 SUCCESS; canvas selection lacks direct E2E tap test, physical 2-3 GB Android NOT VERIFIED; no merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Reserve read-only God observer inspector; inspect citizens, settlements and buildings without direct control."
+        },
+        {
+          "date": "2026-10-19T01:21:00Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Begin read-only God observer inspector; isolated module, offline UI, deterministic tests. Avoid shared UI conflicts and direct Sim controls."
+        },
+        {
+          "date": "2026-10-19T01:29:00Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "FORGE-27",
+          "reason": "Delivered read-only Divine Observatory, offline Node/browser acceptance and exact-HEAD successful CI in PR #28; awaiting independent review."
+        },
+        {
+          "date": "2026-10-19T01:59:30+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Independent review of read-only GOD-004 observable life, town, building and memory UI, save purity, offline Chromium and API29 Android evidence at exact SHA 7de364157e45260e4d728daa1c3558be79dacd39; no physical device or completed interiors."
+        }
+      ],
+      "verified_by": "GDS-KESTREL-1810"
+    },
+    {
+      "id": "GOD-005",
+      "priority": "P2",
+      "area": "divine",
+      "title": "Optional advanced offline language understanding feasibility",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "GOD-001",
+        "QA-004"
+      ],
+      "acceptance": "Physical low-RAM measurements and strict opt-in required; no cloud-required play.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "ART-001",
+      "priority": "P1",
+      "area": "art",
+      "title": "Animated medieval residents, age stages, work and social emotes",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-002"
+      ],
+      "acceptance": "Square pixel sprites and visible work/sleep/talking; role and cultural variants and bounded atlases.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T09:10:03.122Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All prerequisites independently verified; task available to claim; no implementation claimed."
+        }
+      ]
+    },
+    {
+      "id": "ART-002",
+      "priority": "P0",
+      "area": "art",
+      "title": "Tile-coherent roofs, doors, interior walls and furnishings",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-001",
+        "CIV-001"
+      ],
+      "acceptance": "32–96px tile-aligned exteriors, readable doorway, floor/wall/furniture atlas with nearest-neighbor.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "ART-003",
+      "priority": "P1",
+      "area": "art",
+      "title": "Responsive world/indoor HUD and accessible mobile controls",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-009",
+        "GOD-004"
+      ],
+      "acceptance": "Touch 640×360, 720×400, 960×540; no clipping; focused UI and correct camera transform.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "ART-004",
+      "priority": "P2",
+      "area": "art",
+      "title": "Medieval biome props, weather/time and seasonal differences",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-006"
+      ],
+      "acceptance": "Visuals reflect simulated conditions and never mutate simulation.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T09:11:57.026Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "All dependencies independently verified; task available for future ownership."
+        }
+      ]
+    },
+    {
+      "id": "ART-005",
+      "priority": "P1",
+      "area": "art",
+      "title": "Automated visual regressions of rooms, buildings and villagers",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "INT-005",
+        "ART-002"
+      ],
+      "acceptance": "Deterministic Chromium screenshots all zoom levels and no texture bleed.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "QA-001",
+      "priority": "P0",
+      "area": "qa",
+      "title": "Node state-machine regression for life, worlds and migration",
+      "status": "done",
+      "owner": "GDS-KESTREL-1810",
+      "work_branch": "test/qa-001-kestrel-node-regressions",
+      "depends": [],
+      "acceptance": "CI runs seeded state/ownership/saves/scene validation and reports exact SHA.",
+      "issue": null,
+      "pr": 24,
+      "evidence": [
+        "PR #24 https://github.com/jbob-coder/The-idle-open-world-universe/pull/24; implementation HEAD 654081fe91a6c9a1cca763472beacb637074d038; QA Actions https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317; Node deterministic suite, offline HTML, asset contract, native debug APK build/signature checks SUCCESS; Chromium offline checks RUNNING when submitted; physical Android 2–3 GB NOT VERIFIED; no merge",
+        "Full CI SUCCESS at exact implementation SHA 654081fe91a6c9a1cca763472beacb637074d038: 88/88 Node tests PASS (including six QA-001 new regressions), 0 failures; offline HTML, asset reproducibility, native debug APK rebuild/structure/signature, offline Chromium mobile/3-chapter/save/touch tests PASS with 0 JS errors/external requests; screenshots and debug APK artifact 12156824428; run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317. Emulator and physical 2–3 GB hardware not claimed by this run; PR #24 remains unmerged, awaiting independent review.",
+        "Independent TERRAIN-01 review of QA-001 PR #24 exact SHA 654081fe91a6c9a1cca763472beacb637074d038; inspected 6 real Sim state/save/autonomy regressions and CI run job log https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183692317: 88/88 Node PASS, Chromium offline layout/chapters/save tests PASS, Android package/signature PASS. Physical Android device QA NOT TESTED; PR not merged.",
+        "OWNER requested selective verified PR integration. PR #24 merged into integration/godseed-living-society-multitile-architecture on 4f53ed3738824273fbc5f17c531221d52bc9758d (https://github.com/jbob-coder/The-idle-open-world-universe/pull/24); exact merged-SHA offline QA SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39445365722 and https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39445373561. Independent original QA-001 review TERRAIN-01 preserved. Node/Chromium checks only; physical Android not certified."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Requirements and acceptance documented; available for assignment"
+        },
+        {
+          "date": "2026-10-19T01:01:44.708+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Own QA-001: add genuine seeded state-machine/save regression tests without changing runtime subsystems owned by other bots"
+        },
+        {
+          "date": "2026-10-19T01:02:27.893+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Starting isolated QA-001 tests covering deterministic autonomy state and version-1 save restoration, with CI verification at exact HEAD"
+        },
+        {
+          "date": "2026-10-19T01:07:09.134+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Delivered six new deterministic Node state and v1 save regressions in PR #24, exact HEAD verified; awaiting full QA checks and independent review"
+        },
+        {
+          "date": "2026-10-19T01:29:34+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "TERRAIN-01",
+          "reason": "Independent source and exact-SHA Actions log review: six regression suites, 88/88 Node tests, browser offline tests and APK structure pass; not asserting physical hardware."
+        },
+        {
+          "date": "2026-10-20T15:09:31.832Z",
+          "from": "verified",
+          "to": "done",
+          "actor": "OWNER",
+          "reason": "Owner-authorized acceptance of independently verified QA-001 after PR #24 merged into designated integration branch and exact merged-SHA offline QA PASS."
+        }
+      ],
+      "verified_by": "TERRAIN-01"
+    },
+    {
+      "id": "QA-002",
+      "priority": "P0",
+      "area": "qa",
+      "title": "Chromium offline Android-layout interaction acceptance",
+      "status": "blocked",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-001"
+      ],
+      "acceptance": "Real browser UI tap, door enter/exit, one sim day, save; 0 remote requests.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:40:53.282Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Dependencies independently verified; available for a fresh atomic claim. No gameplay performed."
+        },
+        {
+          "date": "2026-10-19T01:55:44+00:00",
+          "from": "ready",
+          "to": "blocked",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Acceptance requires real browser door entry/exit, but runtime doors/interior transitions do not exist yet (INT-004 and INT-005 still planned). QA-001 verification alone is insufficient; resume ready only after live door/scene work is verified. Prevent false PASS and wasted parallel ownership."
+        }
+      ]
+    },
+    {
+      "id": "QA-003",
+      "priority": "P0",
+      "area": "qa",
+      "title": "Gradle host + API29 emulator instrumentation and artifacts",
+      "status": "done",
+      "owner": "TERRAIN-01",
+      "work_branch": "test/qa-003-terrain-01-native-acceptance",
+      "depends": [
+        "QA-001"
+      ],
+      "acceptance": "Native launch, offline, pause/exit handshake and save restoration; APK artifacts exact SHA.",
+      "issue": null,
+      "pr": 30,
+      "evidence": [
+        "QA-003 PR #30 https://github.com/jbob-coder/The-idle-open-world-universe/pull/30 exact HEAD ff8374a8118a625de72c4816e021adeef294acf5; GODSEED offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569230 COMPLETED SUCCESS; native Android API29 host Gradle, 7/7 instrumentation, offline/save/exit and emulator provenance JSON COMPLETED SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569278 ; APK+test APK artifact 12157844452; emulator screenshot/log/meminfo/provenance artifact 12158810382; standalone 3/3 Python manifest tests PASS; stack based on QA-001 PR #24; physical 2–3 GB QA NOT TESTED; no merge.",
+        "Independent FORGE-27 review of TERRAIN-01 QA-003 PR #30 exact source HEAD ff8374a8118a625de72c4816e021adeef294acf5: https://github.com/jbob-coder/The-idle-open-world-universe/pull/30#pullrequestreview-5566236009 ; inspected 5 new/modified QA paths, actual Android WebView ActivityScenario recreation after unsaved pause, 3/3 Python provenance unit tests, native Gradle build, source/tested SHAs, emulator artifact manifests. Native API29 CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569278 COMPLETED SUCCESS: instrumentation log OK (7 tests), screenshot/logcat/meminfo+SHA manifest artifact #12158810382. Offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569230 COMPLETED SUCCESS. Not hardware low-RAM certification: physical 2-3 GB / PSS / FPS / 20-minute soak NOT VERIFIED. PR stacked on QA-001, unmerged; verified is task-level acceptance only.",
+        "OWNER authorization: PR #30 merged into integration/godseed-living-society-multitile-architecture at SHA 53c0d51190afef4e54fe43775d5ae10d96abeb2d. Offline merged-SHA CI PASS runs #39445933213 and #39445944191; Android API29 emulator CI PASS run #39445944367. Previously independently verified by FORGE-27. No physical Android low-RAM evidence."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T01:31:02+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "TERRAIN-01",
+          "reason": "QA-001 independently verified on exact SHA; native emulator validation can run without unavailable interiors."
+        },
+        {
+          "date": "2026-10-19T01:32:01+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "TERRAIN-01",
+          "reason": "Reserve native Android API29 instrumentation and exact SHA evidence; isolate tests/workflow from other bot code; no hardware claims."
+        },
+        {
+          "date": "2026-10-19T01:32:47+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "TERRAIN-01",
+          "reason": "Read native workflow and API29 instrumentation, test real pause/resume/offline/save using isolated QA-003 branch; preserve v1 game saves."
+        },
+        {
+          "date": "2026-10-19T01:48:30+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "TERRAIN-01",
+          "reason": "Delivered exact-SHA native Android API29 instrumentation and provenance with 7/7 native PASS, offline QA PASS; independent review and stacked merge pending."
+        },
+        {
+          "date": "2026-10-19T02:08:10.348Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent exact-SHA review of Android Gradle/API29 7/7 native instrumentation, real unsaved onPause/recreate, offline host, verified provenance and screenshots; not physical hardware QA."
+        },
+        {
+          "date": "2026-10-20T15:16:08.181Z",
+          "from": "verified",
+          "to": "done",
+          "actor": "OWNER",
+          "reason": "Owner-requested selective merge and close after PR #30 integrated; exact merged-SHA offline and native API29 CI passed."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "QA-004",
+      "priority": "P0",
+      "area": "qa",
+      "title": "Physical Android 2 GB and 3 GB 20-minute soak",
+      "status": "blocked",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-003"
+      ],
+      "acceptance": "Phone screenshots/video, app+WebView PSS/RSS, FPS, thermal, resume, saves; hardware evidence attached.",
+      "issue": 13,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "blocked",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Cannot certify until physical 2 GB and 3 GB Android evidence; issue #13"
+        }
+      ]
+    },
+    {
+      "id": "REL-001",
+      "priority": "P1",
+      "area": "release",
+      "title": "Stable Android signing identity and save-safe upgrade",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-003"
+      ],
+      "acceptance": "Signed identity controlled, upgrade without losing save, backups documented, no private key in repo.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        },
+        {
+          "date": "2026-10-19T02:08:10.348Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Every prerequisite independently verified; ready for another agent to claim. No implementation claimed."
+        }
+      ]
+    },
+    {
+      "id": "REL-002",
+      "priority": "P2",
+      "area": "release",
+      "title": "Real optional offline content pack streaming and disk budgets",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-008"
+      ],
+      "acceptance": "Useful core content toward 1GB if created, optional 5GB cap, never pad or hold disk packs in RAM.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "REL-003",
+      "priority": "P1",
+      "area": "release",
+      "title": "Integrate stacked PRs, QA gate and tagged Android beta",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-002",
+        "QA-003",
+        "REL-001"
+      ],
+      "acceptance": "Reviewed merge plan, no Codex overwrite, tagged assets, SHA evidence, release notes.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "GODSEED-COORDINATOR",
+          "reason": "Initial documented backlog; not an implementation claim"
+        }
+      ]
+    },
+    {
+      "id": "GOV-002",
+      "priority": "P0",
+      "area": "governance",
+      "title": "♾️ Continuous bot work-loop prompt, lifecycle automation and safe handoffs",
+      "status": "verified",
+      "owner": "ORBIT-01",
+      "work_branch": "docs/godseed-agent-task-governance-v1",
+      "depends": [],
+      "acceptance": "Publish an independent ready-to-paste ♾️ prompt in repo and link it from the master and workflow; enforce one active coding task, bounded turns, real evidence, fresh task selection and explicit stop reasons; governance CI passes exact SHA.",
+      "issue": null,
+      "pr": 22,
+      "evidence": [
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; commit 46bd0d440142d565fce4bce74c23e445e50d512c; GOV QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183825897 PASS; tests/test_task_infinity.py; docs/agents/INFINITY_AUTOMATION_PROMPT.md. Await independent review; not merged.",
+        "Independent FORGE-27 review at exact coordination PR #22 SHA 72341cbfac040bf5203126f901258a8ec3589564: https://github.com/jbob-coder/The-idle-open-world-universe/pull/22#pullrequestreview-5566292431 ; verified docs/agents/INFINITY_AUTOMATION_PROMPT.md startup links, CLI task-state guardrails, three infinity regression tests and honest no-background limitation; exact HEAD governance CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189351456 SUCCESS. No daemon, no auto-merge, draft PR #22 unmerged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "ORBIT-01",
+          "reason": "User requested continuous ♾️ automation prompt for all GODSEED bots"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "ORBIT-01",
+          "reason": "Standalone document and lifecycle contract can be developed without gameplay dependencies"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "ORBIT-01",
+          "reason": "Claimed the user-requested continuous bot automation documentation before editing."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "ORBIT-01",
+          "reason": "Implementing ♾️ continuation prompt, preemption limits, audit logs and handoff rules"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "ORBIT-01",
+          "reason": "Published ♾️ automation prompt, guardrails, tests and master prompt links; governance CI pass. Submitted for independent review."
+        },
+        {
+          "date": "2026-10-19T02:20:35.445Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent exact-head review of ♾️ prompt, links, enforced task limits and CI; documentation only, not a background runner."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "GOV-003",
+      "priority": "P0",
+      "area": "governance",
+      "title": "Context-limit retirement and new-chat successor handoff",
+      "status": "verified",
+      "owner": "RELAY-01",
+      "work_branch": "docs/godseed-agent-task-governance-v1",
+      "depends": [],
+      "acceptance": "Repository-native one-prompt retirement/new-chat resume instructions, per-task structured verified handoffs, state release/reclaim workflow, tests for invalid handoffs, CI and links from starting bot documents.",
+      "issue": null,
+      "pr": 22,
+      "evidence": [
+        "PR #22 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22; docs/agents/CHAT_RETIRE_AND_RESUME.md; docs/agents/handoffs/README.md; tools/godseed_handoff.py; tests/test_task_handoff.py; governance CI PASS at b2cc988e https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185395507 (25 tests); awaiting independent review and merge.",
+        "Independent FORGE-27 review of GOV-003 PR #22 exact reviewed SHA dabb08cb458f4c66d7f88eb9062b06ff38704e88 https://github.com/jbob-coder/The-idle-open-world-universe/pull/22#pullrequestreview-5566304154 ; validated dual-mode retiring/resume docs, atomic validated per-task handoff CLI, 7 safety tests, start-document links and a live GOD-004 handoff; governance CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189591575 SUCCESS at dabb08cb458f4c66d7f88eb9062b06ff38704e88. Newer coordination commits only modify shared registry/board; no fake background process, SHA existence verification remains successor duty, PR unmerged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "RELAY-01",
+          "reason": "Owner requested safe retiring bot handoff when chat context capacity is exhausted."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "RELAY-01",
+          "reason": "Independent governance tooling and documentation; no gameplay dependencies."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "RELAY-01",
+          "reason": "Reserving context-exhaustion chat retirement and succession workflow before edits."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "RELAY-01",
+          "reason": "Building handoff templates, retirement/new-chat prompts and deterministic validation."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "RELAY-01",
+          "reason": "Dual-mode retirement/successor prompt, validated per-task handoff writer, CI and start-document links are published; review pending."
+        },
+        {
+          "date": "2026-10-19T02:23:13.063Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent verified handoff documentation/CLI/test review with exact-SHA governance CI; no model background execution."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "QA-005",
+      "priority": "P1",
+      "area": "qa",
+      "title": "Diagnose and stabilize paused divine FX render timing in Chromium CI",
+      "status": "verified",
+      "owner": "LIFE-26",
+      "work_branch": "test/qa-005-life-26-paused-fx-ci",
+      "depends": [],
+      "acceptance": "The paused FX animation acceptance reports actual requestAnimationFrame timing and FX lifetime, distinguishes renderer stalls from missing animation, and passes three repeated Chromium CI attempts without relaxing idle redraw limits or hiding genuine defects.",
+      "issue": null,
+      "pr": 29,
+      "evidence": [
+        "PR #29 (draft) | commit 6bda3e4bb82ae7dfb30437b1318ca6884b82721c | same-SHA CI: push run 39185863338 attempt 1 SUCCESS; PR run 39185867993 attempts 1 and 2 SUCCESS | physical Android low RAM unverified",
+        "Independent FORGE-27 review https://github.com/jbob-coder/The-idle-open-world-universe/pull/29#pullrequestreview-5566260180 at exact HEAD 6bda3e4bb82ae7dfb30437b1318ca6884b82721c: reviewed only tests/paused_render_budget.py, RAF timestamps and 2500ms guard preserve idle/FX/resume checks; three successful same-SHA Chromium jobs 117848053568, 117848066647, 117848442145 in runs 39185863338 and 39185867993, each 82/82 Node PASS and paused Canvas FX PASS. Draft PR unmerged; physical low-RAM 2-3GB NOT VERIFIED."
+      ],
+      "origin_task": "SIM-001",
+      "created_by": "LIFE-26",
+      "new_task_reason": "The first SIM-001 exact-SHA Chromium job observed only one animated divine FX redraw in 320ms, while the unchanged code passed on a rerun; this makes acceptance unreliable under runner load.",
+      "status_history": [
+        {
+          "date": "2026-10-19T01:27:26+00:00",
+          "from": null,
+          "to": "planned",
+          "actor": "LIFE-26",
+          "reason": "Necessary follow-up to SIM-001: The first SIM-001 exact-SHA Chromium job observed only one animated divine FX redraw in 320ms, while the unchanged code passed on a rerun; this makes acceptance unreliable under runner load."
+        },
+        {
+          "date": "2026-10-19T01:27:26+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "LIFE-26",
+          "reason": "All declared prerequisites verified; available for assignment"
+        },
+        {
+          "date": "2026-10-19T01:29:03+00:00",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "LIFE-26",
+          "reason": "Reserve scoped headless Chromium paused-FX timing acceptance and diagnostics; no production UI changes"
+        },
+        {
+          "date": "2026-10-19T01:29:10+00:00",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement bounded frame-timing diagnostics and stable FX acceptance while preserving idle draw budget"
+        },
+        {
+          "date": "2026-10-19T01:38:35+00:00",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "LIFE-26",
+          "reason": "Submit scoped stable paused FX acceptance and three exact-SHA Chromium job successes; independent reviewer required."
+        },
+        {
+          "date": "2026-10-19T02:13:27.607Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent paused-FX timing review, actual three exact-HEAD browser CI passes, no relaxation of idle Canvas budget."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "ART-006",
+      "priority": "P1",
+      "area": "art",
+      "title": "Playable GODSEED medieval pixel-art splash and truthful offline loading state",
+      "status": "verified",
+      "owner": "SPLASH-01",
+      "work_branch": "feat/art-006-godseed-loading-screen",
+      "depends": [],
+      "acceptance": "Real offline splash rendered before game UI; coherent 16:9 pixel graphics, accessible status/progress, optional reduced motion, waits for sprite atlas readiness, saves unaffected; browser/node QA and Android packaging CI pass at exact SHA.",
+      "issue": null,
+      "pr": 32,
+      "evidence": [
+        "PR #32 https://github.com/jbob-coder/The-idle-open-world-universe/pull/32; SHA 89bd62e6329b1108c95de5bb509a7084c86e9fe7; offline QA 85/85 tests PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076690; native Android API29 6/6 PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076673; actual screenshots and artifact. Independent review and merge pending.",
+        "Independent FORGE-27 source/CI review PR #32 at exact SHA 89bd62e6329b1108c95de5bb509a7084c86e9fe7: https://github.com/jbob-coder/The-idle-open-world-universe/pull/32#pullrequestreview-5566277095 ; real offline embedded SVG 640x360 crispEdges no external resources, responsive accessible loading/progress/error/reduced-motion, atlas+first-render gating and save isolation. Full QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076690 PASS 85/85 Node and offline 720x400/640x360 Chromium splash/screenshots; Gradle/API29 emulator https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188076673 PASS 6/6. Aesthetic subjective signoff and physical 2–3GB hardware measurements NOT VERIFIED. PR unmerged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "SPLASH-01",
+          "reason": "Owner asked to integrate generated GODSEED loading screen into the playable game."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "SPLASH-01",
+          "reason": "Isolated splash/startup scope; no gameplay dependencies."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SPLASH-01",
+          "reason": "Reserve artwork loading screen integration before code changes."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "SPLASH-01",
+          "reason": "Building offline pixel village splash and asset-loading lifecycle tests."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SPLASH-01",
+          "reason": "Integrated local pixel village splash, truthful readiness UI and Chromium/Android CI; PR #32 ready for independent review."
+        },
+        {
+          "date": "2026-10-19T02:17:00.372Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent scoped loading UI asset/lifecycle review and exact-SHA Node/Chromium/API29 QA; no subjective art or physical low-RAM certification."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "GOV-004",
+      "priority": "P0",
+      "area": "governance",
+      "title": "Author GODSEED V3 divine-view, intelligent lives and kingdoms design bible",
+      "status": "verified",
+      "owner": "DESIGN-28",
+      "work_branch": "docs/godseed-divine-life-kingdoms-v3",
+      "depends": [],
+      "acceptance": "Publish linked, source-checked V3 vision, divine UI, cognitive-family AI, kingdoms/colonies, performance/save and task acceptance documents; reference real existing code/PRs and distinguish concepts from implemented.",
+      "issue": null,
+      "pr": 39,
+      "evidence": [
+        "PR #39 https://github.com/jbob-coder/The-idle-open-world-universe/pull/39; exact head f54b71f6d8ca3be9091fe215e761d412c08231a7; GOV CI PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189837964 (30 tests); six V3 design contracts, index, master bot links; offline QA pending at submission. No gameplay features implemented and no merge.",
+        "Independent TERRAIN-01 review PR #39 exact SHA f54b71f6d8ca3be9091fe215e761d412c08231a7, https://github.com/jbob-coder/The-idle-open-world-universe/pull/39#issuecomment-6258391772 ; checked six linked V3 specs and tests against source, no false implementation claims. Governance CI SUCCESS 30/30 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189837964 ; offline QA SUCCESS 82/82 https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39189837950. PR mergeable=false at review (integration conflict) still needs reconciliation and retest; physical hardware NOT tested. Not merged."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Owner requested full documentation of the God-play redesign, emotional/personality intelligence, family traits, new colonies and monarchies."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "DESIGN-28",
+          "reason": "Prerequisites verified or absent"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "DESIGN-28",
+          "reason": "Owner-requested complete redesign docs claim"
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "DESIGN-28",
+          "reason": "Authoring source-checked V3 gameplay vision and architecture docs, UX map, intelligence/kinship and political simulation."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "DESIGN-28",
+          "reason": "Documented complete requested GODSEED V3 redesign and registered derived tasks; source-grounded documents and 30 governance tests passed. Await review, general QA and integration."
+        },
+        {
+          "date": "2026-10-19T02:31:43+00:00",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "TERRAIN-01",
+          "reason": "Independent V3 design and provenance review: six docs, nine task specifications, exact HEAD governance 30/30 and offline QA 82/82 green. Integration conflicts remain; PR unmerged."
+        }
+      ],
+      "verified_by": "TERRAIN-01"
+    },
+    {
+      "id": "GOD-006",
+      "priority": "P0",
+      "area": "divine",
+      "title": "Replace direct god power toolbar with indirect consequence-based divine influence",
+      "status": "blocked",
+      "owner": "FORGE-27",
+      "work_branch": "feat/god-006-forge-27-indirect-influence",
+      "depends": [
+        "GOD-004",
+        "GOD-001"
+      ],
+      "acceptance": "Read-only observer UI and contextual god influence rules; every action shows scope, costs, agency effects and side effects; 10 God guidance tests and no direct sim steering.",
+      "issue": null,
+      "pr": null,
+      "evidence": [
+        "Code candidate Git object aead479e55d1f24a545eb69347a816448ab8c2ab exists but is UNREFERENCED: branch feat/god-006-forge-27-indirect-influence remains at 7de364157e45260e4d728daa1c3558be79dacd39 after an OpenAI/GitHub connector safety block on publishing. NOT TESTED, NOT PR, NOT INTEGRATED. Requires authorized branch publication and fresh tests.",
+        "Recovery checkpoint by original owner FORGE-27: existing one-commit fast-forward safely published to feat/god-006-forge-27-indirect-influence at exact SHA aead479e55d1f24a545eb69347a816448ab8c2ab (parent 7de364157e45260e4d728daa1c3558be79dacd39), force=false and expected_sha lease. Code remains UNTESTED, no PR or approval. Safe to re-claim work under governance and write tests.",
+        "Recovered branch feat/god-006-forge-27-indirect-influence source commit aead479e55d1f24a545eb69347a816448ab8c2ab exists and is FAST-FORWARD PUBLISHED. Exact-head push QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39190373911 FAILED: Node 93/93 PASS, offline HTML/assets/APK structure PASS; Chromium tests/browser_smoke.py line 28 times out clicking deliberately disabled/hidden legacy [data-power=\"bless\"] toolbar. New 14 guidance Node cases, 640x360 offline browser case and workflow prepared in session but their new Git reference update was BLOCKED by OpenAI safety checks; new tests NOT PUBLISHED, NOT RUN. No native emulator or physical low-RAM QA at this SHA. No PR or merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Current seven powers are disconnected buttons; visual life-sim needs coherent ethical observatory powers."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "DESIGN-28",
+          "reason": "Prerequisites verified or absent"
+        },
+        {
+          "date": "2026-10-19T02:17:30.144Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Scoped GOD-006 indirect contextual influence interface on GOD-004 observer; separate modules, maintain v1 saves and avoid GOD-002/ART-007 conflicts."
+        },
+        {
+          "date": "2026-10-19T02:17:55.593Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Build pure guidance preview/decision engine plus contextual god observatory UI, with ≥10 Node guidance cases and offline browser acceptance. Keep runtime God-002 and ART-007 branches isolated, no actor movement or v1 save schema changes."
+        },
+        {
+          "date": "2026-10-19T02:27:48.478Z",
+          "from": "in_progress",
+          "to": "blocked",
+          "actor": "FORGE-27",
+          "reason": "Implementation tree prepared but code commit reference update blocked by connector safety checks; no branch publication or CI evidence; do not claim complete or attempt unsafe overwrite."
+        },
+        {
+          "date": "2026-10-19T02:32:41.966Z",
+          "from": "blocked",
+          "to": "ready",
+          "actor": "FORGE-27",
+          "reason": "Connector publication blocker resolved via non-force one-commit fast-forward with exact expected SHA; source safely preserved, tests not yet executed. Release then re-claim for ordinary work."
+        },
+        {
+          "date": "2026-10-19T02:33:20.505Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FORGE-27",
+          "reason": "Re-claim same preserved GOD-006 branch after verified protected publication, no other active FORGE-27 task; add guidance tests before review."
+        },
+        {
+          "date": "2026-10-19T02:33:44.395Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FORGE-27",
+          "reason": "Continue preserved indirect guidance candidate: inspect source, add >=10 deterministic tests, repair legacy browser expectations, run CI. Do not change NPC decisions directly."
+        },
+        {
+          "date": "2026-10-19T02:42:43.970Z",
+          "from": "in_progress",
+          "to": "blocked",
+          "actor": "FORGE-27",
+          "reason": "Recovered original code branch safely; exact-head Node 93 PASS but legacy browser QA fails against removed direct powers. Publication of new regression-test commit refused by connector safety; cannot advance without authorized publication/tests, no unsafe workaround."
+        }
+      ]
+    },
+    {
+      "id": "GOD-007",
+      "priority": "P1",
+      "area": "divine",
+      "title": "Visual god narrative dashboard and life-history/century time controls",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "GOD-004",
+        "SIM-007"
+      ],
+      "acceptance": "Mobile usable map-first HUD, person/household/village/kingdom inspection, generation timeline with causally grounded event cards and safe time advance.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "God observer needs one meaningful UI hierarchy rather than many permanent overlapping panels."
+        }
+      ]
+    },
+    {
+      "id": "SIM-011",
+      "priority": "P0",
+      "area": "people",
+      "title": "Individual intelligence, cognition, learning styles and personality effect on choices",
+      "status": "verified",
+      "owner": "CORTEX-19",
+      "work_branch": "feat/sim-011-cortex-19-cognition",
+      "depends": [
+        "SIM-001",
+        "SIM-002"
+      ],
+      "acceptance": "Seeded stat vector, needs/traits/skills/knowledge distinction, bounded multi-goal utility, intelligence changes planning and learning not raw universal success; independent decision traces and 16-seed outcomes.",
+      "issue": null,
+      "pr": 41,
+      "evidence": [
+        "SIM-011 draft-to-ready PR #41 https://github.com/jbob-coder/The-idle-open-world-universe/pull/41 (OPEN, NOT MERGED), exact source HEAD cb6ef3f89343a4456e3403db5a3230185be67660 stacked on independently verified SIM-002 66bcf93440f0293eef4d7a0c05832d1b5904d73f; full offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106721 COMPLETED SUCCESS, 109/109 Node PASS incl 9 new SIM-011 tests and 16 seed simulations, Chromium offline visible cognition/plan, mobile 640x360/720x400/960x540, stories I-III/save with 0 JS/errors/remote requests. Native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106704 COMPLETED SUCCESS, Gradle/WebView APK and Android API29 emulator 6/6 instrumentation PASS, screenshot/logcat artifacts 12159677864 and 12160520171. Outer save v1 preserved; 4 current resident Sims only. Physical 2/3GB RAM/PSS, real device heat/20 minute soak NOT VERIFIED. Independent review required; no merge authorized.",
+        "FORGE-27 independently reviewed SIM-011 https://github.com/jbob-coder/The-idle-open-world-universe/pull/41#pullrequestreview-5569327334 at exact SHA cb6ef3f89343a4456e3403db5a3230185be67660; source cognition/choices/living/UI + nine Node cognition regressions and seeded v1 migration. Exact-head offline CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106721 SUCCESS, 109/109 Node, real mobile Chromium visible cognitive profile and 3 Chapters/save; native https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191106704 SUCCESS, 6/6 API29 emulator. Physical low RAM NOT TESTED, 4 current citizens only, no family/genetics, no PR merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Current Sims are rudimentary and user explicitly requests intelligence/stats alter actions and personalities."
+        },
+        {
+          "date": "2026-10-19T02:21:23+00:00",
+          "from": "planned",
+          "to": "ready",
+          "actor": "GDS-KESTREL-1810",
+          "reason": "Dependencies SIM-001, SIM-002 independently verified. Open for a fresh exclusive bot claim; no ownership reserved and no implementation performed by this transition."
+        },
+        {
+          "date": "2026-10-19T02:28:32.220Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "CORTEX-19",
+          "reason": "New unique CORTEX-19 session claims autonomous cognitive attributes, learning and 16-seed behavior acceptance stacked on verified SIM-002; separate implementation branch."
+        },
+        {
+          "date": "2026-10-19T02:30:28.775Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "CORTEX-19",
+          "reason": "Build actual seeded cognition, bounded learning and personal plans on verified SIM-002; retain v1 compatibility; acceptance across 16 seeds."
+        },
+        {
+          "date": "2026-10-19T02:45:32.779Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "CORTEX-19",
+          "reason": "Submitted deterministic resident cognition/learning v1 and visible planning in PR #41: exact source Node 109/109, Chromium and Gradle Android emulator 6/6 PASS; independent reviewer required; physical low RAM not tested."
+        },
+        {
+          "date": "2026-10-19T09:17:16.141Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "FORGE-27",
+          "reason": "Independent reviewed exact SHA cognitive trait-based choices and earned learning, 109 Node/Chromium + 6 API29 emulator tests; no unearned resources or full generational AI claims."
+        }
+      ],
+      "verified_by": "FORGE-27"
+    },
+    {
+      "id": "SIM-012",
+      "priority": "P0",
+      "area": "people",
+      "title": "Family inheritance, kinship transmission and intergenerational variation",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-004",
+        "SIM-011"
+      ],
+      "acceptance": "Persist stable parentage and guardians, age/family relationships; inherited probabilistic trait distributions blended with environment and experience; generational multi-seed persistence and anti-determinism tests.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "User wants family characteristics to influence descendants without deterministic clones."
+        }
+      ]
+    },
+    {
+      "id": "SIM-013",
+      "priority": "P0",
+      "area": "people",
+      "title": "Low-RAM population simulation LOD and offscreen event aggregation",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "SIM-011",
+        "WLD-008"
+      ],
+      "acceptance": "Demonstrate bounded active resident count and sparse offline summaries over several colonies, consistent births/deaths/growth after revisit, 20k-tick deterministic save/reload tests and mobile profiling.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Expanded generations and colonies must not exhaust 2–3 GB Android devices."
+        }
+      ]
+    },
+    {
+      "id": "CIV-009",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Kings, succession, political legitimacy, noble houses and diplomacy",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "CIV-005",
+        "SIM-004"
+      ],
+      "acceptance": "King/queen and council entities persist, succession and conflicting claims resolve deterministically, 3+ kingdoms bargain/ally/trade/war with causes and measurable world-state changes.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "Existing two towns lack kings, distinct governments, realm politics and inherited rulership."
+        }
+      ]
+    },
+    {
+      "id": "CIV-010",
+      "priority": "P0",
+      "area": "civilization",
+      "title": "Found frontier colonies and simulate logistics, settlements and autonomy",
+      "status": "planned",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "WLD-005",
+        "CIV-002",
+        "SIM-005"
+      ],
+      "acceptance": "New colony has founding group, seed position, supply route/stock, ruler/faction, housing/work and independence pressures; isolation causes effects; 3+ active colonies persist across world chunks.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "New colonies must be built and sustained rather than decorative map icons."
+        }
+      ]
+    },
+    {
+      "id": "ART-007",
+      "priority": "P0",
+      "area": "art",
+      "title": "Redesign GODSEED mobile god-view into map-first coherent pixel interface",
+      "status": "in_review",
+      "owner": "LIFE-26",
+      "work_branch": "feat/art-007-life-26-godview-layout",
+      "depends": [
+        "GOD-004"
+      ],
+      "acceptance": "640x360 and 720x400 responsive real browser screens prioritize visible world, one contextual inspector, hierarchical tabs, legible portraits, consistent icons and no obstructive overlays.",
+      "issue": null,
+      "pr": 46,
+      "evidence": [
+        "ART-007 PR #46 https://github.com/jbob-coder/The-idle-open-world-universe/pull/46 (DRAFT, stacked on independently verified GOD-004 PR #28) exact source HEAD 0a2e82923983111db3ef2b03f34f5364e459235b: offline Node 86/86, Chromium genuine 640x360,720x400,960x540 map-first >=65% stage/7 accessible tabs/GOD-004 inspector/Pause, Bless+Inspire faith, Chapters I-III, JSON backups/v1 save unchanged and 0 network/JS errors + screenshots PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39229640024 ; same-SHA push QA PASS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39229633613 ; Gradle+API29 native WebView 7/7 instrumentation PASS and emulator screenshot https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39229640058 . WebView GOD-004 observer replaceChildren compatibility fixed ONLY in ART-007 stacked branch (commit 69beccf), GOD-004 owner notified PR #28; physical 2/3GB RAM/PSS NOT VERIFIED, family/kingdoms/GOD-006 powers NOT implemented, no merge."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "DESIGN-28",
+          "reason": "User reported chaotic current UI, unclear god abilities and poor sim detail; visual concept needs functional implementation."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "DESIGN-28",
+          "reason": "Prerequisites verified or absent"
+        },
+        {
+          "date": "2026-10-19T08:58:08.841Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "LIFE-26",
+          "reason": "Reserve map-first mobile Divine Observatory UI based on approved visual reference, existing read-only GOD-004 and safe offline legacy gameplay"
+        },
+        {
+          "date": "2026-10-19T08:58:19.223Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "LIFE-26",
+          "reason": "Implement responsive map-first 640x360/720x400 shell, hierarchical navigation, single contextual GOD-004 inspector and working offscreen legacy controls with browser+Android regression tests"
+        },
+        {
+          "date": "2026-10-19T09:28:00.863Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "LIFE-26",
+          "reason": "Submit real map-first mobile game UI with exact-SHA offline Chromium/86 Node and native API29 7/7 evidence for independent verification; no merge/hardware claims"
+        }
+      ]
+    },
+    {
+      "id": "QA-006",
+      "priority": "P0",
+      "area": "qa",
+      "title": "V3 cross-system causal acceptance for divine agency, cognition, families, kingdoms and resource efficiency",
+      "status": "verified",
+      "owner": "SCOPE-31",
+      "work_branch": "docs/godseed-v3-causal-acceptance",
+      "depends": [],
+      "acceptance": "Bot-readable reproducible cross-system QA cases verify divergent intelligent choices, effects of traits/family environment, real input-output resource conservation, god advice refusal, autonomous new colonies, royal succession, remote LOD and save/Android budgets, while explicitly distinguishing documentation from coded tests.",
+      "issue": null,
+      "pr": 42,
+      "evidence": [
+        "PR #42 https://github.com/jbob-coder/The-idle-open-world-universe/pull/42; branch docs/godseed-v3-causal-acceptance SHA 997b22fd6dbebd9e0385d6489643e1d10275aae4; governance PASS 34 tests https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191484387; offline QA pending; docs/qa/GODSEED_V3_CAUSAL_ACCEPTANCE.md; NOT GAMEPLAY IMPLEMENTATION",
+        "Independent reviewer SENTRY-58 at PR #42 HEAD 997b22fd6dbebd9e0385d6489643e1d10275aae4: inspected docs/qa/GODSEED_V3_CAUSAL_ACCEPTANCE.md and structural test; 14 unique VAC-01..VAC-14 table scenarios, 8/8 relative docs links resolved on exact source tree, 30 referenced task IDs exist, source disclaims future features and hardware completion; GitHub exact-head governance CI SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191484387 and offline QA SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191480823 . VERIFIED applies only to documentation/test matrix; VAC runtime cases NOT_IMPLEMENTED and not merged. Before merging PR #42, reconcile branch's 70-task registry snapshot against live 71-task board and owner's 3D direction."
+      ],
+      "status_history": [
+        {
+          "date": "2026-10-18",
+          "from": null,
+          "to": "planned",
+          "actor": "SCOPE-31",
+          "reason": "Owner requested detailed documentation; GOV-004 design exists but no single end-to-end causal acceptance contract."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "planned",
+          "to": "ready",
+          "actor": "SCOPE-31",
+          "reason": "Standalone cross-system QA specification can be authored before implementations."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SCOPE-31",
+          "reason": "Reserve specific cross-system QA documentation without taking existing V3 subsystems from other agents."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "SCOPE-31",
+          "reason": "Drafting the causal cross-domain verification matrix, scenarios and measurable acceptance invariants."
+        },
+        {
+          "date": "2026-10-18",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SCOPE-31",
+          "reason": "Documented 14 cross-system V3 acceptance scenarios and causal/resource/performance invariants; 34 governance tests pass exact SHA. Await offline QA and independent review."
+        },
+        {
+          "date": "2026-10-20T14:08:37.912Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "SENTRY-58",
+          "reason": "Independent documentation acceptance and exact-head CI confirmed for 14 causal VAC design scenarios; runtime acceptance explicitly NOT_IMPLEMENTED; task registry rebase still required before merge."
+        }
+      ],
+      "verified_by": "SENTRY-58"
+    },
+    {
+      "id": "QA-007",
+      "priority": "P1",
+      "area": "qa",
+      "title": "Eliminate reset race in Chromium mobile acceptance",
+      "status": "in_review",
+      "owner": "SENTRY-58",
+      "work_branch": "fix/qa-007-sentry-reset-race",
+      "depends": [
+        "QA-001"
+      ],
+      "acceptance": "Ten repeated Chromium mobile acceptance runs at an exact SHA prove new-world reset and save/import identity without a timing race or regression; offline checks remain green.",
+      "issue": null,
+      "pr": null,
+      "evidence": [
+        "Draft PR #53 https://github.com/jbob-coder/The-idle-open-world-universe/pull/53 exact code SHA d6a0deee8bb16c39d420b875c27786d07997959d; GitHub offline QA SUCCESS on push run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39433403998 and PR run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39433500416. New atomic reset test checks seed/identity/tick across 10 seeds x 3 viewports; does NOT prove 10 independent full-suite repetitions. Issue #52. Independent review and merge pending."
+      ],
+      "origin_task": "WLD-008",
+      "created_by": "SENTRY-58",
+      "new_task_reason": "Separate failure in exact-SHA mobile CI exposed a timing-sensitive reset assertion. Reliable acceptance is needed before combined game integration.",
+      "status_history": [
+        {
+          "date": "2026-10-20T13:44:33.853Z",
+          "from": null,
+          "to": "planned",
+          "actor": "SENTRY-58",
+          "reason": "Necessary follow-up to WLD-008: Separate failure in exact-SHA mobile CI exposed a timing-sensitive reset assertion. Reliable acceptance is needed before combined game integration."
+        },
+        {
+          "date": "2026-10-20T13:44:33.853Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "SENTRY-58",
+          "reason": "All declared prerequisites verified; available for assignment"
+        },
+        {
+          "date": "2026-10-20T13:45:17.929Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SENTRY-58",
+          "reason": "Claim QA-007 after delivering WLD-008 to independent review; diagnose reset assertion without editing other task branches."
+        },
+        {
+          "date": "2026-10-20T13:45:31.163Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "SENTRY-58",
+          "reason": "Inspect failing mobile acceptance and apply smallest deterministic test repair, verify save/import and offline CI on isolated branch."
+        },
+        {
+          "date": "2026-10-20T13:50:00.627Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SENTRY-58",
+          "reason": "QA-007 test-only reset race repair delivered in draft PR #53; exact-head offline QA push+PR success; independent review required before merge."
+        }
+      ]
+    }
+  ]
+}

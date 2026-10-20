@@ -1,3 +1,5 @@
+> **SUPERSEDED / DO NOT USE AS A NEW AGENT PROMPT (2026-10-20).** Historical 2026-10-17 Canvas 2D Codex execution brief, not current owner instructions. Its top-down-only, 16x16/16x24 and no-3D commands are legacy compatibility, not final owner approvals. For new work consult [GODSEED authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and the live task registry. Do not relaunch old task batches; future product is autonomous 3D Pixel Squares.
+
 # GODSEED — FINAL COPY/PASTE PROMPT FOR CODEX CLOUD
 **Save this prompt and submit it in Codex Cloud when the preparation branch is selected.** You are to implement the unfinished game-visual/Android work, not write another general plan. Read source files and execute the plan with evidence.
 

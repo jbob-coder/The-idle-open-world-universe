@@ -1,6 +1,8 @@
-# GODSEED — high-sky world vision (implementation target)
+# GODSEED — historical v0.4 Canvas 2D high-sky camera
 
-**Purpose:** the player is a deity watching one independently developing life and a tiny medieval-fantasy world; the world is the stage, not a wallpaper. Nim and NPCs decide things locally and can surprise the observer.
+**REFERENCE STATUS (2026-10-20):** Exclusive overhead projection is historical, not the approved final 3D Pixel Squares camera. See [project authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md); retain compatible v1 reference renderer.
+
+**Purpose (legacy v0.4):** the player is a deity watching one independently developing life and a tiny medieval-fantasy world; the world is the stage, not a wallpaper. Nim and NPCs decide things locally and can surprise the observer.
 
 **POV:** perpendicular, normal top-down sky view, never angled or pseudo-isometric. Keep it high enough to see roads, villages and interactions simultaneously. The camera tracks Nim only when Follow is on; god can pan/inspect anywhere permitted by camera rules.
 

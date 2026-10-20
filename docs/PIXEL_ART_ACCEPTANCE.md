@@ -1,6 +1,8 @@
 # GODSEED — Strict Pixel-Art Visual Acceptance Matrix
 
-**QA scope:** five groups of visual evidence, all in-game screenshots and automated checks. Reference concepts and PNG atlases are **not** themselves evidence of a completed renderer. Use `config/pixel-art-contract.json` and `docs/PIXEL_WORLD_STYLE_GUIDE.md` as authority. This is an implementation review **checklist**, not 30 new tasks: it maps to existing A–E and W tasks (45 total across F/W/A–E/S as of this handoff).
+**REFERENCE STATUS (2026-10-20):** This is **legacy Canvas 2D asset quality assurance**, not a ban on the future 3D Pixel Squares observer. Do not silently disable 2D validators: replace them only via reviewed migration. [Current product authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
+**QA scope (older A–E/W asset pipeline):** five groups of visual evidence, all in-game screenshots and automated checks. Reference concepts and PNG atlases are **not** themselves evidence of a completed renderer. Use `config/pixel-art-contract.json` and `docs/PIXEL_WORLD_STYLE_GUIDE.md` as authority. This is an implementation review **checklist**, not 30 new tasks: it maps to existing A–E and W tasks (45 total across F/W/A–E/S as of this handoff).
 
 ## Per-artifact gates (all statuses currently TODO for integration)
 

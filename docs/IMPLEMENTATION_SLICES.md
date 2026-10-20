@@ -1,3 +1,5 @@
+> **HISTORICAL 25/30-TASK BACKLOG (2026-10-20):** An earlier Canvas 2D implementation plan, not current bot ownership or task completion. Future product is 3D Pixel Squares emergent civilizations. See [authority and corrected reference precedence](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and live registry.
+
 # Codex implementation batches: do five tasks at a time
 
 **Art acceptance authority:** `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `config/pixel-art-contract.json`, `docs/PIXEL_ART_ACCEPTANCE.md`. A pixel-square look is mandatory for terrain, characters, divine effects and HUD. The validator checks original starter source: `node scripts/validate_pixel_art_contract.mjs`; Codex still must show **runtime screenshots** before marking a task done.

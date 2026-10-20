@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "task_id": "GOD-002",
+  "retiring_bot": "FORGE-27",
+  "reason": "owner_request",
+  "created_utc": "2026-10-20T02:42:19.808Z",
+  "last_known_status": "verified",
+  "owner_at_handoff": "FORGE-27",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "48415db105f6620dd1e9b629d93ba437f14378df",
+  "work_branch": "feat/god-002-forge-27-autonomy",
+  "work_sha": "a9822e8c6037b7f0baa07b55e9a7ea95fbb49905",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/34",
+  "summary": "Retiro definitivo solicitado por propietario. GOD-002 está verified por revisor independiente TERRAIN-01. Evaluación voluntaria y contextual de creencias, seguridad y consentimiento por residente: acepta/considera/rehúsa consejos divinos, preserva libre albedrío, no mueve NPCs ni completa misiones por orden. PR #34 sigue abierto y no fusionado. No equivale a ciclo de ejecución GOD-003 ni mundo 3D.",
+  "changed_files": [
+    "src/divine/consent.js",
+    "src/divine/intent.js",
+    "src/living.js",
+    "src/ui.js",
+    "build.py",
+    "tests/consent.test.js",
+    "tests/intent.test.js",
+    "tests/god_consent_browser_acceptance.py",
+    ".github/workflows/qa.yml"
+  ],
+  "tests": [
+    "PASS: Exact HEAD a9822e8c6037b7f0baa07b55e9a7ea95fbb49905 108/108 Node + Chromium offline 640x360 de consentimientos/rechazo, guardado v1, HTML/APK estructura; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188140209",
+    "PASS: Exact HEAD PR offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188273873",
+    "PASS: Exact HEAD Android Gradle and API29 emulator SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39188273888",
+    "NOT_RUN: Android 2–3 GB físico / PSS, temperatura, 20 minutos",
+    "NOT_RUN: Verificación de UI divina 3D Pixel Squares en una build 3D; el módulo histórico no la implementa"
+  ],
+  "blockers": [],
+  "risks": [
+    "Stacked PR #34 targets unmerged SIM-001 PR #26 at 553ef5c and separately includes GOD-001 parser from unmerged PR #25 at e97465f; integrator must reconcile both before merge.",
+    "A considering response is not a performed objective; GOD-003 owns scheduled actions and outcomes.",
+    "Emulator PASS does not establish low-end physical device memory limits.",
+    "Separate GOD-004 observer PR #28 owned FORGE-27 remains in_review; total two in_review prevents taking another task.",
+    "La dirección aprobada para GODSEED ahora es perspectiva 3D con estética Pixel Squares y NPCs que construyen sus sociedades de forma autónoma (rama introduccion-al-proyecto / PR #47); los requisitos heredados 2D cenital no son autorización para rediseñar la cámara. Revisar interfaces sin borrar código 2D existente; preservar Android offline y saves v1."
+  ],
+  "save_notes": "Saves stay version:1 and localStorage identity unchanged. New optional per-actor divineBelief fields are bounded and normalized on restore; no direct actor movement, quest completion, inventory, time or faith mutation from GOD-002 whispers.",
+  "next_actions": [
+    "Conservar GOD-002 verified: PR #34 abierto y HEAD a9822e8c6037b7f0baa07b55e9a7ea95fbb49905; no devolver a ready ni repetir implementación.",
+    "Integrador autorizado debe conciliar GOD-001 #25 y GOD-002 #34, tener en cuenta GOD-003 futuro y GOD-006 bloqueado y probar guardados v1.",
+    "Revisar dirección 3D Pixel Squares PR #47 y adaptar UI en una tarea autorizada distinta sin destruir 2D legado.",
+    "Solo propietario/integrador puede fusionar y registrar done después de pruebas del SHA integrado."
+  ],
+  "do_not_repeat": [
+    "GOD-001 parser and SIM-001 needs were previously independently verified but not merged. Preserve their code and tests.",
+    "Do not mistake draft/green CI for gameplay complete or integrate unapproved PRs.",
+    "DO NOT overwrite GOD-004's unrelated observer work or others' branches.",
+    "No reimplementar GOD-002 en otra rama ni sobrescribir trabajo ajeno; el PR y sus pruebas ya existen.",
+    "No declarar que el prototipo 2D histórico satisface la nueva escena 3D Pixel Squares.",
+    "No borrar rama, PR o save v1; no forzar merges."
+  ],
+  "unpublished_changes": false,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact."
+}

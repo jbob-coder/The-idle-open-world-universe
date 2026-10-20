@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task_id": "GOD-006",
+  "retiring_bot": "FORGE-27",
+  "reason": "owner_request",
+  "created_utc": "2026-10-19T16:56:08.133Z",
+  "last_known_status": "blocked",
+  "owner_at_handoff": "FORGE-27",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "947692010fb776a31be829810eee9ceec8e3be63",
+  "work_branch": "feat/god-006-forge-27-indirect-influence",
+  "work_sha": "aead479e55d1f24a545eb69347a816448ab8c2ab",
+  "pr_url": null,
+  "summary": "FORGE-27 successfully published the original GOD-006 code aead479e as a nonforce fast-forward from 7de3641. Baseline push CI 39190373911: 93/93 Node passed; browser smoke failed clicking intentionally disabled legacy bless control. New 14 Node guidance tests, offline 640x360 browser acceptance, and workflow changes were prepared, but publishing that newer test commit was refused by OpenAI GitHub connector safety, so do NOT claim that test changes are in the branch or tested. No PR, no completed deliverable. OWNER-REQUESTED DEFINITIVE RETIREMENT: no further work. Code candidate safely published, no PR, no accepted integration. Unpublished 14-test/browser/workflow draft was rejected by earlier connector safety enforcement; it does NOT exist on GitHub and cannot be claimed recoverable. Current coordination state remains blocked with FORGE-27 credited, no legal release while blocked.",
+  "changed_files": [
+    "src/divine/intent.js",
+    "src/living.js",
+    "tests/intent.test.js",
+    "src/divine/guidance.js",
+    "src/guidance_ui.js",
+    "src/ui.js",
+    "build.py"
+  ],
+  "tests": [
+    "PASS: Exact-head aead479e GODSEED offline QA Node suite 93/93, HTML build, asset reproducibility, APK prototype structure/signature; run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39190373911",
+    "FAIL: Same run browser_smoke.py line 28 Playwright times out clicking hidden/disabled legacy [data-power=\"bless\"] after GOD-006 replaces direct power toolbar",
+    "NOT_RUN: Proposed 14 new deterministic guidance Node tests and 640x360 offline mobile browser acceptance; content NOT PUBLISHED because connector update_ref safety blocked",
+    "NOT_RUN: Native Android API29 emulator tests for published GOD-006 source",
+    "NOT_RUN: Physical Android 2-3 GB RAM performance/soak",
+    "NOT_RUN: Fresh native/browser/Node acceptance after owner-request retirement; no new publish, no PR or approved 3D migration performed."
+  ],
+  "blockers": [
+    "Publishing the new guidance regression-test commit to feat/god-006-forge-27-indirect-influence was refused by the GitHub connector's OpenAI safety checks; do not evade the block through force or alternate push route.",
+    "Current published commit aead479e causes browser_smoke.py timeout: old direct power button bless is now hidden and disabled. tests/mobile_acceptance.py and tests/capture_android_layouts.py also still assume direct bless/inspire controls and 10 dock buttons. They must be adapted, not disabled.",
+    "No accepted PR/CI with the new guidance tests; original branch code remains unverified and should not be integrated.",
+    "Owner has ordered permanent retirement of FORGE-27; blocked→ready cannot be enacted without resolving original failing Chromium tests and authorized safety-compliant publication.",
+    "Original 2D divine toolbar UI assumptions conflict with owner-approved 3D Pixel Squares direction (PR #47), so future design decisions require owner/successor review."
+  ],
+  "risks": [
+    "The prepared 14-test update was NOT published; no reliable remote commit SHA/branch reference is recorded for those changes. Do not assume they survive after this chat.",
+    "Source guidance.js uses opt-in consent/whisper but direct Sim.power API remains for legacy simulation; browser UI hides direct toolbar. Verify no hidden UI keyboard path still executes direct powers.",
+    "GOD-006 branch is based on GOD-004 at 7de3641 and ports GOD-001 parser; integration with verified GOD-002 and ART-007 must be coordinated and explicit.",
+    "Do not claim save v1, physical Android low-RAM, or autonomy correctness without fresh test evidence.",
+    "New owner-approved product direction is 3D perspective with Pixel Squares aesthetic and autonomous NPC-built societies (PR #47, introduction branch). Legacy 2D top-down and fixed sprite/camera mandates are historical compatibility context, NOT new owner approval. Coordinate a design review; do not delete old 2D work or misrepresent the game as already 3D.",
+    "Prepared uncommitted guidance test/workflow changes were not published; this retirement does not make them recoverable. Successor must reconstruct independently after authorization."
+  ],
+  "save_notes": "Existing v1 save key and schema preserved by the implementation candidate, but browser regression and migration checks incomplete; only 93 Node tests passed, Chromium startup smoke failed, Android hardware NOT RUN.",
+  "next_actions": [
+    "Owner/coordinator must explicitly resolve GOD-006 blocked cause and transition it according to task governance; handoff alone does not clear owner or allow claim. Do not steal bot identity.",
+    "Obtain an authorized, safety-compliant path to publish the newer test commit; do not bypass the connector safety denial. The recovered code branch HEAD is aead479e55d1f24a545eb69347a816448ab8c2ab.",
+    "Add >=10 deterministic tests for all eight guidance options, costs, preview purity, invalid scope/person, individual consent limitation, insufficient faith, 12-tick cooldown, refusal, no instant NPC moves/resources, deterministic save v1.",
+    "Adapt browser_smoke.py, mobile_acceptance.py and capture_android_layouts.py from hidden bless/inspire direct controls to the touch-safe guidanceDock/guidanceScope/guidanceAction/guidanceSubmit UI while preserving camera, screenshot, touch, save and offline assertions.",
+    "Add and run tests/god_guidance_browser_acceptance.py in .github/workflows/qa.yml; verify browser 640x360 read-only preview, consent/rejection, cooldown, no teleports and save.",
+    "Run exact-head full Node/browser + native Gradle Android API29 tests, record FAIL/PASS and artifacts; write PR and only then move blocked->ready->claimed->in_progress->in_review through authorized transitions and independent review.",
+    "Review latest owner 3D Pixel Squares product direction PR #47 and ART-007 before accepting any replacement divine HUD."
+  ],
+  "do_not_repeat": [
+    "Do not mark the unpublished guidance tests as committed or passing.",
+    "Do not try another Git push/update_ref route to bypass OpenAI safety denial without explicit authorization.",
+    "Do not treat the 93/93 Node passes as full QA success because the browser job failed.",
+    "Do not restore instant God powers to make legacy browser tests pass; tests should reflect the new indirect-god-play semantics.",
+    "Do not treat owner retirement as an instruction to retry denied publishing or restore direct god puppeteering.",
+    "Do not claim unrecoverable unpublished tests were saved by this handoff."
+  ],
+  "unpublished_changes": true,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact."
+}

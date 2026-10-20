@@ -1,6 +1,8 @@
-# GODSEED — STRICT SQUARE-PIXEL ART BIBLE (binding production specification)
+# GODSEED — Legacy Canvas 2D square-pixel art bible (scoped compatibility)
 
-**Authority:** `config/pixel-art-contract.json` defines measurable rules, `assets/palettes/medieval-fantasy.json` is the color source of truth, and `assets/asset-manifest.json` is the sprite-atlas inventory. **Status: design and preparatory assets, not completed renderer integration.** Read `docs/PIXEL_ART_ACCEPTANCE.md` before marking visual tasks done.
+**REFERENCE STATUS (2026-10-20):** This guide defines the **legacy 2D sprite and asset acceptance**, not a veto on the owner's approved 3D Pixel Squares observer POV. Its top-down-only and no-3D wording is historical. Preserve old art validators until a tested new render contract is approved; see [project authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
+**Historical 2D asset authority:** `config/pixel-art-contract.json` defines measurable rules, `assets/palettes/medieval-fantasy.json` is the color source of truth, and `assets/asset-manifest.json` is the sprite-atlas inventory. **Status: design and preparatory assets, not completed renderer integration.** Read `docs/PIXEL_ART_ACCEPTANCE.md` before marking visual tasks done.
 
 ## 0. Non-negotiable identity
 

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "retiring_bot": "LIFE-26",
+  "reason": "owner_request",
+  "created_utc": "2026-10-19T16:55:33.174Z",
+  "owner_at_handoff": "LIFE-26",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "27928edc4412d3ec85cf567113035ec2435f8279",
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact.",
+  "unpublished_changes": false,
+  "task_id": "ART-007",
+  "last_known_status": "in_review",
+  "work_branch": "feat/art-007-life-26-godview-layout",
+  "work_sha": "0a2e82923983111db3ef2b03f34f5364e459235b",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/46",
+  "source_base_branch": "feat/god-004-forge-27-observer",
+  "source_base_sha": "7de364157e45260e4d728daa1c3558be79dacd39",
+  "dependencies": [
+    {
+      "id": "GOD-004",
+      "status": "verified",
+      "pr": 28
+    }
+  ],
+  "summary": "RETIRO SOLICITADO. PR #46 draft, abierto y NO FUSIONADO, ART-007 sigue in_review con pruebas reales exact SHA 0a2e829. Entregó en la arquitectura LEGACY Canvas/WebView 2D una UI mobile map-first de 7 pestañas táctiles 44px, drawer único con inspector read-only GOD-004, retrato real de Nim, pueblos/eventos/consejo, zoom/poderes/guardados anteriores. Fix de compatibilidad API29 con replaceChildren→removeChild en src/observer_ui.js conservado SOLO en esta rama apilada; dueño GOD-004 avisado en PR #28. IMPORTANTE PR #47 documenta preferencia aprobada POSTERIOR de render 3D Pixel Squares: la interfaz 2D NO es el diseño visual final del propietario, preservar componentes agnósticos a renderer y auditar migración, no eliminar datos ni considerarla 3D jugable.",
+  "changed_files": [
+    ".github/workflows/qa.yml",
+    "android/gradle/app/src/androidTest/java/io/godseed/one/MapFirstNativeSmokeTest.java",
+    "build.py",
+    "docs/ART_007_MAP_FIRST_GODVIEW.md",
+    "src/observer_ui.js",
+    "src/ui_layout_v3.css",
+    "src/ui_layout_v3.js",
+    "tests/browser_smoke.py",
+    "tests/capture_android_layouts.py",
+    "tests/chapter_browser_acceptance.py",
+    "tests/chapter_three_browser_acceptance.py",
+    "tests/chapter_two_browser_acceptance.py",
+    "tests/god_observer_browser_acceptance.py",
+    "tests/godview_layout_browser_acceptance.py",
+    "tests/lifecycle_acceptance.py",
+    "tests/living_world_browser_acceptance.py",
+    "tests/mobile_acceptance.py",
+    "tests/native/run-emulator-acceptance.sh"
+  ],
+  "tests": [
+    "PASS: exact HEAD 0a2e82923983111db3ef2b03f34f5364e459235b GitHub Actions PR offline QA #39229640024: python build.py, node --test tests/*.test.js 86/86, Chromium real offline 640x360/720x400/960x540 map-stage >=65%, 7 touch tabs, read-only single observer, v1 saves, chap I-III, no network/JS errors; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39229640024",
+    "PASS: same SHA push offline QA #39229633613; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39229633613",
+    "PASS: exact HEAD Gradle/native WebView API29 emulator 7/7 instrumentation including MapFirstNativeSmokeTest; APK installed/launched and emulator screenshot saved #39229640058; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39229640058",
+    "NOT_RUN: physical 2/3GB Android RAM/PSS/FPS 20-minute heat/scroll and real-user device navigation",
+    "NOT_RUN: 3D Pixel Squares renderer, 3D input/camera integration, autonomous societal creation from no preplaced village"
+  ],
+  "blockers": [
+    "ART-007 remains in_review by owner LIFE-26; independent reviewer required; no re-claim or reset to ready",
+    "PR #47 newer owner-approved 3D Pixel Squares direction supersedes legacy top-down-only 2D; scope review/possible successor adaptation before adopting UI as final",
+    "PR #46 is stacked on GOD-004 source PR #28 and not integrated into main; require dependency-aware review"
+  ],
+  "risks": [
+    "UI drawing and camera are Canvas/WebView 2D; do not equate 640/720/960 responsive acceptance to user-approved 3D",
+    "Legacy 'faith' powers in UI belong to GOD-006 replacement (currently blocked) and are NOT owner-approved final catalog",
+    "Exact Android emulation is NOT physical 2GB/3GB phone PSS/CPU/FPS certification",
+    "Standalone offline HTML and localStorage version:1 must survive 3D migration; imported old save must not be cleared",
+    "Do not overwrite GOD-004 verified owner source branch with this PR's compatibility patch without coordination"
+  ],
+  "save_notes": "Verified unchanged src/sim.js and src/living.js; version:1 saves / key godseed-one-small-life-v1 unchanged. Chromium import/export and old chapter tests plus Android API29 persisted state passed at 0a2e829; no physical-device benchmark. New owner direction 3D transition requires explicit save/render decoupling plan.",
+  "next_actions": [
+    "Read issue #43 and owner direction PR #47 before reviewing or reworking ART-007. Do not assume Canvas 2D-only remains a final constraint or arbitrarily choose 3D engine.",
+    "Treat ART-007 as in_review PR #46; independent reviewer inspects exact HEAD 0a2e829, source and all three CI run URLs. Do NOT move back to ready or self-verify/merge.",
+    "Coordinate with GOD-004 owner: API29 DOM compatibility fix 69beccff883c788e97e2d065c30a0b06e43d474d is on ART-007 stacked branch; backport only under permission and coverage.",
+    "Determine renderer-neutral, reusable observer/navigation/power-state logic; design 3D Pixel Squares migration as separate owner-approved task/PR without discarding accepted saves or native WebView operation.",
+    "New visual PR must run real offline 3D screenshots and Android API29 emulator, then physical phone measurements when feasible; no simulated screenshot as proof of gameplay."
+  ],
+  "do_not_repeat": [
+    "Do not reimplement GOD-004 observational model: read-only inspector from verified PR #28 is reused here.",
+    "Do not duplicate pixel UI/nav test and 7th API29 emulator regression: tests/godview_layout_browser_acceptance.py and MapFirstNativeSmokeTest.java have exact-head PASS.",
+    "Do not treat ART-007 as a 3D game release, or as permission to lock an old fixed 16x16/camera contract as owner-approved.",
+    "Do not take this in_review task as claimed; owner remains LIFE-26 until independent verification according to governance.",
+    "Do not delete the original branch, existing APK/CI artifacts, open PR #46, or mutate main."
+  ]
+}
