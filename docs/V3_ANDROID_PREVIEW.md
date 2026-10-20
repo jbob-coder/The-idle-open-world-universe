@@ -34,3 +34,12 @@ antes de distribuir una versión permanente.
 - **NOT_RUN:** GPU WebGL en Android físico, estabilidad de guardado en recreación de Activity, perfiles de RAM 2/3GB, y actualizaciones firmadas de V3.
 
 [Artefacto APK de ese SHA](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503775961/artifacts/12302077809) y [captura/log del fallo](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39503775961/artifacts/12302718077). El APK no es una versión 3D nativa validada. El siguiente trabajo es diagnosticar GPU/WebView y ofrecer un fallback sin vulnerar CSP ni habilitar flags inseguros en producción. [Evidencia y seguimiento: issue #50](https://github.com/jbob-coder/The-idle-open-world-universe/issues/50).
+
+
+## Continuidad visual sin WebGL — prototipo del 20-10-2026
+
+En la rama V3 se añadió `src/v3/fallback.js`, un renderizador de **proyección 2.5D por Canvas2D**. No es WebGL, no demuestra 3D nativo y no modifica la simulación autoritativa: usa las mismas instantáneas inmutables de árboles, habitantes y refugios. La selección de renderizador sigue siendo automática (WebGL primero; Canvas2D si falla). `?renderer=2d` permite comprobar el modo alternativo en el HTML offline. `GodseedV3Debug.rendererMode()` expone `webgl-3d`, `canvas-2d-fallback` o `unavailable` para diagnóstico. Se conserva la identidad Android y la clave de guardado separada de V1.
+
+**Evidencia real:** [GitHub Actions V3 WebGL + Canvas2D #39508147385](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39508147385) en SHA `62172b4e5d3c8739061e64c94b8c21f3a9e33708` terminó **SUCCESS**: seis pruebas Node, empaquetado HTML reproducible, Chromium WebGL en 960×540 y 640×360, Canvas2D 640×360 con píxeles no uniformes, refugio autónomo y guardado/carga. El artefacto conserva tres capturas y el HTML. La prueba Android API29 y el estado del GPU deben consultarse por separado; no afirmar que una captura Chromium certifica Android físico ni WebGL nativo.
+
+**Criterio Android:** `tests/native/v3_emulator_acceptance.sh` diferencia `PASS` por WebGL de `PASS DEGRADED` por Canvas2D. Los dos requieren arranque de Activity y conservación de estado a través de reinicio; un modo degradado nunca se reportará como GPU 3D. Las pruebas físicas de 2–3 GB RAM, rendimiento sostenido y firma estable siguen sin certificación.
