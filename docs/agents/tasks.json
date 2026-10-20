@@ -1693,7 +1693,8 @@
       "issue": null,
       "pr": 55,
       "evidence": [
-        "PR #55 https://github.com/jbob-coder/The-idle-open-world-universe/pull/55 ; HEAD ca7b9f39c8eccbddb0406bf89adcb1a61c728bd2 ; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39447351756 completed SUCCESS; 114/114 Node tests including six GOD-003 lifecycle regressions; offline browser PASS. Native Android run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39447351757 IN_PROGRESS at submission, not yet acceptance; physical devices NOT_RUN. Await independent review."
+        "PR #55 https://github.com/jbob-coder/The-idle-open-world-universe/pull/55 ; HEAD ca7b9f39c8eccbddb0406bf89adcb1a61c728bd2 ; offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39447351756 completed SUCCESS; 114/114 Node tests including six GOD-003 lifecycle regressions; offline browser PASS. Native Android run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39447351757 IN_PROGRESS at submission, not yet acceptance; physical devices NOT_RUN. Await independent review.",
+        "PR #55 https://github.com/jbob-coder/The-idle-open-world-universe/pull/55 ; exact head 0a2c1b1ec12e1831c64b16e652926c9deab32865 ; GODSEED offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39448389758 COMPLETED SUCCESS: 115/115 Node (7 GOD-003 tests), offline Chromium PASS ; GODSEED native Android https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39448389780 COMPLETED SUCCESS: Gradle package PASS, API29 emulator 6/6 tests PASS including load/save/recreate/exit. Physical 2-3GB devices NOT_RUN. Independent review and integration pending; NOT verified/done."
       ],
       "status_history": [
         {
