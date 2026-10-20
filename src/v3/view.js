@@ -88,12 +88,18 @@
         if(b.berries>0)box(b.x+.44,.32,b.z+.44,.18,.18,.18,[.69,.17,.26]);
       }
       for(const b of state.structures){
-        box(b.x-.25,0,b.z-.15,1.6,1.35,1.5,[.55,.45,.31]);
-        box(b.x-.39,1.35,b.z-.28,1.86,.50,1.76,[.57,.21,.19]);
+        const workshop=b.type==="workshop",store=b.type==="storehouse";
+        const walls=workshop?[.44,.49,.51]:store?[.62,.51,.30]:[.55,.45,.31];
+        const roof=workshop?[.19,.35,.48]:store?[.42,.38,.23]:[.57,.21,.19];
+        const wide=store?1.95:workshop?1.8:1.6;
+        box(b.x-.25,0,b.z-.15,wide,1.35,1.5,walls);
+        box(b.x-.39,1.35,b.z-.28,wide+.26,.50,1.76,roof);
         box(b.x+.25,.12,b.z+1.36,.43,.79,.04,[.29,.17,.10]);
+        if(workshop)box(b.x+1.05,1.75,b.z+.12,.29,.82,.30,[.37,.36,.34]);
+        if(store)box(b.x+.85,.15,b.z+1.36,.38,.42,.06,[.75,.61,.32]);
       }
       for(const c of state.citizens){
-        const col=c.id==="sim_aria"?[.40,.66,.95]:[.96,.72,.34];
+        const col=c.id==="sim_aria"?[.40,.66,.95]:c.id==="sim_bran"?[.96,.72,.34]:[.85,.52,.70];
         box(c.x+.29,0,c.z+.29,.42,.88,.42,col);
         box(c.x+.25,.88,c.z+.25,.5,.38,.5,[.80,.62,.45]);
       }
