@@ -117,8 +117,8 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
     window.GodseedGuidanceLifecycle.summary(recent).slice(0,8):[];
   $('godLifecycle').textContent=!recent?'No divine suggestions recorded.':
     !outcomes.length?'No individual decision evidence yet.':
-    outcomes.map(o=>o.name+': '+(o.result?.status==='observed'?
-      'matching action observed (cause not proven)':o.result?.status==='unobserved'?
+    outcomes.map(o=>o.name+': '+(o.result&&o.result.status==='observed'?
+      'matching action observed (cause not proven)':o.result&&o.result.status==='unobserved'?
       'no matching action observed':o.status)).join(' · ');
  }
 
