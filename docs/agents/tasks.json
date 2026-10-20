@@ -839,7 +839,7 @@
       "priority": "P0",
       "area": "world",
       "title": "Bound active chunks, offscreen simulation and memory",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "SENTRY-58",
       "work_branch": "feat/wld-008-sentry-offscreen",
       "depends": [
@@ -849,7 +849,9 @@
       "acceptance": "LRU and low-frequency offscreen tick, no memory growth from travel distance; measured budgets logged.",
       "issue": 18,
       "pr": null,
-      "evidence": [],
+      "evidence": [
+        "Draft PR #51 https://github.com/jbob-coder/The-idle-open-world-universe/pull/51; implementation source SHA 52a5a12dd35cc31a659c15055d5e058009dfd206; exact-HEAD offline QA SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39432294118. 100-seed no-input settlement proof and 5 Node regressions (now 6 tests), resource conservation and save roundtrip. Not merged; no 3D/Android physical gameplay, independent reviewer pending."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -878,6 +880,13 @@
           "to": "in_progress",
           "actor": "SENTRY-58",
           "reason": "Implement isolated opt-in deterministic offscreen settlement simulation, stable snapshots, cache bounds, no-render progression and Node regressions; preserve current 2D playable world and v1 saves."
+        },
+        {
+          "date": "2026-10-20T13:42:18.047Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SENTRY-58",
+          "reason": "Deliver bounded opt-in offscreen society proof with full exact-SHA offline QA success in draft PR #51; request independent review; no main integration or release claim."
         }
       ]
     },
