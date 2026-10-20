@@ -108,7 +108,8 @@
       if(!s.kits)return {type:s.wood>=2?"kit":"wood"};
       return {type:s.wood>=6?"build":"wood",site:SITES[1]};
     }
-    if(s.citizens.length>=3&&s.structures.length===2){
+    // The council must choose a leader before the third public project is approved.
+    if(s.citizens.length>=3&&s.structures.length===2&&s.settlement.leaderId){
       if(!s.kits)return {type:s.wood>=2?"kit":"wood"};
       return {type:s.wood>=4?"build":"wood",site:SITES[2]};
     }
