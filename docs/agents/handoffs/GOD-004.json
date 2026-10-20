@@ -2,16 +2,16 @@
   "schema_version": 1,
   "task_id": "GOD-004",
   "retiring_bot": "FORGE-27",
-  "reason": "session_end",
-  "created_utc": "2026-10-19T01:31:31.498Z",
-  "last_known_status": "in_review",
+  "reason": "owner_request",
+  "created_utc": "2026-10-20T02:42:19.808Z",
+  "last_known_status": "verified",
   "owner_at_handoff": "FORGE-27",
   "coordination_branch": "docs/godseed-agent-task-governance-v1",
-  "coordination_sha": "32414b640829365c9d39bd2f40423c2a19bfd193",
+  "coordination_sha": "48415db105f6620dd1e9b629d93ba437f14378df",
   "work_branch": "feat/god-004-forge-27-observer",
   "work_sha": "7de364157e45260e4d728daa1c3558be79dacd39",
   "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/28",
-  "summary": "Read-only mobile-friendly Divine Observatory for Nim, travelers, residents, towns and individual 2×2 building footprints; life memories and recent divine guidance; isolated modules and deterministic offline tests, no SIM control and no save schema change. PR #28 awaits independent review; Node/browser and native Android emulator CI passed at exact HEAD; two FORGE-27 PRs in review prohibit new claims.",
+  "summary": "Retiro definitivo solicitado por propietario. GOD-004 está verified por revisor independiente GDS-KESTREL-1810. Observatorio del dios de solo lectura (Nim, viajeros, residentes, pueblos, edificios, memorias e intención) con comprobación anti-XSS y ausencia de mutación; interfaz offline para Android. PR #28 sigue abierto, sin merge; prototipo histórico 2D y no una escena 3D terminada.",
   "changed_files": [
     "src/divine/observer.js",
     "src/observer_ui.js",
@@ -21,28 +21,32 @@
     ".github/workflows/qa.yml"
   ],
   "tests": [
-    "PASS: Exact HEAD 7de364157e45260e4d728daa1c3558be79dacd39, GODSEED offline QA Actions run 39185439491, Node tests, browser mobile/offline, observer XSS safety/no mutation, APK structure.",
-    "PASS: Exact HEAD 7de364157e45260e4d728daa1c3558be79dacd39 native Android run 39185442827 COMPLETED SUCCESS (Gradle, offline APK asset, emulator installation and tests).",
-    "NOT_RUN: Physical Android 2–3 GB RAM device benchmark, requires real hardware."
+    "PASS: Exact HEAD 7de364157e45260e4d728daa1c3558be79dacd39, Node 86/86 + Chromium offline 640x360 observatorio/XSS/no mutación y APK estructura https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185439491",
+    "PASS: Exact HEAD PR offline QA SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185442791",
+    "PASS: Exact HEAD Gradle Android API29 emulator 6/6 tests SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39185442827",
+    "NOT_RUN: Prueba física Android de bajo RAM 2–3 GB/PSS/térmica",
+    "NOT_RUN: Revalidación de presentación del inspector dentro de una escena 3D Pixel Squares; no implementado"
   ],
   "blockers": [],
   "risks": [
-    "Independent review needed before verified; no merge permission.",
     "God-001 PR #25 also pending; apply #25 and #28 without overwriting distinct source modules; ensure builder includes both after integration.",
     "No playable interiors yet. Observer reports status rather than fabricating them.",
-    "Physical low-RAM Android playtest not yet performed."
+    "Physical low-RAM Android playtest not yet performed.",
+    "La dirección aprobada para GODSEED ahora es perspectiva 3D con estética Pixel Squares y NPCs que construyen sus sociedades de forma autónoma (rama introduccion-al-proyecto / PR #47); los requisitos heredados 2D cenital no son autorización para rediseñar la cámara. Revisar interfaces sin borrar código 2D existente; preservar Android offline y saves v1."
   ],
   "save_notes": "No changes to state, serializer, restore, version 1 schema or godseed-one-small-life-v1 localStorage key. Browser test asserts observing cannot mutate serialized state.",
   "next_actions": [
-    "Independently review #28 exact HEAD 7de364157e45260e4d728daa1c3558be79dacd39 and screenshots, then run Node/browser CI after any changes.",
-    "Confirm archived Android emulator artifacts/run 39185442827 and independently review limitations; do not conflate emulation with a physical low-RAM device test.",
-    "If reviewer approves exact HEAD, update registry in_review -> verified by independent reviewer; owner/integrator may merge later and mark done only after integration.",
-    "Before any new task, refetch tasks.json and confirm fewer than two outstanding FORGE-27 PRs and a ready/unowned task."
+    "Conservar GOD-004 verified: PR #28 abierto y HEAD 7de364157e45260e4d728daa1c3558be79dacd39; no reclamar ni marcar done sin merge autorizado.",
+    "Integrador debe coordinar UI observatorio #28 con GOD-006 bloqueada, GOD-002 y dirección 3D Pixel Squares PR #47; mantener la distinción entre inspección y control directo.",
+    "Revisar pruebas canvas-tap E2E aún ausentes, guardados v1, Android offline e integración física en la futura escena 3D; no confundir aprobación antigua 2D.",
+    "Solo propietario/integrador puede fusionar y registrar done tras CI del SHA integrado."
   ],
   "do_not_repeat": [
-    "Do not reclaim GOD-004: ownership remains FORGE-27 and status in_review.",
     "Do not merge #28 without owner approval; avoid touching main.",
-    "Do not rewrite another bot's chat/handoff or its task registry entries."
+    "Do not rewrite another bot's chat/handoff or its task registry entries.",
+    "No reimplementar GOD-004 en otra rama ni sobrescribir trabajo ajeno; el PR y sus pruebas ya existen.",
+    "No declarar que el prototipo 2D histórico satisface la nueva escena 3D Pixel Squares.",
+    "No borrar rama, PR o save v1; no forzar merges."
   ],
   "unpublished_changes": false,
   "starting_documents": [

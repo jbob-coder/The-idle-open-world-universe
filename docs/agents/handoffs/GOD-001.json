@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "task_id": "GOD-001",
+  "retiring_bot": "FORGE-27",
+  "reason": "owner_request",
+  "created_utc": "2026-10-20T02:42:19.808Z",
+  "last_known_status": "verified",
+  "owner_at_handoff": "FORGE-27",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "48415db105f6620dd1e9b629d93ba437f14378df",
+  "work_branch": "feat/god-001-forge-27-intent-parser",
+  "work_sha": "e97465f1343c77362812db603e0c3ae686191041",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/25",
+  "summary": "Retiro definitivo solicitado por propietario. GOD-001 fue implementada y verificada independientemente por TERRAIN-01. Parser offline de intenciones divinas inglés/español, negación, destinatarios explícitos, ambigüedad/entradas desconocidas rechazadas sin asumir obediencia; integra mensajes con la simulación existente y no permite marionetear NPCs. PR #25 abierto, sin merge. Esta entrega no equivale a instalar una IA conversacional ni al nuevo diseño 3D.",
+  "changed_files": [
+    "build.py",
+    "src/divine/intent.js",
+    "src/living.js",
+    "src/ui.js",
+    "tests/intent.test.js"
+  ],
+  "tests": [
+    "PASS: Exact HEAD e97465f1343c77362812db603e0c3ae686191041, node --test tests/*.test.js, 89/89 Node pruebas según revisión independiente TERRAIN-01; browser Chromium offline y móvil PASS; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624",
+    "PASS: Exact HEAD offline PR QA completó SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183738618",
+    "PASS: Exact HEAD native Android Gradle/API29 emulator CI completó SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183738629 (emulador, no teléfono físico).",
+    "NOT_RUN: Prueba física de dispositivos Android de 2–3 GB de RAM, temperatura, PSS y 20 minutos.",
+    "NOT_RUN: Compatibilidad de presentación 3D Pixel Squares del parser/God Whisper integrado en una nueva escena 3D; rama de implementación histórica 2D."
+  ],
+  "blockers": [],
+  "risks": [
+    "PR #25 permanece abierto sin integración autorizada; GOD-002 (#34) y GOD-006 (blocked) usan/replican la lógica de intención. No perder ni duplicar código al reconciliar ramas.",
+    "El resultado del parser es interpretación restringida por reglas, no IA conversacional remota ni obediencia de los Sims.",
+    "La dirección aprobada para GODSEED ahora es perspectiva 3D con estética Pixel Squares y NPCs que construyen sus sociedades de forma autónoma (rama introduccion-al-proyecto / PR #47); los requisitos heredados 2D cenital no son autorización para rediseñar la cámara. Revisar interfaces sin borrar código 2D existente; preservar Android offline y saves v1."
+  ],
+  "save_notes": "Versión 1 del save y clave godseed-one-small-life-v1 conservadas; parser no autoriza mover o completar misiones de NPC instantáneamente. Evidencia Node/Chromium y emulador sobre exact HEAD, sin test físico.",
+  "next_actions": [
+    "Mantener GOD-001 verified en el registro; no reclamo ni nueva implementación. Confirmar que PR #25 y HEAD e97465f1343c77362812db603e0c3ae686191041 siguen accesibles y sin merge.",
+    "Un integrador autorizado debe planificar la reconciliación con GOD-002 PR #34, GOD-004 #28 y GOD-006 bloqueada sin doble incluir parser ni cambiar save v1.",
+    "Revisar GODSEED 3D Pixel Squares PR #47 antes de rehacer presentación; no dar por aprobados supuestos 2D históricos.",
+    "Solo propietario/integrador podrá fusionar y pasar la tarea a done tras CI del SHA integrado."
+  ],
+  "do_not_repeat": [
+    "No rehacer parser bilingual/negación sobre otra rama sin revisar GOD-001 PR #25.",
+    "No marcar done antes de merge ni interpretar el parser como control directo del NPC.",
+    "No borrar PR #25, la rama histórica o los guardados v1."
+  ],
+  "unpublished_changes": false,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact."
+}
