@@ -2946,6 +2946,41 @@
           "reason": "Documented 14 cross-system V3 acceptance scenarios and causal/resource/performance invariants; 34 governance tests pass exact SHA. Await offline QA and independent review."
         }
       ]
+    },
+    {
+      "id": "QA-007",
+      "priority": "P1",
+      "area": "qa",
+      "title": "Eliminate reset race in Chromium mobile acceptance",
+      "status": "ready",
+      "owner": null,
+      "work_branch": null,
+      "depends": [
+        "QA-001"
+      ],
+      "acceptance": "Ten repeated Chromium mobile acceptance runs at an exact SHA prove new-world reset and save/import identity without a timing race or regression; offline checks remain green.",
+      "issue": null,
+      "pr": null,
+      "evidence": [],
+      "origin_task": "WLD-008",
+      "created_by": "SENTRY-58",
+      "new_task_reason": "Separate failure in exact-SHA mobile CI exposed a timing-sensitive reset assertion. Reliable acceptance is needed before combined game integration.",
+      "status_history": [
+        {
+          "date": "2026-10-20T13:44:33.853Z",
+          "from": null,
+          "to": "planned",
+          "actor": "SENTRY-58",
+          "reason": "Necessary follow-up to WLD-008: Separate failure in exact-SHA mobile CI exposed a timing-sensitive reset assertion. Reliable acceptance is needed before combined game integration."
+        },
+        {
+          "date": "2026-10-20T13:44:33.853Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "SENTRY-58",
+          "reason": "All declared prerequisites verified; available for assignment"
+        }
+      ]
     }
   ]
 }
