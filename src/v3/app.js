@@ -83,6 +83,8 @@
         statsPair(stats,"Kits fabricados",state.kitsCrafted);
         statsPair(stats,"Líder",state.settlement.leaderId||"Sin elegir");
         statsPair(stats,"Elecciones",state.settlement.elections);
+        statsPair(stats,"Prioridad del consejo",state.settlement.policy||"none");
+        statsPair(stats,"Repartos de oficio",state.settlement.ordersIssued||0);
       }
       statsPair(stats,"Comida disponible",state.food);
       statsPair(stats,"Bayas recolectadas",state.foodGathered);
@@ -104,6 +106,8 @@
           desc.textContent="Objetivo: "+c.goal+" | Salud "+c.health+"/100 | Hambre "+c.hunger+
             "/100 | Energía "+c.energy+"/20 | Fabricaciones "+c.crafted+
             " | Construcciones "+c.built+" | Conversaciones "+c.conversations+
+            " | Oficio "+c.role+" | Tareas de oficio "+c.ordersCompleted+
+            " | Comida recolectada "+c.foraged+" | Recuerdos "+c.memories.length+
             (state.settlement.leaderId===c.id?" | Líder elegido":"");
         }
         div.appendChild(title);div.appendChild(desc);people.appendChild(div);
@@ -117,6 +121,16 @@
         div.textContent="Líder: "+(council.leaderId||"ninguno")+
           " | Votos: "+council.ballots.map(b=>b.voter+" → "+b.candidate).join(", ");
         memoryPanel.appendChild(div);
+        const policy=document.createElement("div");
+        policy.textContent="Prioridad: "+council.policy+" | Evidencia: "+council.policyReason;
+        memoryPanel.appendChild(policy);
+        for(const person of state.citizens){
+          const note=document.createElement("div");
+          const latest=person.memories.length?person.memories[person.memories.length-1]:null;
+          note.textContent=person.name+" · "+person.role+" · "+person.ordersCompleted+
+            " tareas · recuerdo: "+(latest?latest.kind+" (ciclo "+latest.tick+")":"sin recuerdos");
+          memoryPanel.appendChild(note);
+        }
       }else{
         const mind=state.citizens[0].mind;
         const memoryLabels={build:"Su primer refugio",forage:"Encontró comida",
@@ -135,7 +149,9 @@
           discover:"descubrió un lugar",reflect:"reflexionó",hardship:"pasó hambre",
           craft:"fabricó "+(e.details.recipe||"objeto"),
           talk:"conversó con "+(e.details.with||"otro habitante"),
-          arrive:"llegó a la aldea",elect:"fue elegido líder",death:"falleció"};
+          arrive:"llegó a la aldea",elect:"fue elegido líder",death:"falleció",
+          assign:"recibió oficio "+(e.details.role||""),
+          council:"decidió priorizar "+(e.details.policy||"")};
         div.textContent="Ciclo "+e.tick+" · "+e.actor+": "+(labels[e.action]||e.action)+
           (e.action==="build"&&e.details.site?" ("+e.details.site+")":"");
         events.appendChild(div);
