@@ -120,3 +120,28 @@ test('INT-002: minimap reveals only observed building footprint cells',()=>{
  const tiles=calls.filter(c=>c[0]>=10&&c[0]<14&&c[1]>=10&&c[1]<14);
  assert.deepEqual(tiles,[[10,10,1,1],[13,13,1,1]],'show exactly the discovered tiles');
 });
+
+test('INT-002: later construction cannot occupy a saved building entrance',()=>{
+ const s=world(31),t=s.living.towns[0],x=t.x+5,y=t.y+4;
+ s.map.fill(2);s.bot.x=1;s.bot.y=1;s.enemies=[];
+ for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++)s.map[(y+dy)*W+x+dx]=0;
+ s.map[(y-1)*W+x]=8;
+ t.buildings.push({id:'existing-home',type:'house',x:x-2,y,w:2,h:2,
+  entrance:{orientation:'east',thresholdWorld:{x:x-1,y},
+   approachWorld:{x,y},roadDistance:1}});
+ assert.equal(Living.site(s,t,'market'),null,
+  'even an emergency compact building cannot consume the prior doorstep');
+});
+
+test('INT-002: later construction cannot cut the last short road route to a doorway',()=>{
+ const s=world(31),t=s.living.towns[0],x=t.x+5,y=t.y+4;
+ s.map.fill(2);s.bot.x=1;s.bot.y=1;s.enemies=[];
+ for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++)s.map[(y+dy)*W+x+dx]=0;
+ s.map[y*W+x-1]=0; // existing entrance approach immediately left of parcel
+ s.map[(y-1)*W+x]=8; // only route: approach -> x,y -> road
+ t.buildings.push({id:'existing-home',type:'house',x:x-3,y,w:2,h:2,
+  entrance:{orientation:'east',thresholdWorld:{x:x-2,y},
+   approachWorld:{x:x-1,y},roadDistance:2}});
+ assert.equal(Living.site(s,t,'market'),null,
+  'do not construct a new wall across the only road-connected access');
+});
