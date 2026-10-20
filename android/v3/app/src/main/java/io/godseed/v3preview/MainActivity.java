@@ -64,6 +64,10 @@ public final class MainActivity extends Activity {
             result -> {
                 if (web != active || isDestroyed()) return;
                 Log.i(TAG, "WEBGL_CONTEXT=" + result + " attempt=" + attempt);
+                active.evaluateJavascript(
+                    "(function(){var d=window.GodseedV3Debug;" +
+                    "return d&&d.rendererMode?d.rendererMode():'unavailable'})()",
+                    mode -> Log.i(TAG, "RENDERER_MODE=" + mode.replace("\\\"", "")));
                 if (!"true".equals(result)) {
                     active.evaluateJavascript(RUNTIME_DIAGNOSTIC,
                         details -> Log.i(TAG, "WEBGL_DIAGNOSTIC=" + details));
