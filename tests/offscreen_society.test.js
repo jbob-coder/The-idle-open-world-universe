@@ -56,3 +56,16 @@ test("inconsistent resource ledgers and missing sites fail closed",()=>{
  assert.throws(()=>Society.restore("x".repeat(Society.MAX_SAVE_BYTES+1)),RangeError);
  assert.equal(a.serialize(),raw);
 });
+
+test("100-seed reachable founding sweep catches isolated starting islands",()=>{
+ for(let seed=1;seed<=100;seed++){
+  const s=Society.create(seed,{maxActive:1});
+  const state=s.advance(2000,{x:10000,y:10000});
+  assert.equal(state.built,true,"seed "+seed+" must reach four real trees");
+  assert.equal(state.ledger.harvested,4);
+  assert.equal(state.ledger.spent,4);
+  assert.equal(state.stock.wood,0);
+  assert.ok(state.cache.activeChunks<=1);
+  assert.equal(Society.restore(s.serialize(),{maxActive:1}).serialize(),s.serialize());
+ }
+});
