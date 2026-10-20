@@ -35,6 +35,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Unit-test exact-SHA emulator evidence validation
+        run: python -m unittest discover -s tests/native -p 'test_android_emulator_evidence.py' -v
       - name: Verify opt-in storage boundaries and deterministic offline pack
         run: sh tests/native/run-storage-checks.sh
       - name: Build offline HTML bundle (keep file-origin save identity)
@@ -84,6 +86,9 @@ jobs:
     timeout-minutes: 38
     permissions:
       contents: read
+    env:
+      GODSEED_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      GODSEED_TESTED_SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -129,3 +134,4 @@ jobs:
             qa-screenshots/android-emulator-skyworld.png
             qa-screenshots/android-emulator-memory.txt
             qa-screenshots/android-emulator-logcat.txt
+            qa-screenshots/android-emulator-evidence.json
