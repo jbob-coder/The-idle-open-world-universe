@@ -44,6 +44,7 @@
      alt<3?"#436d40":alt<6?"#486f44":"#497548");}
    let things=[];
    for(const t of s.forest)things.push({type:"tree",x:t.x,z:t.z,order:depth(t.x+.5,t.z+.5)});
+   for(const t of s.berries||[])things.push({type:"berry",x:t.x,z:t.z,stock:t.stock,order:depth(t.x+.5,t.z+.5)});
    for(const t of s.structures)things.push({type:"house",x:t.x,z:t.z,order:depth(t.x+.5,t.z+.5)});
    for(const t of s.citizens)things.push({type:"citizen",x:t.x,z:t.z,actor:t,order:depth(t.x+.5,t.z+.5)});
    things.sort((a,b)=>a.order-b.order);
@@ -52,6 +53,9 @@
      cube(t.x+.35,0,t.z+.35,.3,.95,.3,"#835c39","#634728","#503a25");
      cube(t.x+.12,.9,t.z+.12,.76,1.15,.76,"#4b914a","#286c39","#23592d");
      cube(t.x+.23,2,t.z+.23,.54,.36,.54,"#68a05a","#358442","#2f7538");
+    }else if(t.type==="berry"){
+     cube(t.x+.24,0,t.z+.24,.52,.32,.52,"#448542","#286b35","#23542e");
+     if(t.stock>0)cube(t.x+.40,.24,t.z+.36,.21,.19,.24,"#b94953","#962c36","#812b39");
     }else if(t.type==="house"){
      cube(t.x-.25,0,t.z-.15,1.6,1.35,1.5,"#b99a62","#94734b","#795b3e");
      cube(t.x-.39,1.35,t.z-.28,1.86,.5,1.76,"#b75b49","#964638","#77392f");
