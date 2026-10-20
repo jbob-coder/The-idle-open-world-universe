@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+<title>GODSEED V3 — El mundo se crea solo</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#0b1517;color:#f5efd8}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+#scene{display:block;width:100%;height:100%;touch-action:none;image-rendering:pixelated}
+#top{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));pointer-events:none;background:linear-gradient(#111b1de0,#111b1d00)}
+#top strong{font-size:13px;letter-spacing:.16em;color:#f6d797}
+#top span{font-size:12px;color:#d2e9da}
+#panel{position:fixed;right:max(8px,env(safe-area-inset-right));top:48px;width:min(260px,39vw);max-height:calc(100% - 142px);overflow:auto;background:#132025ed;border:1px solid #68806d75;border-radius:10px;padding:10px;font-size:12px;line-height:1.5}
+#panel h2{margin:0 0 6px;font-size:13px;color:#f7d69a}
+#panel dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:3px}
+#panel dt{color:#b4caba}#panel dd{margin:0;font-weight:650;text-align:right}
+#citizens{border-top:1px solid #64766f55;margin-top:7px;padding-top:5px}
+.person{padding:4px 0;border-bottom:1px solid #ffffff12}
+.person strong{color:#eacb87}#events{font-size:11px;color:#bed3ca;max-height:100px;overflow:auto}
+#bottom{position:fixed;left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:6px;flex-wrap:wrap;pointer-events:auto}
+button{background:#213731;border:1px solid #a5cbb26b;color:#fff2d5;border-radius:7px;padding:9px 11px;font-size:12px;font-weight:600;min-height:40px;cursor:pointer}
+button:focus-visible{outline:2px solid #f5da92}
+button[aria-pressed="true"]{background:#6e6138}
+#hint{position:fixed;left:10px;top:48px;font-size:11px;color:#d6e1d5;background:#101a1fc9;padding:6px 9px;border-radius:6px;max-width:38vw}
+#warning{display:none;position:fixed;inset:30% 15%;background:#1d2631;border:2px solid #f5cf8f;padding:16px;text-align:center}
+@media(max-width:670px){#panel{width:min(205px,42vw);font-size:11px;top:38px;max-height:calc(100% - 100px);padding:6px}
+#panel h2{font-size:12px}#events{max-height:48px}#hint{display:none}#top strong{font-size:11px}
+#bottom button{padding:7px;font-size:11px;min-height:35px}}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-label="Mundo 3D autónomo de GODSEED"></canvas>
+<div id="top"><strong>GODSEED · V3 PREVIEW</strong><span id="headline">Iniciando mundo sin conexión…</span></div>
+<div id="hint">Arrastra para girar la cámara · rueda o botones +/- para acercar</div>
+<aside id="panel" aria-label="Observatorio del mundo">
+<h2>Observatorio divino</h2><dl id="stats"></dl>
+<div id="citizens" aria-live="off"></div>
+<h2>Crónica de decisiones</h2><div id="events"></div>
+</aside>
+<div id="bottom">
+<button id="pause" type="button" aria-pressed="false">Pausar</button>
+<button id="step" type="button">Paso</button>
+<button id="speed" type="button">Velocidad ×1</button>
+<button id="zoomIn" type="button">Acercar +</button>
+<button id="zoomOut" type="button">Alejar −</button>
+<button id="save" type="button">Guardar</button>
+<button id="reset" type="button">Mundo nuevo</button>
+</div>
+<div id="warning" role="alert"></div>
+<script>/* GODSEED V3 opt-in autonomous simulation. Existing v1 saves are untouched. */
+(function(root,factory){"use strict";const api=factory();
+  if(typeof module!=="undefined"&&module.exports)module.exports=api;
+  if(root)root.GodseedV3Sim=api;
+})(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
+  const VERSION=1,SIZE=20,STORAGE_KEY="godseed-v3-prototype-v1";
+  const copy=x=>JSON.parse(JSON.stringify(x));
+  const pos=(x,z)=>Number.isSafeInteger(x)&&Number.isSafeInteger(z)&&x>=0&&z>=0&&x<SIZE&&z<SIZE;
+  const uint32=x=>Number.isSafeInteger(x)&&x>=0&&x<=0xffffffff;
+  const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.z-b.z);
+  function forestFor(seed){
+    const found=[];
+    for(let z=1;z<SIZE-1;z++)for(let x=1;x<SIZE-1;x++){
+      if(x>=3&&x<=7&&z>=3&&z<=6)continue;
+      const h=Math.imul(x+11,73856093)^Math.imul(z+17,19349663)^Math.imul(seed+1,83492791);
+      if((h>>>0)%11<2)found.push({x,z});
+    }
+    for(const p of [{x:3,z:8},{x:8,z:6},{x:9,z:8},{x:5,z:10},{x:11,z:5},{x:7,z:11}]){
+      if(!found.some(q=>q.x===p.x&&q.z===p.z))found.push(p);
+    }
+    return found.sort((a,b)=>a.z-b.z||a.x-b.x);
+  }
+  function record(s,c,action,details){
+    s.events.push({tick:s.tick,actor:c.id,action,details});
+    if(s.events.length>48)s.events.shift();
+  }
+  function nearestTree(c,forest){
+    let best=null,score=Infinity;
+    for(const t of forest){
+      const bias=c.trait==="explorer"?Math.abs(t.z-10)/12:Math.abs(t.x-7)/12;
+      const next=distance(c,t)+bias;
+      if(next<score){score=next;best=t;}
+    }
+    return best;
+  }
+  function act(s,c){
+    if(c.energy<5){c.energy=Math.min(20,c.energy+8);c.goal="descansar";return;}
+    if(!s.structures.length&&s.wood>=4){
+      s.wood-=4;s.spent+=4;s.structures.push({id:"first_shelter",type:"house",x:5,z:5});
+      c.energy-=2;c.goal="construir refugio";
+      record(s,c,"build",{id:"first_shelter",woodSpent:4});return;
+    }
+    const tree=nearestTree(c,s.forest);
+    if(!tree){c.goal=s.structures.length?"mantener aldea":"sin madera";c.energy=Math.min(20,c.energy+1);return;}
+    if(distance(c,tree)<=1){
+      const i=s.forest.findIndex(t=>t.x===tree.x&&t.z===tree.z);
+      if(i<0)throw new Error("resource ownership conflict");
+      s.forest.splice(i,1);s.wood++;s.harvested++;c.harvested++;
+      c.energy=Math.max(0,c.energy-3);c.goal="recolectar madera";
+      record(s,c,"harvest",{x:tree.x,z:tree.z,woodProduced:1});return;
+    }
+    if(c.x!==tree.x)c.x+=Math.sign(tree.x-c.x);else c.z+=Math.sign(tree.z-c.z);
+    c.energy--;c.goal="caminar hacia recurso";
+  }
+  function validate(s){
+    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
+      !uint32(s.seed)||!Number.isSafeInteger(s.tick)||s.tick<0||
+      !Array.isArray(s.citizens)||s.citizens.length!==2||
+      !Array.isArray(s.forest)||!Array.isArray(s.structures)||s.structures.length>1||
+      !Array.isArray(s.events)||s.events.length>48||
+      !Number.isSafeInteger(s.wood)||s.wood<0||
+      !Number.isSafeInteger(s.harvested)||s.harvested<0||
+      !Number.isSafeInteger(s.spent)||s.spent<0||s.wood!==s.harvested-s.spent)return false;
+    const original=forestFor(s.seed),keys=new Set();
+    if(s.harvested+s.forest.length!==original.length)return false;
+    for(const t of s.forest){
+      if(!t||!pos(t.x,t.z)||!original.some(p=>p.x===t.x&&p.z===t.z))return false;
+      const key=t.x+","+t.z;if(keys.has(key))return false;keys.add(key);
+    }
+    const expected=[["sim_aria","explorer"],["sim_bran","builder"]];
+    for(let i=0;i<2;i++){
+      const c=s.citizens[i];
+      if(!c||c.id!==expected[i][0]||c.trait!==expected[i][1]||
+        !pos(c.x,c.z)||!Number.isInteger(c.energy)||c.energy<0||c.energy>20||
+        !Number.isSafeInteger(c.harvested)||c.harvested<0||
+        typeof c.goal!=="string"||c.goal.length>80)return false;
+    }
+    if(s.citizens[0].harvested+s.citizens[1].harvested!==s.harvested)return false;
+    if(s.structures.length){
+      const b=s.structures[0];
+      if(!b||b.id!=="first_shelter"||b.type!=="house"||b.x!==5||b.z!==5||s.spent!==4)return false;
+    }else if(s.spent!==0)return false;
+    for(const e of s.events){
+      if(!e||!Number.isSafeInteger(e.tick)||e.tick<0||e.tick>s.tick||
+        !expected.some(c=>c[0]===e.actor)||!["build","harvest"].includes(e.action))return false;
+    }
+    return true;
+  }
+  function instance(state){
+    function snapshot(){return copy(state);}
+    function advance(n){
+      if(!Number.isSafeInteger(n)||n<0||n>20000)throw new RangeError("invalid steps");
+      for(let i=0;i<n;i++){state.tick++;for(const c of state.citizens)act(state,c);}
+      return snapshot();
+    }
+    function serialize(){
+      const raw=JSON.stringify(state);
+      if(raw.length>64000)throw new RangeError("save quota exceeded");
+      return raw;
+    }
+    return Object.freeze({advance,snapshot,serialize});
+  }
+  function create(seed){
+    if(!uint32(seed))throw new RangeError("seed must be uint32");
+    return instance({schemaVersion:VERSION,seed,tick:0,
+      citizens:[
+        {id:"sim_aria",name:"Aria",trait:"explorer",x:4,z:4,energy:20,harvested:0,goal:"explorar"},
+        {id:"sim_bran",name:"Bran",trait:"builder",x:6,z:4,energy:20,harvested:0,goal:"fundar"}],
+      forest:forestFor(seed),wood:0,harvested:0,spent:0,structures:[],events:[]});
+  }
+  function restore(raw){
+    if(typeof raw!=="string"||raw.length>64000)throw new RangeError("invalid V3 save");
+    const state=JSON.parse(raw);
+    if(!validate(state))throw new RangeError("corrupt V3 save");
+    return instance(copy(state));
+  }
+  return Object.freeze({VERSION,SIZE,STORAGE_KEY,create,restore,validate});
+});</script>
+<script>/* GODSEED V3: offline WebGL1 cubic Pixel Squares spectator, no CDN or game-state writes. */
+(function(root,factory){"use strict";const api=factory();
+  if(typeof module!=="undefined"&&module.exports)module.exports=api;
+  if(root)root.GodseedV3View=api;
+})(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
+  function multiply(a,b){
+    const out=new Float32Array(16);
+    for(let col=0;col<4;col++)for(let row=0;row<4;row++)
+      for(let k=0;k<4;k++)out[col*4+row]+=a[k*4+row]*b[col*4+k];
+    return out;
+  }
+  function perspective(fov,aspect,near,far){
+    const f=1/Math.tan(fov/2),o=new Float32Array(16);
+    o[0]=f/aspect;o[5]=f;o[10]=(far+near)/(near-far);
+    o[11]=-1;o[14]=2*far*near/(near-far);return o;
+  }
+  function normalize(v){const n=Math.hypot(...v)||1;return v.map(x=>x/n);}
+  const sub=(a,b)=>a.map((x,i)=>x-b[i]);
+  const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+  const dot=(a,b)=>a.reduce((sum,x,i)=>sum+x*b[i],0);
+  function lookAt(eye,center){
+    const z=normalize(sub(eye,center)),x=normalize(cross([0,1,0],z)),y=cross(z,x);
+    return new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,
+      -dot(x,eye),-dot(y,eye),-dot(z,eye),1]);
+  }
+  function shader(gl,type,source){
+    const obj=gl.createShader(type);gl.shaderSource(obj,source);gl.compileShader(obj);
+    if(!gl.getShaderParameter(obj,gl.COMPILE_STATUS))throw new Error("Shader: "+gl.getShaderInfoLog(obj));
+    return obj;
+  }
+  function create(canvas){
+    if(!canvas||typeof canvas.getContext!=="function")throw new TypeError("WebGL canvas required");
+    const gl=canvas.getContext("webgl",{antialias:false,alpha:false,preserveDrawingBuffer:false});
+    if(!gl)throw new Error("WebGL unavailable: this Android WebView/browser needs a 3D fallback");
+    const vert=shader(gl,gl.VERTEX_SHADER,
+      "attribute vec3 p;attribute vec3 c;uniform mat4 m;varying vec3 v;void main(){gl_Position=m*vec4(p,1.0);v=c;}");
+    const frag=shader(gl,gl.FRAGMENT_SHADER,
+      "precision mediump float;varying vec3 v;void main(){gl_FragColor=vec4(v,1.0);}");
+    const program=gl.createProgram();gl.attachShader(program,vert);gl.attachShader(program,frag);gl.linkProgram(program);
+    if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error("WebGL link: "+gl.getProgramInfoLog(program));
+    gl.useProgram(program);
+    const p=gl.getAttribLocation(program,"p"),c=gl.getAttribLocation(program,"c"),m=gl.getUniformLocation(program,"m");
+    const buffer=gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
+    gl.enableVertexAttribArray(p);gl.enableVertexAttribArray(c);
+    gl.vertexAttribPointer(p,3,gl.FLOAT,false,24,0);
+    gl.vertexAttribPointer(c,3,gl.FLOAT,false,24,12);
+    gl.enable(gl.DEPTH_TEST);gl.clearColor(.10,.15,.20,1);
+    let yaw=.7, elevation=.85, radius=30;
+    function rotate(dx,dy){
+      yaw+=Math.max(-1,Math.min(1,dx))*.9;
+      elevation=Math.max(.22,Math.min(1.42,elevation+dy*.8));
+    }
+    function zoom(delta){radius=Math.max(13,Math.min(52,radius+delta));}
+    function render(state){
+      if(!state||!Array.isArray(state.citizens)||!Array.isArray(state.forest))
+        throw new TypeError("authoritative world snapshot required");
+      // Finite immutable snapshots only. No simulation methods in the renderer.
+      const v=[];
+      function vertex(a,col){v.push(a[0],a[1],a[2],col[0],col[1],col[2]);}
+      function quad(a,b,c,d,col){
+        vertex(a,col);vertex(b,col);vertex(c,col);
+        vertex(a,col);vertex(c,col);vertex(d,col);
+      }
+      function shade(col,f){return col.map(n=>Math.min(1,n*f));}
+      function box(x,y,z,w,h,d,col){
+        const x1=x+w,y1=y+h,z1=z+d;
+        quad([x,y1,z],[x1,y1,z],[x1,y1,z1],[x,y1,z1],shade(col,1.13));
+        quad([x,y,z1],[x1,y,z1],[x1,y,z],[x,y,z],shade(col,.55));
+        quad([x,y,z],[x1,y,z],[x1,y1,z],[x,y1,z],shade(col,.68));
+        quad([x1,y,z1],[x,y,z1],[x,y1,z1],[x1,y1,z1],shade(col,.82));
+        quad([x1,y,z],[x1,y,z1],[x1,y1,z1],[x1,y1,z],shade(col,.90));
+        quad([x,y,z1],[x,y,z],[x,y1,z],[x,y1,z1],shade(col,.76));
+      }
+      const n=20;
+      for(let z=0;z<n;z++)for(let x=0;x<n;x++){
+        const alt=((x*7+z*11)%9)/85;
+        quad([x,-.06,z],[x+1,-.06,z],[x+1,-.06,z+1],[x,-.06,z+1],
+          [.26+alt,.39+alt,.22+alt]);
+      }
+      for(const tree of state.forest){
+        box(tree.x+.35,0,tree.z+.35,.3,.95,.3,[.42,.29,.17]);
+        box(tree.x+.12,.9,tree.z+.12,.76,1.15,.76,[.14,.38,.22]);
+        box(tree.x+.23,2,tree.z+.23,.54,.36,.54,[.22,.51,.27]);
+      }
+      for(const b of state.structures){
+        box(b.x-.25,0,b.z-.15,1.6,1.35,1.5,[.55,.45,.31]);
+        box(b.x-.39,1.35,b.z-.28,1.86,.50,1.76,[.57,.21,.19]);
+        box(b.x+.25,.12,b.z+1.36,.43,.79,.04,[.29,.17,.10]);
+      }
+      for(const c of state.citizens){
+        const col=c.id==="sim_aria"?[.40,.66,.95]:[.96,.72,.34];
+        box(c.x+.29,0,c.z+.29,.42,.88,.42,col);
+        box(c.x+.25,.88,c.z+.25,.5,.38,.5,[.80,.62,.45]);
+      }
+      const target=[9.5,0,9.5],eye=[
+        9.5+radius*Math.cos(elevation)*Math.sin(yaw),
+        radius*Math.sin(elevation),
+        9.5+radius*Math.cos(elevation)*Math.cos(yaw)
+      ];
+      gl.viewport(0,0,canvas.width,canvas.height);
+      gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+      const proj=perspective(Math.PI/3,canvas.width/canvas.height,.1,140);
+      gl.uniformMatrix4fv(m,false,multiply(proj,lookAt(eye,target)));
+      gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(v),gl.DYNAMIC_DRAW);
+      gl.drawArrays(gl.TRIANGLES,0,v.length/6);
+    }
+    return Object.freeze({render,rotate,zoom});
+  }
+  return Object.freeze({create});
+});</script>
+<script>/* GODSEED V3 proof controls: deterministic simulation tick, read-only render, isolated storage. */
+(function(root){"use strict";
+  const Sim=root.GodseedV3Sim,View=root.GodseedV3View;
+  if(!Sim||!View)throw new Error("GODSEED V3 modules missing");
+  const el=id=>document.getElementById(id);
+  const canvas=el("scene");
+  let simulation,view=null,paused=false,speed=1,last=0,acc=0,dirty=true;
+  let lastPersistedTick=-1,lastShownTick=-1,lastDraw=0,status="";
+  function setStatus(message){status=message;el("headline").textContent=message;}
+  function seedNow(){return ((Date.now()>>>0)^0x5a17b913)>>>0;}
+  function newWorld(seed){
+    simulation=Sim.create(seed===undefined?seedNow():seed);
+    paused=false;acc=0;last=0;lastPersistedTick=-1;lastShownTick=-1;dirty=true;
+    el("pause").setAttribute("aria-pressed","false");
+    el("pause").textContent="Pausar";
+    setStatus("Nuevo mundo autónomo · sin comandos a los Sims");
+    update();
+    return simulation.snapshot();
+  }
+  function save(){
+    if(!simulation)return false;
+    try{
+      root.localStorage.setItem(Sim.STORAGE_KEY,simulation.serialize());
+      lastPersistedTick=simulation.snapshot().tick;
+      setStatus("Mundo guardado localmente · V3 independiente");
+      return true;
+    }catch(error){
+      setStatus("No se pudo guardar: almacenamiento local no disponible");
+      return false;
+    }
+  }
+  function load(){
+    try{
+      const raw=root.localStorage.getItem(Sim.STORAGE_KEY);
+      if(!raw)return false;
+      const loaded=Sim.restore(raw);simulation=loaded;
+      paused=true;acc=0;last=0;dirty=true;
+      lastPersistedTick=simulation.snapshot().tick;lastShownTick=-1;
+      el("pause").setAttribute("aria-pressed","true");
+      el("pause").textContent="Continuar";
+      setStatus("Partida V3 recuperada y pausada");
+      update();
+      return true;
+    }catch(error){
+      setStatus("Guardado V3 inválido; sin borrar ni tocar partidas antiguas");
+      return false;
+    }
+  }
+  function togglePause(){
+    paused=!paused;acc=0;last=0;
+    el("pause").setAttribute("aria-pressed",String(paused));
+    el("pause").textContent=paused?"Continuar":"Pausar";
+    setStatus(paused?"Simulación pausada":"Mundo autónomo en marcha");
+    return paused;
+  }
+  function step(){
+    if(!paused)togglePause();
+    const result=simulation.advance(1);
+    dirty=true;update();
+    return result;
+  }
+  function statsPair(parent,label,value){
+    const dt=document.createElement("dt"),dd=document.createElement("dd");
+    dt.textContent=label;dd.textContent=String(value);
+    parent.appendChild(dt);parent.appendChild(dd);
+  }
+  function update(){
+    if(!simulation)return;
+    const state=simulation.snapshot();
+    if(lastShownTick!==state.tick){
+      const stats=el("stats");stats.replaceChildren();
+      statsPair(stats,"Semilla",state.seed);
+      statsPair(stats,"Ciclo",state.tick);
+      statsPair(stats,"Habitantes",state.citizens.length);
+      statsPair(stats,"Madera disponible",state.wood);
+      statsPair(stats,"Madera recolectada",state.harvested);
+      statsPair(stats,"Madera gastada",state.spent);
+      statsPair(stats,"Refugios construidos",state.structures.length);
+      const people=el("citizens");people.replaceChildren();
+      for(const c of state.citizens){
+        const div=document.createElement("div");div.className="person";
+        const title=document.createElement("strong");title.textContent=c.name+" · "+c.trait;
+        const desc=document.createElement("div");desc.textContent="Objetivo: "+c.goal+" | Energía "+c.energy+"/20 | Madera "+c.harvested;
+        div.appendChild(title);div.appendChild(desc);people.appendChild(div);
+      }
+      const events=el("events");events.replaceChildren();
+      for(const e of state.events.slice(-6).reverse()){
+        const div=document.createElement("div");
+        div.textContent="Día "+e.tick+" · "+e.actor+": "+(e.action==="build"?"construyó refugio":"recolectó madera");
+        events.appendChild(div);
+      }
+      lastShownTick=state.tick;
+    }
+    if(view){
+      const factor=Math.min(root.devicePixelRatio||1,1.25);
+      const w=Math.max(1,Math.floor(canvas.clientWidth*factor));
+      const h=Math.max(1,Math.floor(canvas.clientHeight*factor));
+      if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;dirty=true;}
+      if(dirty){view.render(state);dirty=false;}
+    }
+  }
+  function loop(now){
+    if(!last)last=now;
+    const elapsed=Math.max(0,Math.min(250,now-last));last=now;
+    if(!paused&&simulation){
+      acc+=elapsed*speed;
+      const steps=Math.min(18,Math.floor(acc/450));
+      if(steps){
+        acc-=steps*450;simulation.advance(steps);dirty=true;
+        const tick=simulation.snapshot().tick;
+        if(tick-lastPersistedTick>=35)save();
+      }
+    }
+    if(dirty||now-lastDraw>450){update();lastDraw=now;}
+    root.requestAnimationFrame(loop);
+  }
+  function controls(){
+    el("pause").addEventListener("click",togglePause);
+    el("step").addEventListener("click",step);
+    el("speed").addEventListener("click",function(){
+      speed=speed===1?4:speed===4?12:1;el("speed").textContent="Velocidad ×"+speed;
+    });
+    el("zoomIn").addEventListener("click",()=>{if(view){view.zoom(-3);dirty=true;}});
+    el("zoomOut").addEventListener("click",()=>{if(view){view.zoom(3);dirty=true;}});
+    el("save").addEventListener("click",save);
+    el("reset").addEventListener("click",function(){
+      try{root.localStorage.removeItem(Sim.STORAGE_KEY);}catch(error){}
+      newWorld();
+    });
+    let lastPointer=null;
+    canvas.addEventListener("pointerdown",function(e){
+      lastPointer={id:e.pointerId,x:e.clientX,y:e.clientY};
+      try{canvas.setPointerCapture(e.pointerId);}catch(error){}
+    });
+    canvas.addEventListener("pointermove",function(e){
+      if(!lastPointer||lastPointer.id!==e.pointerId||!view)return;
+      view.rotate((e.clientX-lastPointer.x)/Math.max(100,canvas.clientWidth),
+        (e.clientY-lastPointer.y)/Math.max(100,canvas.clientHeight));
+      lastPointer.x=e.clientX;lastPointer.y=e.clientY;dirty=true;
+    });
+    for(const type of ["pointerup","pointercancel","lostpointercapture"])
+      canvas.addEventListener(type,()=>{lastPointer=null;});
+    canvas.addEventListener("wheel",function(e){e.preventDefault();if(view){view.zoom(Math.sign(e.deltaY)*2);dirty=true;}},{passive:false});
+    root.addEventListener("pagehide",save);
+    document.addEventListener("visibilitychange",function(){
+      if(document.hidden){if(!paused)togglePause();save();}
+    });
+    root.addEventListener("keydown",function(e){
+      if(e.code==="Space"){e.preventDefault();togglePause();}
+      if(view&&e.key==="ArrowLeft"){view.rotate(-.12,0);dirty=true;}
+      if(view&&e.key==="ArrowRight"){view.rotate(.12,0);dirty=true;}
+    });
+  }
+  try{view=View.create(canvas);}catch(error){
+    const warning=el("warning");
+    warning.style.display="block";
+    warning.textContent="No hay contexto WebGL 3D en este navegador o dispositivo. La simulación sigue disponible, pero no se mostrará como 3D.";
+  }
+  controls();
+  if(!load())newWorld(14);
+  // Public test/inspection interface; never exposes a writable simulation object.
+  root.GodseedV3Debug=Object.freeze({
+    getState:()=>simulation.snapshot(),newWorld,step,save,load,
+    isPaused:()=>paused,pause:()=>{if(!paused)togglePause();return true;},
+    resume:()=>{if(paused)togglePause();return true;},
+    hasWebGL:()=>Boolean(view),storageKey:Sim.STORAGE_KEY
+  });
+  root.requestAnimationFrame(loop);
+})(typeof window!=="undefined"?window:globalThis);
+</script>
+</body></html>
