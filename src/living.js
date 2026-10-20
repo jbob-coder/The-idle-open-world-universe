@@ -3,13 +3,15 @@
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
+// Physical exterior footprints are simulation geometry, independent of the
+// eventual 3D renderer. The legacy 2x2 starter homes remain compatible.
 const BLUEPRINTS={
- house:{wood:4,stone:1,label:'Home',kind:'housing'},
- farm:{wood:2,stone:0,label:'Fields',kind:'food'},
- workshop:{wood:5,stone:4,label:'Workshop',kind:'craft'},
- market:{wood:6,stone:2,label:'Market',kind:'trade'},
- watchtower:{wood:7,stone:5,label:'Watchtower',kind:'defense'},
- well:{wood:1,stone:5,label:'Well',kind:'water'}
+ house:{wood:4,stone:1,label:'Home',kind:'housing',w:4,h:4},
+ farm:{wood:2,stone:0,label:'Fields',kind:'food',w:3,h:3},
+ workshop:{wood:5,stone:4,label:'Workshop',kind:'craft',w:5,h:5},
+ market:{wood:6,stone:2,label:'Market',kind:'trade',w:6,h:6},
+ watchtower:{wood:7,stone:5,label:'Watchtower',kind:'defense',w:3,h:3},
+ well:{wood:1,stone:5,label:'Well',kind:'water',w:2,h:2}
 };
 function hash(a,b,c){let n=(Math.imul(a+101,73856093)^Math.imul(b+17,19349663)^Math.imul(c+7,83492791))>>>0;n=Math.imul(n^(n>>>15),2246822519)>>>0;return n^(n>>>13);}
 function distance(a,b,x,y){return Math.abs(a-x)+Math.abs(b-y);}
@@ -24,7 +26,7 @@ function occupied(s,x,y){
  return s.living.towns.some(t=>t.buildings.some(b=>
   x>=b.x&&x<b.x+(b.w||1)&&y>=b.y&&y<b.y+(b.h||1)));
 }
-function site(s,town,type){
+function legacySite(s,town,type){
  let best=null,score=-1e9;
  for(let y=Math.max(2,town.y-9);y<=Math.min(H-4,town.y+8);y++)
  for(let x=Math.max(2,town.x-9);x<=Math.min(W-4,town.x+8);x++){
@@ -35,13 +37,17 @@ function site(s,town,type){
   for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){
    const tx=x+dx,ty=y+dy,n=ty*W+tx,tile=s.map[n];
    if(!GROUND.has(tile)||occupied(s,tx,ty)||s.living.heritage.includes(n)||
-      s.npcs.some(p=>p.homeX===tx&&p.homeY===ty))clear=false;
+      s.npcs.some(p=>(p.homeX===tx&&p.homeY===ty)||(p.x===tx&&p.y===ty))||
+      s.living.citizens.some(p=>p.x===tx&&p.y===ty)||
+      s.enemies.some(p=>p.x===tx&&p.y===ty)||
+      (s.bot.x===tx&&s.bot.y===ty))clear=false;
    if(tile===6)meadow++;
   }
   if(!clear)continue;
   const nearby=s.living.towns.flatMap(t=>t.buildings);
   if(nearby.some(b=>x<b.x+(b.w||1)&&x+2>b.x&&
     y<b.y+(b.h||1)&&y+2>b.y))continue;
+  if(!preservesEntrances(s,x,y,2,2))continue;
   let nearestRoad=4;
   for(let yy=y-2;yy<=y+3;yy++)for(let xx=x-2;xx<=x+3;xx++){
    if(xx<0||xx>=W||yy<0||yy>=H)continue;
@@ -55,13 +61,138 @@ function site(s,town,type){
  }
  return best;
 }
+// Find an exposed 2 m-wide approach to a road without piercing a footprint,
+// stealing a heritage tile, or relying on a render-only door.
+function approachRoadDistance(s,ax,ay,x,y,w,h){
+ const queue=[[ax,ay,0]],seen=new Set([ax+','+ay]);
+ for(let i=0;i<queue.length;i++){
+  const [cx,cy,dist]=queue[i],tile=s.map[cy*W+cx];
+  if(tile===8||tile===9)return dist;
+  if(dist===2)continue;
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+   const nx=cx+dx,ny=cy+dy,key=nx+','+ny;
+   if(nx<1||ny<1||nx>=W-1||ny>=H-1||seen.has(key)||
+      (nx>=x&&nx<x+w&&ny>=y&&ny<y+h))continue;
+   const n=ny*W+nx;
+   if(!PASS.has(s.map[n])||s.map[n]===2||
+      occupied(s,nx,ny)||s.living.heritage.includes(n))continue;
+   seen.add(key);queue.push([nx,ny,dist+1]);
+  }
+ }
+ return Infinity;
+}
+// Preserve previously accessible doorstep cells and their bounded two-step
+// road paths. A later building must not strand a resident at an old home.
+// The local check keeps seeded settlement growth inexpensive.
+function preservesEntrances(s,x,y,w,h){
+ for(const town of s.living.towns)for(const b of town.buildings){
+  const approach=b.entrance&&b.entrance.approachWorld;
+  if(!approach||!Number.isInteger(approach.x)||!Number.isInteger(approach.y))continue;
+  const ax=approach.x,ay=approach.y;
+  if(ax<x-2||ax>=x+w+2||ay<y-2||ay>=y+h+2)continue;
+  if(ax>=x&&ax<x+w&&ay>=y&&ay<y+h)return false;
+  // Only demand an access route if the saved doorway still had one before
+  // this candidate; legacy/corrupt saves may already contain disconnected
+  // buildings and should not stop all unrelated construction.
+  const prior=approachRoadDistance(s,ax,ay,-1,-1,0,0);
+  if(Number.isFinite(prior)&&
+     !Number.isFinite(approachRoadDistance(s,ax,ay,x,y,w,h)))return false;
+ }
+ return true;
+}
+function entranceFor(s,town,x,y,w,h){
+ let best=null,bestScore=Infinity;
+ const test=(side,tx,ty,ax,ay)=>{
+  if(ax<1||ay<1||ax>=W-1||ay>=H-1||
+     !PASS.has(s.map[ay*W+ax])||
+     occupied(s,ax,ay)||s.living.heritage.includes(ay*W+ax))return;
+  const road=approachRoadDistance(s,ax,ay,x,y,w,h);
+  if(!Number.isFinite(road))return;
+  const score=road*100+distance(ax,ay,town.x,town.y)*.01;
+  if(score<bestScore){
+   bestScore=score;best={orientation:side,
+    thresholdWorld:{x:tx,y:ty},approachWorld:{x:ax,y:ay},roadDistance:road};
+  }
+ };
+ for(let dx=0;dx<w;dx++){
+  test('north',x+dx,y,x+dx,y-1);
+  test('south',x+dx,y+h-1,x+dx,y+h);
+ }
+ for(let dy=0;dy<h;dy++){
+  test('west',x,y+dy,x-1,y+dy);
+  test('east',x+w-1,y+dy,x+w,y+dy);
+ }
+ return best;
+}
+function site(s,town,type,starting=false){
+ if(starting||!BLUEPRINTS[type]||BLUEPRINTS[type].w<=2)return legacySite(s,town,type);
+ const bp=BLUEPRINTS[type];
+ // Prefer the physical full-size blueprint. Scarce medieval land may require
+ // a smaller but still real home. Preserve a compact 2x2 fallback rather than
+ // indefinitely halting autonomous settlement development on dense seed maps.
+ for(let size=bp.w;size>=3;size--){
+  const w=size,h=size;
+  let best=null,score=-Infinity;
+  for(let y=Math.max(2,town.y-10);y<=Math.min(H-h-2,town.y+10);y++)
+  for(let x=Math.max(2,town.x-10);x<=Math.min(W-w-2,town.x+10);x++){
+   const radius=distance(x+Math.floor(w/2),y+Math.floor(h/2),town.x,town.y);
+   if(radius<3||radius>12)continue;
+   let clear=true,meadow=0;
+   for(let dy=0;dy<h&&clear;dy++)for(let dx=0;dx<w;dx++){
+    const px=x+dx,py=y+dy,n=py*W+px,tile=s.map[n];
+    if(!GROUND.has(tile)||occupied(s,px,py)||
+       s.living.heritage.includes(n)||
+       s.npcs.some(p=>p.x===px&&p.y===py||p.homeX===px&&p.homeY===py)||
+       s.living.citizens.some(p=>p.x===px&&p.y===py)||
+       s.enemies.some(p=>p.x===px&&p.y===py)||
+       s.bot.x===px&&s.bot.y===py){clear=false;break;}
+    if(tile===6)meadow++;
+   }
+   if(!clear||!preservesEntrances(s,x,y,w,h))continue;
+   const entrance=entranceFor(s,town,x,y,w,h);
+   if(!entrance)continue;
+   const preference=type==='farm'?meadow*2:type==='watchtower'?radius*.5:0;
+   const value=28-radius*1.1-entrance.roadDistance*4+preference+
+    (hash(town.x,town.y,x+y*W)%13)/100;
+   if(value>score){best={x,y,w,h,entrance};score=value;}
+  }
+  if(best)return best;
+ }
+ const compact=legacySite(s,town,type);
+ return compact?{x:compact.x,y:compact.y,w:2,h:2}:null;
+}
+function nextBuildingNumber(town){
+ const prefix=town.id+'-';
+ let highest=0;
+ for(const b of town.buildings){
+  if(!b||typeof b.id!=='string'||!b.id.startsWith(prefix))continue;
+  const tail=b.id.slice(prefix.length);
+  if(!/^[1-9][0-9]*$/.test(tail))continue;
+  const n=Number(tail);
+  if(Number.isSafeInteger(n)&&n<=1000000000)highest=Math.max(highest,n);
+ }
+ // An optional v1 field preserves deleted/tombstoned IDs across save/load.
+ // Missing or stale old-save counters are reconciled with existing identities.
+ const counter=Number.isSafeInteger(town.nextBuildingId)&&
+  town.nextBuildingId>0&&town.nextBuildingId<=1000000000?
+  town.nextBuildingId:1;
+ return Math.max(highest+1,counter);
+}
+function allocateBuildingId(town){
+ const number=nextBuildingNumber(town);
+ town.nextBuildingId=number+1;
+ return town.id+'-'+number;
+}
 function build(s,town,type,starting=false){
  const bp=BLUEPRINTS[type];if(!bp||town.buildings.length>=MAX_BUILDINGS)return false;
- const pos=site(s,town,type);if(!pos)return false;
+ const pos=site(s,town,type,starting);if(!pos)return false;
  if(!starting&&(town.stock.wood<bp.wood||town.stock.stone<bp.stone))return false;
  if(!starting){town.stock.wood-=bp.wood;town.stock.stone-=bp.stone;}
  const shapes=['oak','reed','stone'],roof=shapes[(hash(pos.x,pos.y,town.seed)+town.buildings.length)%3];
- town.buildings.push({id:town.id+'-'+(town.buildings.length+1),type,x:pos.x,y:pos.y,w:2,h:2,roof,builtAt:s.tick});
+ const w=starting?2:(pos.w||bp.w),h=starting?2:(pos.h||bp.h);
+ const building={id:allocateBuildingId(town),type,x:pos.x,y:pos.y,w,h,roof,builtAt:s.tick};
+ if(pos.entrance)building.entrance=pos.entrance;
+ town.buildings.push(building);
  if(!starting){log(s,town.name+' built '+bp.label, 'Residents chose a '+roof+' style '+bp.label.toLowerCase()+' near the old roads.');}
  return true;
 }
@@ -111,8 +242,20 @@ function restore(s){
   const home=townSeeds[t.id];if(!home){create(s);return;}
   t.x=home.x;t.y=home.y;t.stock=t.stock||{food:4,wood:1,stone:1};
   for(const k of ['food','wood','stone'])t.stock[k]=Math.max(0,Math.min(999,Number(t.stock[k])||0));
-  t.buildings=Array.isArray(t.buildings)?t.buildings.slice(0,MAX_BUILDINGS).filter(b=>b&&BLUEPRINTS[b.type]&&
-   Number.isInteger(b.x)&&Number.isInteger(b.y)&&b.x>1&&b.x<W-2&&b.y>1&&b.y<H-2).map(b=>({...b,w:b.w===2?2:1,h:b.h===2?2:1})):[];
+  // Keep legacy 1x1/2x2 dimensions exactly. New 3x3-6x6 geometry is
+  // real saved state; never silently shrink it to a decorative 1x1 tile.
+  t.buildings=Array.isArray(t.buildings)?t.buildings.slice(0,MAX_BUILDINGS).filter(b=>{
+   if(!b||!BLUEPRINTS[b.type]||!Number.isInteger(b.x)||!Number.isInteger(b.y))return false;
+   const w=Number.isInteger(b.w)&&b.w>=1&&b.w<=6?b.w:1;
+   const h=Number.isInteger(b.h)&&b.h>=1&&b.h<=6?b.h:1;
+   if(w<=2&&h<=2)return b.x>1&&b.x<W-2&&b.y>1&&b.y<H-2;
+   return b.x>1&&b.y>1&&b.x+w<=W-2&&b.y+h<=H-2;
+  }).map(b=>({...b,
+   w:Number.isInteger(b.w)&&b.w>=1&&b.w<=6?b.w:1,
+   h:Number.isInteger(b.h)&&b.h>=1&&b.h<=6?b.h:1})):[];
+  // Preserve the highest ever allocated ID; never derive new IDs from
+  // current array length (legacy v1 saves may have removed buildings).
+  t.nextBuildingId=nextBuildingNumber(t);
   t.agenda=BLUEPRINTS[t.agenda]||['housing','food','defense','craft','trade'].includes(t.agenda)?t.agenda:'housing';
   const built=kind=>t.buildings.some(b=>b.type===kind);
   const inferred=t.buildings.length>=9&&built('market')?3:t.buildings.length>=7&&built('workshop')?2:t.buildings.length>=4?1:0;
@@ -135,7 +278,10 @@ function goalFor(s,p){
  // Occupations refer to REAL installed structures instead of abstract offsets.
  const workType=p.role==='Farmer'||p.role==='Forager'?'farm':p.role==='Mason'?'workshop':'house';
  const building=t.buildings.find(b=>b.type===workType)||t.buildings[0];
- return {x:building?building.x:t.x,y:building?building.y:t.y,
+ // A resident works beside the physical building, not inside solid walls.
+ const approach=building&&building.entrance&&building.entrance.approachWorld;
+ return {x:approach?approach.x:building?building.x:t.x,
+  y:approach?approach.y:building?building.y:t.y,
   activity:p.role==='Farmer'?'Tending fields':p.role==='Forager'?'Foraging near the farms':
    p.role==='Mason'?'Working at the workshop':'Building and maintaining homes'};
 }
@@ -146,6 +292,11 @@ function walk(s,p,goal){
  for(const o of opts){
   if(o.x<1||o.y<1||o.x>=W-1||o.y>=H-1||!PASS.has(s.map[o.y*W+o.x])||s.map[o.y*W+o.x]===2)continue;
   if(s.living.citizens.some(q=>q!==p&&q.x===o.x&&q.y===o.y))continue;
+  // New large buildings are solid. Existing 1x1/2x2 structures retain
+  // legacy NPC routes until safe door-path migration is integrated.
+  if((o.x!==p.x||o.y!==p.y)&&s.living.towns.some(t=>
+    t.buildings.some(b=>(b.w>2||b.h>2)&&
+      o.x>=b.x&&o.x<b.x+b.w&&o.y>=b.y&&o.y<b.y+b.h)))continue;
   const cost=distance(o.x,o.y,goal.x,goal.y)+(hash(s.tick,p.id,o.x+o.y*W)%5)*.02;
   if(cost<v){v=cost;best=o;}
  }
@@ -293,6 +444,36 @@ function whisper(s,message){
 }
 function drawBuilding(ctx,b,x,y){
  const roofs={oak:'#98684d',reed:'#d4b577',stone:'#77878a'};
+ if((b.w||1)>2||(b.h||1)>2){
+  // Renderer-neutral world dimensions become hard, square-pixel silhouettes.
+  // No interpolation or simulation changes occur while drawing.
+  const width=(b.w||1)*16,height=(b.h||1)*16;
+  const roof=roofs[b.roof]||roofs.oak;
+  ctx.fillStyle='#172425';ctx.fillRect(x+1,y+1,width-2,height-2);
+  ctx.fillStyle='#b8a88a';ctx.fillRect(x+3,y+Math.floor(height*.6),width-6,Math.floor(height*.4)-3);
+  ctx.fillStyle=roof;ctx.fillRect(x+2,y+3,width-4,Math.floor(height*.6));
+  ctx.fillStyle='#6c5140';ctx.fillRect(x+1,y+Math.floor(height*.6)-2,width-2,3);
+  if(b.type==='farm'){
+   ctx.fillStyle='#526b3e';
+   for(let k=7;k<width-5;k+=9)ctx.fillRect(x+k,y+9,4,height-18);
+  }else if(b.type==='watchtower'){
+   ctx.fillStyle='#d5c5a1';
+   for(let k=5;k<width-6;k+=12)ctx.fillRect(x+k,y+4,5,5);
+  }else{
+   ctx.fillStyle='#e8d18c';
+   for(let k=12;k<width-14;k+=24)ctx.fillRect(x+k,y+height-16,7,7);
+  }
+  const approach=b.entrance,door=approach&&approach.thresholdWorld;
+  if(door){
+   const px=x+(door.x-b.x)*16,py=y+(door.y-b.y)*16;
+   ctx.fillStyle='#3e3029';
+   if(approach.orientation==='north')ctx.fillRect(px+5,py+2,6,8);
+   else if(approach.orientation==='south')ctx.fillRect(px+5,py+8,6,8);
+   else if(approach.orientation==='west')ctx.fillRect(px+2,py+5,8,6);
+   else if(approach.orientation==='east')ctx.fillRect(px+8,py+5,8,6);
+  }
+  return;
+ }
  const roof=roofs[b.roof]||roofs.oak;
  ctx.fillStyle='#172425';ctx.fillRect(x+1,y+5,15,11);
  ctx.fillStyle='#aa9b80';ctx.fillRect(x+2,y+7,12,7);
