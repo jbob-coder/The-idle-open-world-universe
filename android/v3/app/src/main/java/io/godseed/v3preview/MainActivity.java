@@ -67,7 +67,7 @@ public final class MainActivity extends Activity {
                 active.evaluateJavascript(
                     "(function(){var d=window.GodseedV3Debug;" +
                     "return d&&d.rendererMode?d.rendererMode():'unavailable'})()",
-                    mode -> Log.i(TAG, "RENDERER_MODE=" + mode.replace("\\\"", "")));
+                    mode -> Log.i(TAG, "RENDERER_MODE=" + mode));
                 if (!"true".equals(result)) {
                     active.evaluateJavascript(RUNTIME_DIAGNOSTIC,
                         details -> Log.i(TAG, "WEBGL_DIAGNOSTIC=" + details));
