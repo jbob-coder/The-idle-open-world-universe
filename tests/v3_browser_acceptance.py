@@ -114,6 +114,39 @@ def run():
         page.screenshot(path=str(CAPTURE/"godseed-v3-canvas-fallback-640x360.png"))
         print("PASS V3 Canvas2D fallback, autonomous shelter, offline save/restore")
         page.close()
+        # The new society is opt-in and has a separate storage key from Aria's solo world.
+        page=browser.new_page(viewport={"width":640,"height":360})
+        errors=[]
+        page.on("pageerror",lambda error: errors.append(str(error)))
+        page.route("http://**/*",lambda route: route.abort())
+        page.route("https://**/*",lambda route: route.abort())
+        page.goto(HTML.as_uri()+"?mode=society",wait_until="load")
+        wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
+        assert page.evaluate("GodseedV3Debug.mode()") == "society"
+        assert page.evaluate("GodseedV3Debug.storageKey()") == "godseed-v3-society-v1"
+        state=page.evaluate("""() => {
+            const d=GodseedV3Debug;
+            d.newWorld(14);d.pause();
+            for(let i=0;i<260;i++)d.step();
+            return d.getState();
+        }""")
+        assert len(state["citizens"])==3, "newcomers must be simulated"
+        assert [s["id"] for s in state["structures"]]==["home","workshop","storehouse"]
+        assert state["axeCrafted"]==1 and state["kitsCrafted"]==2
+        assert state["settlement"]["leaderId"] in [c["id"] for c in state["citizens"]]
+        assert len(state["settlement"]["ballots"])==3
+        assert state["wood"]==state["harvested"]-state["craftedWood"]-state["spentWood"]
+        assert page.locator("#citizens .person").count() == 3
+        assert page.evaluate("GodseedV3Debug.save()"), "society save failed"
+        page.reload(wait_until="load")
+        wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
+        assert page.evaluate("GodseedV3Debug.getState()") == state
+        assert page.evaluate("GodseedV3Debug.mode()")=="society"
+        assert page.evaluate("GodseedV3Debug.isPaused()")
+        assert not errors, "society browser JavaScript errors: "+"; ".join(errors)
+        page.screenshot(path=str(CAPTURE/"godseed-v3-society-640x360.png"))
+        print("PASS V3 autonomous society: crafted axe, 3 structures, 3 citizens, elected leader, isolated save")
+        page.close()
         browser.close()
 
 if __name__=="__main__":
