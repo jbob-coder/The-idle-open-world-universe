@@ -60,6 +60,7 @@ test("a shelter is built only after an axe exists and finite wood was paid",()=>
   assert.ok(first.axe>0&&first.home>first.axe);
   assert.ok(first.arrival>first.home);
   assert.ok(first.election>first.arrival);
+  assert.ok(s.structures[2].completedAt>first.election,"public storehouse needs elected leadership");
   assert.ok(s.citizens.reduce((sum,c)=>sum+c.built,0)===3);
   assert.equal(Sim.validate(s),true);
 });
