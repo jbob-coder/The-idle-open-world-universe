@@ -8,6 +8,7 @@ on:
       - 'v3/**'
       - 'build_v3.py'
       - 'tests/v3_apk_static_acceptance.py'
+      - 'tests/native/v3_emulator_acceptance.sh'
       - '.github/workflows/v3-android-preview.yml'
   workflow_dispatch:
 jobs:
@@ -96,24 +97,7 @@ jobs:
           force-avd-creation: true
           emulator-boot-timeout: 900
           disable-animations: true
-          script: |
-            set -e
-            test -s v3-android-apk/app-debug.apk
-            adb install -r v3-android-apk/app-debug.apk
-            adb logcat -c
-            adb shell am start -W -n io.godseed.v3preview/.MainActivity
-            mkdir -p qa-screenshots
-            for attempt in $(seq 1 30); do
-              adb logcat -d -s GODSEED_V3:I > qa-screenshots/v3-android-webgl-log.txt
-              if grep -q 'WEBGL_CONTEXT=true' qa-screenshots/v3-android-webgl-log.txt; then break; fi
-              sleep 2
-            done
-            grep -q 'WEBGL_CONTEXT=true' qa-screenshots/v3-android-webgl-log.txt
-            adb shell pidof io.godseed.v3preview
-            adb shell screencap -p /sdcard/godseed-v3-preview.png
-            adb pull /sdcard/godseed-v3-preview.png qa-screenshots/v3-android-emulator.png
-            test -s qa-screenshots/v3-android-emulator.png
-            echo 'PASS: V3 package installed, launched and created WebGL context (API29 emulator)'
+          script: bash tests/native/v3_emulator_acceptance.sh
       - name: Preserve native emulator evidence
         if: always()
         uses: actions/upload-artifact@v4
