@@ -2952,9 +2952,9 @@
       "priority": "P1",
       "area": "qa",
       "title": "Eliminate reset race in Chromium mobile acceptance",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "SENTRY-58",
+      "work_branch": "fix/qa-007-sentry-reset-race",
       "depends": [
         "QA-001"
       ],
@@ -2979,6 +2979,13 @@
           "to": "ready",
           "actor": "SENTRY-58",
           "reason": "All declared prerequisites verified; available for assignment"
+        },
+        {
+          "date": "2026-10-20T13:45:17.929Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SENTRY-58",
+          "reason": "Claim QA-007 after delivering WLD-008 to independent review; diagnose reset assertion without editing other task branches."
         }
       ]
     }
