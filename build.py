@@ -9,7 +9,7 @@ bundle={'manifest':manifest,'images':['data:image/png;base64,'+base64.b64encode(
 render='window.GodseedAssetBundle='+json.dumps(bundle,separators=(',',':'))+';\n'
 for name in ['camera','assets','terrain','actors','fx','settlements']:
     render+=(p/('src/render/'+name+'.js')).read_text()+'\n'
-h=h.replace('/*UI_SOURCE*/',render+(p/'src/ui.js').read_text())
+h=h.replace('/*UI_SOURCE*/',render+(p/'src/ui.js').read_text()+'\n'+(p/'src/divine/observer.js').read_text()+'\n'+(p/'src/observer_ui.js').read_text())
 
 (p/'GODSEED-Play.html').write_text(h)
 print('Standalone HTML:',(p/'GODSEED-Play.html').stat().st_size,'bytes')
