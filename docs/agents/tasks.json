@@ -147,7 +147,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "in_review",
+      "status": "in_progress",
       "owner": "FIX-62",
       "work_branch": "feat/int-002-fix-62-footprints",
       "depends": [
@@ -231,6 +231,13 @@
           "to": "in_review",
           "actor": "FIX-62",
           "reason": "Repaired actor-overlap in compact construction and undiscovered minimap building leak, added 2 regression tests, all 105 Node and 7 emulator tests passed on exact PR #56 HEAD. Independent reviewer required."
+        },
+        {
+          "date": "2026-10-20T22:36:28Z",
+          "from": "in_review",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Owned INT-002 review hardening: subsequent constructions can cover an earlier building's doorway approach or sever its road connection. Preserve accessible site reservations and add regression evidence."
         }
       ]
     },
