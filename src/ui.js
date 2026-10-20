@@ -61,10 +61,25 @@ function draw(){screenRedraws++;positionCamera();const b=s.bot;updateScenery();
  // Physical settlements are persistent Canvas actors, not symbolic village tiles.
  if(s.living)for(const town of s.living.towns)for(const building of town.buildings){
   if(building.x+(building.w||1)>camX&&building.x<camX+VW&&
-     building.y+(building.h||1)>camY&&building.y<camY+VH&&godSeesTown(building.x,building.y)){
+     building.y+(building.h||1)>camY&&building.y<camY+VH){
    const xx=(building.x-camX)*16,yy=(building.y-camY)*16;
-   if(building.w===2&&building.h===2)window.GodseedSettlements.draw(ctx,building,xx,yy);
-   else Living.drawBuilding(ctx,building,xx,yy); // old 1x1 world saves
+   if((building.w||1)>2||(building.h||1)>2){
+    // Only uncovered individual cells may reveal the larger footprint.
+    // The full 3x3-6x6 roof must never disclose fogged-out terrain.
+    ctx.save();ctx.beginPath();let visible=0;
+    for(let dy=0;dy<building.h;dy++)for(let dx=0;dx<building.w;dx++){
+     const tx=building.x+dx,ty=building.y+dy;
+     if(tx>=0&&tx<A.W&&ty>=0&&ty<A.H&&
+       (s.seen[A.idx(tx,ty)]||godSeesTown(tx,ty))){
+      ctx.rect(xx+dx*16,yy+dy*16,16,16);visible++;
+     }
+    }
+    if(visible){ctx.clip();Living.drawBuilding(ctx,building,xx,yy);}
+    ctx.restore();
+   }else if(godSeesTown(building.x,building.y)){
+    if(building.w===2&&building.h===2)window.GodseedSettlements.draw(ctx,building,xx,yy);
+    else Living.drawBuilding(ctx,building,xx,yy); // legacy 1x1 saves
+   }
   }
  }
  if((s.tick%240)>172||(s.tick%240)<42)rect(0,0,canvas.width,canvas.height,'rgba(8,23,38,.18)');
