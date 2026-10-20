@@ -365,7 +365,15 @@ function discoverRegion(s,x,y){const r=Regions.at(s,x,y);if(!r||s.regions.discov
 function discover(s,x,y){discoverRegion(s,x,y);let count=0;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const xx=x+ox,yy=y+oy;if(!inside(xx,yy)||ox*ox+oy*oy>12)continue;const n=idx(xx,yy);if(!s.seen[n]){s.seen[n]=1;count++;}}return count;}
 function remember(s,subject){let m=s.bot.memory;if(m[m.length-1]!==subject){m.push(subject);if(m.length>12)m.shift();}}
 function gain(s,xp,why){const b=s.bot;b.xp+=xp;let need=10+b.level*8;while(b.xp>=need&&b.level<50){b.xp-=need;b.level++;b.maxHp+=4;b.hp=Math.min(b.maxHp,b.hp+7);b.attack+=1;if(b.level%2===0)b.defense+=1;event(s,'LEVEL '+b.level,'Nim has grown stronger through '+why+'.','milestone');remember(s,'Level '+b.level+' reached');need=10+b.level*8;}}
-function walkable(s,x,y){return inside(x,y)&&s.map[idx(x,y)]!==T.WATER;}
+function walkable(s,x,y){
+ if(!inside(x,y)||s.map[idx(x,y)]===T.WATER)return false;
+ // New exterior buildings are physical collision, not decorative overlays.
+ // Keep legacy 1x1/2x2 save navigation behavior unchanged during migration.
+ if(s.living&&Array.isArray(s.living.towns)&&s.living.towns.some(t=>
+   t.buildings.some(b=>(b.w>2||b.h>2)&&
+   x>=b.x&&x<b.x+b.w&&y>=b.y&&y<b.y+b.h)))return false;
+ return true;
+}
 function findPath(s,predicate){ // BFS: max 3,072 tiles; deterministic neighbor order, no per-frame pathfinding
  const b=s.bot,queue=new Int16Array(N),parents=new Int16Array(N);parents.fill(-2);const start=idx(b.x,b.y);let front=0,back=0;queue[back++]=start;parents[start]=-1;let found=-1;
  while(front<back){const cur=queue[front++],cx=cur%W,cy=(cur/W)|0;if(predicate(cx,cy,s.map[cur],cur)){found=cur;break;}
