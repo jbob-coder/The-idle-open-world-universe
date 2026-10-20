@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+<title>GODSEED V3 — El mundo se crea solo</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#0b1517;color:#f5efd8}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+#scene{display:block;width:100%;height:100%;touch-action:none;image-rendering:pixelated}
+#top{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));pointer-events:none;background:linear-gradient(#111b1de0,#111b1d00)}
+#top strong{font-size:13px;letter-spacing:.16em;color:#f6d797}
+#top span{font-size:12px;color:#d2e9da}
+#panel{position:fixed;right:max(8px,env(safe-area-inset-right));top:48px;width:min(260px,39vw);max-height:calc(100% - 142px);overflow:auto;background:#132025ed;border:1px solid #68806d75;border-radius:10px;padding:10px;font-size:12px;line-height:1.5}
+#panel h2{margin:0 0 6px;font-size:13px;color:#f7d69a}
+#panel dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:3px}
+#panel dt{color:#b4caba}#panel dd{margin:0;font-weight:650;text-align:right}
+#citizens{border-top:1px solid #64766f55;margin-top:7px;padding-top:5px}
+.person{padding:4px 0;border-bottom:1px solid #ffffff12}
+.person strong{color:#eacb87}#events{font-size:11px;color:#bed3ca;max-height:100px;overflow:auto}
+#bottom{position:fixed;left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:6px;flex-wrap:wrap;pointer-events:auto}
+button{background:#213731;border:1px solid #a5cbb26b;color:#fff2d5;border-radius:7px;padding:9px 11px;font-size:12px;font-weight:600;min-height:40px;cursor:pointer}
+button:focus-visible{outline:2px solid #f5da92}
+button[aria-pressed="true"]{background:#6e6138}
+#hint{position:fixed;left:10px;top:48px;font-size:11px;color:#d6e1d5;background:#101a1fc9;padding:6px 9px;border-radius:6px;max-width:38vw}
+#warning{display:none;position:fixed;inset:30% 15%;background:#1d2631;border:2px solid #f5cf8f;padding:16px;text-align:center}
+@media(max-width:670px){#panel{width:min(205px,42vw);font-size:11px;top:38px;max-height:calc(100% - 100px);padding:6px}
+#panel h2{font-size:12px}#events{max-height:48px}#hint{display:none}#top strong{font-size:11px}
+#bottom button{padding:7px;font-size:11px;min-height:35px}}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-label="Mundo 3D autónomo de GODSEED"></canvas>
+<div id="top"><strong>GODSEED · V3 PREVIEW</strong><span id="headline">Iniciando mundo sin conexión…</span></div>
+<div id="hint">Arrastra para girar la cámara · rueda o botones +/- para acercar</div>
+<aside id="panel" aria-label="Observatorio del mundo">
+<h2>Observatorio divino</h2><dl id="stats"></dl>
+<div id="citizens" aria-live="off"></div>
+<h2>Crónica de decisiones</h2><div id="events"></div>
+</aside>
+<div id="bottom">
+<button id="pause" type="button" aria-pressed="false">Pausar</button>
+<button id="step" type="button">Paso</button>
+<button id="speed" type="button">Velocidad ×1</button>
+<button id="zoomIn" type="button">Acercar +</button>
+<button id="zoomOut" type="button">Alejar −</button>
+<button id="save" type="button">Guardar</button>
+<button id="reset" type="button">Mundo nuevo</button>
+</div>
+<div id="warning" role="alert"></div>
+<script>/*V3_SIM_SOURCE*/</script>
+<script>/*V3_VIEW_SOURCE*/</script>
+<script>/*V3_APP_SOURCE*/</script>
+</body></html>
