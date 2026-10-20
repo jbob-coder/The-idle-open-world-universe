@@ -361,7 +361,7 @@ button[aria-pressed="true"]{background:#6e6138}
     if(!simulation)return;
     const state=simulation.snapshot();
     if(lastShownTick!==state.tick){
-      const stats=el("stats");stats.replaceChildren();
+      const stats=el("stats");stats.textContent="";
       statsPair(stats,"Semilla",state.seed);
       statsPair(stats,"Ciclo",state.tick);
       statsPair(stats,"Habitantes",state.citizens.length);
@@ -369,14 +369,14 @@ button[aria-pressed="true"]{background:#6e6138}
       statsPair(stats,"Madera recolectada",state.harvested);
       statsPair(stats,"Madera gastada",state.spent);
       statsPair(stats,"Refugios construidos",state.structures.length);
-      const people=el("citizens");people.replaceChildren();
+      const people=el("citizens");people.textContent="";
       for(const c of state.citizens){
         const div=document.createElement("div");div.className="person";
         const title=document.createElement("strong");title.textContent=c.name+" · "+c.trait;
         const desc=document.createElement("div");desc.textContent="Objetivo: "+c.goal+" | Energía "+c.energy+"/20 | Madera "+c.harvested;
         div.appendChild(title);div.appendChild(desc);people.appendChild(div);
       }
-      const events=el("events");events.replaceChildren();
+      const events=el("events");events.textContent="";
       for(const e of state.events.slice(-6).reverse()){
         const div=document.createElement("div");
         div.textContent="Día "+e.tick+" · "+e.actor+": "+(e.action==="build"?"construyó refugio":"recolectó madera");

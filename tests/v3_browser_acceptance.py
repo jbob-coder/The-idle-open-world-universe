@@ -27,6 +27,10 @@ def run():
         ])
         for width,height in ((960,540),(640,360)):
             page=browser.new_page(viewport={"width":width,"height":height})
+            # Older Android WebViews do not implement replaceChildren().
+            # Verify the actual app still initializes when it is unavailable.
+            page.add_init_script("""Object.defineProperty(Element.prototype,
+                'replaceChildren', {value: undefined, configurable: true});""")
             failures=[]
             page.on("pageerror",lambda error: failures.append(str(error)))
             page.route("http://**/*",lambda route: route.abort())
@@ -34,6 +38,9 @@ def run():
             page.goto(HTML.as_uri(),wait_until="load")
             wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
             assert page.evaluate("GodseedV3Debug.hasWebGL()"), "WebGL 3D context unavailable"
+            assert page.evaluate("typeof Element.prototype.replaceChildren") == "undefined"
+            assert page.locator("#stats dt").count() == 7
+            assert page.locator("#citizens .person").count() == 2
             initial=page.evaluate("""() => {
                 const s=GodseedV3Debug.newWorld(14);
                 GodseedV3Debug.pause();
