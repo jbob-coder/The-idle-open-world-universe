@@ -1,3 +1,5 @@
+> **LEGACY 64×48 REGION PLAN (2026-10-20):** The eight named regions and exclusive overhead-camera targets are old v1 game descriptions, not final world/POV limits. Keep save compatibility; refer to [authoritative correction](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
 # GODSEED — First World Region Blueprint (64×48)
 **Status: planning, not implementation.** Authority: `data/world-regions.v1.json`. All coordinates in logical tiles `0..63` × `0..47`. World art is overhead 2D square pixels. No map files, movement logic, or saves are changed by this blueprint.
 

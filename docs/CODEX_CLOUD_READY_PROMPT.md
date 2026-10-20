@@ -1,3 +1,5 @@
+> **SUPERSEDED / DO NOT USE AS A NEW AGENT PROMPT (2026-10-20):** This historical 2D Canvas Codex document is not current product authority. Older bans on 3D and required 16×16/16×24 top-down-only view are scoped to legacy assets; the current goal is 3D Pixel Squares autonomous societies. Consult [authoritative correction](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and the live task board.
+
 # GODSEED — FINAL COPY/PASTE PROMPT FOR CODEX CLOUD
 **Save this prompt and submit it in Codex Cloud when the preparation branch is selected.** You are to implement the unfinished game-visual/Android work, not write another general plan. Read source files and execute the plan with evidence.
 

@@ -1,3 +1,5 @@
+> **LEGACY 2D UI CONCEPT (2026-10-20):** Statements to avoid 3D reflect the old Canvas prototype only. Current owner intent is 3D Pixel Squares; retain UI concepts for historical reference and read [authoritative correction](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
 # GODSEED — Visión visual para Android (v0.2 experimental)
 
 > **Importante:** Las imágenes siguientes son **maquetas conceptuales**, no capturas de una APK instalada ni pruebas de rendimiento real. Ilustran la dirección visual que se propone para el juego. El código actual y sus capturas de navegador siguen siendo la referencia sobre las funciones realmente implementadas.
