@@ -1,5 +1,5 @@
 /* GODSEED Living Settlements: bounded, deterministic offline agency. No external AI. */
-(function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./divine/intent.js'):root.GodseedIntent);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedLiving=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Intent){
 'use strict';
 const W=64,H=48,MAX_BUILDINGS=12;
 const PASS=new Set([0,1,3,4,5,6,7,8,9,10]),GROUND=new Set([0,6]);
@@ -19,19 +19,38 @@ function log(s,title,detail){
  s.log.unshift({tick:s.tick,title,detail,type:'event'});if(s.log.length>45)s.log.length=45;
  s.living.chronicle.unshift({tick:s.tick,title,detail});s.living.chronicle.length=Math.min(s.living.chronicle.length,16);
 }
+function occupied(s,x,y){
+ if(!s.living)return false;
+ return s.living.towns.some(t=>t.buildings.some(b=>
+  x>=b.x&&x<b.x+(b.w||1)&&y>=b.y&&y<b.y+(b.h||1)));
+}
 function site(s,town,type){
- const occupied=new Set(s.living.towns.flatMap(v=>v.buildings.map(z=>z.y*W+z.x)));
  let best=null,score=-1e9;
- for(let y=Math.max(2,town.y-5);y<=Math.min(H-3,town.y+5);y++)
- for(let x=Math.max(2,town.x-5);x<=Math.min(W-3,town.x+5);x++){
-  const n=y*W+x;if(!GROUND.has(s.map[n])||occupied.has(n)||distance(x,y,town.x,town.y)<2)continue;
-  // Protect all shrines, roads, villages, ruins, forests and water from building.
-  const adjacent=[n-W,n+1,n+W,n-1],road=adjacent.some(k=>s.map[k]===8||s.map[k]===9);
-  const nearbyRoad=road||adjacent.some(k=>k>=0&&k<W*H&&[k-W,k+1,k+W,k-1].some(q=>s.map[q]===8));
-  if(!nearbyRoad)continue;
-  const nearWater=adjacent.some(k=>s.map[k]===2),radius=distance(x,y,town.x,town.y);
-  const preference=type==='farm'?(s.map[n]===6?14:2):type==='well'?(nearWater?18:1):type==='watchtower'?radius*2:0;
-  const value=30-radius*3+preference+(road?9:0)+(hash(town.x,town.y,n)%9)/100;
+ for(let y=Math.max(2,town.y-9);y<=Math.min(H-4,town.y+8);y++)
+ for(let x=Math.max(2,town.x-9);x<=Math.min(W-4,town.x+8);x++){
+  const radius=distance(x,y,town.x,town.y);
+  if(radius<2||radius>12)continue;
+  let clear=true,meadow=0;
+  // The entire 2x2 building must sit on safe tiles, not merely its origin.
+  for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){
+   const tx=x+dx,ty=y+dy,n=ty*W+tx,tile=s.map[n];
+   if(!GROUND.has(tile)||occupied(s,tx,ty)||s.living.heritage.includes(n)||
+      s.npcs.some(p=>p.homeX===tx&&p.homeY===ty))clear=false;
+   if(tile===6)meadow++;
+  }
+  if(!clear)continue;
+  const nearby=s.living.towns.flatMap(t=>t.buildings);
+  if(nearby.some(b=>x<b.x+(b.w||1)&&x+2>b.x&&
+    y<b.y+(b.h||1)&&y+2>b.y))continue;
+  let nearestRoad=4;
+  for(let yy=y-2;yy<=y+3;yy++)for(let xx=x-2;xx<=x+3;xx++){
+   if(xx<0||xx>=W||yy<0||yy>=H)continue;
+   if([8,9].includes(s.map[yy*W+xx]))
+    nearestRoad=Math.min(nearestRoad,Math.max(0,Math.abs(xx-(x+.5))-1)+Math.max(0,Math.abs(yy-(y+.5))-1));
+  }
+  if(nearestRoad>2)continue;
+  const preference=type==='farm'?meadow*2:type==='well'?0:type==='watchtower'?radius*.5:0;
+  const value=28-radius*1.1-nearestRoad*4+preference+(hash(town.x,town.y,x+y*W)%13)/100;
   if(value>score){best={x,y};score=value;}
  }
  return best;
@@ -42,7 +61,7 @@ function build(s,town,type,starting=false){
  if(!starting&&(town.stock.wood<bp.wood||town.stock.stone<bp.stone))return false;
  if(!starting){town.stock.wood-=bp.wood;town.stock.stone-=bp.stone;}
  const shapes=['oak','reed','stone'],roof=shapes[(hash(pos.x,pos.y,town.seed)+town.buildings.length)%3];
- town.buildings.push({id:town.id+'-'+(town.buildings.length+1),type,x:pos.x,y:pos.y,roof,builtAt:s.tick});
+ town.buildings.push({id:town.id+'-'+(town.buildings.length+1),type,x:pos.x,y:pos.y,w:2,h:2,roof,builtAt:s.tick});
  if(!starting){log(s,town.name+' built '+bp.label, 'Residents chose a '+roof+' style '+bp.label.toLowerCase()+' near the old roads.');}
  return true;
 }
@@ -51,7 +70,8 @@ function create(s){
   {id:'briarford',name:'Briarford',x:25,y:21,seed:s.worldSeed^113,age:'Outpost',stock:{food:6,wood:2,stone:1},buildings:[],agenda:'housing',technology:{level:0,era:'Founding Age'},nextBuild:120},
   {id:'emberwick',name:'Emberwick',x:37,y:27,seed:s.worldSeed^771,age:'Outpost',stock:{food:5,wood:3,stone:1},buildings:[],agenda:'food',technology:{level:0,era:'Founding Age'},nextBuild:160}
  ];
- const living={version:1,towns,citizens:[],chronicle:[],whispers:[],nextWhisper:1};
+ const living={version:1,towns,citizens:[],chronicle:[],whispers:[],nextWhisper:1,
+  heritage:s.map.flatMap((tile,i)=>tile===5?[i]:[])};
  s.living=living;
  s.bot.life={age:19,occupation:'Wanderer',friends:[],events:[{tick:s.tick,text:'Awoke in the forgotten kingdom'}],lastCareerTick:-300};
  for(const t of towns){build(s,t,'house',true);build(s,t,'farm',true);}
@@ -77,6 +97,7 @@ function compatible(s){
 function restore(s){
  if(!compatible(s)){create(s);return;}
  const l=s.living;l.chronicle=Array.isArray(l.chronicle)?l.chronicle.slice(0,16):[];
+ l.heritage=Array.isArray(l.heritage)?l.heritage.filter(n=>Number.isInteger(n)&&n>=0&&n<W*H).slice(0,50):s.map.flatMap((tile,i)=>tile===5?[i]:[]);
  if(!s.bot.life||typeof s.bot.life!=='object')s.bot.life={age:19,occupation:'Wanderer',friends:[],events:[],lastCareerTick:-300};
  s.bot.life.age=Math.max(19,Math.min(120,Number(s.bot.life.age)||19));
  s.bot.life.events=Array.isArray(s.bot.life.events)?s.bot.life.events.slice(-10):[];
@@ -91,7 +112,7 @@ function restore(s){
   t.x=home.x;t.y=home.y;t.stock=t.stock||{food:4,wood:1,stone:1};
   for(const k of ['food','wood','stone'])t.stock[k]=Math.max(0,Math.min(999,Number(t.stock[k])||0));
   t.buildings=Array.isArray(t.buildings)?t.buildings.slice(0,MAX_BUILDINGS).filter(b=>b&&BLUEPRINTS[b.type]&&
-   Number.isInteger(b.x)&&Number.isInteger(b.y)&&b.x>1&&b.x<W-2&&b.y>1&&b.y<H-2):[];
+   Number.isInteger(b.x)&&Number.isInteger(b.y)&&b.x>1&&b.x<W-2&&b.y>1&&b.y<H-2).map(b=>({...b,w:b.w===2?2:1,h:b.h===2?2:1})):[];
   t.agenda=BLUEPRINTS[t.agenda]||['housing','food','defense','craft','trade'].includes(t.agenda)?t.agenda:'housing';
   const built=kind=>t.buildings.some(b=>b.type===kind);
   const inferred=t.buildings.length>=9&&built('market')?3:t.buildings.length>=7&&built('workshop')?2:t.buildings.length>=4?1:0;
@@ -244,31 +265,15 @@ function personTick(s,p){
   p.role==='Apothecary'?'Preparing remedies':p.role==='Squire'?'Guarding the road':'Studying old history';
  return true;
 }
-const COMMANDS=[
- {intent:'remodel',re:/\b(renovat|redesign|rebuild|remodel|appearance|roof|rediseñar|remodel|renovar|tejado|techos?|apariencia)\w*/i,label:'consider redesigning homes'},
- {intent:'housing',re:/\b(hous(?:e|ing)|shelter|home|casas?|viviendas?|edificios?)\b/i,label:'build homes'},
- {intent:'food',re:/\b(farm|crop|food|harvest|grain|cultivar|granja|comida|agricultur|alimento|cosecha)\w*/i,label:'grow food'},
- {intent:'defense',re:/\b(defend|protect|guard|wolves|wolf|wall|defender|proteger|lobos?|vigil|muralla)\w*/i,label:'protect residents'},
- {intent:'craft',re:/\b(craft|tool|workshop|smith|invent|forge|herramient|taller|forja|investig)\w*/i,label:'develop crafts'},
- {intent:'trade',re:/\b(trade|market|commerce|exchange|mercado|comercio|intercambi)\w*/i,label:'develop trade'},
- {intent:'explore',re:/\b(explore|travel|discover|journey|wander|explorar|viajar|descubri|aventura)\w*/i,label:'explore freely'},
- {intent:'housing',re:/\b(build|construct|construir)\w*/i,label:'build homes'},
- {intent:'rest',re:/\b(rest|sleep|recover|descansa|dormir|dorm|repos|curar)\w*/i,label:'rest'}
-];
-function interpret(message){
- const text=String(message||'').trim().slice(0,220);
- // A limited offline parser must never invert a negative instruction into a positive command.
- const denied=/\b(don.t|do not|never|avoid|no construy|no edifi|no hag|nunca|eviten|prohibi)\w*/i.test(text);
- const match=denied?null:COMMANDS.find(a=>a.re.test(text));
- return {text,intent:match?match.intent:'unknown',label:match?match.label:'unrecognized request'};
-}
+function interpret(message){return Intent.interpret(message);}
 function whisper(s,message){
  if(!s.living)return {ok:false,reason:'World is still awakening'};
  const m=interpret(message);
  if(!m.text||m.text.length<3)return {ok:false,reason:'Write a short intention first'};
- if(m.intent==='unknown')return {ok:false,reason:'This offline version understands building, food, defense, crafts, trade, exploring and rest. No order was issued.'};
+ if(m.status!=='recognized')return {ok:false,reason:m.reason};
+ if(m.target&&m.target.kind==='person')return {ok:false,reason:'Individual guidance requires a separate citizen consent system. No order was issued.'};
  if(s.living.whispers.length&&s.tick-s.living.whispers[s.living.whispers.length-1].tick<12)return {ok:false,reason:'Let the world consider the previous whisper'};
- const towns=s.living.towns,decisions=[];
+ const towns=m.target&&m.target.kind==='town'?s.living.towns.filter(t=>t.id===m.target.id):s.living.towns,decisions=[];
  for(const t of towns){
   const workers=s.living.citizens.filter(c=>c.townId===t.id);
   const independence=workers.reduce((n,c)=>n+c.independence,0)/workers.length;
@@ -278,10 +283,10 @@ function whisper(s,message){
   if(agree&&m.intent==='remodel')t.renovateAfter=s.tick+48;
   decisions.push({name:t.name,agree,reason:agree?'Residents will consider this within their needs and supplies.':'Residents are prioritizing survival or independence.'});
  }
- const nimAgree=s.bot.hunger>=30&&s.bot.energy>=25&&
+ const nimAgree=!m.target&&s.bot.hunger>=30&&s.bot.energy>=25&&
   (m.intent==='explore'||m.intent==='rest'||m.intent==='food')&&(hash(s.worldSeed,s.tick,m.text.length)%10)<Math.floor(s.bot.personality.curiosity*10);
  if(nimAgree)s.living.nimWish={intent:m.intent,until:s.tick+120};
- const entry={id:s.living.nextWhisper++,tick:s.tick,message:m.text,intent:m.intent,label:m.label,decisions,nimAgree};
+ const entry={id:s.living.nextWhisper++,tick:s.tick,message:m.text,intent:m.intent,label:m.label,target:m.target,decisions,nimAgree};
  s.living.whispers.push(entry);if(s.living.whispers.length>12)s.living.whispers.shift();
  log(s,'The god whispers',m.text+' · '+decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join(', ')+(nimAgree?' · Nim is curious.':' · Nim has other plans.'));
  return {ok:true,entry};
@@ -310,5 +315,5 @@ function drawCitizen(ctx,p,x,y,tick){
  ctx.fillStyle='#3e3c31';ctx.fillRect(x+5,y+0,6,2);ctx.fillRect(x+5,y+11,2,3+step);ctx.fillRect(x+9,y+11,2,4-step);
  ctx.fillStyle='#2a322d';ctx.fillRect(x+6,y+4,1,1);ctx.fillRect(x+9,y+4,1,1);
 }
-return {create,restore,tick,personTick,whisper,interpret,BLUEPRINTS,site,drawBuilding,drawCitizen};
+return {create,restore,tick,personTick,whisper,interpret,BLUEPRINTS,site,drawBuilding,drawCitizen,occupied};
 });

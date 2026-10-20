@@ -60,8 +60,11 @@ function draw(){screenRedraws++;positionCamera();const b=s.bot;updateScenery();
  ctx.drawImage(scenery,0,0);
  // Physical settlements are persistent Canvas actors, not symbolic village tiles.
  if(s.living)for(const town of s.living.towns)for(const building of town.buildings){
-  if(building.x>=camX&&building.x<camX+VW&&building.y>=camY&&building.y<camY+VH&&godSeesTown(building.x,building.y)){
-   Living.drawBuilding(ctx,building,(building.x-camX)*16,(building.y-camY)*16);
+  if(building.x+(building.w||1)>camX&&building.x<camX+VW&&
+     building.y+(building.h||1)>camY&&building.y<camY+VH&&godSeesTown(building.x,building.y)){
+   const xx=(building.x-camX)*16,yy=(building.y-camY)*16;
+   if(building.w===2&&building.h===2)window.GodseedSettlements.draw(ctx,building,xx,yy);
+   else Living.drawBuilding(ctx,building,xx,yy); // old 1x1 world saves
   }
  }
  if((s.tick%240)>172||(s.tick%240)<42)rect(0,0,canvas.width,canvas.height,'rgba(8,23,38,.18)');
@@ -86,7 +89,7 @@ function draw(){screenRedraws++;positionCamera();const b=s.bot;updateScenery();
  }
  $('coordinates').textContent=`${b.x}, ${b.y} · ${A.regionAt(s,b.x,b.y).name} · ${ZOOMS[zoomIndex].name}`;
 }
-function drawMini(){const image=mctx.createImageData(A.W,A.H);for(let i=0;i<A.N;i++){const t=s.map[i],c=s.seen[i]?colors[t]:'#121c20';const k=i*4;image.data[k]=parseInt(c.slice(1,3),16);image.data[k+1]=parseInt(c.slice(3,5),16);image.data[k+2]=parseInt(c.slice(5,7),16);image.data[k+3]=255;}mctx.putImageData(image,0,0);mctx.fillStyle='#f9e6b2';mctx.fillRect(s.bot.x,s.bot.y,1,1);mctx.strokeStyle='#d9d8ab';mctx.lineWidth=.5;mctx.strokeRect(camX+.25,camY+.25,VW-.5,VH-.5);}
+function drawMini(){const image=mctx.createImageData(A.W,A.H);for(let i=0;i<A.N;i++){const t=s.map[i],c=s.seen[i]?colors[t]:'#121c20';const k=i*4;image.data[k]=parseInt(c.slice(1,3),16);image.data[k+1]=parseInt(c.slice(3,5),16);image.data[k+2]=parseInt(c.slice(5,7),16);image.data[k+3]=255;}mctx.putImageData(image,0,0);if(s.living)for(const t of s.living.towns)for(const b of t.buildings){mctx.fillStyle='#e1c582';mctx.fillRect(b.x,b.y,b.w||1,b.h||1);}mctx.fillStyle='#f9e6b2';mctx.fillRect(s.bot.x,s.bot.y,1,1);mctx.strokeStyle='#d9d8ab';mctx.lineWidth=.5;mctx.strokeRect(camX+.25,camY+.25,VW-.5,VH-.5);}
 function bar(label,n,max=100){const pct=Math.round(Math.max(0,Math.min(1,n/max))*100);return `<div class="stat"><div class="stathead"><span>${label}</span><b>${Math.round(n)} / ${Math.round(max)}</b></div><div class="track"><i style="width:${pct}%" class="${label.toLowerCase().split(' ')[0]}"></i></div></div>`;}
 function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
  $('quickStatus').textContent=`NIM L${b.level} · HP ${Math.ceil(b.hp)}/${b.maxHp} · Faith ${s.faith} · ${b.goal}`;
@@ -107,7 +110,7 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
   $('townStatus').textContent=s.living.towns.map(t=>t.name+' · '+t.age+' / '+(t.technology?t.technology.era:'Founding Age')+' · '+t.buildings.length+' buildings · '+t.stock.food+' food · '+t.stock.wood+' wood · '+t.stock.stone+' stone').join(' | ');
   $('citizenLives').textContent=s.living.citizens.map(p=>p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity).join(' • ');
   const recent=s.living.whispers[s.living.whispers.length-1];
-  $('godFeedback').textContent=recent?('Interpreted as: '+recent.label+'. '+recent.decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join('; ')+(recent.nimAgree?'; Nim is considering it.':'')):'Speak your intention; residents decide how to respond.';
+  $('godFeedback').textContent=recent?('Interpreted as: '+recent.label+(recent.target?' for '+recent.target.name:'')+'. '+recent.decisions.map(d=>d.name+': '+(d.agree?'considering':'declined')).join('; ')+(recent.nimAgree?'; Nim is considering it.':'')):'Speak your intention; residents decide how to respond.';
  }
 
  $('milestones').title=(s.shrinesVisited||[]).length+' santuarios antiguos visitados';

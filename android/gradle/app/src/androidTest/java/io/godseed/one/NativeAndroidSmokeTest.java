@@ -250,6 +250,47 @@ public class NativeAndroidSmokeTest {
         }
     }
 
+
+    /**
+     * Regression: Android onPause must persist an unsaved paused Nim world
+     * before Activity/WebView recreation. The earlier native test clicked
+     * Save manually, which did not exercise the lifecycle persistence path.
+     */
+    @Test public void backgroundPausePersistsUnsavedWorldAcrossActivityRecreation() throws Exception {
+        try (ActivityScenario<MainActivity> activity = ActivityScenario.launch(MainActivity.class)) {
+            boolean ready = false;
+            for (int i = 0; i < 30; i++) {
+                if ("true".equals(evaluate(activity,
+                    "typeof window.GodseedDebug==='object' && document.readyState==='complete'"))) {
+                    ready = true;
+                    break;
+                }
+                Thread.sleep(500);
+            }
+            assertTrue("Game not ready for background-save test", ready);
+            String before = evaluate(activity,
+                "(function(){GodseedDebug.newWorld(27183);GodseedDebug.setSpeed(0);" +
+                "GodseedDebug.step(29);localStorage.removeItem('godseed-one-small-life-v1');" +
+                "return GodseedDebug.getState().tick;})()");
+            assertEquals("29", before);
+            assertEquals("true", evaluate(activity,
+                "localStorage.getItem('godseed-one-small-life-v1')===null"));
+            activity.recreate();
+            boolean recovered = false;
+            for (int i = 0; i < 30; i++) {
+                String value = evaluate(activity,
+                    "(function(){if(typeof window.GodseedDebug!=='object')return false;" +
+                    "var world=GodseedDebug.getState();" +
+                    "return world.worldSeed===27183 && world.tick>=29" +
+                    " && world.settings.speed===0;})()");
+                if ("true".equals(value)) { recovered = true; break; }
+                Thread.sleep(500);
+            }
+            assertTrue("Unsaved world must survive native onPause + WebView recreation",
+                recovered);
+        }
+    }
+
     private static String evaluate(ActivityScenario<MainActivity> activity, String js)
             throws InterruptedException {
         CountDownLatch done = new CountDownLatch(1);
