@@ -14,9 +14,24 @@ const DIRS=[[1,0],[-1,0],[0,1],[0,-1]],T=Chunks.T;
 const passable=t=>t!==T.WATER&&t!==T.STONE;
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
 const copy=x=>JSON.parse(JSON.stringify(x));
+function reachableForests(store,x,y){
+ const seen=new Set([x+","+y]),q=[{x,y}];let count=0;
+ for(let i=0;i<q.length&&i<500;i++){
+  const p=q[i],tile=store.tileAt(p.x,p.y);
+  if(tile===T.FOREST&&++count>=4)return count;
+  for(const d of DIRS){
+   const xx=p.x+d[0],yy=p.y+d[1],key=xx+","+yy;
+   if(Math.abs(xx-x)>12||Math.abs(yy-y)>12||seen.has(key))continue;
+   seen.add(key);
+   if(passable(store.tileAt(xx,yy)))q.push({x:xx,y:yy});
+  }
+ }
+ return count;
+}
 function chooseHome(store){
  let fallback=null;
- for(let y=-12;y<=12;y++)for(let x=-12;x<=12;x++){
+ for(let radius=0;radius<=48;radius++)for(let y=-radius;y<=radius;y++)for(let x=-radius;x<=radius;x++){
+  if(Math.max(Math.abs(x),Math.abs(y))!==radius)continue;
   const tile=store.tileAt(x,y);
   if(tile!==T.GRASS&&tile!==T.MEADOW)continue;
   if(!passable(store.tileAt(x+1,y)))continue;
@@ -24,7 +39,7 @@ function chooseHome(store){
   let nearby=0;
   for(let dy=-5;dy<=5;dy++)for(let dx=-5;dx<=5;dx++)
    if(Math.abs(dx)+Math.abs(dy)<=5&&store.tileAt(x+dx,y+dy)===T.FOREST)nearby++;
-  if(nearby>=4)return{x,y};
+  if(nearby>=4&&reachableForests(store,x,y)>=4)return{x,y};
  }
  if(!fallback)throw new Error("No suitable starting terrain");
  return fallback;
