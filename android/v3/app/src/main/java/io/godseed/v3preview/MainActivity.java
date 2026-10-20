@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.webkit.ConsoleMessage;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -24,7 +27,33 @@ public final class MainActivity extends Activity {
         "(function(){if(!window.GodseedV3Debug)return false;" +
         "window.GodseedV3Debug.pause();" +
         "return window.GodseedV3Debug.save();})()";
+    private static final String TAG = "GODSEED_V3";
+    // Read-only runtime inspection: distinguish unavailable WebGL, incomplete
+    // JavaScript initialization and a graphics/shader failure in the actual APK.
+    private static final String RUNTIME_DIAGNOSTIC =
+        "(function(){var d=window.GodseedV3Debug;" +
+        "var c=document.getElementById('scene');" +
+        "var w=document.getElementById('warning');" +
+        "return JSON.stringify({ready:!!d,webgl:!!(d&&d.hasWebGL())," +
+        "canvas:!!c,canvasWidth:c?c.width:0,canvasHeight:c?c.height:0," +
+        "warning:w&&w.style.display==='block'?w.textContent:''," +
+        "userAgent:navigator.userAgent})})()";
     private WebView web;
+
+    private void inspectRuntime(WebView active, int attempt) {
+        if (web != active || isDestroyed() || isFinishing()) return;
+        active.evaluateJavascript(
+            "(function(){return Boolean(window.GodseedV3Debug&&" +
+            "GodseedV3Debug.hasWebGL())})()",
+            result -> {
+                if (web != active || isDestroyed()) return;
+                Log.i(TAG, "WEBGL_CONTEXT=" + result + " attempt=" + attempt);
+                if (!"true".equals(result)) {
+                    active.evaluateJavascript(RUNTIME_DIAGNOSTIC,
+                        details -> Log.i(TAG, "WEBGL_DIAGNOSTIC=" + details));
+                }
+            });
+    }
 
     private static boolean trusted(Uri uri) {
         String url = uri == null ? "" : uri.toString();
@@ -34,6 +63,19 @@ public final class MainActivity extends Activity {
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         web = new WebView(this);
+        // The activity and WebView must not silently switch to software
+        // compositing when attempting a WebGL context.
+        web.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        web.setWebChromeClient(new WebChromeClient() {
+            @Override public boolean onConsoleMessage(ConsoleMessage message) {
+                if (message.messageLevel() == ConsoleMessage.MessageLevel.ERROR ||
+                    message.messageLevel() == ConsoleMessage.MessageLevel.WARNING) {
+                    Log.w(TAG, "JS_CONSOLE=" + message.message() +
+                        " @" + message.lineNumber());
+                }
+                return false;
+            }
+        });
         WebSettings settings = web.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
@@ -48,12 +90,15 @@ public final class MainActivity extends Activity {
             @Override public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 if (!GAME_URL.equals(url)) return;
-                // Diagnostic for emulator acceptance only: validates a real
-                // in-WebView WebGL context, not merely a successful APK install.
-                view.evaluateJavascript(
-                    "(function(){return Boolean(window.GodseedV3Debug && " +
-                    "GodseedV3Debug.hasWebGL())})()",
-                    result -> Log.i("GODSEED_V3", "WEBGL_CONTEXT=" + result));
+                // A page-load event is not proof that inline V3 JS or the GPU
+                // renderer initialized. Probe a bounded number of times.
+                // Never report a fabricated success when WebGL is unavailable.
+                Handler handler = new Handler(Looper.getMainLooper());
+                for (int attempt = 0; attempt < 5; attempt++) {
+                    final int number = attempt;
+                    handler.postDelayed(() -> inspectRuntime(view, number),
+                        attempt * 2000L);
+                }
             }
             @Override public boolean shouldOverrideUrlLoading(
                     WebView view, WebResourceRequest request) {

@@ -6,6 +6,7 @@ set -euo pipefail
 APK="v3-android-apk/app-debug.apk"
 LOG="qa-screenshots/v3-android-webgl-log.txt"
 SCREEN="qa-screenshots/v3-android-emulator.png"
+SYSTEM="qa-screenshots/v3-android-emulator-system.txt"
 PACKAGE="io.godseed.v3preview"
 mkdir -p qa-screenshots
 test -s "$APK"
@@ -24,12 +25,24 @@ for attempt in $(seq 1 45); do
   sleep 2
 done
 # Capture screenshot and log even when GPU context failed; preserve evidence.
+# Capture device/rendering environment regardless of the result.
+{
+  echo '=== Graphics version ==='
+  adb shell getprop ro.opengles.version || true
+  echo '=== Active WebView provider ==='
+  adb shell dumpsys webviewupdate || true
+  echo '=== Foreground activity ==='
+  adb shell dumpsys activity activities | grep -E 'mResumedActivity|topResumedActivity' || true
+  echo '=== App process ==='
+  adb shell pidof "$PACKAGE" || true
+} > "$SYSTEM" 2>&1
 adb shell screencap -p /sdcard/godseed-v3-preview.png
 adb pull /sdcard/godseed-v3-preview.png "$SCREEN"
 test -s "$SCREEN"
 if [[ "$found" -ne 1 ]]; then
   echo "FAIL: V3 APK launched but never reported a verified WebGL context" >&2
   cat "$LOG" >&2
+  cat "$SYSTEM" >&2
   exit 1
 fi
 adb shell pidof "$PACKAGE" >/dev/null

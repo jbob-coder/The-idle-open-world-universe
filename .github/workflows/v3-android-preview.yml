@@ -108,6 +108,7 @@ jobs:
           path: |
             qa-screenshots/v3-android-webgl-log.txt
             qa-screenshots/v3-android-emulator.png
+            qa-screenshots/v3-android-emulator-system.txt
 
   # Independent from the Android emulator: a simulator boot timeout does not
   # invalidate a signature/offline-manifest validation of the exact APK.
