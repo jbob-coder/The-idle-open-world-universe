@@ -83,6 +83,12 @@
         box(tree.x+.12,.9,tree.z+.12,.76,1.15,.76,[.14,.38,.22]);
         box(tree.x+.23,2,tree.z+.23,.54,.36,.54,[.22,.51,.27]);
       }
+      // Read-only 3D portrayal of actual food plants, never a state mutation.
+      for(const plant of state.berries||[]){
+        box(plant.x+.24,0,plant.z+.24,.52,.32,.52,[.16,.46,.18]);
+        if(plant.stock>0)box(plant.x+.40,.24,plant.z+.36,.21,.19,.24,
+          plant.stock===2?[.76,.15,.24]:[.59,.22,.28]);
+      }
       for(const b of state.structures){
         box(b.x-.25,0,b.z-.15,1.6,1.35,1.5,[.55,.45,.31]);
         box(b.x-.39,1.35,b.z-.28,1.86,.50,1.76,[.57,.21,.19]);
