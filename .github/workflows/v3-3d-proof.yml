@@ -66,3 +66,4 @@ jobs:
             qa-screenshots/godseed-v3-chromium-640x360.png
             qa-screenshots/godseed-v3-canvas-fallback-640x360.png
             qa-screenshots/godseed-v3-society-640x360.png
+            qa-screenshots/godseed-v3-society-canvas-640x360.png
