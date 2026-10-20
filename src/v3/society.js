@@ -3,7 +3,7 @@
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   if(root)root.GodseedV3Society=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
-  const VERSION=1,SIZE=20,STORAGE_KEY="godseed-v3-society-v1";
+  const VERSION=2,SIZE=20,STORAGE_KEY="godseed-v3-society-v1";
   const copy=x=>JSON.parse(JSON.stringify(x));
   const validPos=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.z)&&p.x>=0&&p.z>=0&&p.x<SIZE&&p.z<SIZE;
   const number=n=>Number.isSafeInteger(n)&&n>=0;
@@ -34,10 +34,25 @@
   }
   function actor(template){return {id:template.id,name:template.name,trait:template.trait,x:template.x,z:template.z,
     skill:template.skill,energy:20,hunger:85,health:100,alive:true,harvested:0,
-    crafted:0,built:0,conversations:0,goal:"explorar",relations:{}};}
+    crafted:0,built:0,foraged:0,conversations:0,ordersCompleted:0,
+    role:"unassigned",memories:[],goal:"explorar",relations:{}};}
+  const MEMORY_KINDS=new Set(["craft","build","forage","eat","talk","elect","assign","council"]);
+  function remember(c,tick,kind,subject){
+    c.memories.push({tick,kind,subject:subject||null});
+    if(c.memories.length>12)c.memories.shift();
+  }
   function record(s,c,action,details){
     s.events.push({tick:s.tick,actor:c.id,action,details});
     if(s.events.length>96)s.events.shift();
+    if(MEMORY_KINDS.has(action)){
+      const subject=details.with||details.site||details.recipe||details.role||
+        details.policy||details.leader||null;
+      remember(c,s.tick,action,subject);
+    }
+    if(action==="forage")c.foraged++;
+    if((c.role==="forager"&&action==="forage")||
+       (c.role==="builder"&&action==="harvest")||
+       (c.role==="steward"&&action==="talk"))c.ordersCompleted++;
   }
   function walk(c,target){
     if(c.x!==target.x)c.x+=Math.sign(target.x-c.x);
@@ -141,6 +156,7 @@
       c.goal="comer";record(s,c,"eat",{foodSpent:1});return;
     }
     if(c.energy<5){c.energy=Math.min(20,c.energy+9);c.goal="descansar";return;}
+    // Survival always overrides political work orders.
     // Newcomers must travel into the inhabited settlement before undertaking work.
     if(c.id!=="sim_aria"&&s.structures.length&&distance(c,SITES[0])>2){
       walk(c,SITES[0]);c.goal="llegar a la aldea";return;
@@ -150,6 +166,14 @@
     }
     if(s.citizens.length>1&&s.tick%9===0&&social(s,c))return;
     const job=plan(s);
+    // After the founding buildings are complete, work orders cause real specialized labor.
+    if(job.type==="none"&&s.settlement.orders.length){
+      if(c.role==="forager"&&s.food<(s.settlement.policy==="secure_food"?8:6)&&
+         s.bushes.some(b=>b.berries>0)){forage(s,c);return;}
+      if(c.role==="builder"&&s.wood<(s.settlement.policy==="reserve_wood"?8:6)&&
+         s.forest.length){gathering(s,c);return;}
+      if(c.role==="steward"&&s.tick%4===0&&social(s,c))return;
+    }
     if(job.type==="wood"){gathering(s,c);return;}
     if(job.type==="axe"||job.type==="kit"){craft(s,c,job.type);return;}
     if(job.type==="build"){construct(s,c,job.site);return;}
@@ -162,6 +186,41 @@
     if(s.tick-s.settlement.foundedAt<(s.citizens.length===1?20:75))return;
     const next=actor(PEOPLE[s.citizens.length]);
     s.citizens.push(next);record(s,next,"arrive",{settlement:s.settlement.id});
+  }
+  // Stable role assignment from observable previous work rather than character IDs.
+  function issueOrders(s){
+    const leader=s.settlement.leaderId;
+    if(!leader)return;
+    const followers=s.citizens.filter(c=>c.id!==leader&&c.alive);
+    if(followers.length!==2)return;
+    followers.sort((a,b)=>{
+      const score=c=>c.built*4+c.crafted*3+c.harvested+
+        (c.trait==="builder"?8:0);
+      return score(b)-score(a)||a.id.localeCompare(b.id);
+    });
+    const chosen=new Map([[leader,"steward"],[followers[0].id,"builder"],
+      [followers[1].id,"forager"]]);
+    s.settlement.orders=[];
+    for(const c of s.citizens){
+      c.role=chosen.get(c.id);
+      s.settlement.orders.push({citizenId:c.id,role:c.role,
+        leaderId:leader,issuedAt:s.tick});
+      record(s,c,"assign",{role:c.role,leader});
+    }
+    s.settlement.ordersIssued++;
+  }
+  function council(s){
+    if(!s.settlement.leaderId)return;
+    const target=s.food<3?"secure_food":s.wood<4?"reserve_wood":"community";
+    const reason="food="+s.food+";wood="+s.wood+";residents="+s.citizens.length;
+    if(s.settlement.policy!==target){
+      s.settlement.policiesSet++;
+      record(s,s.citizens.find(c=>c.id===s.settlement.leaderId),"council",
+        {policy:target,reason});
+    }
+    s.settlement.policy=target;
+    s.settlement.policyReason=reason;
+    s.settlement.policyTick=s.tick;
   }
   function elect(s){
     if(s.citizens.length<3||s.citizens.some(c=>!c.alive))return;
@@ -184,6 +243,8 @@
     s.settlement.elections++;
     record(s,s.citizens.find(c=>c.id===s.settlement.leaderId),"elect",{
       leader:s.settlement.leaderId,ballots:copy(ballots)});
+    issueOrders(s);
+    council(s);
   }
   function create(seed){
     if(!number(seed)||seed>0xffffffff)throw RangeError("seed must be uint32");
@@ -194,10 +255,11 @@
       axe:0,axeCrafted:0,kits:0,kitsCrafted:0,kitsUsed:0,
       food:0,foodGathered:0,foodEaten:0,foodGrown:0,
       settlement:{id:"village_01",name:"Primera Aldea",foundedAt:null,
-        leaderId:null,electionTick:0,elections:0,ballots:[]},events:[]});
+        leaderId:null,electionTick:0,elections:0,ballots:[],orders:[],
+        ordersIssued:0,policy:"none",policyTick:0,policiesSet:0,policyReason:""},events:[]});
   }
-  function validate(s){
-    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
+  function validateLegacy(s){
+    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==1||
       !number(s.seed)||s.seed>0xffffffff||!number(s.tick)||
       !Array.isArray(s.citizens)||s.citizens.length<1||s.citizens.length>3||
       !Array.isArray(s.forest)||!Array.isArray(s.bushes)||s.bushes.length!==4||
@@ -286,6 +348,81 @@
       typeof e.details!=="object")return false;
     return true;
   }
+  function validate(s){
+    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
+      !Array.isArray(s.events))return false;
+    const allowed=new Set(["harvest","craft","build","forage","eat","talk",
+      "arrive","elect","death","assign","council"]);
+    if(s.events.some(e=>!e||!allowed.has(e.action)||!e.details||
+      typeof e.details!=="object"||Array.isArray(e.details)))return false;
+    // The entire version-1 resource, identity, election and location contract
+    // remains enforced; council-only event types are checked explicitly below.
+    const prior={...s,schemaVersion:1,
+      events:s.events.filter(e=>e.action!=="assign"&&e.action!=="council")};
+    if(!validateLegacy(prior))return false;
+    const validRoles=new Set(["unassigned","steward","builder","forager"]);
+    for(const c of s.citizens){
+      if(!validRoles.has(c.role)||!number(c.foraged)||c.foraged>s.foodGathered||
+        !number(c.ordersCompleted)||c.ordersCompleted>s.tick||
+        !Array.isArray(c.memories)||c.memories.length>12)return false;
+      let prev=-1;
+      for(const m of c.memories){
+        if(!m||!number(m.tick)||m.tick>s.tick||m.tick<prev||
+           !MEMORY_KINDS.has(m.kind)||
+           !(m.subject===null||(typeof m.subject==="string"&&m.subject.length<=64)))
+          return false;
+        prev=m.tick;
+      }
+    }
+    const council=s.settlement;
+    if(!Array.isArray(council.orders)||council.orders.length>3||
+      !number(council.ordersIssued)||!number(council.policyTick)||
+      council.policyTick>s.tick||!number(council.policiesSet)||
+      !["none","secure_food","reserve_wood","community"].includes(council.policy)||
+      typeof council.policyReason!=="string"||council.policyReason.length>100)return false;
+    if(council.orders.length!==0&&council.orders.length!==3)return false;
+    if(council.ordersIssued===0&&council.orders.length!==0)return false;
+    if(council.ordersIssued>0&&council.orders.length!==3)return false;
+    if(council.leaderId===null&&(council.orders.length||council.policy!=="none"||
+      council.policiesSet||council.ordersIssued))return false;
+    if(council.policy!=="none"&&(!council.leaderId||!council.policyReason||
+      council.policiesSet<1))return false;
+    if(council.orders.length){
+      const ids=new Set(),roles=new Set();
+      for(const order of council.orders){
+        const person=s.citizens.find(c=>c.id===order.citizenId);
+        if(!person||ids.has(person.id)||!validRoles.has(order.role)||
+          order.role==="unassigned"||roles.has(order.role)||
+          order.leaderId!==council.leaderId||!number(order.issuedAt)||
+          order.issuedAt>s.tick||person.role!==order.role||
+          (person.id===council.leaderId)!==(order.role==="steward"))
+          return false;
+        ids.add(person.id);roles.add(order.role);
+      }
+      if(ids.size!==3||roles.size!==3)return false;
+    }else if(s.citizens.some(c=>c.role!=="unassigned"))return false;
+    for(const e of s.events.filter(e=>e.action==="assign"||e.action==="council")){
+      if(e.action==="assign"){
+        if(!s.citizens.some(c=>c.id===e.actor)||
+          !["steward","builder","forager"].includes(e.details.role)||
+          !s.citizens.some(c=>c.id===e.details.leader))return false;
+      }else if(!["secure_food","reserve_wood","community"].includes(e.details.policy)||
+        typeof e.details.reason!=="string"||e.details.reason.length>100)return false;
+    }
+    return true;
+  }
+  function migrateV1(value){
+    if(!validateLegacy(value))throw RangeError("invalid schema-1 society save");
+    const s=copy(value);
+    s.schemaVersion=VERSION;
+    for(const c of s.citizens){
+      c.foraged=0;c.ordersCompleted=0;c.role="unassigned";c.memories=[];
+    }
+    Object.assign(s.settlement,{orders:[],ordersIssued:0,
+      policy:"none",policyTick:0,policiesSet:0,policyReason:""});
+    if(!validate(s))throw RangeError("unsafe schema-1 migration");
+    return s;
+  }
   function instance(state){
     function snapshot(){return copy(state);}
     function advance(n){
@@ -298,6 +435,8 @@
         arrival(state);
         for(const c of state.citizens)act(state,c);
         if(state.tick%30===0)elect(state);
+        if(state.settlement.leaderId&&!state.settlement.orders.length)issueOrders(state);
+        if(state.settlement.leaderId&&state.tick%45===0)council(state);
       }
       return snapshot();
     }
@@ -308,6 +447,7 @@
   function restore(raw){
     if(typeof raw!=="string"||raw.length>64000)throw RangeError("invalid save");
     let value=JSON.parse(raw);
+    if(value&&value.schemaVersion===1)value=migrateV1(value);
     if(!validate(value))throw RangeError("invalid society state");
     return instance(copy(value));
   }
