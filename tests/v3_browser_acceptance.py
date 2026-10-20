@@ -185,6 +185,33 @@ def run():
         fallback.screenshot(path=str(CAPTURE/"godseed-v3-society-canvas-640x360.png"))
         print("PASS V3 society Canvas2D fallback and separate mode switch without save loss")
         fallback.close()
+        # Real schema-1 society saves load in the browser without touching solo V3.
+        legacy=browser.new_page(viewport={"width":640,"height":360})
+        legacy_errors=[]
+        legacy.on("pageerror",lambda error:legacy_errors.append(str(error)))
+        legacy.route("http://**/*",lambda route:route.abort())
+        legacy.route("https://**/*",lambda route:route.abort())
+        legacy.goto(HTML.as_uri()+"?mode=society",wait_until="load")
+        historical=(ROOT/"tests/fixtures/v3_society_schema1_seed14.json").read_text()
+        legacy.evaluate("""raw => localStorage.setItem('godseed-v3-society-v1', raw)""",historical)
+        legacy.reload(wait_until="load")
+        wait_for_state(legacy,"() => Boolean(window.GodseedV3Debug)",20)
+        old_state=legacy.evaluate("GodseedV3Debug.getState()")
+        assert old_state["schemaVersion"]==2 and old_state["tick"]==350
+        assert len(old_state["citizens"])==3 and len(old_state["structures"])==3
+        assert old_state["settlement"]["leaderId"]=="sim_aria"
+        assert old_state["settlement"]["orders"]==[]
+        assert legacy.evaluate("GodseedV3Debug.isPaused()")
+        next_state=legacy.evaluate("""() => GodseedV3Debug.step()""")
+        assert len(next_state["settlement"]["orders"])==3
+        assert next_state["settlement"]["policy"]!="none"
+        assert legacy.evaluate("GodseedV3Debug.save()")
+        legacy.reload(wait_until="load")
+        wait_for_state(legacy,"() => Boolean(window.GodseedV3Debug)",20)
+        assert legacy.evaluate("GodseedV3Debug.getState()")==next_state
+        assert not legacy_errors, "society legacy migration errors: "+"; ".join(legacy_errors)
+        print("PASS V3 authentic society schema-1 browser migration with restored leadership and policy")
+        legacy.close()
         browser.close()
 
 if __name__=="__main__":
