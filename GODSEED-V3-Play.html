@@ -866,7 +866,10 @@ button[aria-pressed="true"]{background:#6e6138}
         arrival(state);
         for(const c of state.citizens)act(state,c);
         if(state.tick%30===0)elect(state);
-        if(state.settlement.leaderId&&!state.settlement.orders.length)issueOrders(state);
+        if(state.settlement.leaderId&&!state.settlement.orders.length){
+          issueOrders(state);
+          council(state); // Schema-1 restore: never leave an active council without a policy.
+        }
         if(state.settlement.leaderId&&state.tick%45===0)council(state);
       }
       return snapshot();
