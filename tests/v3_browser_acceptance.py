@@ -194,8 +194,10 @@ def run():
         legacy.goto(HTML.as_uri()+"?mode=society",wait_until="load")
         historical=(ROOT/"tests/fixtures/v3_society_schema1_seed14.json").read_text()
         legacy.evaluate("""raw => localStorage.setItem('godseed-v3-society-v1', raw)""",historical)
-        legacy.reload(wait_until="load")
-        wait_for_state(legacy,"() => Boolean(window.GodseedV3Debug)",20)
+        # A reload here would fire pagehide/save and overwrite the injected v1
+        # fixture with the running default world before the loader could read it.
+        # Use the real load() entrypoint directly; verify reload after migration.
+        assert legacy.evaluate("GodseedV3Debug.load()")
         old_state=legacy.evaluate("GodseedV3Debug.getState()")
         assert old_state["schemaVersion"]==2 and old_state["tick"]==350
         assert len(old_state["citizens"])==3 and len(old_state["structures"])==3
