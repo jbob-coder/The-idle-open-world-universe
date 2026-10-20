@@ -398,6 +398,36 @@ function whisper(s,message){
 }
 function drawBuilding(ctx,b,x,y){
  const roofs={oak:'#98684d',reed:'#d4b577',stone:'#77878a'};
+ if((b.w||1)>2||(b.h||1)>2){
+  // Renderer-neutral world dimensions become hard, square-pixel silhouettes.
+  // No interpolation or simulation changes occur while drawing.
+  const width=(b.w||1)*16,height=(b.h||1)*16;
+  const roof=roofs[b.roof]||roofs.oak;
+  ctx.fillStyle='#172425';ctx.fillRect(x+1,y+1,width-2,height-2);
+  ctx.fillStyle='#b8a88a';ctx.fillRect(x+3,y+Math.floor(height*.6),width-6,Math.floor(height*.4)-3);
+  ctx.fillStyle=roof;ctx.fillRect(x+2,y+3,width-4,Math.floor(height*.6));
+  ctx.fillStyle='#6c5140';ctx.fillRect(x+1,y+Math.floor(height*.6)-2,width-2,3);
+  if(b.type==='farm'){
+   ctx.fillStyle='#526b3e';
+   for(let k=7;k<width-5;k+=9)ctx.fillRect(x+k,y+9,4,height-18);
+  }else if(b.type==='watchtower'){
+   ctx.fillStyle='#d5c5a1';
+   for(let k=5;k<width-6;k+=12)ctx.fillRect(x+k,y+4,5,5);
+  }else{
+   ctx.fillStyle='#e8d18c';
+   for(let k=12;k<width-14;k+=24)ctx.fillRect(x+k,y+height-16,7,7);
+  }
+  const approach=b.entrance,door=approach&&approach.thresholdWorld;
+  if(door){
+   const px=x+(door.x-b.x)*16,py=y+(door.y-b.y)*16;
+   ctx.fillStyle='#3e3029';
+   if(approach.orientation==='north')ctx.fillRect(px+5,py+2,6,8);
+   else if(approach.orientation==='south')ctx.fillRect(px+5,py+8,6,8);
+   else if(approach.orientation==='west')ctx.fillRect(px+2,py+5,8,6);
+   else if(approach.orientation==='east')ctx.fillRect(px+8,py+5,8,6);
+  }
+  return;
+ }
  const roof=roofs[b.roof]||roofs.oak;
  ctx.fillStyle='#172425';ctx.fillRect(x+1,y+5,15,11);
  ctx.fillStyle='#aa9b80';ctx.fillRect(x+2,y+7,12,7);
