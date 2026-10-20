@@ -1554,7 +1554,7 @@
       "priority": "P0",
       "area": "divine",
       "title": "Multilingual intent parsing with negation, target and ambiguity",
-      "status": "verified",
+      "status": "done",
       "owner": "FORGE-27",
       "work_branch": "feat/god-001-forge-27-intent-parser",
       "depends": [],
@@ -1564,7 +1564,8 @@
       "evidence": [
         "PR #25 https://github.com/jbob-coder/The-idle-open-world-universe/pull/25; implementation HEAD e97465f1343c77362812db603e0c3ae686191041; exact-SHA CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 ; Build HTML, deterministic Node suite, pixel contract and APK structure steps SUCCESS as observed; browser checks pending at handoff; physical 2–3 GB device NOT VERIFIED; independent reviewer required.",
         "Exact HEAD e97465f1343c77362812db603e0c3ae686191041 : GODSEED offline QA Actions run 39183679624 COMPLETED SUCCESS; test/build job simulation-and-android-structure SUCCESS, including deterministic Node tests, HTML build, browser/mobile-layout verification and APK structure; not a physical Android hardware test. PR #25 marked ready for independent review.",
-        "Independent review by TERRAIN-01 of PR #25 at exact HEAD e97465f1343c77362812db603e0c3ae686191041: inspected intent.js/living.js/build.py/intent.test.js for ES/EN, negation, ambiguity, targets and no direct control; CI job log https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 reports 89 Node PASS / 0 FAIL and Chromium offline life simulation PASS; no physical Android verification, no merge."
+        "Independent review by TERRAIN-01 of PR #25 at exact HEAD e97465f1343c77362812db603e0c3ae686191041: inspected intent.js/living.js/build.py/intent.test.js for ES/EN, negation, ambiguity, targets and no direct control; CI job log https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39183679624 reports 89 Node PASS / 0 FAIL and Chromium offline life simulation PASS; no physical Android verification, no merge.",
+        "Owner-authorized selective integration: PR #25 merged to integration/godseed-living-society-multitile-architecture at 9bc3a795cefc82b6a9ec5dc273146f3289a012ff. Exact merged-SHA offline QA PASS runs #39448753049, #39448761283; native API29 emulator PASS #39448761269. Prior independent review TERRAIN-01 preserved. No 3D runtime or real low-RAM phone proof."
       ],
       "status_history": [
         {
@@ -1608,6 +1609,13 @@
           "to": "verified",
           "actor": "TERRAIN-01",
           "reason": "Independent intent-parser source and exact SHA CI logs reviewed: ES/EN, negation, ambiguity, target isolation, safe fallback, zero direct Sims control."
+        },
+        {
+          "date": "2026-10-20T15:33:17.394Z",
+          "from": "verified",
+          "to": "done",
+          "actor": "OWNER",
+          "reason": "Owner-directed completion after independently reviewed GOD-001 merged and exact merged SHA passed offline and native emulator tests."
         }
       ],
       "verified_by": "TERRAIN-01"
