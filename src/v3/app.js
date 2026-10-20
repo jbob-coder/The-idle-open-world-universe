@@ -1,10 +1,10 @@
 /* GODSEED V3 proof controls: deterministic simulation tick, read-only render, isolated storage. */
 (function(root){"use strict";
-  const Sim=root.GodseedV3Sim,View=root.GodseedV3View;
-  if(!Sim||!View)throw new Error("GODSEED V3 modules missing");
+  const Sim=root.GodseedV3Sim,View=root.GodseedV3View,Fallback=root.GodseedV3Fallback;
+  if(!Sim||!View||!Fallback)throw new Error("GODSEED V3 modules missing");
   const el=id=>document.getElementById(id);
-  const canvas=el("scene");
-  let simulation,view=null,paused=false,speed=1,last=0,acc=0,dirty=true;
+  let canvas=el("scene");
+  let simulation,view=null,rendererMode="unavailable",paused=false,speed=1,last=0,acc=0,dirty=true;
   let lastPersistedTick=-1,lastShownTick=-1,lastDraw=0,status="";
   function setStatus(message){status=message;el("headline").textContent=message;}
   function seedNow(){return ((Date.now()>>>0)^0x5a17b913)>>>0;}
@@ -151,19 +151,32 @@
       if(view&&e.key==="ArrowRight"){view.rotate(.12,0);dirty=true;}
     });
   }
-  try{view=View.create(canvas);}catch(error){
-    const warning=el("warning");
-    warning.style.display="block";
-    warning.textContent="No hay contexto WebGL 3D en este navegador o dispositivo. La simulación sigue disponible, pero no se mostrará como 3D.";
+  const forceFallback=root.location&&/(?:\\?|&)renderer=2d(?:&|$)/.test(root.location.search||"");
+  try{
+    if(forceFallback)throw new Error("Canvas2D QA");
+    view=View.create(canvas);rendererMode="webgl-3d";
+  }catch(error){
+    // After a partial shader initialization a WebGL canvas cannot become 2D.
+    // Replace canvas before binding movement and creating the fallback context.
+    const replacement=canvas.cloneNode(false);
+    canvas.parentNode.replaceChild(replacement,canvas);
+    canvas=replacement;
+    try{
+      view=Fallback.create(canvas);rendererMode="canvas-2d-fallback";
+    }catch(fallbackError){
+      const warning=el("warning");warning.style.display="block";
+      warning.textContent="WebGL y Canvas2D no están disponibles; la simulación continúa sin imagen.";
+    }
   }
   controls();
   if(!load())newWorld(14);
+  if(rendererMode==="canvas-2d-fallback")setStatus("Modo compatible 2.5D · WebGL no disponible");
   // Public test/inspection interface; never exposes a writable simulation object.
   root.GodseedV3Debug=Object.freeze({
     getState:()=>simulation.snapshot(),newWorld,step,save,load,
     isPaused:()=>paused,pause:()=>{if(!paused)togglePause();return true;},
     resume:()=>{if(paused)togglePause();return true;},
-    hasWebGL:()=>Boolean(view),storageKey:Sim.STORAGE_KEY
+    hasWebGL:()=>rendererMode==="webgl-3d",rendererMode:()=>rendererMode,storageKey:Sim.STORAGE_KEY
   });
   root.requestAnimationFrame(loop);
 })(typeof window!=="undefined"?window:globalThis);
