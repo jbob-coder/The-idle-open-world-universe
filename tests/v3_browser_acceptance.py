@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
 """Actual headless Chromium acceptance for GODSEED V3's offline WebGL preview."""
 from pathlib import Path
+from time import monotonic
 from playwright.sync_api import sync_playwright
 
 ROOT=Path(__file__).resolve().parents[1]
 HTML=(ROOT/"GODSEED-V3-Play.html").resolve()
 CAPTURE=ROOT/"qa-screenshots"
+
+def wait_for_state(page, expression, timeout_seconds=25):
+    """Poll with page.evaluate: no wait_for_function eval under restrictive CSP."""
+    deadline=monotonic()+timeout_seconds
+    while monotonic()<deadline:
+        if page.evaluate(expression):
+            return
+        page.wait_for_timeout(80)
+    raise AssertionError("Timed out waiting for state: "+expression)
 
 def run():
     assert HTML.exists(), "run python build_v3.py before browser tests"
@@ -22,7 +32,7 @@ def run():
             page.route("http://**/*",lambda route: route.abort())
             page.route("https://**/*",lambda route: route.abort())
             page.goto(HTML.as_uri(),wait_until="load")
-            page.wait_for_function("Boolean(window.GodseedV3Debug)",timeout=20000)
+            wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
             assert page.evaluate("GodseedV3Debug.hasWebGL()"), "WebGL 3D context unavailable"
             initial=page.evaluate("""() => {
                 const s=GodseedV3Debug.newWorld(14);
@@ -40,14 +50,14 @@ def run():
             page.get_by_role("button",name="Continuar").click()
             page.get_by_role("button",name="Velocidad ×1").click()
             page.get_by_role("button",name="Velocidad ×4").click()
-            page.wait_for_function("GodseedV3Debug.getState().structures.length === 1",timeout=30000)
+            wait_for_state(page,"() => GodseedV3Debug.getState().structures.length === 1",30)
             page.evaluate("GodseedV3Debug.pause()")
             built=page.evaluate("GodseedV3Debug.getState()")
             assert built["spent"]==4 and built["wood"]==built["harvested"]-4
             assert len(built["structures"])==1
             assert page.evaluate("GodseedV3Debug.save()"), "V3 persistence failed"
             page.reload(wait_until="load")
-            page.wait_for_function("Boolean(window.GodseedV3Debug)",timeout=20000)
+            wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
             assert page.evaluate("GodseedV3Debug.isPaused()"), "restored world must be paused"
             restored=page.evaluate("GodseedV3Debug.getState()")
             assert restored==built, "save/load must preserve exact authoritative state"
