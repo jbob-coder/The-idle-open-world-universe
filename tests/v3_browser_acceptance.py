@@ -135,6 +135,13 @@ def run():
         assert state["axeCrafted"]==1 and state["kitsCrafted"]==2
         assert state["settlement"]["leaderId"] in [c["id"] for c in state["citizens"]]
         assert len(state["settlement"]["ballots"])==3
+        assert state["schemaVersion"]==2
+        assert {o["role"] for o in state["settlement"]["orders"]}=={"steward","builder","forager"}
+        assert state["settlement"]["ordersIssued"]>=1
+        assert state["settlement"]["policy"] in {"secure_food","reserve_wood","community"}
+        assert all(len(c["memories"])>0 for c in state["citizens"])
+        assert page.locator("#stats").inner_text().find("Prioridad del consejo")>=0
+        assert page.locator("#memories").inner_text().find("Evidencia:")>=0
         assert state["wood"]==state["harvested"]-state["craftedWood"]-state["spentWood"]
         assert page.locator("#citizens .person").count() == 3
         assert page.evaluate("GodseedV3Debug.save()"), "society save failed"
@@ -167,6 +174,8 @@ def run():
             return d.getState();
         }""")
         assert len(outcome["structures"])==3 and outcome["settlement"]["leaderId"]
+        assert len(outcome["settlement"]["orders"])==3
+        assert outcome["schemaVersion"]==2
         assert fallback.evaluate("GodseedV3Debug.save()")
         fallback.reload(wait_until="load")
         wait_for_state(fallback,"() => Boolean(window.GodseedV3Debug)",20)
