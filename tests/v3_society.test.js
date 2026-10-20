@@ -116,3 +116,93 @@ test("extended 10k-tick society keeps finite resources and persistent roles",()=
   assert.equal(Sim.validate(s),true);
   assert.deepEqual(Sim.restore(game.serialize()).snapshot(),s);
 });
+
+
+test("the elected leader delegates three different jobs with observable results in 100 worlds",()=>{
+  for(let seed=1;seed<=100;seed++){
+    const game=Sim.create(seed),s=game.advance(2000);
+    const roles=Object.fromEntries(s.citizens.map(c=>[c.role,c]));
+    assert.equal(s.schemaVersion,2);
+    assert.equal(s.settlement.orders.length,3);
+    assert.deepEqual(Object.keys(roles).sort(),["builder","forager","steward"]);
+    assert.equal(roles.steward.id,s.settlement.leaderId);
+    assert.ok(roles.builder.settled&&roles.forager.settled);
+    assert.ok(roles.builder.ordersCompleted>0,"builder actually harvested seed "+seed);
+    assert.ok(roles.forager.ordersCompleted>0,"forager actually gathered seed "+seed);
+    assert.ok(roles.steward.ordersCompleted>0,"steward actually talked seed "+seed);
+    assert.ok(roles.forager.foraged>0);
+    assert.ok(s.settlement.policy!=="none"&&s.settlement.policiesSet>=1);
+    assert.ok(s.settlement.policyReason.includes("food="));
+    assert.ok(s.settlement.orders.every(o=>o.leaderId===s.settlement.leaderId));
+    assert.ok(s.citizens.every(c=>c.memories.length>0&&c.memories.length<=12));
+    assert.equal(Sim.validate(s),true,"new schema seed "+seed);
+    assert.deepEqual(Sim.restore(game.serialize()).snapshot(),s);
+  }
+});
+
+test("authentic schema-1 society save migrates without changing historical people or world",()=>{
+  const fs=require("node:fs"),path=require("node:path");
+  const raw=fs.readFileSync(path.join(__dirname,"fixtures/v3_society_schema1_seed14.json"),"utf8");
+  const previous=JSON.parse(raw);
+  assert.equal(previous.schemaVersion,1);
+  assert.equal(previous.citizens.length,3);
+  assert.ok(previous.settlement.leaderId);
+  const game=Sim.restore(raw),s=game.snapshot();
+  assert.equal(s.schemaVersion,2);
+  for(const name of ["tick","wood","food","harvested","spentWood","foodGathered","foodEaten"])
+    assert.equal(s[name],previous[name],"retain "+name);
+  assert.deepEqual(s.forest,previous.forest);
+  assert.deepEqual(s.structures,previous.structures);
+  assert.equal(s.settlement.leaderId,previous.settlement.leaderId);
+  assert.deepEqual(s.settlement.ballots,previous.settlement.ballots);
+  assert.deepEqual(s.events,previous.events);
+  assert.equal(s.settlement.orders.length,0,"orders cannot be retroactively invented");
+  assert.ok(s.citizens.every(c=>c.role==="unassigned"&&c.memories.length===0));
+  assert.equal(Sim.validate(s),true);
+  assert.deepEqual(Sim.restore(game.serialize()).snapshot(),s);
+  const next=game.advance(1);
+  assert.equal(next.settlement.orders.length,3,"historical leader appoints on next tick");
+  assert.ok(next.settlement.policy!=="none");
+  assert.ok(next.citizens.every(c=>c.role!=="unassigned"));
+  assert.equal(Sim.validate(next),true);
+  const bad=JSON.parse(raw);bad.wood+=3;
+  assert.throws(()=>Sim.restore(JSON.stringify(bad)),RangeError);
+});
+
+test("political forgery, fake jobs and fabricated memories are rejected before save load",()=>{
+  const game=Sim.create(14);game.advance(900);
+  const actions=[
+    s=>s.citizens[0].role="builder",
+    s=>s.citizens[0].settled=false,
+    s=>s.citizens[1].ordersCompleted=s.tick+1,
+    s=>s.citizens[1].foraged=s.foodGathered+1,
+    s=>s.citizens[1].memories.push({tick:s.tick+1,kind:"eat",subject:null}),
+    s=>s.citizens[1].memories[0].kind="invented",
+    s=>s.settlement.orders[0].citizenId=s.settlement.orders[1].citizenId,
+    s=>s.settlement.orders[0].issuedAt=s.tick+1,
+    s=>s.settlement.orders[0].role="ruler",
+    s=>s.settlement.policy="magic",
+    s=>s.settlement.policyTick=s.tick+1,
+    s=>s.settlement.policyReason="x".repeat(101),
+    s=>s.events.push({tick:s.tick,actor:"sim_aria",action:"miracle",details:{}})
+  ];
+  for(const mutate of actions){
+    const tampered=game.snapshot();
+    mutate(tampered);
+    assert.equal(Sim.validate(tampered),false,mutate.toString());
+    assert.throws(()=>Sim.restore(JSON.stringify(tampered)),RangeError);
+  }
+});
+
+test("twenty thousand ticks preserve deterministic work, memory bounds and finite ecology",()=>{
+  const once=Sim.create(42),chunks=Sim.create(42);
+  const a=once.advance(20000);
+  for(let i=0;i<100;i++)chunks.advance(200);
+  assert.deepEqual(a,chunks.snapshot());
+  assert.equal(a.wood,a.harvested-a.craftedWood-a.spentWood);
+  assert.equal(a.harvested+a.forest.length,Sim.create(42).snapshot().forest.length);
+  assert.ok(a.settlement.elections>0&&a.settlement.ordersIssued>0);
+  assert.ok(a.citizens.every(c=>c.alive&&c.memories.length<=12));
+  assert.ok(once.serialize().length<64000);
+  assert.equal(Sim.validate(a),true);
+});
