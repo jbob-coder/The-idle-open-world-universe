@@ -25,8 +25,8 @@ def align(b,n=4):
     while len(b)%n:b.extend(b'\0')
 
 class Dex:
-    def __init__(self):
-        self.owner='Lio/godseed/one/MainActivity;'
+    def __init__(self, owner='Lio/godseed/one/MainActivity;'):
+        self.owner=owner
         self.methods=[
          ('Landroid/app/Activity;','<init>','V',()),
          ('Landroid/app/Activity;','onCreate','V',('Landroid/os/Bundle;',)),
@@ -124,7 +124,12 @@ class Dex:
 class Axml:
     URI='http://schemas.android.com/apk/res/android'
     RES={'theme':0x01010000,'label':0x01010001,'name':0x01010003,'exported':0x01010010,'screenOrientation':0x0101001e,'versionCode':0x0101021b,'versionName':0x0101021c,'minSdkVersion':0x0101020c,'targetSdkVersion':0x01010270,'allowBackup':0x01010280,'hardwareAccelerated':0x010102d3,'usesCleartextTraffic':0x010104ec}
-    def __init__(self):self.ss=[]
+    def __init__(self, package='io.godseed.one', label='GODSEED', version_code=5, version_name='1.0-experimental'):
+        self.ss=[]
+        self.package=package
+        self.label=label
+        self.version_code=version_code
+        self.version_name=version_name
     def sid(self,s):
         if s not in self.ss:self.ss.append(s)
         return self.ss.index(s)
@@ -155,10 +160,10 @@ class Axml:
     def build(self):
         # Collect indices up front, because pool must be first serialized XML chunk.
         chunks=[self.ns(True)]
-        chunks.append(self.start('manifest',[('package','io.godseed.one','string'),('versionCode',5,'int'),('versionName','1.0-experimental','string')]))
+        chunks.append(self.start('manifest',[('package',self.package,'string'),('versionCode',self.version_code,'int'),('versionName',self.version_name,'string')]))
         chunks.extend([self.start('uses-sdk',[('minSdkVersion',26,'int'),('targetSdkVersion',28,'int')]),self.end('uses-sdk')])
-        chunks.append(self.start('application',[('label','GODSEED','string'),('theme',0x01030007,'ref'),('allowBackup',False,'bool'),('hardwareAccelerated',True,'bool'),('usesCleartextTraffic',False,'bool')]))
-        chunks.append(self.start('activity',[('name','io.godseed.one.MainActivity','string'),('exported',True,'bool'),('screenOrientation',0,'int')]))
+        chunks.append(self.start('application',[('label',self.label,'string'),('theme',0x01030007,'ref'),('allowBackup',False,'bool'),('hardwareAccelerated',True,'bool'),('usesCleartextTraffic',False,'bool')]))
+        chunks.append(self.start('activity',[('name',self.package+'.MainActivity','string'),('exported',True,'bool'),('screenOrientation',0,'int')]))
         chunks.append(self.start('intent-filter'))
         chunks.extend([self.start('action',[('name','android.intent.action.MAIN','string')]),self.end('action')])
         chunks.extend([self.start('category',[('name','android.intent.category.LAUNCHER','string')]),self.end('category')])
