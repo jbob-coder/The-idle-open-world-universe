@@ -496,9 +496,24 @@ button[aria-pressed="true"]{background:#6e6138}
     c.goal="fabricar "+recipe;
     record(s,c,"craft",{recipe,woodSpent:cost});
   }
+  // The rendered building extends across multiple tiles; clear its real footprint.
+  function obstructs(tree,site){
+    return tree.x>=site.x-1&&tree.x<=site.x+2&&
+      tree.z>=site.z-1&&tree.z<=site.z+2;
+  }
   function construct(s,c,site){
     if(s.wood<site.cost||s.structures.length!==SITES.indexOf(site))
       throw Error("invalid construction attempt");
+    const blocking=nearest(c,s.forest.filter(t=>obstructs(t,site)));
+    if(blocking){
+      if(distance(c,blocking)>1){walk(c,blocking);c.goal="despejar terreno";return;}
+      const index=s.forest.findIndex(t=>same(t,blocking));
+      if(index<0)throw Error("building site timber conflict");
+      s.forest.splice(index,1);s.wood++;s.harvested++;c.harvested++;
+      c.energy=Math.max(0,c.energy-2);c.goal="limpiar la obra";
+      record(s,c,"harvest",{x:blocking.x,z:blocking.z,amount:1,site:site.id});
+      return;
+    }
     if(distance(c,site)>1){walk(c,site);c.goal="ir a obra";return;}
     if(site.id!=="home"&&s.kits<1)throw Error("construction kit missing");
     s.wood-=site.cost;s.spentWood+=site.cost;
@@ -643,6 +658,7 @@ button[aria-pressed="true"]{background:#6e6138}
         !PEOPLE.some(c=>c.id===b.builder)||!number(b.completedAt)||
         b.completedAt>s.tick)return false;
       spent+=p.cost;
+      if(s.forest.some(t=>obstructs(t,p)))return false;
     }
     if(spent!==s.spentWood||s.axeCrafted!==(s.structures.length?1:s.axeCrafted))return false;
     const ids=new Set(s.citizens.map(c=>c.id));
