@@ -3,7 +3,7 @@
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   if(root)root.GodseedV3Sim=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
-  const VERSION=1,SIZE=20,STORAGE_KEY="godseed-v3-prototype-v1";
+  const VERSION=2,SIZE=20,STORAGE_KEY="godseed-v3-prototype-v1";
   const copy=x=>JSON.parse(JSON.stringify(x));
   const pos=(x,z)=>Number.isSafeInteger(x)&&Number.isSafeInteger(z)&&x>=0&&z>=0&&x<SIZE&&z<SIZE;
   const uint32=x=>Number.isSafeInteger(x)&&x>=0&&x<=0xffffffff;
@@ -20,6 +20,22 @@
     }
     return found.sort((a,b)=>a.z-b.z||a.x-b.x);
   }
+  // Eight seeded berry plants with finite inventory and tracked regrowth.
+  function berriesFor(seed){
+    const trees=new Set(forestFor(seed).map(p=>p.x+","+p.z));
+    const positions=[[3,7],[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],
+      [4,8],[6,8],[8,8],[10,8],[4,9],[6,9],[8,9],[10,9],
+      [5,11],[7,12],[11,9],[12,10]];
+    return positions.filter(p=>!trees.has(p[0]+","+p[1])).slice(0,8)
+      .map(p=>({x:p[0],z:p[1],stock:2}));
+  }
+  function nearestFood(c,plants){
+    let chosen=null,best=Infinity;
+    for(const p of plants)if(p.stock&&distance(c,p)<best){
+      best=distance(c,p);chosen=p;
+    }
+    return chosen;
+  }
   function record(s,c,action,details){
     s.events.push({tick:s.tick,actor:c.id,action,details});
     if(s.events.length>48)s.events.shift();
@@ -34,6 +50,7 @@
     return best;
   }
   function act(s,c){
+    if(c.hunger>=20)c.energy=Math.max(0,c.energy-1);
     if(c.energy<5){c.energy=Math.min(20,c.energy+8);c.goal="descansar";return;}
     if(!s.structures.length&&s.wood>=4){
       s.wood-=4;s.spent+=4;s.structures.push({id:"first_shelter",type:"house",x:5,z:5});
@@ -43,6 +60,21 @@
     // Keep a finite timber reserve instead of cutting every tree after founding.
     // Settlers remain autonomous: replenish if needed, then return to their home.
     if(s.structures.length&&s.wood>=4){
+      if(s.food<3){
+        const plant=nearestFood(c,s.berries);
+        if(plant){
+          if(distance(c,plant)<=1){
+            plant.stock--;s.food++;s.foraged++;
+            c.energy=Math.max(0,c.energy-2);c.goal="buscar alimento";
+            record(s,c,"forage",{x:plant.x,z:plant.z,foodProduced:1});
+          }else{
+            if(c.x!==plant.x)c.x+=Math.sign(plant.x-c.x);
+            else c.z+=Math.sign(plant.z-c.z);
+            c.energy--;c.goal="caminar hacia bayas";
+          }
+          return;
+        }
+      }
       const home=s.structures[0];
       if(distance(c,home)>1){
         if(c.x!==home.x)c.x+=Math.sign(home.x-c.x);
@@ -71,9 +103,25 @@
       !Array.isArray(s.citizens)||s.citizens.length!==2||
       !Array.isArray(s.forest)||!Array.isArray(s.structures)||s.structures.length>1||
       !Array.isArray(s.events)||s.events.length>48||
+      !Array.isArray(s.berries)||s.berries.length!==berriesFor(s.seed).length||
+      !Number.isSafeInteger(s.food)||s.food<0||
+      !Number.isSafeInteger(s.foraged)||s.foraged<0||
+      !Number.isSafeInteger(s.eaten)||s.eaten<0||
+      !Number.isSafeInteger(s.grown)||s.grown<0||s.eaten>s.foraged||
+      s.food!==s.foraged-s.eaten||
       !Number.isSafeInteger(s.wood)||s.wood<0||
       !Number.isSafeInteger(s.harvested)||s.harvested<0||
       !Number.isSafeInteger(s.spent)||s.spent<0||s.wood!==s.harvested-s.spent)return false;
+    const initial=berriesFor(s.seed);
+    if(s.grown>Math.floor(s.tick/48)*initial.length)return false;
+    let stock=0;
+    for(let i=0;i<initial.length;i++){
+      const p=s.berries[i],expected=initial[i];
+      if(!p||p.x!==expected.x||p.z!==expected.z||
+        !Number.isSafeInteger(p.stock)||p.stock<0||p.stock>2)return false;
+      stock+=p.stock;
+    }
+    if(stock+s.foraged!==initial.length*2+s.grown)return false;
     const original=forestFor(s.seed),keys=new Set();
     if(s.harvested+s.forest.length!==original.length)return false;
     for(const t of s.forest){
@@ -85,6 +133,7 @@
       const c=s.citizens[i];
       if(!c||c.id!==expected[i][0]||c.trait!==expected[i][1]||
         !pos(c.x,c.z)||!Number.isInteger(c.energy)||c.energy<0||c.energy>20||
+        !Number.isSafeInteger(c.hunger)||c.hunger<0||c.hunger>20||
         !Number.isSafeInteger(c.harvested)||c.harvested<0||
         typeof c.goal!=="string"||c.goal.length>80)return false;
     }
@@ -95,7 +144,7 @@
     }else if(s.spent!==0)return false;
     for(const e of s.events){
       if(!e||!Number.isSafeInteger(e.tick)||e.tick<0||e.tick>s.tick||
-        !expected.some(c=>c[0]===e.actor)||!["build","harvest"].includes(e.action))return false;
+        !expected.some(c=>c[0]===e.actor)||!["build","harvest","forage","eat"].includes(e.action))return false;
     }
     return true;
   }
@@ -103,7 +152,22 @@
     function snapshot(){return copy(state);}
     function advance(n){
       if(!Number.isSafeInteger(n)||n<0||n>20000)throw new RangeError("invalid steps");
-      for(let i=0;i<n;i++){state.tick++;for(const c of state.citizens)act(state,c);}
+      for(let i=0;i<n;i++){
+        state.tick++;
+        if(state.tick%48===0)for(const plant of state.berries){
+          if(plant.stock<2){plant.stock++;state.grown++;}
+        }
+        for(const c of state.citizens){
+          if(state.tick%32===0){
+            c.hunger=Math.min(20,c.hunger+6);
+            if(state.food>0&&c.hunger>=6){
+              state.food--;state.eaten++;c.hunger=Math.max(0,c.hunger-8);
+              record(state,c,"eat",{foodSpent:1});
+            }
+          }
+          act(state,c);
+        }
+      }
       return snapshot();
     }
     function serialize(){
@@ -117,13 +181,23 @@
     if(!uint32(seed))throw new RangeError("seed must be uint32");
     return instance({schemaVersion:VERSION,seed,tick:0,
       citizens:[
-        {id:"sim_aria",name:"Aria",trait:"explorer",x:4,z:4,energy:20,harvested:0,goal:"explorar"},
-        {id:"sim_bran",name:"Bran",trait:"builder",x:6,z:4,energy:20,harvested:0,goal:"fundar"}],
-      forest:forestFor(seed),wood:0,harvested:0,spent:0,structures:[],events:[]});
+        {id:"sim_aria",name:"Aria",trait:"explorer",x:4,z:4,energy:20,harvested:0,hunger:0,goal:"explorar"},
+        {id:"sim_bran",name:"Bran",trait:"builder",x:6,z:4,energy:20,harvested:0,hunger:0,goal:"fundar"}],
+      forest:forestFor(seed),berries:berriesFor(seed),food:0,foraged:0,eaten:0,grown:0,
+      wood:0,harvested:0,spent:0,structures:[],events:[]});
   }
   function restore(raw){
     if(typeof raw!=="string"||raw.length>64000)throw new RangeError("invalid V3 save");
     const state=JSON.parse(raw);
+    // Existing V3 preview saves migrate without changing historical tree,
+    // citizen, town, wood or event state. Original V1 app saves are separate.
+    if(state&&state.schemaVersion===1){
+      if(!uint32(state.seed)||!Array.isArray(state.citizens)||
+        state.citizens.length!==2)throw new RangeError("invalid V3 legacy save");
+      state.schemaVersion=VERSION;state.berries=berriesFor(state.seed);
+      state.food=0;state.foraged=0;state.eaten=0;state.grown=0;
+      for(const c of state.citizens)c.hunger=0;
+    }
     if(!validate(state))throw new RangeError("corrupt V3 save");
     return instance(copy(state));
   }
