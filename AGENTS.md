@@ -1,3 +1,9 @@
+# V3 DESIGN CONTRACT — GODSEED LIVING CIVILIZATIONS
+
+If working on God gameplay, sim intelligence/personality, households, hereditary traits, colonies, kings, kingdom politics, Android LOD or UI, read `docs/design/README.md` and its linked V3 design contracts first. This documentation is a planned vision, not proof that features exist. Read live task ownership and CI from `docs/godseed-agent-task-governance-v1`, do not overwrite other bots' PRs.
+
+---
+
 # GODSEED — current agents entry point (October 2026)
 
 **OWNER-DIRECTION OVERRIDE / READ FIRST:** [Project authority and reference corrections](docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and [owner-approved 3D Pixel Squares autonomous-society direction](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/owner-direction-3d-autonomy-handoff-20261019/docs/owner/GODSEED_OWNER_DIRECTION_AND_SESSION_HANDOFF_2026-10-19.md) supersede ALL legacy statements below that prohibit 3D or claim fixed art/camera dimensions are permanent owner mandates. The 2D constraints below protect the *existing Canvas renderer*, not the target product; keep associated tests until safe replacement. The material after the separator is **historical Codex preparation**, not a current new-agent job assignment.
