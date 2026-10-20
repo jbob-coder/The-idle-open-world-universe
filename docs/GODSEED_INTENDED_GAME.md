@@ -1,8 +1,8 @@
 # GODSEED — Intended Game & Player Experience
-**Status:** normative product specification for future Codex implementation, not a statement that every feature currently runs. Last reconciled with prep branch on 2026-10-17.
+**REFERENCE STATUS (2026-10-20): HISTORICAL 2D Codex brief dated 2026-10-17, NOT current final product authority.** The exclusive top-down camera, 16×16/16×24 source sizes, Faith toolbar and earlier zoom/town/region limits are still useful for the *legacy runtime* but do not constrain the approved 3D Pixel Squares autonomous-society goal. See [project authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md); preserve v1 saves and historical source tests.
 
 ## One-sentence identity
-GODSEED is a **fully offline, lightweight Android landscape, medieval-fantasy, top-down pixel-square living-world simulation**: the player is a god who observes and influences autonomous inhabitants, especially Nim, without directly controlling anyone.
+**Legacy v0.5 design statement (not new target):** GODSEED was specified as a **fully offline, lightweight Android landscape, medieval-fantasy, top-down pixel-square living-world simulation**: the player is a god who observes and influences autonomous inhabitants, especially Nim, without directly controlling anyone.
 
 ## 1. Player fantasy, loop, and boundaries
 - **Player = god.** Inspect geography, characters, motives and stories; spend the Faith resource to alter conditions using Bless, Gift Food, Bloom, Guide, Lightning and Inspire. The player is *not* a controllable humanoid on the map. Do not add WASD/joystick movement or a player combat controller.
