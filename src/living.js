@@ -103,31 +103,40 @@ function entranceFor(s,town,x,y,w,h){
 }
 function site(s,town,type,starting=false){
  if(starting||!BLUEPRINTS[type]||BLUEPRINTS[type].w<=2)return legacySite(s,town,type);
- const {w,h}=BLUEPRINTS[type];
- let best=null,score=-Infinity;
- for(let y=Math.max(2,town.y-10);y<=Math.min(H-h-2,town.y+10);y++)
- for(let x=Math.max(2,town.x-10);x<=Math.min(W-w-2,town.x+10);x++){
-  const radius=distance(x+Math.floor(w/2),y+Math.floor(h/2),town.x,town.y);
-  if(radius<3||radius>12)continue;
-  let clear=true,meadow=0;
-  for(let dy=0;dy<h&&clear;dy++)for(let dx=0;dx<w;dx++){
-   const px=x+dx,py=y+dy,n=py*W+px,tile=s.map[n];
-   if(!GROUND.has(tile)||occupied(s,px,py)||
-      s.living.heritage.includes(n)||
-      s.npcs.some(p=>p.x===px&&p.y===py||p.homeX===px&&p.homeY===py)||
-      s.living.citizens.some(p=>p.x===px&&p.y===py)||
-      s.bot.x===px&&s.bot.y===py){clear=false;break;}
-   if(tile===6)meadow++;
+ const bp=BLUEPRINTS[type];
+ // Prefer the physical full-size blueprint. Scarce medieval land may require
+ // a smaller but still real home. Preserve a compact 2x2 fallback rather than
+ // indefinitely halting autonomous settlement development on dense seed maps.
+ for(let size=bp.w;size>=3;size--){
+  const w=size,h=size;
+  let best=null,score=-Infinity;
+  for(let y=Math.max(2,town.y-10);y<=Math.min(H-h-2,town.y+10);y++)
+  for(let x=Math.max(2,town.x-10);x<=Math.min(W-w-2,town.x+10);x++){
+   const radius=distance(x+Math.floor(w/2),y+Math.floor(h/2),town.x,town.y);
+   if(radius<3||radius>12)continue;
+   let clear=true,meadow=0;
+   for(let dy=0;dy<h&&clear;dy++)for(let dx=0;dx<w;dx++){
+    const px=x+dx,py=y+dy,n=py*W+px,tile=s.map[n];
+    if(!GROUND.has(tile)||occupied(s,px,py)||
+       s.living.heritage.includes(n)||
+       s.npcs.some(p=>p.x===px&&p.y===py||p.homeX===px&&p.homeY===py)||
+       s.living.citizens.some(p=>p.x===px&&p.y===py)||
+       s.enemies.some(p=>p.x===px&&p.y===py)||
+       s.bot.x===px&&s.bot.y===py){clear=false;break;}
+    if(tile===6)meadow++;
+   }
+   if(!clear)continue;
+   const entrance=entranceFor(s,town,x,y,w,h);
+   if(!entrance)continue;
+   const preference=type==='farm'?meadow*2:type==='watchtower'?radius*.5:0;
+   const value=28-radius*1.1-entrance.roadDistance*4+preference+
+    (hash(town.x,town.y,x+y*W)%13)/100;
+   if(value>score){best={x,y,w,h,entrance};score=value;}
   }
-  if(!clear)continue;
-  const entrance=entranceFor(s,town,x,y,w,h);
-  if(!entrance)continue;
-  const preference=type==='farm'?meadow*2:type==='watchtower'?radius*.5:0;
-  const value=28-radius*1.1-entrance.roadDistance*4+preference+
-   (hash(town.x,town.y,x+y*W)%13)/100;
-  if(value>score){best={x,y,entrance};score=value;}
+  if(best)return best;
  }
- return best;
+ const compact=legacySite(s,town,type);
+ return compact?{x:compact.x,y:compact.y,w:2,h:2}:null;
 }
 function build(s,town,type,starting=false){
  const bp=BLUEPRINTS[type];if(!bp||town.buildings.length>=MAX_BUILDINGS)return false;
@@ -135,7 +144,7 @@ function build(s,town,type,starting=false){
  if(!starting&&(town.stock.wood<bp.wood||town.stock.stone<bp.stone))return false;
  if(!starting){town.stock.wood-=bp.wood;town.stock.stone-=bp.stone;}
  const shapes=['oak','reed','stone'],roof=shapes[(hash(pos.x,pos.y,town.seed)+town.buildings.length)%3];
- const w=starting?2:bp.w,h=starting?2:bp.h;
+ const w=starting?2:(pos.w||bp.w),h=starting?2:(pos.h||bp.h);
  const building={id:town.id+'-'+(town.buildings.length+1),type,x:pos.x,y:pos.y,w,h,roof,builtAt:s.tick};
  if(pos.entrance)building.entrance=pos.entrance;
  town.buildings.push(building);
@@ -235,7 +244,11 @@ function walk(s,p,goal){
  for(const o of opts){
   if(o.x<1||o.y<1||o.x>=W-1||o.y>=H-1||!PASS.has(s.map[o.y*W+o.x])||s.map[o.y*W+o.x]===2)continue;
   if(s.living.citizens.some(q=>q!==p&&q.x===o.x&&q.y===o.y))continue;
-  if((o.x!==p.x||o.y!==p.y)&&occupied(s,o.x,o.y))continue;
+  // New large buildings are solid. Existing 1x1/2x2 structures retain
+  // legacy NPC routes until safe door-path migration is integrated.
+  if((o.x!==p.x||o.y!==p.y)&&s.living.towns.some(t=>
+    t.buildings.some(b=>(b.w>2||b.h>2)&&
+      o.x>=b.x&&o.x<b.x+b.w&&o.y>=b.y&&o.y<b.y+b.h)))continue;
   const cost=distance(o.x,o.y,goal.x,goal.y)+(hash(s.tick,p.id,o.x+o.y*W)%5)*.02;
   if(cost<v){v=cost;best=o;}
  }
