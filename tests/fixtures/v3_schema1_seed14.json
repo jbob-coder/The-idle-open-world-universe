@@ -1,0 +1,375 @@
+{
+  "schemaVersion": 1,
+  "seed": 14,
+  "tick": 151,
+  "citizens": [
+    {
+      "id": "sim_aria",
+      "name": "Aria",
+      "trait": "explorer",
+      "x": 5,
+      "z": 4,
+      "energy": 20,
+      "harvested": 4,
+      "goal": "cuidar refugio"
+    },
+    {
+      "id": "sim_bran",
+      "name": "Bran",
+      "trait": "builder",
+      "x": 5,
+      "z": 4,
+      "energy": 20,
+      "harvested": 4,
+      "goal": "cuidar refugio"
+    }
+  ],
+  "forest": [
+    {
+      "x": 11,
+      "z": 1
+    },
+    {
+      "x": 16,
+      "z": 2
+    },
+    {
+      "x": 18,
+      "z": 2
+    },
+    {
+      "x": 15,
+      "z": 3
+    },
+    {
+      "x": 11,
+      "z": 4
+    },
+    {
+      "x": 8,
+      "z": 5
+    },
+    {
+      "x": 11,
+      "z": 5
+    },
+    {
+      "x": 14,
+      "z": 5
+    },
+    {
+      "x": 17,
+      "z": 5
+    },
+    {
+      "x": 8,
+      "z": 6
+    },
+    {
+      "x": 9,
+      "z": 6
+    },
+    {
+      "x": 10,
+      "z": 6
+    },
+    {
+      "x": 1,
+      "z": 7
+    },
+    {
+      "x": 5,
+      "z": 7
+    },
+    {
+      "x": 10,
+      "z": 7
+    },
+    {
+      "x": 13,
+      "z": 7
+    },
+    {
+      "x": 3,
+      "z": 8
+    },
+    {
+      "x": 5,
+      "z": 8
+    },
+    {
+      "x": 6,
+      "z": 8
+    },
+    {
+      "x": 9,
+      "z": 8
+    },
+    {
+      "x": 13,
+      "z": 8
+    },
+    {
+      "x": 15,
+      "z": 8
+    },
+    {
+      "x": 1,
+      "z": 9
+    },
+    {
+      "x": 4,
+      "z": 9
+    },
+    {
+      "x": 10,
+      "z": 9
+    },
+    {
+      "x": 13,
+      "z": 9
+    },
+    {
+      "x": 16,
+      "z": 9
+    },
+    {
+      "x": 2,
+      "z": 10
+    },
+    {
+      "x": 3,
+      "z": 10
+    },
+    {
+      "x": 5,
+      "z": 10
+    },
+    {
+      "x": 8,
+      "z": 10
+    },
+    {
+      "x": 17,
+      "z": 10
+    },
+    {
+      "x": 18,
+      "z": 10
+    },
+    {
+      "x": 7,
+      "z": 11
+    },
+    {
+      "x": 9,
+      "z": 11
+    },
+    {
+      "x": 13,
+      "z": 11
+    },
+    {
+      "x": 2,
+      "z": 12
+    },
+    {
+      "x": 4,
+      "z": 12
+    },
+    {
+      "x": 5,
+      "z": 12
+    },
+    {
+      "x": 7,
+      "z": 12
+    },
+    {
+      "x": 9,
+      "z": 12
+    },
+    {
+      "x": 12,
+      "z": 12
+    },
+    {
+      "x": 16,
+      "z": 12
+    },
+    {
+      "x": 17,
+      "z": 12
+    },
+    {
+      "x": 7,
+      "z": 13
+    },
+    {
+      "x": 10,
+      "z": 13
+    },
+    {
+      "x": 12,
+      "z": 13
+    },
+    {
+      "x": 3,
+      "z": 14
+    },
+    {
+      "x": 6,
+      "z": 15
+    },
+    {
+      "x": 9,
+      "z": 15
+    },
+    {
+      "x": 12,
+      "z": 15
+    },
+    {
+      "x": 5,
+      "z": 16
+    },
+    {
+      "x": 12,
+      "z": 16
+    },
+    {
+      "x": 15,
+      "z": 16
+    },
+    {
+      "x": 16,
+      "z": 16
+    },
+    {
+      "x": 9,
+      "z": 17
+    },
+    {
+      "x": 3,
+      "z": 18
+    },
+    {
+      "x": 6,
+      "z": 18
+    },
+    {
+      "x": 12,
+      "z": 18
+    },
+    {
+      "x": 13,
+      "z": 18
+    },
+    {
+      "x": 15,
+      "z": 18
+    }
+  ],
+  "wood": 4,
+  "harvested": 8,
+  "spent": 4,
+  "structures": [
+    {
+      "id": "first_shelter",
+      "type": "house",
+      "x": 5,
+      "z": 5
+    }
+  ],
+  "events": [
+    {
+      "tick": 3,
+      "actor": "sim_aria",
+      "action": "harvest",
+      "details": {
+        "x": 3,
+        "z": 2,
+        "woodProduced": 1
+      }
+    },
+    {
+      "tick": 3,
+      "actor": "sim_bran",
+      "action": "harvest",
+      "details": {
+        "x": 7,
+        "z": 2,
+        "woodProduced": 1
+      }
+    },
+    {
+      "tick": 4,
+      "actor": "sim_bran",
+      "action": "harvest",
+      "details": {
+        "x": 8,
+        "z": 3,
+        "woodProduced": 1
+      }
+    },
+    {
+      "tick": 5,
+      "actor": "sim_aria",
+      "action": "harvest",
+      "details": {
+        "x": 3,
+        "z": 1,
+        "woodProduced": 1
+      }
+    },
+    {
+      "tick": 5,
+      "actor": "sim_bran",
+      "action": "build",
+      "details": {
+        "id": "first_shelter",
+        "woodSpent": 4
+      }
+    },
+    {
+      "tick": 8,
+      "actor": "sim_aria",
+      "action": "harvest",
+      "details": {
+        "x": 1,
+        "z": 1,
+        "woodProduced": 1
+      }
+    },
+    {
+      "tick": 8,
+      "actor": "sim_bran",
+      "action": "harvest",
+      "details": {
+        "x": 6,
+        "z": 1,
+        "woodProduced": 1
+      }
+    },
+    {
+      "tick": 12,
+      "actor": "sim_aria",
+      "action": "harvest",
+      "details": {
+        "x": 1,
+        "z": 5,
+        "woodProduced": 1
+      }
+    },
+    {
+      "tick": 12,
+      "actor": "sim_bran",
+      "action": "harvest",
+      "details": {
+        "x": 8,
+        "z": 1,
+        "woodProduced": 1
+      }
+    }
+  ]
+}
