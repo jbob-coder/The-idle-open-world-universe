@@ -69,3 +69,54 @@ test('INT-002: v1 restore preserves original 1x1,2x2 and new 4x4 footprints',()=
  }
  assert.equal(restored.version,1);
 });
+
+test('INT-002: compact fallback never builds over the player, active NPCs or residents',()=>{
+ const s=world(31),t=s.living.towns[0],x=t.x+5,y=t.y+4;
+ s.map.fill(2);s.enemies=[];
+ for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++)s.map[(y+dy)*W+x+dx]=0;
+ s.map[(y-1)*W+x]=8; // only accessible road-connected 2x2 parcel
+ s.bot.x=1;s.bot.y=1;
+ const actorChecks=[
+  s.bot,
+  s.living.citizens[0],
+  s.npcs[0]
+ ];
+ for(const actor of actorChecks){
+  const prior={x:actor.x,y:actor.y};
+  actor.x=x;actor.y=y;
+  assert.equal(Living.site(s,t,'market'),null,'must not construct over an existing actor');
+  actor.x=prior.x;actor.y=prior.y;
+ }
+ s.enemies.push({id:999,x,y});
+ assert.equal(Living.site(s,t,'market'),null,'must not place building on an active enemy');
+ s.enemies.pop();
+ const chosen=Living.site(s,t,'market');
+ assert.ok(chosen,'preserve emergency compact town growth when parcel is clear');
+ assert.deepEqual([chosen.x,chosen.y,chosen.w,chosen.h],[x,y,2,2]);
+});
+
+test('INT-002: minimap reveals only observed building footprint cells',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const ui=fs.readFileSync(path.join(__dirname,'../src/ui.js'),'utf8');
+ const start=ui.indexOf('function drawMini(){'),end=ui.indexOf('\nfunction bar(',start);
+ assert.ok(start>=0&&end>start,'read actual minimap code, not a duplicated implementation');
+ const fn=ui.slice(start,end);
+ const calls=[],mctx={
+  fillStyle:'',strokeStyle:'',lineWidth:1,
+  createImageData(w,h){return {data:new Uint8ClampedArray(w*h*4)};},
+  putImageData(){},fillRect(...p){calls.push(p);},strokeRect(){}
+ };
+ const unseen={map:new Array(W*H).fill(0),seen:new Array(W*H).fill(0),
+  bot:{x:1,y:1},living:{towns:[{buildings:[{x:10,y:10,w:4,h:4}]}]}};
+ const A={W,H,N:W*H,idx:(x,y)=>y*W+x};
+ const draw=new Function('mctx','s','A','colors','camX','camY','VW','VH','godSeesTown',
+  fn+';return drawMini;')(mctx,unseen,A,['#888888'],0,0,20,10,()=>false);
+ draw();
+ assert.equal(calls.filter(c=>c[0]>=10&&c[0]<14&&c[1]>=10&&c[1]<14).length,0,
+  'unseen buildings must not reveal location or total footprint');
+ calls.length=0;
+ unseen.seen[10*W+10]=1;unseen.seen[13*W+13]=1;
+ draw();
+ const tiles=calls.filter(c=>c[0]>=10&&c[0]<14&&c[1]>=10&&c[1]<14);
+ assert.deepEqual(tiles,[[10,10,1,1],[13,13,1,1]],'show exactly the discovered tiles');
+});
