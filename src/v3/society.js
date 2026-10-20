@@ -33,7 +33,8 @@
     return result.sort((a,b)=>a.z-b.z||a.x-b.x);
   }
   function actor(template){return {id:template.id,name:template.name,trait:template.trait,x:template.x,z:template.z,
-    skill:template.skill,energy:20,hunger:85,health:100,alive:true,harvested:0,
+    skill:template.skill,energy:20,hunger:85,health:100,alive:true,
+    settled:template.id==="sim_aria",harvested:0,
     crafted:0,built:0,foraged:0,conversations:0,ordersCompleted:0,
     role:"unassigned",memories:[],goal:"explorar",relations:{}};}
   const MEMORY_KINDS=new Set(["craft","build","forage","eat","talk","elect","assign","council"]);
@@ -158,8 +159,11 @@
     if(c.energy<5){c.energy=Math.min(20,c.energy+9);c.goal="descansar";return;}
     // Survival always overrides political work orders.
     // Newcomers must travel into the inhabited settlement before undertaking work.
-    if(c.id!=="sim_aria"&&s.structures.length&&distance(c,SITES[0])>2){
-      walk(c,SITES[0]);c.goal="llegar a la aldea";return;
+    if(!c.settled&&s.structures.length){
+      if(distance(c,SITES[0])>2){
+        walk(c,SITES[0]);c.goal="llegar a la aldea";return;
+      }
+      c.settled=true; // Milestone is persistent: do not pull a worker back from distant jobs.
     }
     if(s.food<Math.max(2,s.citizens.length)||c.hunger<=58){
       if(s.bushes.some(b=>b.berries>0)){forage(s,c);return;}
@@ -364,6 +368,7 @@
     for(const c of s.citizens){
       if(!validRoles.has(c.role)||!number(c.foraged)||c.foraged>s.foodGathered||
         !number(c.ordersCompleted)||c.ordersCompleted>s.tick||
+        typeof c.settled!=="boolean"||(c.id==="sim_aria"&&!c.settled)||
         !Array.isArray(c.memories)||c.memories.length>12)return false;
       let prev=-1;
       for(const m of c.memories){
@@ -417,6 +422,7 @@
     s.schemaVersion=VERSION;
     for(const c of s.citizens){
       c.foraged=0;c.ordersCompleted=0;c.role="unassigned";c.memories=[];
+      c.settled=c.id==="sim_aria"||distance(c,SITES[0])<=2;
     }
     Object.assign(s.settlement,{orders:[],ordersIssued:0,
       policy:"none",policyTick:0,policiesSet:0,policyReason:""});
