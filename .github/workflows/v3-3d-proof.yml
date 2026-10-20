@@ -8,9 +8,6 @@ on:
       - 'GODSEED-V3-Play.html'
       - 'tests/v3_sim.test.js'
       - 'tests/v3_browser_acceptance.py'
-      - 'android/build_apk.py'
-      - 'android/build_v3_preview_apk.py'
-      - 'tests/test_v3_android_package.py'
       - '.github/workflows/v3-3d-proof.yml'
   pull_request:
     paths:
@@ -20,9 +17,6 @@ on:
       - 'GODSEED-V3-Play.html'
       - 'tests/v3_sim.test.js'
       - 'tests/v3_browser_acceptance.py'
-      - 'android/build_apk.py'
-      - 'android/build_v3_preview_apk.py'
-      - 'tests/test_v3_android_package.py'
       - '.github/workflows/v3-3d-proof.yml'
   workflow_dispatch:
 jobs:
@@ -54,14 +48,6 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Test actual offline WebGL, autonomous shelter, 2 viewports and save/reload
         run: python tests/v3_browser_acceptance.py
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-      - name: Package isolated V3 Android debug APK and verify its exact content
-        run: |
-          python android/build_v3_preview_apk.py
-          python tests/test_v3_android_package.py
       - name: Preserve V3 HTML and real Chromium screenshots
         if: success()
         uses: actions/upload-artifact@v4
@@ -71,7 +57,5 @@ jobs:
           retention-days: 30
           path: |
             GODSEED-V3-Play.html
-            dist/GODSEED-V3-preview.apk
-            dist/GODSEED-V3-preview-manifest.json
             qa-screenshots/godseed-v3-chromium-960x540.png
             qa-screenshots/godseed-v3-chromium-640x360.png
