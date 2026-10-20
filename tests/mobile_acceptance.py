@@ -71,8 +71,18 @@ with sync_playwright() as pw:
         saved=json.loads(raw)
         assert saved['tick']>=50
         page.locator('#saveClose').click()
-        page.evaluate('()=>GodseedDebug.newWorld(987654321)')
-        assert page.evaluate('GodseedDebug.getState().tick')==0
+        # Check reset atomically before the requestAnimationFrame clock may tick.
+        # Repeat on distinct seeds; pause in the SAME JS task after inspecting.
+        for reset_index in range(10):
+            seed=987654321+reset_index
+            reset=page.evaluate("""seed => {
+                GodseedDebug.newWorld(seed);
+                const s=GodseedDebug.getState();
+                const observed={seed:s.worldSeed,tick:s.tick,name:s.bot.name};
+                GodseedDebug.setSpeed(0);
+                return observed;
+            }""",seed)
+            assert reset=={'seed':seed,'tick':0,'name':'Nim'},(width,height,reset)
         page.locator('#import').click()
         page.locator('#saveText').fill(raw)
         page.evaluate('()=>{window.confirm=()=>{throw Error("Native JS dialogs unavailable")}}')
