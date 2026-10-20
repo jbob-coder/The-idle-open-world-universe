@@ -84,6 +84,8 @@ test("invalid identities, invented resources and leadership are rejected",()=>{
     s=>s.food++,
     s=>s.foodGrown++,
     s=>s.settlement.leaderId="unknown",
+    s=>s.settlement.leaderId=s.settlement.leaderId==="sim_aria"?"sim_bran":"sim_aria",
+    s=>s.settlement.ballots[0].voter=s.settlement.ballots[1].voter,
     s=>s.citizens[0].relations.sim_bran=9999,
     s=>s.structures[1].x=1,
     s=>s.citizens.push(JSON.parse(JSON.stringify(s.citizens[0])))
