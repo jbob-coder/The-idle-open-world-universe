@@ -83,3 +83,15 @@ test("GOD-003: malformed or old saves normalize without awarding fictitious resu
   assert.doesNotThrow(()=>L.restore(old));
   assert.equal(old.living.whispers[0].lifecycle,undefined);
 });
+
+test("GOD-003: observed lifecycle HUD is text-only and uses legacy WebView-compatible syntax",()=>{
+  const fs=require("node:fs");
+  const path=require("node:path");
+  const ui=fs.readFileSync(path.join(__dirname,"../src/ui.js"),"utf8");
+  const html=fs.readFileSync(path.join(__dirname,"../index.template.html"),"utf8");
+  assert.match(html,/id="godLifecycle"/);
+  assert.match(ui,/\$\('godLifecycle'\)\.textContent=/);
+  // API29 emulators may run older system WebView JavaScript parsers.
+  assert.doesNotMatch(ui,/\?\./,"GOD-003 HUD must not introduce optional chaining");
+  assert.doesNotMatch(ui,/godLifecycle'\)\.innerHTML/,"player-supplied suggestions must remain text-only");
+});
