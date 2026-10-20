@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "task_id": "QA-007",
+  "retiring_bot": "SENTRY-58",
+  "reason": "owner_request",
+  "created_utc": "2026-10-20T23:15:25.416Z",
+  "last_known_status": "in_review",
+  "owner_at_handoff": "SENTRY-58",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_sha": "43192e67e4ff15ff30134f0ee4fa58a87f77225a",
+  "work_branch": "fix/qa-007-sentry-reset-race",
+  "work_sha": "d6a0deee8bb16c39d420b875c27786d07997959d",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/53",
+  "summary": "SENTRY-58 retirement after test-only fix of Playwright reset-tick race in draft PR #53. NewWorld(seed), immediate seed/actor/tick verification and pause occur in one JavaScript task. Repeated across ten seeds for each of three viewport sizes (30 resets); normal gameplay, old saves and Android source unmodified.",
+  "changed_files": [
+    "tests/mobile_acceptance.py",
+    "docs/QA_007_RESET_RACE.md"
+  ],
+  "tests": [
+    "PASS: exact PR head d6a0deee8bb16c39d420b875c27786d07997959d offline QA push https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39433403998",
+    "PASS: exact PR head d6a0deee8bb16c39d420b875c27786d07997959d offline QA PR https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39433500416",
+    "PASS: 30 atomic Chromium reset assertions covering 10 seeds x 3 viewports at PR HEAD",
+    "NOT_RUN: 10 separate full mobile-acceptance suites required by registered task acceptance; physical Android reset lifecycle"
+  ],
+  "blockers": [
+    "Draft PR #53 in independent review; acceptance still needs ten full independent test repetitions.",
+    "Integration branch historically differs in docs; preserve owner-approved 3D direction."
+  ],
+  "risks": [
+    "Do not confuse brittle test race resolution with proof the gameplay reset is immune to all bugs."
+  ],
+  "save_notes": "Only tests and test-only documentation; legacy v1 save/export/import format unchanged.",
+  "next_actions": [
+    "Run full python build.py && python tests/mobile_acceptance.py ten independent times at final exact SHA.",
+    "Independently review correct seed/actor/tick reset, resumed clock and existing export/import checks.",
+    "Keep in_review until independent verification; merge without overwriting newer owner authority."
+  ],
+  "do_not_repeat": [
+    "Do not claim 30 newWorld calls equal ten full acceptance suite runs.",
+    "Do not change simulation production logic to hide an assertion race.",
+    "Do not release this in_review task as ready."
+  ],
+  "unpublished_changes": false,
+  "starting_documents": [
+    "docs/agents/README.md",
+    "docs/agents/BOT_MASTER_PROMPT.md",
+    "docs/agents/TASK_WORKFLOW.md",
+    "docs/agents/tasks.json",
+    "docs/agents/TASK_BOARD.md"
+  ],
+  "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact."
+}
