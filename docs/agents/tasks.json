@@ -2091,7 +2091,7 @@
       "priority": "P0",
       "area": "qa",
       "title": "Gradle host + API29 emulator instrumentation and artifacts",
-      "status": "verified",
+      "status": "done",
       "owner": "TERRAIN-01",
       "work_branch": "test/qa-003-terrain-01-native-acceptance",
       "depends": [
@@ -2102,7 +2102,8 @@
       "pr": 30,
       "evidence": [
         "QA-003 PR #30 https://github.com/jbob-coder/The-idle-open-world-universe/pull/30 exact HEAD ff8374a8118a625de72c4816e021adeef294acf5; GODSEED offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569230 COMPLETED SUCCESS; native Android API29 host Gradle, 7/7 instrumentation, offline/save/exit and emulator provenance JSON COMPLETED SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569278 ; APK+test APK artifact 12157844452; emulator screenshot/log/meminfo/provenance artifact 12158810382; standalone 3/3 Python manifest tests PASS; stack based on QA-001 PR #24; physical 2–3 GB QA NOT TESTED; no merge.",
-        "Independent FORGE-27 review of TERRAIN-01 QA-003 PR #30 exact source HEAD ff8374a8118a625de72c4816e021adeef294acf5: https://github.com/jbob-coder/The-idle-open-world-universe/pull/30#pullrequestreview-5566236009 ; inspected 5 new/modified QA paths, actual Android WebView ActivityScenario recreation after unsaved pause, 3/3 Python provenance unit tests, native Gradle build, source/tested SHAs, emulator artifact manifests. Native API29 CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569278 COMPLETED SUCCESS: instrumentation log OK (7 tests), screenshot/logcat/meminfo+SHA manifest artifact #12158810382. Offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569230 COMPLETED SUCCESS. Not hardware low-RAM certification: physical 2-3 GB / PSS / FPS / 20-minute soak NOT VERIFIED. PR stacked on QA-001, unmerged; verified is task-level acceptance only."
+        "Independent FORGE-27 review of TERRAIN-01 QA-003 PR #30 exact source HEAD ff8374a8118a625de72c4816e021adeef294acf5: https://github.com/jbob-coder/The-idle-open-world-universe/pull/30#pullrequestreview-5566236009 ; inspected 5 new/modified QA paths, actual Android WebView ActivityScenario recreation after unsaved pause, 3/3 Python provenance unit tests, native Gradle build, source/tested SHAs, emulator artifact manifests. Native API29 CI https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569278 COMPLETED SUCCESS: instrumentation log OK (7 tests), screenshot/logcat/meminfo+SHA manifest artifact #12158810382. Offline QA https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39186569230 COMPLETED SUCCESS. Not hardware low-RAM certification: physical 2-3 GB / PSS / FPS / 20-minute soak NOT VERIFIED. PR stacked on QA-001, unmerged; verified is task-level acceptance only.",
+        "OWNER authorization: PR #30 merged into integration/godseed-living-society-multitile-architecture at SHA 53c0d51190afef4e54fe43775d5ae10d96abeb2d. Offline merged-SHA CI PASS runs #39445933213 and #39445944191; Android API29 emulator CI PASS run #39445944367. Previously independently verified by FORGE-27. No physical Android low-RAM evidence."
       ],
       "status_history": [
         {
@@ -2146,6 +2147,13 @@
           "to": "verified",
           "actor": "FORGE-27",
           "reason": "Independent exact-SHA review of Android Gradle/API29 7/7 native instrumentation, real unsaved onPause/recreate, offline host, verified provenance and screenshots; not physical hardware QA."
+        },
+        {
+          "date": "2026-10-20T15:16:08.181Z",
+          "from": "verified",
+          "to": "done",
+          "actor": "OWNER",
+          "reason": "Owner-requested selective merge and close after PR #30 integrated; exact merged-SHA offline and native API29 CI passed."
         }
       ],
       "verified_by": "FORGE-27"
