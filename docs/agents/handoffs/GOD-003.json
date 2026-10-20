@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "retiring_bot": "LIFE-26",
+  "retiring_bot": "FIX-62",
   "reason": "owner_request",
-  "created_utc": "2026-10-19T16:55:33.174Z",
-  "owner_at_handoff": "LIFE-26",
+  "created_utc": "2026-10-20T23:13:32.245Z",
+  "owner_at_handoff": "FIX-62",
   "coordination_branch": "docs/godseed-agent-task-governance-v1",
-  "coordination_sha": "27928edc4412d3ec85cf567113035ec2435f8279",
+  "coordination_sha": "7863edd87fe28de3b24664b921aa0a2cd40fd86a",
   "starting_documents": [
     "docs/agents/README.md",
     "docs/agents/BOT_MASTER_PROMPT.md",
@@ -16,72 +16,53 @@
   "continuity_rule": "Re-read live registry. Only claim if ready/unowned. Keep prior branch intact.",
   "unpublished_changes": false,
   "task_id": "GOD-003",
-  "last_known_status": "in_progress",
-  "work_branch": "feat/god-003-life-26-consequence-ledger",
-  "work_sha": "c06af2bf400de41b7eb5c04162a6db0dce202383",
-  "pr_url": null,
+  "last_known_status": "in_review",
+  "work_branch": "feat/god-003-fix-62-lifecycle",
+  "work_sha": "0a2c1b1ec12e1831c64b16e652926c9deab32865",
+  "pr_url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/55",
   "source_base_branch": "feat/god-002-forge-27-autonomy",
   "source_base_sha": "a9822e8c6037b7f0baa07b55e9a7ea95fbb49905",
   "dependencies": [
-    {
-      "id": "GOD-002",
-      "status": "verified",
-      "pr": 34
-    },
-    {
-      "id": "SIM-002",
-      "status": "verified",
-      "source_sha": "66bcf93440f0293eef4d7a0c05832d1b5904d73f"
-    }
+    "GOD-002",
+    "SIM-002"
   ],
-  "published_commits": [
-    "3f0f787528da3466dafcdeae05179736ad7b9c36",
-    "8e61e5be82b8a4f582cdb9eb71cb79581803c781",
-    "a33cdb92908cfc26956e7cf1936e2c8115c63ebf",
-    "89b6e120e5d6ea7cae72994e7d2a3f19c986c4b0",
-    "b56d869ebb8c44a55158afb76b82ea720a19e632",
-    "c06af2bf400de41b7eb5c04162a6db0dce202383"
-  ],
-  "summary": "RETIRO SOLICITADO. Entrega PARCIAL, no completada ni para PR: rama basada en GOD-002 de FORGE-27; lógica offline de ciclo de sugerencias oído/considerado/declinado/acción/resultado observado (sin acreditar causalidad divina), registro limitado, normalización de saves v1 y observación de trabajo real de aldeanos, obras, comercio, remodelación, exploración y descanso. Se incorporó src/choices.js de SIM-002 y conectores en src/living.js/build.py. No hay pruebas dedicadas del ciclo ni interfaz de seguimiento, ni PR GOD-003; resultado de aceptación NO VERIFICADO. La rama es un prototipo 2D reutilizable agnóstico a render; no elegir cámara o motor al heredarlo. Fuente del propietario: PR #47 abierto, 3D Pixel Squares y NPCs crean sociedad autónoma.",
+  "summary": "FIX-62 owner-requested retirement. Recovered LIFE-26 unpublished-to-integration lifecycle work from c06af2b, published on new branch as PR #55. Real observed non-coercive divine guidance phases, finite completed outcome validation, tamper-resistant refusal on v1 restore, actor identity/duplicate event defense, expiry, read-only no-HTML HUD and WebView-compatible JavaScript. Seven new GOD-003 regression tests, source and API29 emulator on exact feature HEAD passed. PR is open, in_review; independent reviewer and integration remain pending. Does not implement a 3D renderer.",
   "changed_files": [
-    "src/divine/lifecycle.js",
+    "build.py",
+    "index.template.html",
     "src/choices.js",
+    "src/divine/lifecycle.js",
     "src/living.js",
-    "build.py"
+    "src/ui.js",
+    "tests/god_guidance_lifecycle.test.js"
   ],
   "tests": [
-    "PASS: GitHub Actions offline QA on exact branch HEAD c06af2bf400de41b7eb5c04162a6db0dce202383: python build.py; node --test tests/*.test.js 108/108; generic offline Chromium and existing GOD-002 consent browser checks; https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39231462487",
-    "NOT_RUN: dedicated GOD-003 lifecycle Node unit tests / adversarial zero-fake-outcome, exact measured before/after deltas and save/reload; no such tests are added to this branch",
-    "NOT_RUN: GOD-003-specific Chromium acceptance of all phases with actual UI; no source UI updates to expose lifecycle",
-    "NOT_RUN: native Android API29 emulator instrumentation for GOD-003 exact SHA (offline QA includes prototype APK structure, NOT native emulator)",
-    "NOT_RUN: physical Android devices with 2GB/3GB RAM and PSS/FPS/heat measurements",
-    "NOT_RUN: 3D pixel-squares gameplay or 2D→3D migration"
+    "PASS: exact PR #55 head 0a2c1b1ec12e1831c64b16e652926c9deab32865, node --test tests/*.test.js: 115/115 pass, 0 fail, 7 GOD-003 regressions; offline Chromium smoke PASS. https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39448389758",
+    "PASS: exact PR #55 head 0a2c1b1ec12e1831c64b16e652926c9deab32865; Gradle native Android host built, API29 emulator 6/6 instrumentation PASS (load/restore/exit). https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39448389780",
+    "FAIL: earlier superseded HUD code at ca7b9f39c8eccbddb0406bf89adcb1a61c728bd2 had 3/6 API29 instrumentation failures; repaired by removing optional-chain syntax and confirmed in latest passing exact-head Android run. https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39447351757",
+    "NOT_RUN: physical low-RAM Android phone 2/3GB PSS/RSS, 20-minute soak, thermal and battery benchmarks.",
+    "NOT_RUN: independent review, merged integrated product, full 3D God-view compatibility."
   ],
   "blockers": [
-    "OWNER_REQUESTED_RETIREMENT — no further features or task claims by LIFE-26",
-    "Incomplete GOD-003 criteria; no dedicated lifecycle tests, observable user panel or PR; do not mark in_review/verified/done",
-    "Product direction updated to 3D Pixel Squares (PR #47 open, not merged); inherited 2D-only UI/render restrictions require reconciliation"
+    "No independent reviewer has submitted approval for PR #55; in_review must stay in_review, not ready/verified/done.",
+    "GOD-003 branch targets its GOD-002 dependency chain; combined current 3D integration selection remains open."
   ],
   "risks": [
-    "Lifecycle hooks need dedicated deterministic tests: ensure 1 witness/action is credited at most once; timeout and save migration valid; town work must not falsely credit named individual",
-    "GOD-002 individual consent may consider an intent while independent utility choices execute something else; a measured result is correlation, not causation",
-    "Legacy state schema version:1 and key godseed-one-small-life-v1 must survive; do not force a save reset or schedule ticks from UI",
-    "No Android API29 WebView or low-memory physical evidence for GOD-003; Node/Chromium green is only baseline regression",
-    "GOD-003 code references pre-placed two villages; new 3D autonomous-ant-farm vision requires architectural follow-up, not deletion of preserved work"
+    "Correlated observed action does not prove divine suggestion caused the act: UI uses factual wording, not causal attribution.",
+    "Preserve citizen consent, legacy v1 whisper records and their non-forgeable action evidence across migration.",
+    "The previous optional chaining WebView parser regression is repaired at exact final source HEAD; avoid reintroducing unsupported syntax.",
+    "Legacy 2D renderer is transitional, not owner's final 3D Pixel Squares observer."
   ],
-  "save_notes": "Uses version-1 living.whispers entry.lifecycle and 4-entry personal choice history with normalization on restore; src/sim.js unchanged. Existing save/restore regression passed in generic CI at c06, but no new tests yet confirm forged/malformed lifecycle data, old saves lacking lifecycle, bounded archival behavior or 3D migration.",
+  "save_notes": "Preserves localStorage key godseed-one-small-life-v1 and outer save version 1. Tests protect previously declined citizens from forged result and prevent duplicate/resource-zero evidence. Android API29 emulator launch/reload tests passed, physical low-memory QA still NOT_RUN.",
   "next_actions": [
-    "Before coding: read owner direction PR #47 and issue #43; re-fetch tasks.json, handoff and c06af2b. Only claim GOD-003 if it is ready/unowned; new BOT_ID and new branch from c06af2b (preserve archived LIFE-26 branch).",
-    "Audit src/divine/lifecycle.js (records + town observations) and src/living.js. Write GOD-003-specific Node tests for accepted/declined, no premature result, actual measured stock/build/delta only, deadline expiry, 12 whispers, V1 missing/malformed data, save-reload and wrong person/town credit; do not weaken other tests.",
-    "Add read-only visible history for each suggestion, using textContent and no gameplay mutation; browser test heard → considered/refused → observed actual outcome/expired and no fake success, offline 640×360/720×400, save reload.",
-    "Run exact SHA Node/Chromium, native API29, and dedicated regression before opening PR; disclose physical-device NOT_RUN. Resolve any conflict with pending GOD-006/ART-007 without touching their branches.",
-    "Only after complete tests create PR based on approved integration chain and submit to independent review; adhere to owner 3D vision without assuming WebGL/Godot choice."
+    "Do not release GOD-003 to ready. Keep PR #55 in_review and ask a reviewer other than FIX-62 to examine exact source HEAD and evidence.",
+    "Reviewer must confirm refusal/consent and actor-specific observed outcomes survive v1 save/restore, read-only text rendering, zero false credit and exact-head CI pass.",
+    "Integrate GOD-003 only after review and approved dependency merge order with #34, #41/#45 and newer owner 3D requirements; do not self-verify.",
+    "A successor in a new chat must use a distinct bot identity and consult current coordination registry, rather than inheriting FIX-62 permissions."
   ],
   "do_not_repeat": [
-    "Do not recode the GOD-002 consent engine; PR #34 exact a9822e8 was independently verified, preserve its refusal and agency.",
-    "Do not recode SIM-002 utility scoring; src/choices.js is copied from verified SHA 66bcf934, although post-copy integration is not proven by dedicated lifecycle tests.",
-    "Do not claim the user's 3D Pixel Squares approval also approves a particular voxel size, top-down-only 2D renderer, camera angle, number of NPCs or game engine.",
-    "Do not mark results as observed merely because a whisper was considered; require a real subsequent action/delta.",
-    "Do not merge, close or alter other bots' PRs/branches, and do not adopt their identities."
+    "Do not restart GOD-003 from the original LIFE-26 handoff/commit c06af2b; PR #55 already contains recovered improvements and seven passing regressions.",
+    "Do not assume earlier failed WebView build means latest PR #55 Android build failed; use the passing exact-head run.",
+    "Do not label the 2D HUD or old whisper interface as final 3D God powers."
   ]
 }
