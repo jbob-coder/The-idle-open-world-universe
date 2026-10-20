@@ -123,7 +123,7 @@ def run():
         page.goto(HTML.as_uri()+"?mode=society",wait_until="load")
         wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
         assert page.evaluate("GodseedV3Debug.mode()") == "society"
-        assert page.evaluate("GodseedV3Debug.storageKey()") == "godseed-v3-society-v1"
+        assert page.evaluate("GodseedV3Debug.storageKey") == "godseed-v3-society-v1"
         state=page.evaluate("""() => {
             const d=GodseedV3Debug;
             d.newWorld(14);d.pause();
