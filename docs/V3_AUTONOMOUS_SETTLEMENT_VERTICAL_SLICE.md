@@ -10,7 +10,7 @@ Authority: owner direction is an offline, autonomous medieval 3D Pixel Squares a
 2. Once a shelter exists, at most two named outsiders can arrive at different times. This is a **scripted bounded migration demonstration**, **not** reproduction or a claim of a realistic population model.
 3. Residents exchange real social interactions while near one another, raising bilateral trust and contributing to a persistent relationship ledger. Personal skills/contributions can differ.
 4. Given 3 residents and sufficient interaction, citizens vote autonomously on a leader. Votes are inspectable and persist. Electing a leader **unlocks council approval of the third communal building (storehouse)**. Wider laws, delegation, political legitimacy and succession remain future tasks.
-5. If labor and materials permit, inhabitants add a workshop and a storehouse on separate sites. Each project consumes the inventory exactly once. No prefab city and no player command is required.
+5. If labor and materials permit, inhabitants add a workshop and a storehouse on separate sites. Before construction they autonomously clear trees intersecting each multi-cell footprint, counting cleared timber as a genuine resource. Each project consumes inventory exactly once. No prefab city and no player command is required.
 
 ## Isolation and compatibility
 
