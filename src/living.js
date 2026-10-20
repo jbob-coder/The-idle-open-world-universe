@@ -161,6 +161,28 @@ function site(s,town,type,starting=false){
  const compact=legacySite(s,town,type);
  return compact?{x:compact.x,y:compact.y,w:2,h:2}:null;
 }
+function nextBuildingNumber(town){
+ const prefix=town.id+'-';
+ let highest=0;
+ for(const b of town.buildings){
+  if(!b||typeof b.id!=='string'||!b.id.startsWith(prefix))continue;
+  const tail=b.id.slice(prefix.length);
+  if(!/^[1-9][0-9]*$/.test(tail))continue;
+  const n=Number(tail);
+  if(Number.isSafeInteger(n)&&n<=1000000000)highest=Math.max(highest,n);
+ }
+ // An optional v1 field preserves deleted/tombstoned IDs across save/load.
+ // Missing or stale old-save counters are reconciled with existing identities.
+ const counter=Number.isSafeInteger(town.nextBuildingId)&&
+  town.nextBuildingId>0&&town.nextBuildingId<=1000000000?
+  town.nextBuildingId:1;
+ return Math.max(highest+1,counter);
+}
+function allocateBuildingId(town){
+ const number=nextBuildingNumber(town);
+ town.nextBuildingId=number+1;
+ return town.id+'-'+number;
+}
 function build(s,town,type,starting=false){
  const bp=BLUEPRINTS[type];if(!bp||town.buildings.length>=MAX_BUILDINGS)return false;
  const pos=site(s,town,type,starting);if(!pos)return false;
@@ -168,7 +190,7 @@ function build(s,town,type,starting=false){
  if(!starting){town.stock.wood-=bp.wood;town.stock.stone-=bp.stone;}
  const shapes=['oak','reed','stone'],roof=shapes[(hash(pos.x,pos.y,town.seed)+town.buildings.length)%3];
  const w=starting?2:(pos.w||bp.w),h=starting?2:(pos.h||bp.h);
- const building={id:town.id+'-'+(town.buildings.length+1),type,x:pos.x,y:pos.y,w,h,roof,builtAt:s.tick};
+ const building={id:allocateBuildingId(town),type,x:pos.x,y:pos.y,w,h,roof,builtAt:s.tick};
  if(pos.entrance)building.entrance=pos.entrance;
  town.buildings.push(building);
  if(!starting){log(s,town.name+' built '+bp.label, 'Residents chose a '+roof+' style '+bp.label.toLowerCase()+' near the old roads.');}
@@ -231,6 +253,9 @@ function restore(s){
   }).map(b=>({...b,
    w:Number.isInteger(b.w)&&b.w>=1&&b.w<=6?b.w:1,
    h:Number.isInteger(b.h)&&b.h>=1&&b.h<=6?b.h:1})):[];
+  // Preserve the highest ever allocated ID; never derive new IDs from
+  // current array length (legacy v1 saves may have removed buildings).
+  t.nextBuildingId=nextBuildingNumber(t);
   t.agenda=BLUEPRINTS[t.agenda]||['housing','food','defense','craft','trade'].includes(t.agenda)?t.agenda:'housing';
   const built=kind=>t.buildings.some(b=>b.type===kind);
   const inferred=t.buildings.length>=9&&built('market')?3:t.buildings.length>=7&&built('workshop')?2:t.buildings.length>=4?1:0;
