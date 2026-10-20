@@ -36,6 +36,7 @@ jobs:
         run: |
           node --check src/v3/sim.js
           node --check src/v3/view.js
+          node --check src/v3/fallback.js
           node --check src/v3/app.js
           node --test tests/v3_sim.test.js
       - name: Rebuild self-contained V3 HTML and verify committed artifact
@@ -46,7 +47,7 @@ jobs:
         run: |
           python -m pip install playwright
           python -m playwright install --with-deps chromium
-      - name: Test actual offline WebGL, autonomous shelter, 2 viewports and save/reload
+      - name: Test WebGL 3D and Canvas2D fallback with autonomous shelter and save/reload
         run: python tests/v3_browser_acceptance.py
       - name: Preserve V3 HTML and real Chromium screenshots
         if: success()
@@ -59,3 +60,4 @@ jobs:
             GODSEED-V3-Play.html
             qa-screenshots/godseed-v3-chromium-960x540.png
             qa-screenshots/godseed-v3-chromium-640x360.png
+            qa-screenshots/godseed-v3-canvas-fallback-640x360.png
