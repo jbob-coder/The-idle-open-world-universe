@@ -91,6 +91,19 @@ button[aria-pressed="true"]{background:#6e6138}
       c.energy-=2;c.goal="construir refugio";
       record(s,c,"build",{id:"first_shelter",woodSpent:4});return;
     }
+    // Keep a finite timber reserve instead of cutting every tree after founding.
+    // Settlers remain autonomous: replenish if needed, then return to their home.
+    if(s.structures.length&&s.wood>=4){
+      const home=s.structures[0];
+      if(distance(c,home)>1){
+        if(c.x!==home.x)c.x+=Math.sign(home.x-c.x);
+        else c.z+=Math.sign(home.z-c.z);
+        c.energy--;c.goal="regresar al refugio";
+      }else{
+        c.energy=Math.min(20,c.energy+2);c.goal="cuidar refugio";
+      }
+      return;
+    }
     const tree=nearestTree(c,s.forest);
     if(!tree){c.goal=s.structures.length?"mantener aldea":"sin madera";c.energy=Math.min(20,c.energy+1);return;}
     if(distance(c,tree)<=1){
