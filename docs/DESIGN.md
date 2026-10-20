@@ -1,4 +1,6 @@
-# GODSEED — Design decisions in groups of five
+# GODSEED — Historical v0.1 design decisions in groups of five
+
+**REFERENCE STATUS (2026-10-20):** This is a v0.1 engineering decision log. The exclusive 2D and defer-3D directions below are superseded **as final product requirements**, not erased from Git history. Read [project authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md), preserving compatibility and evidence.
 
 State: **v0.1 experimental Android APK prototype**. Goal: a low-spec offline god game where the user watches a single autonomous character evolve and intervenes indirectly.
 

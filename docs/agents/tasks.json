@@ -839,9 +839,9 @@
       "priority": "P0",
       "area": "world",
       "title": "Bound active chunks, offscreen simulation and memory",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "in_review",
+      "owner": "SENTRY-58",
+      "work_branch": "feat/wld-008-sentry-offscreen",
       "depends": [
         "WLD-002",
         "WLD-003"
@@ -849,7 +849,9 @@
       "acceptance": "LRU and low-frequency offscreen tick, no memory growth from travel distance; measured budgets logged.",
       "issue": 18,
       "pr": null,
-      "evidence": [],
+      "evidence": [
+        "Draft PR #51 https://github.com/jbob-coder/The-idle-open-world-universe/pull/51; implementation source SHA 52a5a12dd35cc31a659c15055d5e058009dfd206; exact-HEAD offline QA SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39432294118. 100-seed no-input settlement proof and 5 Node regressions (now 6 tests), resource conservation and save roundtrip. Not merged; no 3D/Android physical gameplay, independent reviewer pending."
+      ],
       "status_history": [
         {
           "date": "2026-10-18",
@@ -864,6 +866,27 @@
           "to": "ready",
           "actor": "FORGE-27",
           "reason": "All prerequisites independently verified; task available to claim; no implementation claimed."
+        },
+        {
+          "date": "2026-10-20T13:23:46.552Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SENTRY-58",
+          "reason": "Owner-authorized recovery: bounded offscreen simulation and deterministic autonomous settlement proof on a separately tested branch; existing save/runtime untouched."
+        },
+        {
+          "date": "2026-10-20T13:24:24.197Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "SENTRY-58",
+          "reason": "Implement isolated opt-in deterministic offscreen settlement simulation, stable snapshots, cache bounds, no-render progression and Node regressions; preserve current 2D playable world and v1 saves."
+        },
+        {
+          "date": "2026-10-20T13:42:18.047Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SENTRY-58",
+          "reason": "Deliver bounded opt-in offscreen society proof with full exact-SHA offline QA success in draft PR #51; request independent review; no main integration or release claim."
         }
       ]
     },
@@ -2876,7 +2899,7 @@
       "priority": "P0",
       "area": "qa",
       "title": "V3 cross-system causal acceptance for divine agency, cognition, families, kingdoms and resource efficiency",
-      "status": "in_review",
+      "status": "verified",
       "owner": "SCOPE-31",
       "work_branch": "docs/godseed-v3-causal-acceptance",
       "depends": [],
@@ -2884,7 +2907,8 @@
       "issue": null,
       "pr": 42,
       "evidence": [
-        "PR #42 https://github.com/jbob-coder/The-idle-open-world-universe/pull/42; branch docs/godseed-v3-causal-acceptance SHA 997b22fd6dbebd9e0385d6489643e1d10275aae4; governance PASS 34 tests https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191484387; offline QA pending; docs/qa/GODSEED_V3_CAUSAL_ACCEPTANCE.md; NOT GAMEPLAY IMPLEMENTATION"
+        "PR #42 https://github.com/jbob-coder/The-idle-open-world-universe/pull/42; branch docs/godseed-v3-causal-acceptance SHA 997b22fd6dbebd9e0385d6489643e1d10275aae4; governance PASS 34 tests https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191484387; offline QA pending; docs/qa/GODSEED_V3_CAUSAL_ACCEPTANCE.md; NOT GAMEPLAY IMPLEMENTATION",
+        "Independent reviewer SENTRY-58 at PR #42 HEAD 997b22fd6dbebd9e0385d6489643e1d10275aae4: inspected docs/qa/GODSEED_V3_CAUSAL_ACCEPTANCE.md and structural test; 14 unique VAC-01..VAC-14 table scenarios, 8/8 relative docs links resolved on exact source tree, 30 referenced task IDs exist, source disclaims future features and hardware completion; GitHub exact-head governance CI SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191484387 and offline QA SUCCESS https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39191480823 . VERIFIED applies only to documentation/test matrix; VAC runtime cases NOT_IMPLEMENTED and not merged. Before merging PR #42, reconcile branch's 70-task registry snapshot against live 71-task board and owner's 3D direction."
       ],
       "status_history": [
         {
@@ -2921,6 +2945,72 @@
           "to": "in_review",
           "actor": "SCOPE-31",
           "reason": "Documented 14 cross-system V3 acceptance scenarios and causal/resource/performance invariants; 34 governance tests pass exact SHA. Await offline QA and independent review."
+        },
+        {
+          "date": "2026-10-20T14:08:37.912Z",
+          "from": "in_review",
+          "to": "verified",
+          "actor": "SENTRY-58",
+          "reason": "Independent documentation acceptance and exact-head CI confirmed for 14 causal VAC design scenarios; runtime acceptance explicitly NOT_IMPLEMENTED; task registry rebase still required before merge."
+        }
+      ],
+      "verified_by": "SENTRY-58"
+    },
+    {
+      "id": "QA-007",
+      "priority": "P1",
+      "area": "qa",
+      "title": "Eliminate reset race in Chromium mobile acceptance",
+      "status": "in_review",
+      "owner": "SENTRY-58",
+      "work_branch": "fix/qa-007-sentry-reset-race",
+      "depends": [
+        "QA-001"
+      ],
+      "acceptance": "Ten repeated Chromium mobile acceptance runs at an exact SHA prove new-world reset and save/import identity without a timing race or regression; offline checks remain green.",
+      "issue": null,
+      "pr": null,
+      "evidence": [
+        "Draft PR #53 https://github.com/jbob-coder/The-idle-open-world-universe/pull/53 exact code SHA d6a0deee8bb16c39d420b875c27786d07997959d; GitHub offline QA SUCCESS on push run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39433403998 and PR run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39433500416. New atomic reset test checks seed/identity/tick across 10 seeds x 3 viewports; does NOT prove 10 independent full-suite repetitions. Issue #52. Independent review and merge pending."
+      ],
+      "origin_task": "WLD-008",
+      "created_by": "SENTRY-58",
+      "new_task_reason": "Separate failure in exact-SHA mobile CI exposed a timing-sensitive reset assertion. Reliable acceptance is needed before combined game integration.",
+      "status_history": [
+        {
+          "date": "2026-10-20T13:44:33.853Z",
+          "from": null,
+          "to": "planned",
+          "actor": "SENTRY-58",
+          "reason": "Necessary follow-up to WLD-008: Separate failure in exact-SHA mobile CI exposed a timing-sensitive reset assertion. Reliable acceptance is needed before combined game integration."
+        },
+        {
+          "date": "2026-10-20T13:44:33.853Z",
+          "from": "planned",
+          "to": "ready",
+          "actor": "SENTRY-58",
+          "reason": "All declared prerequisites verified; available for assignment"
+        },
+        {
+          "date": "2026-10-20T13:45:17.929Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "SENTRY-58",
+          "reason": "Claim QA-007 after delivering WLD-008 to independent review; diagnose reset assertion without editing other task branches."
+        },
+        {
+          "date": "2026-10-20T13:45:31.163Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "SENTRY-58",
+          "reason": "Inspect failing mobile acceptance and apply smallest deterministic test repair, verify save/import and offline CI on isolated branch."
+        },
+        {
+          "date": "2026-10-20T13:50:00.627Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SENTRY-58",
+          "reason": "QA-007 test-only reset race repair delivered in draft PR #53; exact-head offline QA push+PR success; independent review required before merge."
         }
       ]
     }

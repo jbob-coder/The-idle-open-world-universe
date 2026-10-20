@@ -1,3 +1,5 @@
+> **LEGACY UI CONCEPT (2026-10-20):** This file's avoidance of 3D describes the older Canvas interface, not the owner's 3D Pixel Squares goal. Preserve prototype screenshots and UI evidence; see [project authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
 # GODSEED — Visión visual para Android (v0.2 experimental)
 
 > **Importante:** Las imágenes siguientes son **maquetas conceptuales**, no capturas de una APK instalada ni pruebas de rendimiento real. Ilustran la dirección visual que se propone para el juego. El código actual y sus capturas de navegador siguen siendo la referencia sobre las funciones realmente implementadas.

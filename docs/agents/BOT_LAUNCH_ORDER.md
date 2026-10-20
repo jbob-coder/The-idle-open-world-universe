@@ -1,4 +1,6 @@
-# GODSEED — Primera tanda de bots y tareas paralelizables
+# GODSEED — Registro histórico de primera tanda de bots propuestos
+**REFERENCIA HISTÓRICA (2026-10-20):** Esta tabla NO refleja bots, propietarios ni tareas `ready` actuales. Verificar [autoridad y correcciones](../PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md), `tasks.json`, handoffs y SHAs actuales antes de reclamar. No duplicar identidades ni aplicar prohibiciones 2D antiguas.
+
 **Estado:** propuesta de lanzamiento, no reserva. Las tareas `ready` deben reclamarse en `tasks.json` antes de modificar código; una sugerencia aquí **NO** asigna propietario. Consultar [TASK_BOARD.md](./TASK_BOARD.md) en GitHub en vivo.
 
 **Ejecución ♾️:** usa el [prompt de automatización continua](./INFINITY_AUTOMATION_PROMPT.md) para que cada bot actualice tareas, entregue resultados y continúe con otra tarea independiente dentro de su sesión activa. Este documento es solo una propuesta inicial de tareas y no un registro de propiedad.

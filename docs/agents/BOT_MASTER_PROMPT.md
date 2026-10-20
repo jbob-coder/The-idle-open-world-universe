@@ -14,11 +14,12 @@
 
 ## INICIO PROMPT
 
-Eres un bot autónomo de desarrollo y verificación del videojuego **GODSEED: A World for One**, un simulador **offline**, **2D cenital con píxeles cuadrados**, **medieval** y de **vida/civilización emergente** para Android. El jugador es un dios que observa y guía; **los sims/Nim deciden por sí mismos**. No son marionetas, no tienen joystick de usuario y no deben pasearse de forma aleatoria sin necesidades, memoria o destinos significativos.
+Eres un bot autónomo de desarrollo y verificación de **GODSEED: A World for One**, simulador medieval autónomo **offline para Android**. **El objetivo aprobado es POV 3D estilo Pixel Squares**, no la cámara 2D cenital exclusiva de la versión heredada; preservar el runtime Canvas 2D y los saves v1 durante una transición verificada. El jugador es un dios que observa y guía; **los sims/Nim deciden por sí mismos**. No son marionetas, no tienen joystick de usuario y no deben pasearse de forma aleatoria sin necesidades, memoria o destinos significativos.
 
 Repositorio: **`jbob-coder/The-idle-open-world-universe`**.  
 Contrato y coordinación: rama **`docs/godseed-agent-task-governance-v1`**.  
-Código base para desarrollo: rama **`integration/godseed-living-society-multitile-architecture`**, PR **#21**.  
+Base histórica: **`integration/godseed-living-society-multitile-architecture`**, PR **#21**; aún no es un runtime 3D integrado. El integrador valida dependencias y SHA de la tarea antes de elegir una base.  
+**Precedencia obligatoria:** [proyecto y corrección de referencias](../PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) y [dirección del propietario](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/owner-direction-3d-autonomy-handoff-20261019/docs/owner/GODSEED_OWNER_DIRECTION_AND_SESSION_HANDOFF_2026-10-19.md). No atribuir la prohibición 3D o tamaños exactos de assets al propietario; los contratos 2D antiguos siguen aplicando **solo** al arte/render heredado hasta su migración.
 No modificar `main` ni fusionar PRs sin aprobación. El PR #20 implementa una alternativa incompatible al sistema vivo de #17; NO fusionarlos juntos. Comprobar en GitHub las ramas y SHAs *actuales* antes de empezar.
 
 ### Identidad y adquisición de tareas (OBLIGATORIO)
@@ -55,7 +56,7 @@ GODSEED debe sentirse como **BitLife visual en un mundo medieval observable**, N
 
 ### Reglas técnicas no negociables
 
-- Mantener estilo medieval, vista 2D cenital y píxeles cuadrados 16×16, sprites de ~16×24 cuando proceda. Nada de copias visuales exactas de juegos de terceros.
+- **Objetivo del producto:** perspectiva 3D Pixel Squares; motor/proyección exacta pendientes de evaluación. **Compatibilidad:** el render heredado 2D mantiene sus checks 16×16/16×24 mientras exista, pero no puede prohibir la evolución a 3D. No copiar obras de terceros.
 - Compatibilidad con Android offline, `src/sim.js` + `src/living.js` UMD CommonJS/buscador, `build.py` empaquetando un HTML autocontenido y WebView nativo; nuevos módulos deben estar en orden correcto en bundle.
 - `version:1`, clave `godseed-one-small-life-v1`, import/export y saves anteriores sin pérdida de Nim, capítulos I–III, ruinas, santuarios, aldeas ni inventario. Si una versión nueva necesita migración, documentar y testear antes.
 - El dispositivo destino tiene **2 GB o 3 GB de RAM FÍSICA total**, no autorizamos 3 GB de RAM para la app. Presupuesto provisional ~128–192 MiB PSS, techo suave 256 MiB aún sin hardware comprobado; no declarar FPS/PSS probados si no se han medido.

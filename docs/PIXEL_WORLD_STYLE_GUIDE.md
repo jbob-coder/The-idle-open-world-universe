@@ -1,8 +1,8 @@
-> **SCOPE CORRECTION — 2026-10-20:** The binding measurements below apply to **legacy 2D sprite atlases and Canvas rendering only**. They are **not** the final GODSEED 3D asset, camera or engine contract. The owner's later direction requires a 3D observer world with Pixel Squares styling; appropriate 3D texture filtering, pixel proportions, camera and low-end Android acceptance remain to be designed and measured. Keep 2D validation intact until a replacement is tested. See [authority and reference register](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and [owner direction](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/owner-direction-3d-autonomy-handoff-20261019/docs/owner/GODSEED_OWNER_DIRECTION_AND_SESSION_HANDOFF_2026-10-19.md).
+# GODSEED — Legacy Canvas 2D square-pixel art bible (scoped compatibility)
 
-# GODSEED — STRICT SQUARE-PIXEL ART BIBLE (binding production specification)
+**REFERENCE STATUS (2026-10-20):** This guide defines the **legacy 2D sprite and asset acceptance**, not a veto on the owner's approved 3D Pixel Squares observer POV. Its top-down-only and no-3D wording is historical. Preserve old art validators until a tested new render contract is approved; see [project authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
 
-**Authority:** `config/pixel-art-contract.json` defines measurable rules, `assets/palettes/medieval-fantasy.json` is the color source of truth, and `assets/asset-manifest.json` is the sprite-atlas inventory. **Status: design and preparatory assets, not completed renderer integration.** Read `docs/PIXEL_ART_ACCEPTANCE.md` before marking visual tasks done.
+**Historical 2D asset authority:** `config/pixel-art-contract.json` defines measurable rules, `assets/palettes/medieval-fantasy.json` is the color source of truth, and `assets/asset-manifest.json` is the sprite-atlas inventory. **Status: design and preparatory assets, not completed renderer integration.** Read `docs/PIXEL_ART_ACCEPTANCE.md` before marking visual tasks done.
 
 ## 0. Non-negotiable identity
 

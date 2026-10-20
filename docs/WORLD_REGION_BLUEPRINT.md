@@ -1,3 +1,5 @@
+> **LEGACY WORLD PLAN (2026-10-20):** The eight named 64x48 overhead 2D regions are v1 compatibility/history, not the final 3D Pixel Squares world-size/camera mandate. Preserve saves. See [project authority and reference corrections](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
 # GODSEED — First World Region Blueprint (64×48)
 **Status: planning, not implementation.** Authority: `data/world-regions.v1.json`. All coordinates in logical tiles `0..63` × `0..47`. World art is overhead 2D square pixels. No map files, movement logic, or saves are changed by this blueprint.
 

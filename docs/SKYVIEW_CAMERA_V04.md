@@ -1,4 +1,6 @@
-# GODSEED v0.4 — Cámara cenital y personaje 2D ampliado
+# GODSEED v0.4 — Registro histórico: cámara cenital y personaje 2D ampliado
+
+**REFERENCIA HISTÓRICA (2026-10-20):** Esta cámara Canvas 2D era una etapa antigua; la dirección final aprobada es **3D Pixel Squares**. Consultar [autoridad y correcciones del proyecto](PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md); conservar compatibilidad y pruebas existentes.
 
 **Estado: primera etapa implementada en la rama experimental `feat/skyview-zoom-v0.4`.** Esta entrega no cambia cómo decide Nim; cambia el punto de observación del jugador/dios. La dirección artística continúa siendo fantasía medieval en píxeles, no una cámara 3D ni la estética de otro juego.
 

@@ -1,7 +1,9 @@
 # GODSEED — Centro de operaciones para bots
 
-**Proyecto:** videojuego medieval 2D cenital de píxeles cuadrados y simulación social autónoma para Android offline.  
-**Objetivo del propietario:** un mundo continuamente explorable, personajes con vida parecida a BitLife visual, viviendas y pueblos funcionales, puertas con interiores grandes y seguros, mejoras de civilización guiadas por necesidades y consejos divinos que los habitantes pueden rechazar.
+**Proyecto — objetivo aprobado:** simulador medieval autónomo para Android offline con **perspectiva 3D estilo Pixel Squares**. El runtime heredado es **Canvas/WebView 2D**, no un render 3D ya implementado.  
+**Objetivo del propietario:** Sims con decisiones causales que desarrollan relaciones, hogares, familias, colonias y reinos sin órdenes ni pulsaciones del dios; poderes e interfaz divina por rediseñar, sin limitarse necesariamente a susurros.
+
+**Leer primero:** [autoridad actual del proyecto](../PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) y [decisiones del propietario](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/owner-direction-3d-autonomy-handoff-20261019/docs/owner/GODSEED_OWNER_DIRECTION_AND_SESSION_HANDOFF_2026-10-19.md). La vieja prohibición 3D, Faith, sprite 16×16 y cámara cenital son referencias de compatibilidad 2D, **NO** requisitos finales aprobados. Consultar siempre `tasks.json` y SHA real antes de afirmar estado o asignar bot.
 
 ## Archivos obligatorios
 
@@ -10,7 +12,7 @@
 | [Registro de tareas (dinámico)](tasks.json) | ID, prioridad, dependencia, estado, propietario, pruebas, historial | **Única fuente estructurada** |
 | [Tablero actualizado](TASK_BOARD.md) | Estado y responsable visibles para todos | **Generado desde JSON**, nunca editar manualmente |
 | [Protocolo de los bots](TASK_WORKFLOW.md) | Reclamar antes de editar, cambiar estados, resolver conflictos y cerrar | **Obligatorio** |
-| [Prompt maestro](BOT_MASTER_PROMPT.md) | Instrucciones reproducibles para Codex y otros agentes | **Copiar para activar bots** |
+| [Prompt maestro](BOT_MASTER_PROMPT.md) | Instrucciones de desarrollo reconciliadas con dirección del propietario | **Leer tras autoridad y registro actual** |
 | [Modo automático ♾️](INFINITY_AUTOMATION_PROMPT.md) | Continuar tareas sucesivas por sesión con límites y evidencia | **Copiar para bots autónomos** |
 | [Relevo de chat / CONTEXTO_AGOTADO](CHAT_RETIRE_AND_RESUME.md) | Prompt doble: bot que se retira y bot sucesor; cómo no perder el trabajo | **Obligatorio al terminar un chat con tarea activa** |
 | [Archivo de relevos](handoffs/README.md) | Estado verificable por tarea, ramas, SHA, pruebas, próximos pasos | **Leer al heredar trabajo** |
@@ -28,7 +30,7 @@
 - [Issue #19](https://github.com/jbob-coder/The-idle-open-world-universe/issues/19): civilización y vidas personales más profundas.
 - [Issue #13](https://github.com/jbob-coder/The-idle-open-world-universe/issues/13): pruebas físicas 2–3 GB RAM, **bloqueadas** hasta conseguir evidencia.
 
-**Aún no existe** navegación exterior/interior, casas realmente habitables, puertas utilizables, un mapa continuo por chunks, generaciones sociales completas ni certificación de un APK comercial. Documentar el diseño no implementa esas funciones.
+**En el runtime heredado no se integran aún** 3D, navegación global entre chunks, interiores transitables, generaciones sociales completas ni un APK comercial certificado. Hay módulos opt-in en PRs separados; un test verde individual no equivale a integración.
 
 ## Modo ♾️ para bots autónomos
 
