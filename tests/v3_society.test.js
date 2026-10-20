@@ -34,6 +34,9 @@ test("100 seeded villages craft, build, socialize and elect without input",()=>{
     assert.equal(s.food,s.foodGathered-s.foodEaten);
     assert.equal(s.foodGathered+s.bushes.reduce((n,x)=>n+x.berries,0),12+s.foodGrown);
     assert.equal(new Set(s.structures.map(x=>x.x+","+x.z)).size,3);
+    assert.ok(s.forest.every(t=>s.structures.every(b=>
+      t.x<b.x-1||t.x>b.x+2||t.z<b.z-1||t.z>b.z+2)),
+      "no trees remain within a constructed footprint seed "+seed);
     assert.ok(s.citizens.every(x=>x.alive),"living villagers "+seed);
     assert.ok(s.citizens.some(x=>x.conversations>=3),"social contact "+seed);
     assert.ok(s.settlement.leaderId,"leader "+seed);
