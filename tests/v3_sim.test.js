@@ -54,3 +54,25 @@ test("different update cadences yield the same authoritative state",()=>{
   for(let i=0;i<240;i++)many.advance(1);
   assert.deepEqual(once.snapshot(),many.snapshot());
 });
+
+test("after founding a shelter, residents keep four timber in reserve instead of clearing the entire forest",()=>{
+  for(let seed=1;seed<=100;seed++){
+    const game=V3.create(seed),initial=game.snapshot(),state=game.advance(1500);
+    assert.equal(state.structures.length,1,"shelter seed "+seed);
+    assert.equal(state.spent,4);
+    assert.equal(state.wood,4,"finite reserve seed "+seed);
+    assert.equal(state.harvested,8,"no unnecessary timber harvesting seed "+seed);
+    assert.equal(state.forest.length,initial.forest.length-8);
+    assert.ok(state.forest.length>0,"forest must survive seed "+seed);
+    const home=state.structures[0];
+    assert.ok(state.citizens.every(c=>Math.abs(c.x-home.x)+Math.abs(c.z-home.z)<=1),
+      "citizens must return to shelter seed "+seed);
+    assert.ok(state.citizens.every(c=>c.goal==="cuidar refugio"));
+    assert.equal(V3.validate(state),true);
+    assert.deepEqual(V3.restore(game.serialize()).snapshot(),state);
+    game.advance(500);
+    const later=game.snapshot();
+    assert.equal(later.harvested,state.harvested,"do not deforest after reserve is full");
+    assert.equal(later.structures.length,1);
+  }
+});
