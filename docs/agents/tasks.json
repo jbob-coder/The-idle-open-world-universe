@@ -147,7 +147,7 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "claimed",
+      "status": "in_progress",
       "owner": "FIX-62",
       "work_branch": "feat/int-002-fix-62-footprints",
       "depends": [
@@ -201,6 +201,13 @@
           "to": "claimed",
           "actor": "FIX-62",
           "reason": "Owner-requested successor to retired FORGE-27: preserve original branch and v1 saves; implement safe 3x3-6x6 physical footprints with evidence"
+        },
+        {
+          "date": "2026-10-20T21:35:44Z",
+          "from": "claimed",
+          "to": "in_progress",
+          "actor": "FIX-62",
+          "reason": "Begin isolated footprint collision, placement, legacy save and Node/Android acceptance work. Do not edit other owners' branches."
         }
       ]
     },
