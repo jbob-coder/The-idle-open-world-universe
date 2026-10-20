@@ -1,6 +1,6 @@
 # GODSEED — Plan de ejecución integrado y dependencias
 
-**Horizonte de producto:** simulador medieval visual de vida, poblaciones y civilizaciones con mundo espacialmente continuo. **No es solo un RPG de combates y capítulos.**  
+**Horizonte del producto aprobado (2026-10-19):** simulador medieval autónomo con **POV 3D Pixel Squares**, mundo continuo y Android offline. Canvas 2D es compatibilidad actual, no obligación de entrega final. Consultar [autoridad y correcciones](../PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) y el registro de tareas vivo antes de elegir dependencia o motor. **No es solo un RPG de combates y capítulos.**  
 **Regla:** este archivo explica orden y por qué; el estado verdadero siempre está en `tasks.json` y `TASK_BOARD.md`.
 
 ## Base y restricciones de trabajo
