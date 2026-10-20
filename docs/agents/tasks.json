@@ -2952,7 +2952,7 @@
       "priority": "P1",
       "area": "qa",
       "title": "Eliminate reset race in Chromium mobile acceptance",
-      "status": "in_progress",
+      "status": "in_review",
       "owner": "SENTRY-58",
       "work_branch": "fix/qa-007-sentry-reset-race",
       "depends": [
@@ -2961,7 +2961,9 @@
       "acceptance": "Ten repeated Chromium mobile acceptance runs at an exact SHA prove new-world reset and save/import identity without a timing race or regression; offline checks remain green.",
       "issue": null,
       "pr": null,
-      "evidence": [],
+      "evidence": [
+        "Draft PR #53 https://github.com/jbob-coder/The-idle-open-world-universe/pull/53 exact code SHA d6a0deee8bb16c39d420b875c27786d07997959d; GitHub offline QA SUCCESS on push run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39433403998 and PR run https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39433500416. New atomic reset test checks seed/identity/tick across 10 seeds x 3 viewports; does NOT prove 10 independent full-suite repetitions. Issue #52. Independent review and merge pending."
+      ],
       "origin_task": "WLD-008",
       "created_by": "SENTRY-58",
       "new_task_reason": "Separate failure in exact-SHA mobile CI exposed a timing-sensitive reset assertion. Reliable acceptance is needed before combined game integration.",
@@ -2993,6 +2995,13 @@
           "to": "in_progress",
           "actor": "SENTRY-58",
           "reason": "Inspect failing mobile acceptance and apply smallest deterministic test repair, verify save/import and offline CI on isolated branch."
+        },
+        {
+          "date": "2026-10-20T13:50:00.627Z",
+          "from": "in_progress",
+          "to": "in_review",
+          "actor": "SENTRY-58",
+          "reason": "QA-007 test-only reset race repair delivered in draft PR #53; exact-head offline QA push+PR success; independent review required before merge."
         }
       ]
     }
