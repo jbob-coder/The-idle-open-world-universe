@@ -147,9 +147,9 @@
       "priority": "P0",
       "area": "interiors",
       "title": "Enlarge exterior homes and public buildings to 3×3–6×6 cells",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "FIX-62",
+      "work_branch": "feat/int-002-fix-62-footprints",
       "depends": [
         "INT-001"
       ],
@@ -194,6 +194,13 @@
           "to": "ready",
           "actor": "FORGE-27",
           "reason": "Owner requested permanent retirement. Machine-validated handoff docs/agents/handoffs/INT-002.json was committed and CI checked; original branch equals baseline a5919223ec9092bb8f2ec4c4a35cc2576021c817 with no code to lose; release the task for a separately authorized successor."
+        },
+        {
+          "date": "2026-10-20T21:35:33Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FIX-62",
+          "reason": "Owner-requested successor to retired FORGE-27: preserve original branch and v1 saves; implement safe 3x3-6x6 physical footprints with evidence"
         }
       ]
     },
