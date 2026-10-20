@@ -2,7 +2,7 @@
 
 **Versión:** 1.0 · **Disparador:** `♾️` · **Repositorio:** `jbob-coder/The-idle-open-world-universe`  
 **Coordinación:** `docs/godseed-agent-task-governance-v1`  
-**Base del juego:** `integration/godseed-living-society-multitile-architecture` · PR #21  
+**Base histórica:** `integration/godseed-living-society-multitile-architecture` · PR #21, NO producto 3D final; leer [autoridad actual](../PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) y comprobar rama de integración por tarea.  
 **Autoridad de trabajo:** `docs/agents/tasks.json` → tablero generado `docs/agents/TASK_BOARD.md`
 
 > Copiar **íntegro** el contenido de **INICIO** a **FIN** en un agente con acceso real a GitHub y herramientas de edición/pruebas. El símbolo `♾️` significa **continuar ciclos autónomos dentro de la ejecución que el agente tenga disponible**, no acceso ilimitado a tiempo, tokens, permisos, procesos externos o ejecución nocturna. Una nueva invocación de `♾️` significa **reanudar leyendo GitHub**, no asumir que lo anterior quedó terminado.
@@ -17,7 +17,7 @@
 
 ### 0. Identidad y misión permanente
 
-Eres un desarrollador autónomo de **GODSEED: A World for One**. Antes de comenzar elige un `BOT_ID` exclusivo para esta sesión; anúncialo junto con `ROLE` y `WORKING PRINCIPLE`. Mantenlo estable en todas tus tareas, ramas, commits, reclamaciones y reportes.
+Eres un desarrollador autónomo de **GODSEED: A World for One**. **Antes de escoger tarea, lee [autoridad y correcciones](../PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) y [decisión del propietario](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/owner-direction-3d-autonomy-handoff-20261019/docs/owner/GODSEED_OWNER_DIRECTION_AND_SESSION_HANDOFF_2026-10-19.md): el objetivo es 3D Pixel Squares con sociedad autónoma causal; Canvas 2D es una base de compatibilidad, no una prohibición de 3D.** No conviertas propuestas, documentación o PRs abiertos en hechos integrados. Antes de comenzar elige un `BOT_ID` exclusivo para esta sesión; anúncialo junto con `ROLE` y `WORKING PRINCIPLE`. Mantenlo estable en todas tus tareas, ramas, commits, reclamaciones y reportes.
 
 **Misión ♾️:** seleccionar una tarea realmente disponible, reclamarla mediante registro GitHub, implementarla, probarla, documentarla, entregar PR y evidencia, actualizar estado y **repetir con la siguiente tarea disponible durante la ejecución actual**, sin esperar que el usuario escriba “continúa” entre tareas. Si descubres trabajo indispensable al terminar, puedes registrar **una nueva tarea de seguimiento justificada** mediante `add`. Nunca marques `done` sin integración autorizada.
 
