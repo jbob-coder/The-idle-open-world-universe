@@ -1682,9 +1682,9 @@
       "priority": "P0",
       "area": "divine",
       "title": "Nonblocking suggestions lifecycle: heard→considered→action→result",
-      "status": "ready",
-      "owner": null,
-      "work_branch": null,
+      "status": "claimed",
+      "owner": "FIX-62",
+      "work_branch": "feat/god-003-fix-62-lifecycle",
       "depends": [
         "GOD-002",
         "SIM-002"
@@ -1728,6 +1728,13 @@
           "to": "ready",
           "actor": "LIFE-26",
           "reason": "Owner-requested retirement; preserved GOD-003 code c06af2bf400de41b7eb5c04162a6db0dce202383 and validated machine handoff docs/agents/handoffs/GOD-003.json commit 947692010fb776a31be829810eee9ceec8e3be63. No PR and acceptance tests unfinished; new BOT_ID must read handoff/reclaim legally."
+        },
+        {
+          "date": "2026-10-20T15:13:59Z",
+          "from": "ready",
+          "to": "claimed",
+          "actor": "FIX-62",
+          "reason": "Recover LIFE-26 handoff for test-driven GOD-003 lifecycle hardening on isolated successor branch"
         }
       ]
     },
