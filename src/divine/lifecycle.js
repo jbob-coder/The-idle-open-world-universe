@@ -56,15 +56,19 @@
  }
  function validAction(intent,activity){
   if(!activity||typeof activity!=='object')return false;
+  // Never treat an animation, intention or non-finite numeric value as
+  // material progress. The living-world producer supplies actual deltas.
+  const positive=Number.isFinite(activity.amount)&&activity.amount>0;
   switch(intent){
-   case 'food':return activity.kind==='produce'&&activity.resource==='food'&&activity.amount>0;
-   case 'housing':return activity.kind==='build'&&activity.buildingType==='house';
-   case 'craft':return activity.kind==='produce'&&['wood','stone'].includes(activity.resource)&&activity.amount>0;
-   case 'trade':return activity.kind==='trade'&&activity.amount>0;
-   case 'explore':return activity.kind==='explore'&&activity.distance>0;
-   case 'rest':return activity.kind==='recover'&&activity.resource==='energy'&&activity.amount>0;
-   case 'defense':return activity.kind==='protect'&&activity.amount>0;
-   case 'remodel':return activity.kind==='remodel'&&activity.amount>0;
+   case 'food':return activity.kind==='produce'&&activity.resource==='food'&&positive;
+   case 'housing':return activity.kind==='build'&&activity.buildingType==='house'&&
+     positive&&typeof activity.buildingId==='string'&&activity.buildingId.length>0;
+   case 'craft':return activity.kind==='produce'&&['wood','stone'].includes(activity.resource)&&positive;
+   case 'trade':return activity.kind==='trade'&&positive;
+   case 'explore':return activity.kind==='explore'&&Number.isFinite(activity.distance)&&activity.distance>0;
+   case 'rest':return activity.kind==='recover'&&activity.resource==='energy'&&positive;
+   case 'defense':return activity.kind==='protect'&&positive;
+   case 'remodel':return activity.kind==='remodel'&&positive;
    default:return false;
   }
  }
@@ -141,8 +145,13 @@ function expire(s){
    Number.isSafeInteger(p.result.tick)&&p.result.tick>=0&&p.result.tick<=now?
    {status:p.result.status,tick:p.result.tick,summary:text(p.result.summary),
     proof:text(p.result.proof,150)}:null;
+  // An old or manipulated save cannot turn a person's explicit refusal
+  // into an observed success. Consent belongs to the agent, not the God.
+  const accepted=p.accepted===true;
+  if(!accepted&&p.status!=='declined')return null;
+  if(accepted&&p.status==='declined')return null;
   if(p.status==='result'&&(!result||
-    (result.status==='observed'&&!performed)))return null;
+    (result.status==='observed'&&(!performed||!accepted))))return null;
   if(p.status==='acted'&&!performed)return null;
   const origin=p.origin&&Number.isSafeInteger(p.origin.x)&&Number.isSafeInteger(p.origin.y)&&
    Math.abs(p.origin.x)<=1000000&&Math.abs(p.origin.y)<=1000000?
