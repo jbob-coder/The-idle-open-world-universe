@@ -73,6 +73,42 @@ def run():
             assert not failures, "Chromium page errors: "+"; ".join(failures)
             print(f"PASS GODSEED V3 WebGL offline {width}x{height}; tick={built['tick']} harvested={built['harvested']}")
             page.close()
+        # Software-projected renderer acceptance: not a claim of native GPU 3D.
+        page=browser.new_page(viewport={"width":640,"height":360})
+        errors=[]
+        page.on("pageerror",lambda error: errors.append(str(error)))
+        page.route("http://**/*",lambda route: route.abort())
+        page.route("https://**/*",lambda route: route.abort())
+        page.goto(HTML.as_uri()+"?renderer=2d",wait_until="load")
+        wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
+        assert page.evaluate("GodseedV3Debug.rendererMode()") == "canvas-2d-fallback"
+        assert not page.evaluate("GodseedV3Debug.hasWebGL()")
+        assert page.evaluate("""() => {
+            const c=document.getElementById('scene'),ctx=c.getContext('2d');
+            if (!ctx) return false;
+            const d=ctx.getImageData(0,0,c.width,c.height).data;
+            const first=d.slice(0,4).join(',');
+            for(let i=4;i<d.length;i+=400)
+                if(d.slice(i,i+4).join(',')!==first)return true;
+            return false;
+        }"""), "Fallback must paint non-uniform world pixels"
+        built=page.evaluate("""() => {
+            const d=GodseedV3Debug;
+            d.newWorld(14);d.pause();
+            for(let n=0;n<240;n++)d.step();
+            return d.getState();
+        }""")
+        assert len(built["structures"]) == 1, "Autonomous shelter remains functional"
+        assert built["wood"] == built["harvested"]-4
+        assert page.evaluate("GodseedV3Debug.save()")
+        page.reload(wait_until="load")
+        wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
+        assert page.evaluate("GodseedV3Debug.rendererMode()") == "canvas-2d-fallback"
+        assert page.evaluate("GodseedV3Debug.getState()") == built
+        assert not errors, "Fallback JavaScript errors: " + "; ".join(errors)
+        page.screenshot(path=str(CAPTURE/"godseed-v3-canvas-fallback-640x360.png"))
+        print("PASS V3 Canvas2D fallback, autonomous shelter, offline save/restore")
+        page.close()
         browser.close()
 
 if __name__=="__main__":
