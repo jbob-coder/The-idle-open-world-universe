@@ -111,6 +111,15 @@ function hud(){const b=s.bot,goal=b.goal;const xpNeed=10+b.level*8;
   $('citizenLives').textContent=s.living.citizens.map(p=>p.name+' ('+p.role+', Lv.'+p.skill+') · '+p.activity).join(' • ');
   const recent=s.living.whispers[s.living.whispers.length-1];
   $('godFeedback').textContent=recent?('Interpreted as: '+recent.label+'. '+(recent.people||[]).slice(0,8).map(d=>d.name+': '+d.state+' ('+d.reason+')').join('; ')+(recent.nimAgree?'; Nim may consider it.':'')):'Speak your intention; residents decide how to respond.';
+  // Read-only evidence from the authoritative simulation; never tick the
+  // world, award progress, or assume a whisper caused an observed action.
+  const outcomes=recent&&window.GodseedGuidanceLifecycle?
+    window.GodseedGuidanceLifecycle.summary(recent).slice(0,8):[];
+  $('godLifecycle').textContent=!recent?'No divine suggestions recorded.':
+    !outcomes.length?'No individual decision evidence yet.':
+    outcomes.map(o=>o.name+': '+(o.result?.status==='observed'?
+      'matching action observed (cause not proven)':o.result?.status==='unobserved'?
+      'no matching action observed':o.status)).join(' · ');
  }
 
  $('milestones').title=(s.shrinesVisited||[]).length+' santuarios antiguos visitados';
