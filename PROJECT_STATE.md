@@ -1,3 +1,5 @@
+> **HISTORICAL STATUS REGISTER — 2026-10-20 NOTICE:** Entries below reflect older branch milestones and cannot override the owner's approved 3D Pixel Squares ant-farm goal. Older 2D-only bans, 25/30/45-task totals and dated "current objectives" are snapshots, not live governance. See [authoritative corrections](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and current coordination task registry.
+
 ## Chapter I autonomous playable milestone — 2026-10-18
 
 BRANCH: `feat/godseed-chapter-one-complete`, based on `feat/godseed-android-storage-host` (PR #6), based on GODSEED v1 PR #5. No merge to `main`.

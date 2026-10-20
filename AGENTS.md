@@ -1,5 +1,7 @@
 # GODSEED — current agents entry point (October 2026)
 
+**OWNER-DIRECTION UPDATE (2026-10-20):** Read [authoritative reference corrections](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and [owner-approved 3D autonomous civilization direction](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/owner-direction-3d-autonomy-handoff-20261019/docs/owner/GODSEED_OWNER_DIRECTION_AND_SESSION_HANDOFF_2026-10-19.md). The 2D-only constraints in historical Codex instructions below remain compatibility/asset rules for the **old Canvas runtime**, not a prohibition of final 3D Pixel Squares. Do not disable legacy tests without migration or infer tasks are complete from old prompts.
+
 **New chats, new bots, retirement and task claims:** start with `docs/agents/README.md`, then `docs/agents/BOT_MASTER_PROMPT.md`, `docs/agents/TASK_WORKFLOW.md`, `docs/agents/tasks.json` and the generated `docs/agents/TASK_BOARD.md` **from the coordination branch** `docs/godseed-agent-task-governance-v1` (PR #22). This is the current governance for GODSEED living-world development; verify GitHub current HEAD.
 
 - When your existing chat cannot reliably continue: **MODO A** of `docs/agents/CHAT_RETIRE_AND_RESUME.md` to save `docs/agents/handoffs/<TASK_ID>.json` and safely release a task only after preservation.

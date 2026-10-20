@@ -1,7 +1,9 @@
 # GODSEED — Centro de operaciones para bots
 
-**Proyecto:** videojuego medieval 2D cenital de píxeles cuadrados y simulación social autónoma para Android offline.  
-**Objetivo del propietario:** un mundo continuamente explorable, personajes con vida parecida a BitLife visual, viviendas y pueblos funcionales, puertas con interiores grandes y seguros, mejoras de civilización guiadas por necesidades y consejos divinos que los habitantes pueden rechazar.
+**Proyecto — objetivo aprobado:** simulador medieval autónomo Android offline, con perspectiva **3D Pixel Squares** pendiente de implementar. **Estado de esta rama:** gameplay heredado Canvas 2D y saves v1 que se deben preservar.  
+**Objetivo del propietario:** habitantes autónomos desarrollan familias, asentamientos, colonias y reinos mediante decisiones y recursos causales; el dios observa y sus habilidades están por rediseñar.
+
+**Precedencia:** [corrección de referencias y estado](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) y [decisión del propietario](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/owner-direction-3d-autonomy-handoff-20261019/docs/owner/GODSEED_OWNER_DIRECTION_AND_SESSION_HANDOFF_2026-10-19.md). Las reglas 2D/16×16, Faith y POV cenital de las instrucciones antiguas no son aprobación final. Comprobar tareas/SHAs vigentes antes de desarrollar.
 
 ## Archivos obligatorios
 

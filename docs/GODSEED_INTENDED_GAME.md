@@ -1,5 +1,5 @@
 # GODSEED — Intended Game & Player Experience
-**Status:** normative product specification for future Codex implementation, not a statement that every feature currently runs. Last reconciled with prep branch on 2026-10-17.
+**HISTORICAL 2D SPEC (2026-10-20 CORRECTION):** The October 17 Codex preparation is **not** the current final product mandate. The owner later approved 3D Pixel Squares autonomous societies; exact top-down camera/legacy Faith/16×16 rules remain only for the old pipeline. See [current project authority](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md). Preserve legacy v1 saves and runtime tests.
 
 ## One-sentence identity
 GODSEED is a **fully offline, lightweight Android landscape, medieval-fantasy, top-down pixel-square living-world simulation**: the player is a god who observes and influences autonomous inhabitants, especially Nim, without directly controlling anyone.
