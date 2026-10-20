@@ -17,7 +17,7 @@ El empaquetador alternativo SDK-free añadido de forma concurrente se ha
 retirado para no crear dos APK con el mismo ID y diferentes firmas. Se ha
 conservado su historial Git y restaurado el empaquetador anterior de V1.
 
-**Pendiente:** certificar el arranque WebGL, guardado y rendimiento en un
+**Pendiente:** certificar en dispositivo Android físico el arranque WebGL, guardado y rendimiento en un
 dispositivo Android físico de memoria baja. Una prueba en emulador no
 demuestra compatibilidad en todos los teléfonos. La firma debug automática
 no garantiza actualizaciones in-place entre ejecuciones de CI; una clave
@@ -43,3 +43,14 @@ En la rama V3 se añadió `src/v3/fallback.js`, un renderizador de **proyección
 **Evidencia real:** [GitHub Actions V3 WebGL + Canvas2D #39508147385](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39508147385) en SHA `62172b4e5d3c8739061e64c94b8c21f3a9e33708` terminó **SUCCESS**: seis pruebas Node, empaquetado HTML reproducible, Chromium WebGL en 960×540 y 640×360, Canvas2D 640×360 con píxeles no uniformes, refugio autónomo y guardado/carga. El artefacto conserva tres capturas y el HTML. La prueba Android API29 y el estado del GPU deben consultarse por separado; no afirmar que una captura Chromium certifica Android físico ni WebGL nativo.
 
 **Criterio Android:** `tests/native/v3_emulator_acceptance.sh` diferencia `PASS` por WebGL de `PASS DEGRADED` por Canvas2D. Los dos requieren arranque de Activity y conservación de estado a través de reinicio; un modo degradado nunca se reportará como GPU 3D. Las pruebas físicas de 2–3 GB RAM, rendimiento sostenido y firma estable siguen sin certificación.
+
+
+## Resultado posterior: emulador API29 aprobado (20-10-2026)
+
+La evidencia previa de fallo en `#39503775961` permanece como antecedente y no debe confundirse con el estado nuevo. Después de incorporar el respaldo visual de Canvas2D, registrar el modo real de renderizado y conservar la prueba de Activity lifecycle, la ejecución [#39508121551](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39508121551) en SHA **`c623d8b7f8008e3d83f655cfb040ca8a3e4e489b`** terminó con tres jobs **SUCCESS**: `build-v3-debug`, `v3-apk-static-independent` y `v3-emulator-webgl-launch`. El log nativo dice expresamente **`PASS: native V3 APK installed with real WebGL GPU context`** y **`PASS: Android lifecycle preserved seed,tick,harvest,spent,wood,shelters`**. No se usó la aceptación degradada en esta ejecución.
+
+- [APK de depuración generado por ese SHA](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39508121551/artifacts/12303958450)
+- [Evidencia del emulador (captura y logcat)](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39508121551/artifacts/12303244437)
+- La prueba Chromium de WebGL y del respaldo 2.5D también aprobó en [#39508147385](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39508147385), SHA `62172b4e5d3c8739061e64c94b8c21f3a9e33708`, después de la sincronización del HTML.
+
+**No verificado:** dispositivos Android físicos de 2 y 3 GB de RAM, estrés de 20 minutos, temperatura, energía, almacenamiento entre versiones firmadas y experiencia gráfica de producción. Un APK debug firmado por CI puede usar una clave no estable, por lo que no debe prometerse actualización sin reinstalar. La implementación permanece aislada de `main` y de V1.
