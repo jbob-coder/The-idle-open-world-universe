@@ -252,7 +252,18 @@
       (!!s.settlement.leaderId)!==(s.settlement.elections>0))return false;
     for(const ballot of s.settlement.ballots)if(!ballot||!ids.has(ballot.voter)||
       !ids.has(ballot.candidate))return false;
-    if(s.settlement.elections>0&&s.settlement.ballots.length!==3)return false;
+    if(s.settlement.elections>0){
+      if(s.settlement.ballots.length!==3||s.settlement.electionTick>s.tick)return false;
+      const electors=new Set(),count={};
+      for(const ballot of s.settlement.ballots){
+        if(electors.has(ballot.voter))return false;
+        electors.add(ballot.voter);
+        count[ballot.candidate]=(count[ballot.candidate]||0)+1;
+      }
+      const winner=s.citizens.map(c=>({id:c.id,votes:count[c.id]||0}))
+        .sort((a,b)=>b.votes-a.votes||a.id.localeCompare(b.id))[0].id;
+      if(winner!==s.settlement.leaderId)return false;
+    }else if(s.settlement.electionTick!==0||s.settlement.ballots.length)return false;
     for(const e of s.events)if(!e||!number(e.tick)||e.tick>s.tick||
       !PEOPLE.some(c=>c.id===e.actor)||
       !["harvest","craft","build","forage","eat","talk","arrive","elect","death"].includes(e.action)||
