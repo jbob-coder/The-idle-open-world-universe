@@ -513,7 +513,7 @@ button[aria-pressed="true"]{background:#6e6138}
       if(view&&e.key==="ArrowRight"){view.rotate(.12,0);dirty=true;}
     });
   }
-  const forceFallback=root.location&&/(?:\\?|&)renderer=2d(?:&|$)/.test(root.location.search||"");
+  const forceFallback=Boolean(root.location&&((root.location.search||"").indexOf("renderer=2d")>=0));
   try{
     if(forceFallback)throw new Error("Canvas2D QA");
     view=View.create(canvas);rendererMode="webgl-3d";
