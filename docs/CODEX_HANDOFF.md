@@ -1,3 +1,5 @@
+> **SUPERSEDED HANDOFF (2026-10-20):** Earlier Canvas 2D preparations and old task totals, not current project tasks. The owner's 3D Pixel Squares autonomous-society target supersedes prior camera restrictions. Refer to [current authority](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
 # Exact handoff state (2026-10-17)
 
 Repo: `jbob-coder/The-idle-open-world-universe`.

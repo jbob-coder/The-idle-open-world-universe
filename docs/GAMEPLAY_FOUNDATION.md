@@ -1,3 +1,5 @@
+> **LEGACY SIMULATION BASELINE (2026-10-20):** Preserve v1 saves and 2D implementation evidence; the final target is autonomous 3D Pixel Squares society, not the old fixed camera or initial population. See [current authority](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
 # GODSEED — Minimum Playable Systems: Foundation Before World Expansion
 **Status: prioritized planning, NOT implemented work.** The source already supports several of these mechanics in basic form, so the task is to **validate, stabilize and connect** them into a reliable play loop, not write duplicate engines.
 

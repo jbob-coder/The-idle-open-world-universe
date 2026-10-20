@@ -1,3 +1,5 @@
+> **HISTORICAL RUNBOOK (2026-10-20):** This old Codex workflow does not grant new claims or override the current owner's 3D direction. Read [current authority](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and live task board before continuing.
+
 # Codex Cloud runbook — implementation start
 
 **Select repo** `jbob-coder/The-idle-open-world-universe`, **base branch** `prep/codex-skyworld-v0.5`. This is a handoff, not a runtime renderer release. Create **implementation branch** `feat/godseed-medieval-skyworld-v1`. Read `AGENTS.md`, `docs/GODSEED_INTENDED_GAME.md`, `docs/ANDROID_HTML_APK_SPEC.md`, `docs/HANDOFF_READINESS.md`, and paste `docs/CODEX_CLOUD_READY_PROMPT.md` into Codex Cloud.

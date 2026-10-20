@@ -1,3 +1,5 @@
+> **HISTORICAL IMPLEMENTATION PLAN (2026-10-20):** Old 25/30 task counts, Canvas 2D visual scopes and agent directions are not live ownership instructions. The future target is 3D Pixel Squares and emergent autonomous civilization; see [current authority](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md).
+
 # Codex implementation batches: do five tasks at a time
 
 **Art acceptance authority:** `docs/PIXEL_WORLD_STYLE_GUIDE.md`, `config/pixel-art-contract.json`, `docs/PIXEL_ART_ACCEPTANCE.md`. A pixel-square look is mandatory for terrain, characters, divine effects and HUD. The validator checks original starter source: `node scripts/validate_pixel_art_contract.mjs`; Codex still must show **runtime screenshots** before marking a task done.
