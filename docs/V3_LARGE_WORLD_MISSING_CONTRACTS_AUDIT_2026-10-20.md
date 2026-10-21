@@ -86,3 +86,18 @@ Leer primero [`V3_LARGE_WORLD_2026-10-20.md`](V3_LARGE_WORLD_2026-10-20.md): all
 6. **El usuario es un dios observador, no joystick:** mantener autonomía, contenido offline y estilo Pixel Squares 3D. El mundo contiene un cartógrafo extra, **no una inteligencia civilizatoria equivalente a todas las regiones**.
 
 **FIN DEL AUDIT:** documentación añadida de forma independiente, con evidencia y límites separados; sin cambios de runtime, APK, saves, PRs ajenas ni claims de pruebas físicas.
+
+
+## 8. Seguimiento: pruebas reproducibles y recorrido íntegro (auditoría independiente)
+
+La brecha de pruebas descrita en el apartado 6 se convirtió en una implementación **separada**: [PR #63](https://github.com/jbob-coder/The-idle-open-world-universe/pull/63), rama `test/godseed-v3-large-world-acceptance-20261020`, apilada directamente sobre la fuente de PR #60. **PR #61 permanece solo documental; ninguna de las dos PR se ha fusionado.**
+
+Los archivos nuevos son `tests/v3_world.test.js` y `tests/v3_world_browser_acceptance.py`; la modificación de `.github/workflows/v3-3d-proof.yml` añade al pipeline la validación de sintaxis de los módulos mundiales, pruebas Node específicas y observación auténtica del modo `?mode=world` con capturas WebGL y Canvas. El [primer CI del nuevo conjunto](https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39527394384), en SHA `b9d82f06e53c2462ae55e12baf5cee663e339757`, terminó **SUCCESS**: 10 pruebas V3 individuales + 15 sociales + 9 pruebas nuevas del mundo, y pruebas de navegador de ambos renderizadores, atlas, coordenadas negativas, guardado, y copia de una partida histórica. Esta ejecución precede a la prueba posterior de recorrido completo; consultar [PR #63](https://github.com/jbob-coder/The-idle-open-world-universe/pull/63) para el último SHA y su CI.
+
+### Prueba directa de horizonte completo — sin medir rendimiento Android
+
+Ejecuté de forma independiente el simulador JavaScript de PR #60, leyendo sus módulos desde GitHub, con **20.000 ticks** para cada semilla `1`, `2`, `3`, `14`, `42` y `100`. En las seis semillas, el explorador seguía vivo, llegó a **224 descubrimientos**, terminó **56 campamentos** y volvió al estado de objetivo **«cuidar el último campamento»** en la posición `(472, -424)`. Los estados serializados tenían entre aproximadamente **63.000 y 64.000 caracteres**, bien por debajo del límite lógico de 1.500.000. Para semilla `14`, la recuperación `WorldSim.restore(serialize())` coincidió exactamente con el estado calculado.
+
+Las reglas contables verificables siguen siendo cuatro maderas por campamento y ninguna creación gratuita de raciones. La versión posterior de las pruebas permanentes de PR #63 exige también los 224 descubrimientos y 56 campamentos tras 20.000 ticks. Esta muestra **no demuestra** que todas las 2³² semillas concluyan el recorrido, que no haya problemas de rendimiento, ni que el Android físico pueda mantener 20.000 ticks sin limitaciones de batería/memoria.
+
+**Estado de coordinación:** PR #60 conserva la propiedad de los módulos del mundo; #61 aporta únicamente documentación; #63 aporta únicamente pruebas y CI. Verificar resultados en sus commits exactos antes de integrar y mantener abierto el riesgo de integridad histórica del puesto del [issue #59](https://github.com/jbob-coder/The-idle-open-world-universe/issues/59).
