@@ -303,7 +303,7 @@
     }
     function stopFollowing(){followExplorer=false;el("followExplorer").setAttribute("aria-pressed","false");}
     if(useWorld){
-      el("worldTools").style.display="flex";
+      // The compact HUD reveals atlas and camera tools only on demand.
       atlas=root.GodseedV3Atlas.create(el("atlasMap"),(x,z)=>{
         if(view){stopFollowing();view.focus(x,z);setAtlas(false);dirty=true;}
       });
