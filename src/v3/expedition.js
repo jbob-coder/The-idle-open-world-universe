@@ -105,7 +105,7 @@
         {x:c.x,z:c.z,amount:1},c.id);
     };
     const site=s.houses.length
-      ?Infra.next(world,s.camps.concat(s.houses),s.roads,tick):null;
+      ?Infra.next(world,s.camps.filter(b=>b.id===c.homeCampId).concat(s.houses),s.roads,tick):null;
     const decision=Agency.decide(c.mind,{hunger:c.hunger,energy:c.energy,
       food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site});
     Agency.commitChoice(c.mind,decision.action);
@@ -314,7 +314,7 @@
         h.completedAt<m.bornAt||h.completedAt>tick)return false;
     }
     if(s.roads.length&&!s.houses.length)return false;
-    if(!Infra.validate(world,s.camps.concat(s.houses),s.roads,tick,
+    if(!Infra.validate(world,s.camps.filter(b=>m&&b.id===m.homeCampId).concat(s.houses),s.roads,tick,
       m?m.id:null,m?m.bornAt:0))return false;
     const chunks=new Set();
     for(const id of s.knownChunks){
