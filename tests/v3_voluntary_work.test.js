@@ -84,3 +84,29 @@ test("workers choose work from competing actual projects, not a fixed NPC itiner
   assert.equal(jobs.entries.every(p=>p.progress===0),true,
     "decisions do not automatically spend resources or construct a road");
 });
+
+test("trusted helper can opt to gather wood for a nearby unfinished project without creating resources",()=>{
+  const jobs=Projects.create();
+  const owner=person("homeowner",{x:9,z:9});
+  const helper=person("local_traveler",{x:11,z:9,wood:0,craftsmanship:88,security:25});
+  const order=Projects.propose(jobs,"home",{x:9,z:9},owner.id,30);
+  const social={ties:[{a:helper.id,b:owner.id,trust:65}]};
+  assert.equal(Projects.chooseVoluntaryWork(jobs,helper,social,31,["home"]),null,
+    "without a gathering plan zero timber must prevent labor");
+  const offer=Projects.chooseVoluntaryWork(jobs,helper,social,31,["home"],true);
+  assert.ok(offer,"the worker can choose to search for supplies");
+  assert.equal(offer.needsWood,true);
+  assert.equal(offer.id,order.id);
+  assert.equal(order.progress,0,"a plan is not a completed work shift");
+  assert.equal(Projects.contribute(jobs,order,helper,32).worked,false,
+    "resource scarcity must remain enforceable by the construction engine");
+  helper.wood=1;helper.x=9;
+  const funded=Projects.chooseVoluntaryWork(jobs,helper,social,33,["home"],true);
+  assert.equal(funded.needsWood,false);
+  assert.equal(Projects.contribute(jobs,order,helper,33).worked,true);
+  assert.equal(helper.wood,0);
+  assert.equal(Projects.validate(jobs,33,[],[],[owner,helper]),1);
+  helper.hunger=30;
+  assert.equal(Projects.chooseVoluntaryWork(jobs,helper,social,34,["home"],true),null,
+    "survival always permits the volunteer to reconsider");
+});
