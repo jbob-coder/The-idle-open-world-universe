@@ -2024,6 +2024,27 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
       record(s,tick,"settler_home_completed",
         {id:"frontier_home_1",x:place.x,z:place.z,helpedBy:finisher},owner.id);
   }
+  // Select reachable, personally interesting destinations without a fixed
+  // patrol. The resident still advances just one physical tile per tick.
+  // At most two bounded route searches are made for each exploration decision.
+  function wanderStep(world,c,home,tick){
+    const p=c.mind.preferences,turn=Math.floor(tick/36);
+    const reach=4+Math.floor(p.curiosity/8);
+    let searched=0;
+    for(let probe=0;probe<16;probe++){
+      const angle=((turn*7+p.security+probe*11)%32)*Math.PI/16;
+      const distance=4+((turn+p.curiosity+probe*5)%(reach-3));
+      const destination={x:home.x+Math.round(Math.cos(angle)*distance),
+        z:home.z+Math.round(Math.sin(angle)*distance)};
+      const tile=world.sample(destination.x,destination.z,tick);
+      if(!tile||!tile.walkable||tile.tree||Nav.same(c,destination))continue;
+      const route=Nav.local(world,c,destination,tick);
+      searched++;
+      if(route&&route.path.length)return {step:route.path[0],destination};
+      if(searched>=2)break;
+    }
+    return null;
+  }
   // First inhabited wilderness camp; Mira acts on the same world clock.
   // Wilderness inventory is owned per person, never by the distant village.
   function advanceSettler(s,world,tick){
@@ -2150,21 +2171,16 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
       return;
     }
     if(decision.action==="explore"){
-      // Exploration is an optional choice after shelter. Deterministic interests
-      // change the direction; camera/player commands never select a destination.
-      const home=c.homeSite||camp,turn=Math.floor(tick/22);
-      const place={x:home.x+((turn+c.mind.preferences.curiosity)%5)-2,
-        z:home.z+((turn+c.mind.preferences.security)%5)-2};
-      if(world.walkable(place.x,place.z)&&!Nav.same(c,place)){
-        const route=Nav.local(world,c,place,tick);
-        if(route&&route.path.length){
-          c.x=route.path[0].x;c.z=route.path[0].z;
-          c.energy=Math.max(0,c.energy-1);mark(s,c);
-          Agency.observe(c.mind,"explore",true);
-          c.goal="explorar por curiosidad";return;
-        }
+      // Curiosity and reachable world terrain, not a five-tile scripted orbit,
+      // determine where an inhabitant goes when free to explore.
+      const next=wanderStep(world,c,c.homeSite||camp,tick);
+      if(next){
+        c.x=next.step.x;c.z=next.step.z;
+        c.energy=Math.max(0,c.energy-1);mark(s,c);
+        Agency.observe(c.mind,"explore",true);
+        c.goal="explorar por curiosidad";return;
       }
-      Agency.observe(c.mind,"explore",false);
+      if(tick%8===0)Agency.observe(c.mind,"explore",false);
       c.goal="observar el terreno";
       if(tick%22===0)record(s,tick,"settler_explore",{x:c.x,z:c.z},c.id);
       c.energy=Math.min(20,c.energy+1);return;
@@ -2493,7 +2509,7 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
     }
     return true;
   }
-  return Object.freeze({create,advance,advanceSocial,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,migrateV5,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
+  return Object.freeze({create,advance,advanceSocial,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,migrateV5,snapshot:copy,ROUTE_LENGTH:ROUTE.length,wanderStep});
 });
 </script>
 <script>/* Large-world adapter: keep the existing settlement authoritative in its home
