@@ -21,6 +21,13 @@
   const home=(x,z)=>x>=0&&x<20&&z>=0&&z<20;
   const mod=(n,d)=>((n%d)+d)%d;
   const clamp=n=>Math.max(MIN,Math.min(MAX,n));
+  // Signed world coordinates, floor-divided instead of truncated: -1 belongs
+  // to chunk -1, never chunk 0. Each 16x16 chunk has a stable identity.
+  function locate(x,z){
+    if(!inside(x,z))return null;
+    const cx=Math.floor(x/CHUNK),cz=Math.floor(z/CHUNK);
+    return {cx,cz,lx:x-cx*CHUNK,lz:z-cz*CHUNK,id:key(cx,cz)};
+  }
   function hash(seed,x,z,salt){
     let h=(seed^Math.imul(x,374761393)^Math.imul(z,668265263)^salt)>>>0;
     h=Math.imul(h^(h>>>13),1274126177);return (h^(h>>>16))>>>0;
@@ -85,7 +92,8 @@
   }
   function create(seed,saved){
     if(!integer(seed)||seed<0||seed>0xffffffff)throw RangeError("invalid world seed");
-    const cache=new Map(),removed=new Set(),berries=new Map();let revision=0;
+    const cache=new Map(),removed=new Set(),berries=new Map();
+    let revision=0,chunkBuilds=0,chunkHits=0;
     if(saved){
       if(saved.generatorVersion!==VERSION||!Array.isArray(saved.removed)||
         !Array.isArray(saved.berries)||saved.removed.length+saved.berries.length>EDIT_LIMIT)
@@ -102,29 +110,37 @@
         berries.set(key(b.x,b.z),{x:b.x,z:b.z,amount:b.amount,at:b.at});
       }
     }
-    function base(x,z){
-      if(!inside(x,z))return null;
-      const cx=Math.floor(x/CHUNK),cz=Math.floor(z/CHUNK),id=key(cx,cz);
+    function chunkAt(cx,cz){
+      const id=key(cx,cz);
       let chunk=cache.get(id);
-      if(chunk){cache.delete(id);cache.set(id,chunk);}
-      else{
-        chunk=[];
+      if(chunk){
+        chunkHits++;
+        cache.delete(id);cache.set(id,chunk);
+      }else{
+        chunkBuilds++;
+        chunk=new Array(CHUNK*CHUNK);
         for(let dz=0;dz<CHUNK;dz++)for(let dx=0;dx<CHUNK;dx++)
-          chunk.push(terrain(seed,cx*CHUNK+dx,cz*CHUNK+dz));
+          chunk[dz*CHUNK+dx]=terrain(seed,cx*CHUNK+dx,cz*CHUNK+dz);
         cache.set(id,chunk);
         if(cache.size>CACHE_LIMIT)cache.delete(cache.keys().next().value);
       }
-      return chunk[mod(z,CHUNK)*CHUNK+mod(x,CHUNK)];
+      return chunk;
+    }
+    function base(x,z){
+      const p=locate(x,z);if(!p)return null;
+      return chunkAt(p.cx,p.cz)[p.lz*CHUNK+p.lx];
     }
     function berryCount(x,z,tick){
       const b=berries.get(key(x,z));
       return b?Math.min(3,b.amount+Math.max(0,Math.floor((tick-b.at)/BERRY_PERIOD))):3;
     }
-    function sample(x,z,tick){
-      const t=base(x,z);if(!t)return null;
-      return Object.assign({},t,{color:t.color.slice(),tree:t.tree&&!removed.has(key(x,z)),
-        berries:t.bush?berryCount(x,z,tick):0});
+    function decorate(t,tick){
+      if(!t)return null;
+      return Object.assign({},t,{color:t.color.slice(),
+        tree:t.tree&&!removed.has(key(t.x,t.z)),
+        berries:t.bush?berryCount(t.x,t.z,tick):0});
     }
+    function sample(x,z,tick){return decorate(base(x,z),tick);}
     function harvest(x,z){
       const t=base(x,z),id=key(x,z);
       if(!t||!t.tree||home(x,z)||removed.has(id)||removed.size+berries.size>=EDIT_LIMIT)return false;
@@ -141,10 +157,23 @@
       berries.set(id,{x,z,amount:amount-1,at});revision++;return true;
     }
     function windowAt(x,z,half,tick){
-      x=Math.round(clamp(x));z=Math.round(clamp(z));half=Math.max(12,Math.min(32,Math.ceil(half)));
+      if(!Number.isFinite(x)||!Number.isFinite(z)||!Number.isFinite(half)||
+         !integer(tick)||tick<0)throw RangeError("invalid camera chunk window");
+      x=Math.round(clamp(x));z=Math.round(clamp(z));
+      half=Math.max(12,Math.min(32,Math.ceil(half)));
+      const x0=Math.max(MIN,x-half),x1=Math.min(MAX,x+half);
+      const z0=Math.max(MIN,z-half),z1=Math.min(MAX,z+half);
       const cells=[];
-      for(let tz=Math.max(MIN,z-half);tz<=Math.min(MAX,z+half);tz++)
-        for(let tx=Math.max(MIN,x-half);tx<=Math.min(MAX,x+half);tx++)cells.push(sample(tx,tz,tick));
+      // Rows remain in original z-major order, but lookup happens once per
+      // chunk-span (roughly 5-6 per row) instead of once per terrain tile.
+      for(let tz=z0;tz<=z1;tz++){
+        const cz=Math.floor(tz/CHUNK),lz=tz-cz*CHUNK;
+        for(let tx=x0;tx<=x1;){
+          const cx=Math.floor(tx/CHUNK),start=cx*CHUNK,
+            end=Math.min(x1,start+CHUNK-1),chunk=chunkAt(cx,cz);
+          for(;tx<=end;tx++)cells.push(decorate(chunk[lz*CHUNK+tx-start],tick));
+        }
+      }
       return cells;
     }
     function save(tick){
@@ -156,9 +185,10 @@
     }
     return Object.freeze({sample,harvest,forage,windowAt,save,
       walkable:(x,z)=>{const t=base(x,z);return !!t&&t.walkable;},
-      metrics:()=>({cachedChunks:cache.size,chunkLimit:CACHE_LIMIT,resourceEdits:removed.size+berries.size,revision}),
+      metrics:()=>({cachedChunks:cache.size,chunkLimit:CACHE_LIMIT,
+        chunkBuilds,chunkHits,resourceEdits:removed.size+berries.size,revision}),
       region:(x,z)=>region(seed,x,z),landmark:(rx,rz)=>landmark(seed,rx,rz)});
   }
   return Object.freeze({VERSION,SIZE,MIN,MAX,CHUNK,REGION,CACHE_LIMIT,EDIT_LIMIT,BIOMES,
-    inside,home,road,terrain,region,landmark,create});
+    inside,locate,home,road,terrain,region,landmark,create});
 });
