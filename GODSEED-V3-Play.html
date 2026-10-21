@@ -1417,7 +1417,7 @@ button[aria-pressed="true"]{background:#6e6138}
  const EVENTS=new Set(["settler_build","settler_build_road","settler_forage",
    "settler_harvest","settler_eat","settler_arrive","settler_death","settler_explore",
    "expedition_arrive","discover","build_camp","eat","forage","harvest","death",
-   "meet","settler_meet"]);
+   "meet","settler_meet","assist_work_home","assist_finish_home"]);
  const MAX_MEMORIES=16;
  const positive=n=>Number.isSafeInteger(n)&&n>=0;
  const clamp=n=>Math.max(0,Math.min(100,n));
@@ -1653,6 +1653,44 @@ button[aria-pressed="true"]{background:#6e6138}
     if(completed){project.status="complete";project.completedAt=tick;}
     return {worked:true,completed,woodSpent:1,projectId:project.id};
   }
+  // A character can *offer* labor to another resident's active project.
+  // Neither project ownership nor the simulation tick issues commands.
+  // The caller must still walk to the site and pay through contribute().
+  function chooseVoluntaryWork(s,actor,social,tick,types=["home","road","camp"]){
+    if(!s||!Array.isArray(s.entries)||!actor||!actor.alive||
+       !actor.mind||!actor.mind.preferences||
+       !social||!Array.isArray(social.ties)||!integer(tick)||
+       !integer(actor.wood)||actor.wood<1||
+       !integer(actor.energy)||actor.energy<10||
+       !integer(actor.food)||actor.food<2||
+       !integer(actor.hunger)||actor.hunger<68||
+       !Array.isArray(types))return null;
+    const craft=actor.mind.preferences.craftsmanship;
+    const security=actor.mind.preferences.security;
+    if(!integer(craft)||!integer(security))return null;
+    let best=null,bestScore=-Infinity;
+    for(const p of s.entries){
+      if(p.status!=="active"||!types.includes(p.type)||
+         p.initiator===actor.id||p.startedAt>tick||
+         p.progress>=p.required)continue;
+      const distance=Math.abs(actor.x-p.x)+Math.abs(actor.z-p.z);
+      if(distance>12)continue; // Local offers, not interregional orders.
+      const tie=social.ties.find(t=>
+        (t.a===actor.id&&t.b===p.initiator)||
+        (t.b===actor.id&&t.a===p.initiator));
+      if(!tie||!integer(tie.trust)||tie.trust<23)continue;
+      // Individual craftsmanship, trust, safety and real travel cost compete.
+      // There is no fixed date or required construction goal.
+      const score=craft+tie.trust-Math.floor(security/3)-
+        distance*3+(p.progress>0?12:0);
+      if(score<67)continue;
+      if(score>bestScore||(score===bestScore&&p.id<best.id)){
+        best=p;bestScore=score;
+      }
+    }
+    return best?{id:best.id,type:best.type,x:best.x,z:best.z,
+      score:bestScore,reason:"voluntary_community_work"}:null;
+  }
   function validate(s,tick,homes,roads,workers,camps=[]){
     if(!s||!integer(s.cutoverTick)||s.cutoverTick>tick||
        !Array.isArray(s.entries)||
@@ -1713,7 +1751,7 @@ button[aria-pressed="true"]{background:#6e6138}
         return false;
     return units;
   }
-  return Object.freeze({COST,MAX_ACTIVE_PROJECTS,create,find,propose,contribute,validate});
+  return Object.freeze({COST,MAX_ACTIVE_PROJECTS,create,find,propose,contribute,chooseVoluntaryWork,validate});
 });</script>
 <script>/* Persistent autonomous wilderness explorer. All supplies are physically gathered.
  * Camps belong to the expedition ledger; village stores are never remotely debited. */
@@ -1781,6 +1819,16 @@ button[aria-pressed="true"]{background:#6e6138}
     c.goal="reconocer nueva región";
   }
 
+  // A home's initiator owns the plot, even when a different willing worker
+  // performs its last paid shift. Contributor history remains in the job.
+  function completeFrontierHome(s,camp,owner,task,tick,finisher){
+    const place=owner.homeSite;
+    s.houses.push({id:"frontier_home_1",type:"home",x:place.x,z:place.z,
+      campId:camp.id,builder:owner.id,completedAt:tick,name:"Casa de Mira"});
+    record(s,tick,finisher===owner.id?"settler_build":"assist_finish_home",
+      {id:"frontier_home_1",woodSpent:task.required,
+        x:place.x,z:place.z,owner:owner.id},finisher);
+  }
   // First inhabited wilderness camp; Mira acts on the same world clock.
   // Wilderness inventory is owned per person, never by the distant village.
   function advanceSettler(s,world,tick){
@@ -1851,11 +1899,8 @@ button[aria-pressed="true"]{background:#6e6138}
       if(!step.worked){c.goal="obtener madera para la obra";return;}
       s.woodSpent+=step.woodSpent;c.goal="construir vivienda ("+task.progress+"/"+task.required+")";
       if(step.completed){
-        s.houses.push({id:"frontier_home_1",type:"home",x:place.x,z:place.z,
-          campId:camp.id,builder:c.id,completedAt:tick,name:"Casa de Mira"});
+        completeFrontierHome(s,camp,c,task,tick,c.id);
         c.goal="completé mi hogar";
-        record(s,tick,"settler_build",{id:"frontier_home_1",woodSpent:task.required,
-          x:place.x,z:place.z},c.id);
       }
       return;
     }
@@ -1971,6 +2016,37 @@ button[aria-pressed="true"]{background:#6e6138}
     }
     if(c.energy<4){c.energy=Math.min(20,c.energy+8);c.goal="descansar en el camino";return;}
     if(c.hunger<40&&c.food===0){gather(s,world,"food",tick);return;}
+    // Optional cooperative labor: a traveler with food, tools and trust may
+    // help an active local home, but never receives a forced construction job.
+    // Historical itinerary saves keep their original behavior.
+    const offer=c.routeMode==="free"&&c.stage!=="travel"?
+      Projects.chooseVoluntaryWork(s.projects,c,s.social,tick,["home"]):null;
+    if(offer){
+      const project=Projects.find(s.projects,offer.type,offer);
+      const owner=s.settlers.find(person=>person.id===project.initiator);
+      const homeCamp=owner?s.camps.find(b=>b.id===owner.homeCampId):null;
+      if(owner&&owner.alive&&homeCamp&&owner.homeSite&&
+         Nav.same(owner.homeSite,offer)&&!s.houses.length){
+        if(!Nav.same(c,offer)){
+          const approach=Nav.local(world,c,offer,tick,16,2048);
+          if(approach&&approach.path.length){
+            move(s,approach.path[0]);
+            c.goal="ofrecer ayuda a una obra cercana";
+            return;
+          }
+        }else{
+          const step=Projects.contribute(s.projects,project,c,tick);
+          if(step.worked){
+            s.woodSpent+=step.woodSpent;
+            c.goal="ayudar por voluntad propia ("+project.progress+"/"+project.required+")";
+            record(s,tick,"assist_work_home",{x:offer.x,z:offer.z,
+              progress:project.progress,woodSpent:step.woodSpent,for:owner.id});
+            if(step.completed)completeFrontierHome(s,homeCamp,owner,project,tick,c.id);
+            return;
+          }
+        }
+      }
+    }
     if(c.stage==="travel"){
       const target=c.routeMode==="free"?c.target:ROUTE[c.routeIndex];
       if(!target){c.stage="supply";return;}
@@ -2054,6 +2130,14 @@ button[aria-pressed="true"]{background:#6e6138}
     const pendingCamp=s.projects.entries.filter(p=>p.status==="active"&&
       p.type==="camp").reduce((n,p)=>n+p.progress,0);
     const pendingSettler=pending-pendingCamp;
+    // Credit every actually recorded cross-NPC shift to the worker who
+    // physically carried and paid the timber; historic buildings remain
+    // attributed to their original builder when migrating old saves.
+    const paidBy=(id,campWork)=>s.projects.entries.reduce((sum,p)=>
+      sum+((p.type==="camp")===campWork?
+        (p.contributors.find(member=>member.id===id)?.units||0):0),0);
+    const travelerCivicWork=paidBy("world_taren",false);
+    const settlerCampWork=paidBy("world_mira",true);
     if(s.woodSpent!==(s.camps.length+s.houses.length)*4+s.roads.length+pending||
       s.woodGathered!==removedCount||
       s.settlerWoodGathered>s.woodGathered||
@@ -2077,7 +2161,8 @@ button[aria-pressed="true"]{background:#6e6138}
         if(!positive(m[k]))return false;
       if(m.energy>20||m.hunger>100||m.health>100||
         m.alive!==(m.health>0)||
-        m.wood!==s.settlerWoodGathered-s.houses.length*4-s.roads.length-pendingSettler||
+        m.wood!==s.settlerWoodGathered-s.houses.length*4-s.roads.length-
+           pendingSettler+travelerCivicWork-settlerCampWork||
         m.food!==s.settlerFoodGathered-s.settlerFoodEaten)return false;
     }
     if(s.houses.length){
@@ -2122,7 +2207,8 @@ button[aria-pressed="true"]{background:#6e6138}
       typeof c.goal!=="string"||c.goal.length>80)return false;
     for(const k of ["energy","hunger","health","food","wood"])if(!positive(c[k]))return false;
     if(c.energy>20||c.hunger>100||c.health>100||c.alive!==(c.health>0)||
-      c.wood!==s.woodGathered-s.settlerWoodGathered-s.camps.length*4-pendingCamp||
+      c.wood!==s.woodGathered-s.settlerWoodGathered-s.camps.length*4-pendingCamp-
+         travelerCivicWork+settlerCampWork||
       c.food!==s.foodGathered-s.settlerFoodGathered-(s.foodEaten-s.settlerFoodEaten)||
       s.discoveries.length!==c.routeIndex||
       !chunks.has(Math.floor(c.x/16)+","+Math.floor(c.z/16))||
@@ -2160,7 +2246,8 @@ button[aria-pressed="true"]{background:#6e6138}
         camp.name!=="Refugio de ruta "+(position+1))return false;
       ids.add(camp.id);previous=camp.completedAt;
     }
-    const actions=["expedition_arrive","harvest","forage","eat","discover","build_camp","death","meet"];
+    const actions=["expedition_arrive","harvest","forage","eat","discover","build_camp",
+      "death","meet","assist_work_home","assist_finish_home"];
     const residentActions=["settler_arrive","settler_forage","settler_harvest",
       "settler_eat","settler_build","settler_build_road","settler_explore","settler_death","settler_meet"];
     previous=-1;
