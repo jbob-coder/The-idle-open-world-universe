@@ -5,7 +5,7 @@
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   if(root)root.GodseedV3Projects=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
-  const COST=Object.freeze({home:4,road:1}),MAX_PROJECTS=40,MAX_CONTRIBUTORS=8;
+  const COST=Object.freeze({home:4,road:1,camp:4}),MAX_PROJECTS=48,MAX_CONTRIBUTORS=8;
   const integer=n=>Number.isSafeInteger(n)&&n>=0;
   const key=(type,site)=>type+":"+site.x+","+site.z;
   const create=(cutoverTick=0)=>({cutoverTick,entries:[]});
@@ -20,7 +20,7 @@
     const existing=find(s,type,site);
     if(existing)return existing;
     if(s.entries.length>=MAX_PROJECTS||
-       s.entries.some(p=>p.status==="active"))
+       s.entries.filter(p=>p.status==="active").length>=3)
       return null; // Bounded concurrent construction, not an NPC command.
     const order={id:key(type,site),type,x:site.x,z:site.z,
       required:COST[type],progress:0,status:"active",initiator,
@@ -44,10 +44,11 @@
     if(completed){project.status="complete";project.completedAt=tick;}
     return {worked:true,completed,woodSpent:1,projectId:project.id};
   }
-  function validate(s,tick,homes,roads,workers){
+  function validate(s,tick,homes,roads,workers,camps=[]){
     if(!s||!integer(s.cutoverTick)||s.cutoverTick>tick||
        !Array.isArray(s.entries)||s.entries.length>MAX_PROJECTS||
-       !Array.isArray(homes)||!Array.isArray(roads)||!Array.isArray(workers))
+       !Array.isArray(homes)||!Array.isArray(roads)||!Array.isArray(workers)||
+       !Array.isArray(camps))
       return false;
     const identities=new Map(workers.map(w=>[w.id,w]));
     const seen=new Set();let previous=-1,active=0,units=0;
@@ -78,19 +79,20 @@
           (p.completedAt!==null)))return false;
       if(!complete)active++;
       if(complete){
-        const target=p.type==="home"?
-          homes.find(h=>h.x===p.x&&h.z===p.z&&h.completedAt===p.completedAt):
-          roads.find(r=>r.x===p.x&&r.z===p.z&&r.completedAt===p.completedAt);
+        const buildings=p.type==="home"?homes:p.type==="road"?roads:camps;
+        const target=buildings.find(h=>h.x===p.x&&h.z===p.z&&
+          h.completedAt===p.completedAt);
         if(!target)return false;
       }else{
         if(homes.some(h=>h.x===p.x&&h.z===p.z)||
-           roads.some(r=>r.x===p.x&&r.z===p.z))return false;
+           roads.some(r=>r.x===p.x&&r.z===p.z)||
+           camps.some(c=>c.x===p.x&&c.z===p.z))return false;
       }
     }
-    if(active>1)return false;
+    if(active>3)return false;
     // Every finished structure built after this system activated needs a
     // real work order. Older imported history is preserved without fabrication.
-    for(const [buildings,type] of [[homes,"home"],[roads,"road"]])
+    for(const [buildings,type] of [[homes,"home"],[roads,"road"],[camps,"camp"]])
       for(const b of buildings)if(b.completedAt>s.cutoverTick&&
         !s.entries.some(p=>p.type===type&&p.x===b.x&&p.z===b.z&&
           p.status==="complete"&&p.completedAt===b.completedAt))return false;
