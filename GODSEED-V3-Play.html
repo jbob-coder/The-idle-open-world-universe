@@ -440,7 +440,7 @@ button[aria-pressed="true"]{background:#6e6138}
  const newState=()=>({id:SITE_ID,name:"Colina Oriental",status:"unfounded",
    site:{x:SITE.x,z:SITE.z},founderId:null,approvedBy:null,
    approvedAt:null,foundedAt:null,cargoWood:0,wood:0,food:0,
-   deliveries:0,delivery:null});
+   deliveries:0,shipmentsDispatched:0,foodConsumed:0,delivery:null});
  function crop(s,c,ctx,siteClear=false){
    const options=s.forest.filter(t=>siteClear?obstructs(t):dist(t,SITE)<=4);
    const t=ctx.nearest(c,options);
@@ -473,7 +473,7 @@ button[aria-pressed="true"]{background:#6e6138}
  }
  function foodAvailable(s,c){return localFood(s,c)?s.outpost.food:s.food;}
  function consumeFood(s,c){
-   if(localFood(s,c)){if(s.outpost.food<1)throw Error("empty frontier pantry");s.outpost.food--;}
+   if(localFood(s,c)){if(s.outpost.food<1)throw Error("empty frontier pantry");s.outpost.food--;s.outpost.foodConsumed++;}
    else{if(s.food<1)throw Error("empty mother pantry");s.food--;}
  }
  function beforeAction(s,c,ctx){
@@ -518,7 +518,7 @@ button[aria-pressed="true"]{background:#6e6138}
    }else if(o.status==="established"&&!o.delivery&&o.food<=1&&s.food>=5){
      const courier=s.citizens.find(c=>c.role==="forager"&&c.alive&&c.homeId==="village_01");
      if(!courier)return;
-     s.food-=2;o.delivery={courierId:courier.id,food:2,startedAt:s.tick};
+     s.food-=2;o.shipmentsDispatched++;o.delivery={courierId:courier.id,food:2,startedAt:s.tick};
      ctx.record(s,courier,"dispatch",{settlement:SITE_ID,food:2});
    }
  }
@@ -538,11 +538,12 @@ button[aria-pressed="true"]{background:#6e6138}
      !o.site||!same(o.site,SITE)||
      !["unfounded","travelling","established"].includes(o.status)||
      !number(o.cargoWood)||o.cargoWood>4||!number(o.wood)||!number(o.food)||
-     !number(o.deliveries)||s.structures.length>4||
+     !number(o.deliveries)||!number(o.shipmentsDispatched)||
+     !number(o.foodConsumed)||s.structures.length>4||
      est!==(s.structures.length===4))return false;
    if(o.status==="unfounded"&&(o.founderId!==null||o.approvedBy!==null||
      o.approvedAt!==null||o.foundedAt!==null||o.cargoWood||o.wood||
-     o.food||o.delivery||o.deliveries))return false;
+     o.food||o.delivery||o.deliveries||o.shipmentsDispatched||o.foodConsumed))return false;
    if((travel||est)&&(!s.citizens.some(c=>c.id===o.founderId)||
      !s.citizens.some(c=>c.id===o.approvedBy)||
      !number(o.approvedAt)||o.approvedAt>s.tick))return false;
@@ -552,6 +553,11 @@ button[aria-pressed="true"]{background:#6e6138}
    if(!(o.delivery===null||(est&&o.delivery&&o.delivery.food===2&&
      number(o.delivery.startedAt)&&o.delivery.startedAt<=s.tick&&
      s.citizens.some(c=>c.id===o.delivery.courierId&&c.id!==o.founderId))))return false;
+   // Outpost logistics are a conserved, separately audited sub-ledger.
+   const inflight=o.delivery?o.delivery.food:0;
+   if(o.shipmentsDispatched!==o.deliveries+(o.delivery?1:0)||
+      o.food+inflight+o.foodConsumed!==(o.status==="unfounded"?0:2)+
+        o.shipmentsDispatched*2)return false;
    if(est){
      const house=s.structures[3];
      if(house.id!==SITE.id||house.type!==SITE.type||!same(house,SITE)||
