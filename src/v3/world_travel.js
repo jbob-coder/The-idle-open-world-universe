@@ -26,12 +26,23 @@
     return null;
   }
   function resource(world,start,kind,tick,radius=12,maxNodes=768){
-    // Wilderness homesteaders can search a wider physical area without changing
-    // the existing explorer's small bounded search or global world limits.
+    // Search budgets are per route calculation, never travel or world borders.
+    // Camp residents may need to reach timber outside a harvested local grove.
+    // The explorer keeps the smaller search budget.
+    if(start.worldSettler&&kind==="wood"){
+      radius=Math.max(radius,32);
+      maxNodes=Math.max(maxNodes,2048);
+    }
     return search(world,start,t=>kind==="wood"?t.tree:t.bush&&t.berries>0,
       tick,radius,maxNodes);
   }
-  function local(world,start,target,tick){return search(world,start,t=>same(t,target),tick,24);}
+  function local(world,start,target,tick,radius=24,maxNodes=768){
+    if(start.worldSettler){
+      radius=Math.max(radius,36);
+      maxNodes=Math.max(maxNodes,4096);
+    }
+    return search(world,start,t=>same(t,target),tick,radius,maxNodes);
+  }
   function roadStep(world,start,target){
     if(same(start,target))return null;
     const next=start.x!==target.x?{x:start.x+Math.sign(target.x-start.x),z:start.z}:
