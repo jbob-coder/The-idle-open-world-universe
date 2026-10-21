@@ -42,3 +42,17 @@ test("house plot is selected from real terrain and NPC differences",()=>{
   assert.ok(d>=4&&d<=8);
   assert.deepEqual(Infra.chooseHomeSite(world,camp,Agency.create("test",90,90).preferences,250),p);
 });
+
+test("NPCs retain home founding milestones while mundane work memories are bounded",()=>{
+  const mind=Agency.create("resident",64,24);
+  mind.choices=200;
+  Agency.remember(mind,1,"settler_arrive",{});
+  Agency.remember(mind,20,"settler_build",{});
+  for(let tick=40;tick<=190;tick+=10){
+    Agency.remember(mind,tick,tick%20?"settler_harvest":"settler_forage",{});
+  }
+  assert.ok(mind.memories.length<=Agency.MAX_MEMORIES);
+  assert.ok(mind.memories.some(m=>m.action==="settler_arrive"));
+  assert.ok(mind.memories.some(m=>m.action==="settler_build"));
+  assert.ok(Agency.validate(mind,200));
+});
