@@ -137,7 +137,7 @@ test("finished construction beyond 128 lifetime orders never blocks later NPC pr
   const jobs=Projects.create(),builder=worker("road_builder",170);
   const roads=[];
   for(let i=0;i<160;i++){
-    builder.x=i;builder.z=9;
+    builder.x=i;builder.z=9;builder.energy=20; // Independent rest/recovery between construction shifts.
     const site={x:i,z:9},tick=20+i;
     const order=Projects.propose(jobs,"road",site,builder.id,tick);
     assert.ok(order,"valid completed history must not impose a lifetime cap at "+i);
