@@ -4,19 +4,29 @@ const Agency=require("../src/v3/agency.js");
 const Infra=require("../src/v3/infrastructure.js");
 const World=require("../src/v3/world.js");
 
-test("NPCs with different needs and opportunities prefer different actions",()=>{
+test("different personalities choose different legal actions in the same circumstances",()=>{
   const a=Agency.create("a",24,24),b=Agency.create("b",24,24);
   assert.deepEqual(Agency.create("a",24,24),a);
   assert.notDeepEqual(a.preferences,b.preferences);
   const context={hunger:90,energy:20,food:4,wood:4,hasHome:false,roadPending:false};
-  assert.equal(Agency.decide(a,context).action,"build_home");
-  assert.equal(Agency.decide(a,{...context,hasHome:true,roadPending:true}).action,"build_road");
-  assert.equal(Agency.decide(a,{...context,hasHome:true,wood:0,roadPending:true}).action,"gather_wood");
-  assert.equal(Agency.decide(a,{...context,hasHome:true,roadPending:false}).action,"explore");
-  assert.equal(Agency.decide(a,{...context,hunger:55,food:0}).action,"forage");
-  assert.equal(Agency.decide(a,{...context,hunger:55,food:2}).action,"eat");
-  assert.equal(Agency.decide(a,{...context,energy:2}).action,"rest");
-  assert.ok(Agency.decide(a,{...context}).alternatives.length<=3);
+  const home=Agency.create("builder",24,24);
+  home.preferences={curiosity:25,craftsmanship:89,security:89};
+  home.curiosityUrge=0;
+  assert.equal(Agency.decide(home,context).action,"build_home");
+  assert.equal(Agency.decide(home,{...context,hasHome:true,roadPending:true}).action,"build_road");
+  assert.equal(Agency.decide(home,{...context,hasHome:true,wood:0,roadPending:true}).action,"gather_wood");
+  assert.equal(Agency.decide(home,{...context,hunger:55,food:0}).action,"forage");
+  assert.equal(Agency.decide(home,{...context,hunger:55,food:2}).action,"eat");
+  assert.equal(Agency.decide(home,{...context,energy:2}).action,"rest");
+  const curious=Agency.create("wanderer",24,24);
+  curious.preferences={curiosity:89,craftsmanship:25,security:25};
+  curious.curiosityUrge=100;
+  assert.equal(Agency.decide(curious,context).action,"explore");
+  assert.ok(Agency.decide(curious,context).alternatives.some(o=>o.action==="build_home"));
+  for(let n=0;n<5;n++)Agency.commitChoice(curious,"explore");
+  assert.equal(Agency.decide(curious,context).action,"build_home",
+    "satiated curiosity makes the same NPC reconsider construction");
+  assert.ok(Agency.validate(curious,100));
 });
 
 test("bounded NPC memories and decisions reject forged cognition",()=>{
