@@ -1,3 +1,13 @@
+# GODSEED V3 — Gran mundo
+
+This development branch adds a **1,024 × 1,024 tile, offline 3D world** around the existing autonomous settlement: streamed terrain, six land biomes, water, roads, bridges, regional landmarks, an atlas, and an independent explorer who gathers supplies and builds route camps.
+
+Open `GODSEED-V3-Play.html` and select **Gran mundo** (or use `?mode=world`). A valid existing society save is copied into a separate large-world slot on first entry. Use the atlas or drag to observe distant regions; **Seguir explorador** follows the expedition.
+
+[Implementation, controls, save ownership, and next work](docs/V3_LARGE_WORLD_2026-10-20.md). **Source implementation; gameplay/browser/Android validation was not run for this creation-focused task.** The HTML was assembled from source, and this branch does not supply a new APK.
+
+## Earlier project milestones and compatibility history
+
 > **GODSEED V3 REBUILD — ACTIVE DIRECTION (2026-10-20):** The current target is an **autonomous medieval 3D Pixel Squares God-observer world**, not a 2D-only skyview game. This branch contains a *separate*, offline 20×20 WebGL proof with two independently acting residents, finite wood, one shelter and isolated V3 browser saves. An isolated **experimental Gradle Android V3 APK** now exists in [android/v3](android/v3), separate from the original game; this is **not** a certified release, complete civilization, or physical-device performance result. See [preview packaging and verification limits](docs/V3_ANDROID_PREVIEW.md). The chapters and 2D constraints described below are legacy compatibility history. Start with [V3 verified scope](docs/V3_REBUILD_VERIFIED_STATE.md), [active agent instructions](AGENTS.md) and the [owner's product authority](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md). Do not delete or overwrite legacy saves.
 
 ## Playable story milestone — Chapter I: The Mossbound Oath

@@ -1,3 +1,11 @@
+# Current branch addition — V3 large world (2026-10-20)
+
+This branch extends the current settlement line with the opt-in **Gran mundo** mode (`?mode=world`). Its world is 1,024 × 1,024 tiles; the original 20 × 20 settlement remains its local simulation core. The source modules `src/v3/world.js`, `world_travel.js`, `expedition.js`, `world_sim.js`, and `atlas.js` compose with the existing V3 modules. Read [the implementation handoff](docs/V3_LARGE_WORLD_2026-10-20.md) before changing generator version 1, save ownership, resource ledgers, or streaming limits.
+
+The large-world key is `godseed-v3-large-world-v1`; solo and local society keys are untouched. No gameplay validation was run for this owner's creation-focused task; historical evidence below must not be attributed to this extension. This task-specific scope is not a permanent removal of later verification requirements.
+
+---
+
 # GODSEED V3 — ACTIVE AGENT INSTRUCTIONS (2026-10-20)
 
 **The owner's current direction is the offline Android 3D Pixel Squares autonomous-civilization game.** The old instructions under the separator are **historical Canvas 2D compatibility guidance**, not a prohibition on WebGL/3D, nor a standing assignment to the 2010s-era Codex branches. Resolve all conflicts through the [current project authority](https://github.com/jbob-coder/The-idle-open-world-universe/blob/docs/godseed-agent-task-governance-v1/docs/PROJECT_AUTHORITY_AND_REFERENCE_STATUS.md) and the latest direct owner decisions. This override applies **before** any prior “hard,” “binding,” or “non-negotiable” statement below.
