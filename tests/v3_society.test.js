@@ -108,7 +108,8 @@ test("extended 10k-tick society keeps finite resources and persistent roles",()=
   const game=Sim.create(14);
   const s=game.advance(10000);
   assert.equal(s.citizens.length,3);
-  assert.equal(s.structures.length,3);
+  assert.equal(s.structures.length,4);
+  assert.equal(s.outpost.status,"established");
   assert.ok(s.citizens.every(c=>c.alive));
   assert.ok(s.settlement.elections>=1);
   assert.ok(s.events.length<=96);
@@ -122,7 +123,7 @@ test("the elected leader delegates three different jobs with observable results 
   for(let seed=1;seed<=100;seed++){
     const game=Sim.create(seed),s=game.advance(2000);
     const roles=Object.fromEntries(s.citizens.map(c=>[c.role,c]));
-    assert.equal(s.schemaVersion,2);
+    assert.equal(s.schemaVersion,3);
     assert.equal(s.settlement.orders.length,3);
     assert.deepEqual(Object.keys(roles).sort(),["builder","forager","steward"]);
     assert.equal(roles.steward.id,s.settlement.leaderId);
@@ -148,7 +149,7 @@ test("authentic schema-1 society save migrates without changing historical peopl
   assert.equal(previous.citizens.length,3);
   assert.ok(previous.settlement.leaderId);
   const game=Sim.restore(raw),s=game.snapshot();
-  assert.equal(s.schemaVersion,2);
+  assert.equal(s.schemaVersion,3);
   for(const name of ["tick","wood","food","harvested","spentWood","foodGathered","foodEaten"])
     assert.equal(s[name],previous[name],"retain "+name);
   assert.deepEqual(s.forest,previous.forest);
@@ -199,10 +200,89 @@ test("twenty thousand ticks preserve deterministic work, memory bounds and finit
   const a=once.advance(20000);
   for(let i=0;i<100;i++)chunks.advance(200);
   assert.deepEqual(a,chunks.snapshot());
-  assert.equal(a.wood,a.harvested-a.craftedWood-a.spentWood);
+  assert.equal(a.wood+a.outpost.wood+a.outpost.cargoWood,
+    a.harvested-a.craftedWood-a.spentWood);
   assert.equal(a.harvested+a.forest.length,Sim.create(42).snapshot().forest.length);
   assert.ok(a.settlement.elections>0&&a.settlement.ordersIssued>0);
   assert.ok(a.citizens.every(c=>c.alive&&c.memories.length<=12));
   assert.ok(once.serialize().length<64000);
   assert.equal(Sim.validate(a),true);
+});
+
+
+test("100 worlds found an actual second community after council approval and a travelled building",()=>{
+  for(let seed=1;seed<=100;seed++){
+    const sim=Sim.create(seed),before=sim.snapshot();
+    const s=sim.advance(3600);
+    const out=s.outpost,house=s.structures[3],founder=s.citizens.find(c=>c.id===out.founderId);
+    assert.equal(s.schemaVersion,3);
+    assert.equal(out.status,"established","outpost seed "+seed);
+    assert.equal(s.structures.length,4);
+    assert.equal(s.citizens.length,3,"the settlement must not create people");
+    assert.equal(out.approvedBy,s.settlement.leaderId);
+    assert.ok(out.approvedAt>=2400&&out.foundedAt>out.approvedAt);
+    assert.deepEqual([house.id,house.x,house.z],["east_outpost",15,13]);
+    assert.equal(house.builder,founder.id);
+    assert.equal(founder.homeId,"village_02");
+    assert.equal(s.citizens.filter(c=>c.homeId==="village_01").length,2);
+    assert.ok(s.forest.every(t=>
+      t.x<14||t.x>17||t.z<12||t.z>15),"no trees cross outpost structure "+seed);
+    assert.ok(out.deliveries>=1,"physical courier delivery "+seed);
+    assert.ok(s.events.length<=96);
+    assert.equal(s.wood+out.wood+out.cargoWood,s.harvested-s.craftedWood-s.spentWood);
+    assert.equal(s.food+out.food+(out.delivery?out.delivery.food:0),
+      s.foodGathered-s.foodEaten);
+    assert.equal(s.harvested+s.forest.length,before.forest.length);
+    assert.ok(s.citizens.every(c=>c.alive),"all three survive seed "+seed);
+    assert.equal(Sim.validate(s),true,"frontier conservation "+seed);
+    assert.deepEqual(Sim.restore(sim.serialize()).snapshot(),s);
+  }
+});
+
+test("schema-2 saves migrate exactly before new expedition and subsequently grow another community",()=>{
+  const fs=require("node:fs"),path=require("node:path");
+  const raw=fs.readFileSync(path.join(__dirname,"fixtures/v3_society_schema2_seed14.json"),"utf8");
+  const before=JSON.parse(raw);
+  assert.equal(before.schemaVersion,2);
+  const sim=Sim.restore(raw),initial=sim.snapshot();
+  assert.equal(initial.schemaVersion,3);
+  assert.equal(initial.outpost.status,"unfounded");
+  for(const key of ["tick","wood","food","harvested","spentWood","foodGathered","foodEaten"])
+    assert.equal(initial[key],before[key],"migrated "+key);
+  assert.deepEqual(initial.forest,before.forest);
+  assert.deepEqual(initial.structures,before.structures);
+  assert.deepEqual(initial.settlement,before.settlement);
+  assert.deepEqual(initial.events,before.events);
+  assert.ok(initial.citizens.every(c=>c.homeId==="village_01"));
+  assert.equal(Sim.validate(initial),true);
+  const later=sim.advance(350);
+  assert.equal(later.outpost.status,"established");
+  assert.equal(later.structures.length,4);
+  assert.equal(Sim.validate(later),true);
+  assert.deepEqual(Sim.restore(sim.serialize()).snapshot(),later);
+  const stolen=JSON.parse(raw);stolen.wood++;
+  assert.throws(()=>Sim.restore(JSON.stringify(stolen)),RangeError);
+});
+
+test("reserve accounts, forged couriers and historical founder IDs fail closed",()=>{
+  const game=Sim.create(14);game.advance(3600);
+  const corruptions=[
+    s=>s.outpost.wood++,
+    s=>s.outpost.food++,
+    s=>s.outpost.deliveries=-1,
+    s=>s.outpost.founderId="sim_unknown",
+    s=>s.outpost.approvedAt=s.tick+1,
+    s=>s.outpost.foundedAt=s.outpost.approvedAt-1,
+    s=>s.outpost.site.x=0,
+    s=>s.structures[3].x=0,
+    s=>s.citizens.find(c=>c.id===s.outpost.founderId).homeId="village_01",
+    s=>s.outpost.cargoWood=4,
+    s=>s.outpost.delivery={courierId:s.outpost.founderId,food:2,startedAt:s.tick},
+    s=>s.outpost.delivery={courierId:"sim_elen",food:200,startedAt:s.tick}
+  ];
+  for(const corrupt of corruptions){
+    const s=game.snapshot();corrupt(s);
+    assert.equal(Sim.validate(s),false,corrupt.toString());
+    assert.throws(()=>Sim.restore(JSON.stringify(s)),RangeError);
+  }
 });
