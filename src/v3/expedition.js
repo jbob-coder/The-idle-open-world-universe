@@ -103,7 +103,7 @@
       ?Infra.next(world,s.camps.concat(s.houses),s.roads,tick):null;
     const decision=Agency.decide(c.mind,{hunger:c.hunger,energy:c.energy,
       food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site});
-    c.mind.choices++;c.mind.lastChoice=decision.action;
+    Agency.commitChoice(c.mind,decision.action);
     if(decision.action==="forage"){gather("food");return;}
     if(decision.action==="gather_wood"){gather("wood");return;}
     if(decision.action==="build_home"){
