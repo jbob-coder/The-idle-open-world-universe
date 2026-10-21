@@ -35,6 +35,31 @@
     return [];
   }
 
+  // A resident weighs terrain, personal preferences and reachable free ground.
+  // This is a candidate search, not a named settlement or preauthored building.
+  function chooseHomeSite(world,camp,preferences,tick){
+    const choices=[];
+    for(let dz=-6;dz<=6;dz++)for(let dx=-6;dx<=6;dx++){
+      const x=camp.x+dx,z=camp.z+dz,d=Math.abs(dx)+Math.abs(dz);
+      if(d<4||d>8)continue;
+      const t=world.sample(x,z,tick);
+      if(!t||!t.walkable||t.tree||t.bush||
+         t.kind!=="ground")continue;
+      // Favor level, reachable land with modest spatial variation. A cautious
+      // NPC tends toward a sheltered home; a curious one accepts remoteness.
+      const elevation=Math.abs(t.height-(world.sample(camp.x,camp.z,tick)?.height||0));
+      const preference=((preferences.curiosity*17+preferences.security*11+
+        Math.imul(x,1327)+Math.imul(z,1999))>>>0)%37;
+      const score=elevation*35+Math.abs(d-(preferences.curiosity>55?6:4))*7+
+        preference/5;
+      choices.push({x,z,score});
+    }
+    choices.sort((a,b)=>a.score-b.score||a.z-b.z||a.x-b.x);
+    for(const p of choices.slice(0,18)){
+      if(Nav.local(world,camp,p,tick,24,1024))return {x:p.x,z:p.z};
+    }
+    return null;
+  }
   function next(world,structures,roads,tick){
     const route=plan(world,structures,tick),done=new Set(roads.map(key));
     return route.find(tile=>!done.has(key(tile)))||null;
@@ -53,5 +78,5 @@
     }
     return true;
   }
-  return Object.freeze({plan,next,validate,MAX_LOCAL_ROAD});
+  return Object.freeze({plan,next,validate,chooseHomeSite,MAX_LOCAL_ROAD});
 });

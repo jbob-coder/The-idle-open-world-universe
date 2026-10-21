@@ -1,5 +1,10 @@
 # GODSEED V3 — Gran mundo
 
+**Owner decision — living world, no chapters:** New GODSEED world gameplay is an open-ended simulation. NPCs choose from feasible goals based on individual needs, preferences, resources and consequences. They must build settlements, roads and eventual kingdoms through physical work and cooperation, not follow chapters or a predetermined ruler/capital. Older chapter prototypes remain as compatibility history only. See [Living World & NPC Agency ADR](docs/design/GODSEED_LIVING_WORLD_AGENCY_ADR.md).
+
+**Current playable proof, not a finished kingdom:** autonomous frontier house-site selection, personal choice/memory, real material-funded roads and save schema 4 are in an isolated draft branch. Earlier hardcoded homeland placement, Taren's itinerary and kingdom-scale institutions are explicitly unfinished.
+
+
 This development branch adds a **1,024 × 1,024 tile, offline 3D world** around the existing autonomous settlement: streamed terrain, six land biomes, water, roads, bridges, regional landmarks, an atlas, and an independent explorer who gathers supplies and builds route camps.
 
 Open `GODSEED-V3-Play.html` and select **Gran mundo** (or use `?mode=world`). A valid existing society save is copied into a separate large-world slot on first entry. Use the atlas or drag to observe distant regions; **Seguir explorador** follows the expedition.

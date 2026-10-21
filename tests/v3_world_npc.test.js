@@ -33,13 +33,13 @@ test("schema 1 world saves remain loadable without retroactive NPC creation",()=
   const original=game.snapshot();
   assert.equal(original.expedition.camps.length,0);
   const raw=JSON.parse(game.serialize());
-  assert.equal(raw.schemaVersion,3);
+  assert.equal(raw.schemaVersion,4);
   raw.schemaVersion=1;
   for(const key of ["settlers","houses","settlerWoodGathered",
     "settlerFoodGathered","settlerFoodEaten"])delete raw.expedition[key];
   const migrated=WorldSim.restore(JSON.stringify(raw));
   assert.deepEqual(migrated.snapshot().expedition,original.expedition);
-  assert.equal(JSON.parse(migrated.serialize()).schemaVersion,3);
+  assert.equal(JSON.parse(migrated.serialize()).schemaVersion,4);
   assert.equal(migrated.snapshot().world.frontierResidents,0);
 });
 
@@ -112,13 +112,13 @@ test("NPC roads arise from built settlement structures and survive reload",()=>{
 test("schema 2 world migrates roads to an empty list without fabrication",()=>{
   const game=WorldSim.create(77);game.advance(650);
   const prior=JSON.parse(game.serialize());
-  assert.equal(prior.schemaVersion,3);
+  assert.equal(prior.schemaVersion,4);
   assert.equal(prior.expedition.roads.length,0,"legacy fixture cannot include new roads");
   prior.schemaVersion=2;
   delete prior.expedition.roads;
   const restored=WorldSim.restore(JSON.stringify(prior));
   assert.deepEqual(restored.snapshot(),game.snapshot());
-  assert.equal(JSON.parse(restored.serialize()).schemaVersion,3);
+  assert.equal(JSON.parse(restored.serialize()).schemaVersion,4);
 });
 
 test("world rejects road material forgery and forged construction chronology",()=>{
@@ -137,5 +137,48 @@ test("world rejects road material forgery and forged construction chronology",()
   for(const modify of alterations){
     const attack=JSON.parse(JSON.stringify(saved));modify(attack);
     assert.throws(()=>WorldSim.restore(JSON.stringify(attack)),RangeError);
+  }
+});
+
+test("frontier NPC selects terrain-driven home and remembers independent activities",()=>{
+  const game=WorldSim.create(14),s=game.advance(3500);
+  const mira=s.expedition.settlers[0],home=s.expedition.houses[0],camp=s.expedition.camps[0];
+  assert.ok(mira&&home&&camp&&mira.mind);
+  assert.deepEqual({x:home.x,z:home.z},mira.homeSite);
+  assert.ok(Math.abs(home.x-camp.x)+Math.abs(home.z-camp.z)>=4);
+  assert.ok(mira.mind.choices>0);
+  assert.ok(["build_road","explore","reflect","forage","gather_wood"].includes(mira.mind.lastChoice));
+  assert.ok(mira.mind.memories.some(m=>m.action==="settler_build"));
+  const now=WorldSim.restore(game.serialize());
+  assert.deepEqual(now.snapshot(),s,"personality and long-term interests survive restart");
+});
+
+test("schema 3 living-world upgrades preserve old homes and roads",()=>{
+  const game=WorldSim.create(14),initial=game.advance(3500);
+  const old=JSON.parse(game.serialize());old.schemaVersion=3;
+  const resident=old.expedition.settlers[0];
+  delete resident.homeSite;delete resident.mind;
+  const restored=WorldSim.restore(JSON.stringify(old)).snapshot();
+  assert.deepEqual(restored.expedition.houses,initial.expedition.houses);
+  assert.deepEqual(restored.expedition.roads,initial.expedition.roads);
+  assert.deepEqual(restored.expedition.settlers[0].homeSite,
+    {x:initial.expedition.houses[0].x,z:initial.expedition.houses[0].z});
+  assert.equal(restored.expedition.settlers[0].mind.choices,0);
+  assert.equal(restored.world.constructedRoads,initial.world.constructedRoads);
+});
+
+test("mind, home site and decision forgery reject corrupted world saves",()=>{
+  const game=WorldSim.create(14);game.advance(3500);
+  const raw=JSON.parse(game.serialize());
+  const edits=[
+    x=>x.expedition.settlers[0].homeSite.x+=99,
+    x=>x.expedition.settlers[0].mind.preferences.curiosity=-1,
+    x=>x.expedition.settlers[0].mind.memories[0].tick=x.homeland.tick+1,
+    x=>x.expedition.settlers[0].mind.choices=x.homeland.tick+1,
+    x=>x.expedition.settlers[0].mind.lastChoice="complete_chapter"
+  ];
+  for(const modify of edits){
+    const changed=JSON.parse(JSON.stringify(raw));modify(changed);
+    assert.throws(()=>WorldSim.restore(JSON.stringify(changed)),RangeError);
   }
 });
