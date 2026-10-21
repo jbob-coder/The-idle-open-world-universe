@@ -329,7 +329,7 @@
     if(!c||c.id!=="world_taren"||c.name!=="Taren"||c.trait!=="cartógrafo"||c.worldExplorer!==true||
       !positive(c.bornAt)||c.bornAt<600||c.bornAt>tick||!world.walkable(c.x,c.z)||
       !c.anchor||!Number.isInteger(c.anchor.x)||!Number.isInteger(c.anchor.z)||
-      c.anchor.x< -424||c.anchor.x>472||c.anchor.z< -424||c.anchor.z>472||
+      c.anchor.x< -488||c.anchor.x>472||c.anchor.z< -488||c.anchor.z>472||
       (c.anchor.x-24)%64!==0||(c.anchor.z-24)%64!==0||
       !positive(c.routeIndex)||c.routeIndex>(c.routeMode==="free"?
         Discovery.MAX_DISCOVERIES:ROUTE.length)||
