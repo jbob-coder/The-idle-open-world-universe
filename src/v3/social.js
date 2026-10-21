@@ -14,9 +14,11 @@
    if(!a.alive||!b.alive||dist(a,b)>MEET_RADIUS||
       a.energy<4||b.energy<4||a.hunger<45||b.hunger<45)return false;
    // Their own curiosity/security influences whether either person wishes to talk.
-   const am=a.mind?.preferences,bm=b.mind?.preferences;
-   const welcome=(am?.curiosity??55)+(bm?.curiosity??50)-
-     Math.floor((am?.security??50)/2)-Math.floor((bm?.security??50)/2);
+   const am=a.mind&&a.mind.preferences,bm=b.mind&&b.mind.preferences;
+   const preference=(p,k,fallback)=>p&&p[k]!==undefined?p[k]:fallback;
+   const welcome=preference(am,"curiosity",55)+preference(bm,"curiosity",50)-
+     Math.floor(preference(am,"security",50)/2)-
+     Math.floor(preference(bm,"security",50)/2);
    if(welcome<35)return false;
    let tie=s.social.ties.find(t=>t.a===a.id&&t.b===b.id);
    if(tie&&tick-tie.lastAt<COOLDOWN)return false;
