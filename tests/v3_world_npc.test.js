@@ -33,13 +33,17 @@ test("schema 1 world saves remain loadable without retroactive NPC creation",()=
   const original=game.snapshot();
   assert.equal(original.expedition.camps.length,0);
   const raw=JSON.parse(game.serialize());
-  assert.equal(raw.schemaVersion,4);
+  assert.equal(raw.schemaVersion,5);
   raw.schemaVersion=1;
   for(const key of ["settlers","houses","settlerWoodGathered",
     "settlerFoodGathered","settlerFoodEaten"])delete raw.expedition[key];
   const migrated=WorldSim.restore(JSON.stringify(raw));
-  assert.deepEqual(migrated.snapshot().expedition,original.expedition);
-  assert.equal(JSON.parse(migrated.serialize()).schemaVersion,4);
+  assert.equal(migrated.snapshot().expedition.explorer?.routeMode,"legacy");
+  assert.deepEqual(migrated.snapshot().expedition.camps,original.expedition.camps);
+  assert.deepEqual(migrated.snapshot().expedition.discoveries,original.expedition.discoveries);
+  assert.equal(migrated.snapshot().expedition.explorer?.x,original.expedition.explorer?.x);
+  assert.equal(migrated.snapshot().expedition.explorer?.z,original.expedition.explorer?.z);
+  assert.equal(JSON.parse(migrated.serialize()).schemaVersion,5);
   assert.equal(migrated.snapshot().world.frontierResidents,0);
 });
 
@@ -112,13 +116,15 @@ test("NPC roads arise from built settlement structures and survive reload",()=>{
 test("schema 2 world migrates roads to an empty list without fabrication",()=>{
   const game=WorldSim.create(77);game.advance(650);
   const prior=JSON.parse(game.serialize());
-  assert.equal(prior.schemaVersion,4);
+  assert.equal(prior.schemaVersion,5);
   assert.equal(prior.expedition.roads.length,0,"legacy fixture cannot include new roads");
   prior.schemaVersion=2;
   delete prior.expedition.roads;
   const restored=WorldSim.restore(JSON.stringify(prior));
-  assert.deepEqual(restored.snapshot(),game.snapshot());
-  assert.equal(JSON.parse(restored.serialize()).schemaVersion,4);
+  assert.equal(restored.snapshot().expedition.explorer?.routeMode,"legacy");
+  assert.deepEqual(restored.snapshot().expedition.camps,game.snapshot().expedition.camps);
+  assert.deepEqual(restored.snapshot().expedition.discoveries,game.snapshot().expedition.discoveries);
+  assert.equal(JSON.parse(restored.serialize()).schemaVersion,5);
 });
 
 test("world rejects road material forgery and forged construction chronology",()=>{
@@ -153,18 +159,37 @@ test("frontier NPC selects terrain-driven home and remembers independent activit
   assert.deepEqual(now.snapshot(),s,"personality and long-term interests survive restart");
 });
 
-test("schema 3 living-world upgrades preserve old homes and roads",()=>{
-  const game=WorldSim.create(14),initial=game.advance(3500);
-  const old=JSON.parse(game.serialize());old.schemaVersion=3;
-  const resident=old.expedition.settlers[0];
-  delete resident.homeSite;delete resident.mind;
-  const restored=WorldSim.restore(JSON.stringify(old)).snapshot();
-  assert.deepEqual(restored.expedition.houses,initial.expedition.houses);
-  assert.deepEqual(restored.expedition.roads,initial.expedition.roads);
-  assert.deepEqual(restored.expedition.settlers[0].homeSite,
-    {x:initial.expedition.houses[0].x,z:initial.expedition.houses[0].z});
-  assert.equal(restored.expedition.settlers[0].mind.choices,0);
-  assert.equal(restored.world.constructedRoads,initial.world.constructedRoads);
+test("schema 3 checkpoints migrate without fabricating settlements",()=>{
+  const game=WorldSim.create(26),initial=game.advance(650);
+  const raw=JSON.parse(game.serialize());
+  assert.equal(raw.schemaVersion,5);
+  assert.equal(raw.expedition.houses.length,0);
+  raw.schemaVersion=3;
+  delete raw.expedition.explorer.routeMode;
+  delete raw.expedition.explorer.target;
+  delete raw.expedition.explorer.mind;
+  const outcome=WorldSim.restore(JSON.stringify(raw)).snapshot();
+  assert.equal(outcome.expedition.explorer.routeMode,"legacy");
+  assert.deepEqual(outcome.expedition.camps,initial.expedition.camps);
+  assert.deepEqual(outcome.expedition.roads,initial.expedition.roads);
+  assert.equal(outcome.expedition.houses.length,0);
+  assert.equal(outcome.world.constructedRoads,initial.world.constructedRoads);
+});
+
+test("free-world saves reject forged explorer itinerary and discoveries",()=>{
+  const game=WorldSim.create(14);game.advance(2400);
+  const saved=JSON.parse(game.serialize());
+  assert.equal(saved.expedition.explorer.routeMode,"free");
+  const edits=[
+    x=>x.expedition.explorer.routeMode="scripted_chapter",
+    x=>x.expedition.explorer.target={x:12345,z:12345,id:"made_up"},
+    x=>x.expedition.explorer.mind.preferences.curiosity=-2,
+    x=>x.expedition.discoveries.push({...x.expedition.discoveries[0],tick:99999})
+  ];
+  for(const modify of edits){
+    const payload=JSON.parse(JSON.stringify(saved));modify(payload);
+    assert.throws(()=>WorldSim.restore(JSON.stringify(payload)),RangeError);
+  }
 });
 
 test("mind, home site and decision forgery reject corrupted world saves",()=>{

@@ -8,7 +8,9 @@
  const ACTIONS=Object.freeze(["eat","rest","forage","gather_wood","build_home",
    "build_road","explore","reflect"]);
  const EVENTS=new Set(["settler_build","settler_build_road","settler_forage",
-   "settler_harvest","settler_eat","settler_arrive","settler_death","settler_explore"]);
+   "settler_harvest","settler_eat","settler_arrive","settler_death","settler_explore",
+   "expedition_arrive","discover","build_camp","eat","forage","harvest","death",
+   "meet","settler_meet"]);
  const MAX_MEMORIES=16;
  const positive=n=>Number.isSafeInteger(n)&&n>=0;
  const clamp=n=>Math.max(0,Math.min(100,n));

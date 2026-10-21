@@ -89,6 +89,7 @@
         statsPair(stats,"Lugares descubiertos",state.world.discoveredRegions);
         statsPair(stats,"Campamentos de ruta",state.world.camps);
         statsPair(stats,"Caminos construidos por NPC",state.world.constructedRoads);
+        statsPair(stats,"Vínculos personales",state.world.socialConnections);
       }
       statsPair(stats,"Habitantes",state.citizens.length);
       statsPair(stats,useWorld?"Madera de la aldea":"Madera disponible",state.wood);
