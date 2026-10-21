@@ -8,21 +8,23 @@
   const Society=node?require("./society.js"):globalThis.GodseedV3Society;
   const World=node?require("./world.js"):globalThis.GodseedV3World;
   const Expedition=node?require("./expedition.js"):globalThis.GodseedV3Expedition;
-  const VERSION=1,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
+  const VERSION=2,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
   const copy=x=>JSON.parse(JSON.stringify(x));
   function instance(homeland,world,expedition){
     let home=homeland.snapshot(),sceneCache=null,sceneKey="";
     function snapshot(){
       const result=copy(home),c=expedition.explorer;
       if(c)result.citizens.push(copy(c));
-      result.structures=result.structures.concat(copy(expedition.camps));
+      result.citizens=result.citizens.concat(copy(expedition.settlers));
+      result.structures=result.structures.concat(copy(expedition.camps),copy(expedition.houses));
       result.events=result.events.concat(copy(expedition.events)).sort((a,b)=>a.tick-b.tick).slice(-96);
       result.expedition=Expedition.snapshot(expedition);
       result.world={size:World.SIZE,min:World.MIN,max:World.MAX,tileCount:World.SIZE*World.SIZE,
         chunkSize:World.CHUNK,regionSize:World.REGION,regions:256,
         discoveredRegions:expedition.discoveries.length,knownChunks:expedition.knownChunks.length,
         biome:World.terrain(home.seed,c?c.x:5,c?c.z:5).biome,
-        homelandCitizens:home.citizens.length,camps:expedition.camps.length};
+        homelandCitizens:home.citizens.length,camps:expedition.camps.length,
+        frontierResidents:expedition.settlers.length,frontierHomes:expedition.houses.length};
       return result;
     }
     function advance(n){
@@ -76,14 +78,16 @@
   function restore(raw){
     if(typeof raw!=="string"||raw.length>SAVE_LIMIT)throw RangeError("invalid large-world save");
     const s=JSON.parse(raw);
-    if(!s||s.schemaVersion!==VERSION||!s.homeland||s.seed!==s.homeland.seed||!s.wilderness)
+    if(!s||![1,VERSION].includes(s.schemaVersion)||!s.homeland||
+      s.seed!==s.homeland.seed||!s.wilderness)
       throw RangeError("incompatible large-world save");
     const homeland=Society.restore(JSON.stringify(s.homeland)),tick=homeland.snapshot().tick;
     const world=World.create(s.seed,s.wilderness);
+    const expedition=s.schemaVersion===1?Expedition.migrateLegacy(s.expedition):s.expedition;
     if(s.wilderness.berries.some(b=>b.at>tick)||
-      !Expedition.validate(s.expedition,world,tick,s.wilderness.removed.length))
+      !Expedition.validate(expedition,world,tick,s.wilderness.removed.length))
       throw RangeError("invalid wilderness progress");
-    return instance(homeland,world,copy(s.expedition));
+    return instance(homeland,world,copy(expedition));
   }
   return Object.freeze({VERSION,STORAGE_KEY,create,restore,fromSociety});
 });
