@@ -132,3 +132,37 @@ test("live explorer finances a camp through shifts, independent of Mira's housin
     "Mira should enter only after a physical shelter is actually built");
   assert.deepEqual(WorldSim.restore(game.serialize()).snapshot(),later);
 });
+
+test("finished construction beyond 128 lifetime orders never blocks later NPC projects",()=>{
+  const jobs=Projects.create(),builder=worker("road_builder",170);
+  const roads=[];
+  for(let i=0;i<160;i++){
+    builder.x=i;builder.z=9;
+    const site={x:i,z:9},tick=20+i;
+    const order=Projects.propose(jobs,"road",site,builder.id,tick);
+    assert.ok(order,"valid completed history must not impose a lifetime cap at "+i);
+    assert.equal(Projects.contribute(jobs,order,builder,tick).completed,true);
+    roads.push({...site,completedAt:tick});
+    if(i===0||i===127||i===159)
+      assert.equal(Projects.validate(jobs,tick,[],roads,[builder]),i+1);
+  }
+  assert.equal(jobs.entries.length,160);
+  assert.equal(builder.wood,10);
+  assert.deepEqual(JSON.parse(JSON.stringify(jobs)),jobs,"large ledgers remain JSON-persistable");
+  assert.equal(Projects.validate(jobs,179,[],roads,[builder]),160);
+});
+
+test("only three unfinished construction sites coexist and fake receipts cannot expand them",()=>{
+  const jobs=Projects.create(),builder=worker("builder",10);
+  for(let i=0;i<3;i++)
+    assert.ok(Projects.propose(jobs,"road",{x:30+i,z:40},builder.id,20+i));
+  assert.equal(Projects.propose(jobs,"road",{x:34,z:40},builder.id,24),null);
+  assert.equal(Projects.validate(jobs,24,[],[],[builder]),0);
+  const invalid=JSON.parse(JSON.stringify(jobs));
+  invalid.entries.push({...invalid.entries[0],id:"road:35,40",x:35});
+  assert.equal(Projects.validate(invalid,24,[],[],[builder]),false);
+  const done=jobs.entries[0];builder.x=done.x;builder.z=done.z;
+  assert.equal(Projects.contribute(jobs,done,builder,25).completed,true);
+  assert.ok(Projects.propose(jobs,"road",{x:34,z:40},builder.id,26));
+  assert.equal(Projects.validate(jobs,26,[],[{x:30,z:40,completedAt:25}],[builder]),1);
+});
