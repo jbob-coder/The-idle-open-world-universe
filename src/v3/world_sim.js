@@ -12,6 +12,10 @@
   const copy=x=>JSON.parse(JSON.stringify(x));
   function instance(homeland,world,expedition){
     let home=homeland.snapshot(),sceneCache=null,sceneKey="";
+    // Camera chunks are independent of AI ticks. Keep immutable source tiles
+    // until the exact next visual berry change or a terrain resource edit.
+    let terrainCache=null,terrainKey="",terrainFreshUntil=0;
+    let terrainWindowsBuilt=0,terrainWindowsReused=0;
     function snapshot(){
       const result=copy(home),c=expedition.explorer;
       if(c)result.citizens.push(copy(c));
@@ -50,13 +54,18 @@
       const id=home.tick+":"+cx+":"+cz+":"+radius;
       if(sceneCache&&sceneKey===id)return sceneCache;
       const result=snapshot(),visible=p=>Math.abs(p.x-cx)<=radius&&Math.abs(p.z-cz)<=radius;
-      result.terrain=world.windowAt(cx,cz,radius,home.tick);
-      // Apply only completed, paid NPC roads as presentation overlays.
-      // The terrain generator remains authoritative for collision and geography.
+      const resourceRevision=world.metrics().revision;
+      const tileKey=cx+":"+cz+":"+radius+":"+resourceRevision;
+      if(!terrainCache||terrainKey!==tileKey||home.tick>=terrainFreshUntil){
+        terrainCache=world.windowAt(cx,cz,radius,home.tick);
+        terrainKey=tileKey;terrainFreshUntil=world.nextVisualChange(home.tick);
+        terrainWindowsBuilt++;
+      }else terrainWindowsReused++;
+      // Keep tile source immutable. Completed roads are overlays, not changes
+      // to the procedural terrain cache, so revisits cannot duplicate edits.
       const made=new Set(expedition.roads.map(p=>p.x+","+p.z));
-      for(const tile of result.terrain)if(made.has(tile.x+","+tile.z)){
-        tile.kind="road";tile.color=[.58,.43,.29];
-      }
+      result.terrain=terrainCache.map(tile=>made.has(tile.x+","+tile.z)?
+        Object.assign({},tile,{kind:"road",color:[.58,.43,.29]}):tile);
       result.forest=home.forest.filter(visible).map(p=>Object.assign({},p));
       result.bushes=home.bushes.filter(visible).map(p=>Object.assign({},p));
       for(const tile of result.terrain){
@@ -80,7 +89,7 @@
     }
     return Object.freeze({snapshot,advance,scene,serialize,
       terrain:(x,z)=>world.sample(x,z,home.tick),region:(x,z)=>world.region(x,z),
-      metrics:()=>world.metrics()});
+      metrics:()=>Object.assign({},world.metrics(),{terrainWindowsBuilt,terrainWindowsReused})});
   }
   function create(seed){return instance(Society.create(seed),World.create(seed),Expedition.create());}
   function fromSociety(raw){
