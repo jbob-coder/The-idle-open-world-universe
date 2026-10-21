@@ -88,6 +88,7 @@
         statsPair(stats,"Regiones",state.world.regions);
         statsPair(stats,"Lugares descubiertos",state.world.discoveredRegions);
         statsPair(stats,"Campamentos de ruta",state.world.camps);
+        statsPair(stats,"Caminos construidos por NPC",state.world.constructedRoads);
       }
       statsPair(stats,"Habitantes",state.citizens.length);
       statsPair(stats,useWorld?"Madera de la aldea":"Madera disponible",state.wood);
@@ -118,6 +119,11 @@
           desc.textContent="Objetivo: "+c.goal+" | Posición "+c.x+", "+c.z+
             " | Salud "+c.health+"/100 | Saciedad "+c.hunger+"/100 | Energía "+c.energy+
             "/20 | Mochila: "+c.food+" comida / "+c.wood+" madera | Regiones visitadas "+c.routeIndex;
+        }else if(c.worldSettler){
+          desc.textContent="Objetivo: "+c.goal+" | Posición "+c.x+", "+c.z+
+            " | Salud "+c.health+"/100 | Saciedad "+c.hunger+"/100"+
+            " | Energía "+c.energy+"/20 | Mochila "+c.food+" comida / "+
+            c.wood+" madera | Campamento "+c.homeCampId;
         }else if(c.mind){
           const mind=c.mind;
           desc.textContent="Objetivo: "+c.goal+
@@ -150,7 +156,7 @@
         policy.textContent="Prioridad: "+council.policy+" | Evidencia: "+council.policyReason;
         memoryPanel.appendChild(policy);
         for(const person of state.citizens){
-          if(person.worldExplorer)continue;
+          if(person.worldExplorer||person.worldSettler)continue;
           const note=document.createElement("div");
           const latest=person.memories.length?person.memories[person.memories.length-1]:null;
           note.textContent=person.name+" · "+person.role+" · "+person.ordersCompleted+
@@ -190,7 +196,14 @@
           found_outpost:"fundó Colina Oriental",
           dispatch:"despachó provisiones",deliver:"entregó alimentos",
           expedition_arrive:"llegó para explorar el gran mundo",
-          build_camp:"construyó un refugio de ruta"};
+          build_camp:"construyó un refugio de ruta",
+          settler_arrive:"llegó al campamento",
+          settler_harvest:"cosechó madera silvestre",
+          settler_forage:"recolectó comida silvestre",
+          settler_eat:"consumió provisiones",
+          settler_build:"construyó su propia casa",
+          settler_build_road:"construyó un tramo de camino",
+          settler_death:"falleció en la frontera"};
         div.textContent="Ciclo "+e.tick+" · "+e.actor+": "+(labels[e.action]||e.action)+
           (e.action==="build"&&e.details.site?" ("+e.details.site+")":"")+
           (e.action==="discover"&&e.details.name?" · "+e.details.name:"");
