@@ -74,9 +74,11 @@ test("world keeps an open construction job and paid timber on restart",()=>{
       found=true;
       assert.equal(open.type,"home");
       assert.ok(open.progress>=1&&open.progress<4);
+      const funded=state.expedition.projects.entries.filter(p=>p.status==="active")
+        .reduce((units,p)=>units+p.progress,0);
       assert.equal(state.expedition.woodSpent,
         (state.expedition.camps.length+state.expedition.houses.length)*4+
-        state.expedition.roads.length+open.progress);
+        state.expedition.roads.length+funded);
       assert.deepEqual(WorldSim.restore(game.serialize()).snapshot(),state);
       game.advance(250);
       assert.ok(game.snapshot().expedition.houses.length>0);
