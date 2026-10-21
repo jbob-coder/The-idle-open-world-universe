@@ -85,6 +85,10 @@
         statsPair(stats,"Elecciones",state.settlement.elections);
         statsPair(stats,"Prioridad del consejo",state.settlement.policy||"none");
         statsPair(stats,"Repartos de oficio",state.settlement.ordersIssued||0);
+        statsPair(stats,"Comunidades",state.outpost.status==="established"?2:1);
+        statsPair(stats,"Puesto oriental",state.outpost.status);
+        statsPair(stats,"Reservas orientales",state.outpost.wood+" madera / "+state.outpost.food+" comida");
+        statsPair(stats,"Entregas completadas",state.outpost.deliveries);
       }
       statsPair(stats,"Comida disponible",state.food);
       statsPair(stats,"Bayas recolectadas",state.foodGathered);
@@ -107,6 +111,7 @@
             "/100 | Energía "+c.energy+"/20 | Fabricaciones "+c.crafted+
             " | Construcciones "+c.built+" | Conversaciones "+c.conversations+
             " | Oficio "+c.role+" | Tareas de oficio "+c.ordersCompleted+
+            " | Comunidad "+c.homeId+
             " | Comida recolectada "+c.foraged+" | Recuerdos "+c.memories.length+
             (state.settlement.leaderId===c.id?" | Líder elegido":"");
         }
@@ -151,7 +156,10 @@
           talk:"conversó con "+(e.details.with||"otro habitante"),
           arrive:"llegó a la aldea",elect:"fue elegido líder",death:"falleció",
           assign:"recibió oficio "+(e.details.role||""),
-          council:"decidió priorizar "+(e.details.policy||"")};
+          council:"decidió priorizar "+(e.details.policy||""),
+          approve_outpost:"aprobó fundación de otra comunidad",
+          found_outpost:"fundó Colina Oriental",
+          dispatch:"despachó provisiones",deliver:"entregó alimentos"};
         div.textContent="Ciclo "+e.tick+" · "+e.actor+": "+(labels[e.action]||e.action)+
           (e.action==="build"&&e.details.site?" ("+e.details.site+")":"");
         events.appendChild(div);
@@ -248,6 +256,10 @@
   // Public test/inspection interface; never exposes a writable simulation object.
   root.GodseedV3Debug=Object.freeze({
     getState:()=>simulation.snapshot(),newWorld,step,save,load,
+    fastForward:(n)=>{
+      if(!paused)togglePause();
+      const result=simulation.advance(n);dirty=true;update();return result;
+    },
     isPaused:()=>paused,pause:()=>{if(!paused)togglePause();return true;},
     resume:()=>{if(paused)togglePause();return true;},
     hasWebGL:()=>rendererMode==="webgl-3d",rendererMode:()=>rendererMode,storageKey:Sim.STORAGE_KEY,
