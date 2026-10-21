@@ -1206,6 +1206,13 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
   const home=(x,z)=>x>=0&&x<20&&z>=0&&z<20;
   const mod=(n,d)=>((n%d)+d)%d;
   const clamp=n=>Math.max(MIN,Math.min(MAX,n));
+  // Signed world coordinates, floor-divided instead of truncated: -1 belongs
+  // to chunk -1, never chunk 0. Each 16x16 chunk has a stable identity.
+  function locate(x,z){
+    if(!inside(x,z))return null;
+    const cx=Math.floor(x/CHUNK),cz=Math.floor(z/CHUNK);
+    return {cx,cz,lx:x-cx*CHUNK,lz:z-cz*CHUNK,id:key(cx,cz)};
+  }
   function hash(seed,x,z,salt){
     let h=(seed^Math.imul(x,374761393)^Math.imul(z,668265263)^salt)>>>0;
     h=Math.imul(h^(h>>>13),1274126177);return (h^(h>>>16))>>>0;
@@ -1270,7 +1277,8 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
   }
   function create(seed,saved){
     if(!integer(seed)||seed<0||seed>0xffffffff)throw RangeError("invalid world seed");
-    const cache=new Map(),removed=new Set(),berries=new Map();let revision=0;
+    const cache=new Map(),removed=new Set(),berries=new Map();
+    let revision=0,chunkBuilds=0,chunkHits=0;
     if(saved){
       if(saved.generatorVersion!==VERSION||!Array.isArray(saved.removed)||
         !Array.isArray(saved.berries)||saved.removed.length+saved.berries.length>EDIT_LIMIT)
@@ -1287,28 +1295,50 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
         berries.set(key(b.x,b.z),{x:b.x,z:b.z,amount:b.amount,at:b.at});
       }
     }
-    function base(x,z){
-      if(!inside(x,z))return null;
-      const cx=Math.floor(x/CHUNK),cz=Math.floor(z/CHUNK),id=key(cx,cz);
+    function chunkAt(cx,cz){
+      const id=key(cx,cz);
       let chunk=cache.get(id);
-      if(chunk){cache.delete(id);cache.set(id,chunk);}
-      else{
-        chunk=[];
+      if(chunk){
+        chunkHits++;
+        cache.delete(id);cache.set(id,chunk);
+      }else{
+        chunkBuilds++;
+        chunk=new Array(CHUNK*CHUNK);
         for(let dz=0;dz<CHUNK;dz++)for(let dx=0;dx<CHUNK;dx++)
-          chunk.push(terrain(seed,cx*CHUNK+dx,cz*CHUNK+dz));
+          chunk[dz*CHUNK+dx]=terrain(seed,cx*CHUNK+dx,cz*CHUNK+dz);
         cache.set(id,chunk);
         if(cache.size>CACHE_LIMIT)cache.delete(cache.keys().next().value);
       }
-      return chunk[mod(z,CHUNK)*CHUNK+mod(x,CHUNK)];
+      return chunk;
+    }
+    function base(x,z){
+      const p=locate(x,z);if(!p)return null;
+      return chunkAt(p.cx,p.cz)[p.lz*CHUNK+p.lx];
     }
     function berryCount(x,z,tick){
       const b=berries.get(key(x,z));
       return b?Math.min(3,b.amount+Math.max(0,Math.floor((tick-b.at)/BERRY_PERIOD))):3;
     }
-    function sample(x,z,tick){
-      const t=base(x,z);if(!t)return null;
-      return Object.assign({},t,{color:t.color.slice(),tree:t.tree&&!removed.has(key(x,z)),
-        berries:t.bush?berryCount(x,z,tick):0});
+    function decorate(t,tick){
+      if(!t)return null;
+      return Object.assign({},t,{color:t.color.slice(),
+        tree:t.tree&&!removed.has(key(t.x,t.z)),
+        berries:t.bush?berryCount(t.x,t.z,tick):0});
+    }
+    function sample(x,z,tick){return decorate(base(x,z),tick);}
+    function nextVisualChange(tick){
+      // Berries regrow at each patch's own timestamp, not at global tick % 40.
+      // Consumers can reuse a previously computed visible terrain window until
+      // this exact next change, unless a player/NPC edits a resource sooner.
+      let next=Infinity;
+      for(const b of berries.values()){
+        const count=berryCount(b.x,b.z,tick);
+        if(count>=3)continue;
+        const elapsed=Math.max(0,tick-b.at);
+        const when=b.at+(Math.floor(elapsed/BERRY_PERIOD)+1)*BERRY_PERIOD;
+        if(when<next)next=when;
+      }
+      return next;
     }
     function harvest(x,z){
       const t=base(x,z),id=key(x,z);
@@ -1326,10 +1356,23 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
       berries.set(id,{x,z,amount:amount-1,at});revision++;return true;
     }
     function windowAt(x,z,half,tick){
-      x=Math.round(clamp(x));z=Math.round(clamp(z));half=Math.max(12,Math.min(32,Math.ceil(half)));
+      if(!Number.isFinite(x)||!Number.isFinite(z)||!Number.isFinite(half)||
+         !integer(tick)||tick<0)throw RangeError("invalid camera chunk window");
+      x=Math.round(clamp(x));z=Math.round(clamp(z));
+      half=Math.max(12,Math.min(32,Math.ceil(half)));
+      const x0=Math.max(MIN,x-half),x1=Math.min(MAX,x+half);
+      const z0=Math.max(MIN,z-half),z1=Math.min(MAX,z+half);
       const cells=[];
-      for(let tz=Math.max(MIN,z-half);tz<=Math.min(MAX,z+half);tz++)
-        for(let tx=Math.max(MIN,x-half);tx<=Math.min(MAX,x+half);tx++)cells.push(sample(tx,tz,tick));
+      // Rows remain in original z-major order, but lookup happens once per
+      // chunk-span (roughly 5-6 per row) instead of once per terrain tile.
+      for(let tz=z0;tz<=z1;tz++){
+        const cz=Math.floor(tz/CHUNK),lz=tz-cz*CHUNK;
+        for(let tx=x0;tx<=x1;){
+          const cx=Math.floor(tx/CHUNK),start=cx*CHUNK,
+            end=Math.min(x1,start+CHUNK-1),chunk=chunkAt(cx,cz);
+          for(;tx<=end;tx++)cells.push(decorate(chunk[lz*CHUNK+tx-start],tick));
+        }
+      }
       return cells;
     }
     function save(tick){
@@ -1339,13 +1382,14 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
         const p=id.split(",").map(Number);return {x:p[0],z:p[1]};
       }),berries:Array.from(berries.values(),b=>Object.assign({},b))};
     }
-    return Object.freeze({sample,harvest,forage,windowAt,save,
+    return Object.freeze({sample,harvest,forage,windowAt,save,nextVisualChange,
       walkable:(x,z)=>{const t=base(x,z);return !!t&&t.walkable;},
-      metrics:()=>({cachedChunks:cache.size,chunkLimit:CACHE_LIMIT,resourceEdits:removed.size+berries.size,revision}),
+      metrics:()=>({cachedChunks:cache.size,chunkLimit:CACHE_LIMIT,
+        chunkBuilds,chunkHits,resourceEdits:removed.size+berries.size,revision}),
       region:(x,z)=>region(seed,x,z),landmark:(rx,rz)=>landmark(seed,rx,rz)});
   }
   return Object.freeze({VERSION,SIZE,MIN,MAX,CHUNK,REGION,CACHE_LIMIT,EDIT_LIMIT,BIOMES,
-    inside,home,road,terrain,region,landmark,create});
+    inside,locate,home,road,terrain,region,landmark,create});
 });
 </script>
 <script>/* Bounded local search plus connected road travel. No whole-world path arrays. */
@@ -1539,12 +1583,20 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
    const seed=hash(id,x,z);
    return {preferences:{curiosity:25+(seed%65),craftsmanship:25+((seed>>>8)%65),
        security:25+((seed>>>16)%65)},
-     memories:[],lastChoice:null,choices:0,explorations:0,curiosityUrge:70};
+     memories:[],lastChoice:null,choices:0,explorations:0,curiosityUrge:70,
+     // Individual experience affects the next choice, not just a fixed trait.
+     // Zeroed on birth; old saves without this field remain valid.
+     adaptation:{forage:0,gather_wood:0,build_home:0,build_road:0,explore:0}};
  }
  function decide(mind,ctx){
    const p=mind.preferences,options=[];
    const add=(action,utility,reason,legal=true)=>{
-     if(legal)options.push({action,utility:Math.round(utility),reason});
+     if(legal){
+       const learned=mind.adaptation&&mind.adaptation[action]||0;
+       // Survival overrides negative experience: hunger cannot be "learned away".
+       const emergency=(action==="forage"&&food===0&&hunger<48);
+       options.push({action,utility:Math.round(utility+(emergency?Math.max(0,learned):learned)*3),reason});
+     }
    };
    const hunger=clamp(ctx.hunger),energy=Math.max(0,Math.min(20,ctx.energy)),
      food=ctx.food,wood=ctx.wood,house=!!ctx.hasHome,road=!!ctx.roadPending;
@@ -1568,6 +1620,24 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
      reason:chosen?chosen.reason:"no_viable_work",
      utility:chosen?chosen.utility:0,
      alternatives:options.slice(1,4).map(o=>({action:o.action,utility:o.utility}))};
+ }
+ const ADAPT_ACTIONS=Object.freeze(["forage","gather_wood","build_home","build_road","explore"]);
+ function observe(mind,action,succeeded){
+   if(!ADAPT_ACTIONS.includes(action)||typeof succeeded!=="boolean")
+     throw RangeError("invalid real-world NPC feedback");
+   if(!mind.adaptation){
+     mind.adaptation={forage:0,gather_wood:0,build_home:0,build_road:0,explore:0};
+   }
+   const previous=mind.adaptation[action];
+   // Consecutive failed searches make the next search more exploratory.
+   // Successful physical work restores confidence. Saturation keeps saves small.
+   mind.adaptation[action]=Math.max(-12,Math.min(12,previous+(succeeded?2:-3)));
+   return mind.adaptation[action];
+ }
+ function searchRadius(mind,action){
+   if(!["forage","gather_wood"].includes(action))throw RangeError("invalid resource");
+   const frustration=Math.max(0,-((mind.adaptation||{})[action]||0));
+   return frustration>=9?64:frustration>=6?36:frustration>=3?24:12;
  }
  function commitChoice(mind,action){
    if(!ACTIONS.includes(action))throw RangeError("invalid NPC decision");
@@ -1598,6 +1668,13 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
       mind.explorations>mind.choices||!positive(mind.curiosityUrge)||
       mind.curiosityUrge>100||
       !(mind.lastChoice===null||ACTIONS.includes(mind.lastChoice)))return false;
+   if(mind.adaptation!==undefined){
+     if(!mind.adaptation||typeof mind.adaptation!=="object"||
+        Array.isArray(mind.adaptation)||Object.keys(mind.adaptation).length!==ADAPT_ACTIONS.length)
+       return false;
+     for(const action of ADAPT_ACTIONS)if(!Number.isSafeInteger(mind.adaptation[action])||
+        mind.adaptation[action]<-12||mind.adaptation[action]>12)return false;
+   }
    for(const k of ["curiosity","craftsmanship","security"]){
      const v=mind.preferences[k];if(!positive(v)||v<25||v>89)return false;
    }
@@ -1608,7 +1685,7 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
    }
    return true;
  }
- return Object.freeze({ACTIONS,create,decide,commitChoice,remember,validate,MAX_MEMORIES});
+ return Object.freeze({ACTIONS,create,decide,observe,searchRadius,commitChoice,remember,validate,MAX_MEMORIES});
 });</script>
 <script>/* GODSEED: NPC-selected discovery destinations, no authored itinerary.
  * Pure deterministic planner: depends on actual landmark geography, the
@@ -1978,15 +2055,23 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
       c.goal=s.houses.length?"descansar en casa":"descansar en campamento";return;
     }
     const gather=kind=>{
-      const route=Nav.resource(world,c,kind,tick);
-      if(!route){c.goal=kind==="food"?"buscar nuevos frutos":"buscar nuevos árboles";return;}
+      const action=kind==="food"?"forage":"gather_wood";
+      const radius=Agency.searchRadius(c.mind,action);
+      const route=Nav.resource(world,c,kind,tick,radius,radius>=36?4096:2048);
+      if(!route){
+        Agency.observe(c.mind,action,false);
+        c.goal=kind==="food"?"buscar nuevos frutos":"buscar nuevos árboles";return;
+      }
       if(route.path.length){
         const p=route.path[0];c.x=p.x;c.z=p.z;c.energy=Math.max(0,c.energy-1);
         mark(s,c);c.goal=kind==="food"?"recolectar alimentos":"reunir madera";return;
       }
       const done=kind==="wood"?world.harvest(route.target.x,route.target.z):
         world.forage(route.target.x,route.target.z,tick);
-      if(!done){c.goal="recurso agotado";return;}
+      if(!done){
+        Agency.observe(c.mind,action,false);c.goal="recurso agotado";return;
+      }
+      Agency.observe(c.mind,action,true);
       c.energy=Math.max(0,c.energy-1);
       if(kind==="wood"){c.wood++;s.woodGathered++;s.settlerWoodGathered++;}
       else{c.food++;s.foodGathered++;s.settlerFoodGathered++;}
@@ -2004,18 +2089,29 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
     if(decision.action==="gather_wood"){gather("wood");return;}
     if(decision.action==="build_home"){
       const place=c.homeSite;
-      if(!place){c.goal="investigar un terreno seguro";return;}
+      if(!place){Agency.observe(c.mind,"build_home",false);
+        c.goal="investigar un terreno seguro";return;}
       if(!Nav.same(c,place)){
         const route=Nav.local(world,c,place,tick);
-        if(!route||!route.path.length){c.goal="buscar acceso al terreno";return;}
+        if(!route||!route.path.length){
+          Agency.observe(c.mind,"build_home",false);
+          c.goal="buscar acceso al terreno";return;
+        }
         const p=route.path[0];c.x=p.x;c.z=p.z;
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="trasladar madera al hogar";return;
       }
       const task=Projects.propose(s.projects,"home",place,c.id,tick);
-      if(!task){c.goal="esperar una obra disponible";return;}
+      if(!task){
+        Agency.observe(c.mind,"build_home",false);
+        c.goal="esperar una obra disponible";return;
+      }
       const step=Projects.contribute(s.projects,task,c,tick);
-      if(!step.worked){c.goal="obtener madera para la obra";return;}
+      if(!step.worked){
+        Agency.observe(c.mind,"build_home",false);
+        c.goal="obtener madera para la obra";return;
+      }
+      Agency.observe(c.mind,"build_home",true);
       s.woodSpent+=step.woodSpent;c.goal="construir vivienda ("+task.progress+"/"+task.required+")";
       if(step.completed){
         completeFrontierHome(s,camp,c,task,tick,c.id);
@@ -2026,15 +2122,25 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
     if(decision.action==="build_road"&&site){
       if(!Nav.same(c,site)){
         const route=Nav.local(world,c,site,tick);
-        if(!route||!route.path.length){c.goal="buscar acceso a la obra vial";return;}
+        if(!route||!route.path.length){
+          Agency.observe(c.mind,"build_road",false);
+          c.goal="buscar acceso a la obra vial";return;
+        }
         const p=route.path[0];c.x=p.x;c.z=p.z;
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="transportar madera al camino";return;
       }
       const task=Projects.propose(s.projects,"road",site,c.id,tick);
-      if(!task){c.goal="esperar una obra disponible";return;}
+      if(!task){
+        Agency.observe(c.mind,"build_road",false);
+        c.goal="esperar una obra disponible";return;
+      }
       const step=Projects.contribute(s.projects,task,c,tick);
-      if(!step.worked){c.goal="buscar materiales para el camino";return;}
+      if(!step.worked){
+        Agency.observe(c.mind,"build_road",false);
+        c.goal="buscar materiales para el camino";return;
+      }
+      Agency.observe(c.mind,"build_road",true);
       s.woodSpent+=step.woodSpent;c.goal="trabajar en camino";
       if(step.completed){
         s.roads.push({x:site.x,z:site.z,type:"road",material:"timber",
@@ -2054,9 +2160,11 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
         if(route&&route.path.length){
           c.x=route.path[0].x;c.z=route.path[0].z;
           c.energy=Math.max(0,c.energy-1);mark(s,c);
+          Agency.observe(c.mind,"explore",true);
           c.goal="explorar por curiosidad";return;
         }
       }
+      Agency.observe(c.mind,"explore",false);
       c.goal="observar el terreno";
       if(tick%22===0)record(s,tick,"settler_explore",{x:c.x,z:c.z},c.id);
       c.energy=Math.min(20,c.energy+1);return;
@@ -2402,6 +2510,10 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
   const copy=x=>JSON.parse(JSON.stringify(x));
   function instance(homeland,world,expedition){
     let home=homeland.snapshot(),sceneCache=null,sceneKey="";
+    // Camera chunks are independent of AI ticks. Keep immutable source tiles
+    // until the exact next visual berry change or a terrain resource edit.
+    let terrainCache=null,terrainKey="",terrainFreshUntil=0;
+    let terrainWindowsBuilt=0,terrainWindowsReused=0;
     function snapshot(){
       const result=copy(home),c=expedition.explorer;
       if(c)result.citizens.push(copy(c));
@@ -2440,13 +2552,18 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
       const id=home.tick+":"+cx+":"+cz+":"+radius;
       if(sceneCache&&sceneKey===id)return sceneCache;
       const result=snapshot(),visible=p=>Math.abs(p.x-cx)<=radius&&Math.abs(p.z-cz)<=radius;
-      result.terrain=world.windowAt(cx,cz,radius,home.tick);
-      // Apply only completed, paid NPC roads as presentation overlays.
-      // The terrain generator remains authoritative for collision and geography.
+      const resourceRevision=world.metrics().revision;
+      const tileKey=cx+":"+cz+":"+radius+":"+resourceRevision;
+      if(!terrainCache||terrainKey!==tileKey||home.tick>=terrainFreshUntil){
+        terrainCache=world.windowAt(cx,cz,radius,home.tick);
+        terrainKey=tileKey;terrainFreshUntil=world.nextVisualChange(home.tick);
+        terrainWindowsBuilt++;
+      }else terrainWindowsReused++;
+      // Keep tile source immutable. Completed roads are overlays, not changes
+      // to the procedural terrain cache, so revisits cannot duplicate edits.
       const made=new Set(expedition.roads.map(p=>p.x+","+p.z));
-      for(const tile of result.terrain)if(made.has(tile.x+","+tile.z)){
-        tile.kind="road";tile.color=[.58,.43,.29];
-      }
+      result.terrain=terrainCache.map(tile=>made.has(tile.x+","+tile.z)?
+        Object.assign({},tile,{kind:"road",color:[.58,.43,.29]}):tile);
       result.forest=home.forest.filter(visible).map(p=>Object.assign({},p));
       result.bushes=home.bushes.filter(visible).map(p=>Object.assign({},p));
       for(const tile of result.terrain){
@@ -2470,7 +2587,7 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
     }
     return Object.freeze({snapshot,advance,scene,serialize,
       terrain:(x,z)=>world.sample(x,z,home.tick),region:(x,z)=>world.region(x,z),
-      metrics:()=>world.metrics()});
+      metrics:()=>Object.assign({},world.metrics(),{terrainWindowsBuilt,terrainWindowsReused})});
   }
   function create(seed){return instance(Society.create(seed),World.create(seed),Expedition.create());}
   function fromSociety(raw){
