@@ -1462,7 +1462,12 @@ button[aria-pressed="true"]{background:#6e6138}
    const previous=mind.memories[mind.memories.length-1];
    if(previous&&previous.action===action&&tick-previous.tick<20)return;
    mind.memories.push({tick,action});
-   if(mind.memories.length>MAX_MEMORIES)mind.memories.shift();
+   if(mind.memories.length>MAX_MEMORIES){
+     // Never let routine foraging erase the founding of a home or first arrival.
+     const pinned=new Set(["settler_arrive","settler_build","settler_death"]);
+     const index=mind.memories.findIndex(m=>!pinned.has(m.action));
+     mind.memories.splice(index<0?0:index,1);
+   }
    if(action==="settler_explore")mind.explorations++;
  }
  function validate(mind,tick){
@@ -2406,7 +2411,11 @@ button[aria-pressed="true"]{background:#6e6138}
           desc.textContent="Objetivo: "+c.goal+" | Posición "+c.x+", "+c.z+
             " | Salud "+c.health+"/100 | Saciedad "+c.hunger+"/100"+
             " | Energía "+c.energy+"/20 | Mochila "+c.food+" comida / "+
-            c.wood+" madera | Campamento "+c.homeCampId;
+            c.wood+" madera | Campamento "+c.homeCampId+
+            (c.mind?" | Decisión "+(c.mind.lastChoice||"considerando opciones")+
+            " | Curiosidad "+c.mind.preferences.curiosity+
+            " | Seguridad "+c.mind.preferences.security+
+            " | Memorias "+c.mind.memories.length:"");
         }else if(c.mind){
           const mind=c.mind;
           desc.textContent="Objetivo: "+c.goal+
