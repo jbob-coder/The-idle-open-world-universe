@@ -17,8 +17,8 @@ jobs:
       contents: read
     timeout-minutes: 18
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.11'
       - name: Install browser test dependencies (not game dependencies)
@@ -31,7 +31,7 @@ jobs:
         run: python tests/capture_android_layouts.py
       - name: Publish browser screenshots and results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: godseed-skyview-browser-captures
           path: qa-screenshots/
