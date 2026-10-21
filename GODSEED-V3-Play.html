@@ -469,7 +469,8 @@ button[aria-pressed="true"]{background:#6e6138}
    ctx.record(s,c,"found_outpost",{settlement:SITE_ID,leader:o.approvedBy});
  }
  function localFood(s,c){
-   return s.outpost.status==="established"&&c.homeId===SITE_ID&&dist(c,SITE)<=4;
+   return (s.outpost.status==="travelling"&&c.id===s.outpost.founderId)||
+     (s.outpost.status==="established"&&dist(c,SITE)<=4);
  }
  function foodAvailable(s,c){return localFood(s,c)?s.outpost.food:s.food;}
  function consumeFood(s,c){
