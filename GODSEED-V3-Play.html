@@ -423,12 +423,167 @@ button[aria-pressed="true"]{background:#6e6138}
   }
     return Object.freeze({VERSION,SIZE,STORAGE_KEY,create,restore,validate});
 });</script>
+<script>/* Autonomous two-community frontier extension for the isolated GODSEED V3 society.
+ * Strictly bounded: one extra outpost, one founder, one courier. No RNG or network.
+ * The parent simulation remains authoritative for clock, citizens and finite trees.
+ */
+(function(root,factory){"use strict";const api=factory();
+ if(typeof module!=="undefined"&&module.exports)module.exports=api;
+ if(root)root.GodseedV3Frontier=api;
+})(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
+ const SITE=Object.freeze({id:"east_outpost",type:"house",x:15,z:13,cost:4});
+ const SITE_ID="village_02";
+ const number=n=>Number.isSafeInteger(n)&&n>=0;
+ const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.z-b.z);
+ const same=(a,b)=>a.x===b.x&&a.z===b.z;
+ const obstructs=t=>t.x>=SITE.x-1&&t.x<=SITE.x+2&&t.z>=SITE.z-1&&t.z<=SITE.z+2;
+ const newState=()=>({id:SITE_ID,name:"Colina Oriental",status:"unfounded",
+   site:{x:SITE.x,z:SITE.z},founderId:null,approvedBy:null,
+   approvedAt:null,foundedAt:null,cargoWood:0,wood:0,food:0,
+   deliveries:0,delivery:null});
+ function crop(s,c,ctx,siteClear=false){
+   const options=s.forest.filter(t=>siteClear?obstructs(t):dist(t,SITE)<=4);
+   const t=ctx.nearest(c,options);
+   if(!t)return false;
+   if(dist(c,t)>1){ctx.walk(c,t);c.goal=siteClear?"despejar solar":"talar junto al puesto";return true;}
+   const index=s.forest.findIndex(a=>same(a,t));
+   if(index<0)throw Error("frontier tree already removed");
+   s.forest.splice(index,1);s.harvested++;s.outpost.wood++;c.harvested++;
+   c.energy=Math.max(0,c.energy-2);c.goal=siteClear?"limpiar terreno":"acopiar madera";
+   ctx.record(s,c,"harvest",{x:t.x,z:t.z,amount:1,settlement:SITE_ID});
+   return true;
+ }
+ function found(s,c,ctx){
+   // Blockers first, before returning to construction coordinates.
+   if(crop(s,c,ctx,true))return;
+   if(dist(c,SITE)>1){ctx.walk(c,SITE);c.goal="viajar a segunda comunidad";return;}
+   const o=s.outpost;
+   if(o.cargoWood!==SITE.cost)throw Error("missing reserved founding timber");
+   o.cargoWood=0;s.spentWood+=SITE.cost;
+   s.structures.push({id:SITE.id,type:SITE.type,x:SITE.x,z:SITE.z,
+     builder:c.id,completedAt:s.tick});
+   c.built++;c.homeId=SITE_ID;c.energy=Math.max(0,c.energy-3);
+   c.goal="fundar nueva comunidad";
+   o.status="established";o.foundedAt=s.tick;
+   ctx.record(s,c,"build",{site:SITE.id,woodSpent:SITE.cost,kitUsed:false});
+   ctx.record(s,c,"found_outpost",{settlement:SITE_ID,leader:o.approvedBy});
+ }
+ function localFood(s,c){
+   return s.outpost.status==="established"&&c.homeId===SITE_ID&&dist(c,SITE)<=4;
+ }
+ function foodAvailable(s,c){return localFood(s,c)?s.outpost.food:s.food;}
+ function consumeFood(s,c){
+   if(localFood(s,c)){if(s.outpost.food<1)throw Error("empty frontier pantry");s.outpost.food--;}
+   else{if(s.food<1)throw Error("empty mother pantry");s.food--;}
+ }
+ function beforeAction(s,c,ctx){
+   const o=s.outpost;
+   if(c.id===o.founderId&&o.status==="travelling"){found(s,c,ctx);return true;}
+   if(c.id===o.founderId&&o.status==="established"){
+     if(o.food===0&&c.hunger<48&&dist(c,{x:5,z:5})>3){
+       ctx.walk(c,{x:5,z:5});c.goal="volver por suministros";return true;
+     }
+     if(dist(c,SITE)>2&&!(o.food===0&&c.hunger<48)){
+       ctx.walk(c,SITE);c.goal="regresar al puesto";return true;
+     }
+     if(dist(c,SITE)<=2){
+       if(o.wood<4&&crop(s,c,ctx))return true;
+       c.goal="mantener el puesto";c.energy=Math.min(20,c.energy+2);return true;
+     }
+   }
+   if(o.delivery&&o.delivery.courierId===c.id){
+     if(dist(c,SITE)>2){
+       ctx.walk(c,SITE);c.goal="transportar alimentos";return true;
+     }
+     const food=o.delivery.food;
+     o.delivery=null;o.food+=food;o.deliveries++;
+     c.goal="entregar alimentos";
+     ctx.record(s,c,"deliver",{settlement:SITE_ID,food});
+     return true;
+   }
+   return false;
+ }
+ function afterTick(s,ctx){
+   const o=s.outpost;
+   if(o.status==="unfounded"){
+     if(s.tick<2400||s.structures.length!==3||!s.settlement.leaderId||
+       s.wood<4||s.food<4||s.settlement.orders.length!==3)return;
+     const founder=s.citizens.find(c=>c.role==="builder"&&c.alive);
+     if(!founder)return;
+     s.wood-=4;s.food-=2;o.cargoWood=4;o.food=2;
+     o.founderId=founder.id;o.approvedBy=s.settlement.leaderId;
+     o.approvedAt=s.tick;o.status="travelling";
+     ctx.record(s,s.citizens.find(c=>c.id===o.approvedBy),"approve_outpost",
+       {settlement:SITE_ID,founder:founder.id,wood:4,food:2});
+   }else if(o.status==="established"&&!o.delivery&&o.food<=1&&s.food>=5){
+     const courier=s.citizens.find(c=>c.role==="forager"&&c.alive&&c.homeId==="village_01");
+     if(!courier)return;
+     s.food-=2;o.delivery={courierId:courier.id,food:2,startedAt:s.tick};
+     ctx.record(s,courier,"dispatch",{settlement:SITE_ID,food:2});
+   }
+ }
+ function projectV2(s){
+   const o=s.outpost,est=o.status==="established";
+   return {...s,schemaVersion:2,structures:s.structures.slice(0,3),
+     wood:s.wood+o.cargoWood+o.wood+(est?SITE.cost:0),
+     food:s.food+o.food+(o.delivery?o.delivery.food:0),
+     spentWood:s.spentWood-(est?SITE.cost:0),
+     citizens:s.citizens.map(c=>({...c,built:c.built-(est&&c.id===o.founderId?1:0)})),
+     events:s.events.filter(e=>!["approve_outpost","found_outpost","dispatch","deliver"].includes(e.action))};
+ }
+ function validate(s){
+   if(!s||!s.outpost||!Array.isArray(s.citizens)||!Array.isArray(s.structures))return false;
+   const o=s.outpost,est=o.status==="established",travel=o.status==="travelling";
+   if(o.id!==SITE_ID||o.name!=="Colina Oriental"||
+     !o.site||!same(o.site,SITE)||
+     !["unfounded","travelling","established"].includes(o.status)||
+     !number(o.cargoWood)||o.cargoWood>4||!number(o.wood)||!number(o.food)||
+     !number(o.deliveries)||s.structures.length>4||
+     est!==(s.structures.length===4))return false;
+   if(o.status==="unfounded"&&(o.founderId!==null||o.approvedBy!==null||
+     o.approvedAt!==null||o.foundedAt!==null||o.cargoWood||o.wood||
+     o.food||o.delivery||o.deliveries))return false;
+   if((travel||est)&&(!s.citizens.some(c=>c.id===o.founderId)||
+     !s.citizens.some(c=>c.id===o.approvedBy)||
+     !number(o.approvedAt)||o.approvedAt>s.tick))return false;
+   if(travel&&(o.cargoWood!==4||o.foundedAt!==null||o.delivery!==null))return false;
+   if(est&&(!number(o.foundedAt)||o.foundedAt<o.approvedAt||o.foundedAt>s.tick||
+     o.cargoWood!==0))return false;
+   if(!(o.delivery===null||(est&&o.delivery&&o.delivery.food===2&&
+     number(o.delivery.startedAt)&&o.delivery.startedAt<=s.tick&&
+     s.citizens.some(c=>c.id===o.delivery.courierId&&c.id!==o.founderId))))return false;
+   if(est){
+     const house=s.structures[3];
+     if(house.id!==SITE.id||house.type!==SITE.type||!same(house,SITE)||
+       house.builder!==o.founderId||house.completedAt!==o.foundedAt||
+       s.forest.some(obstructs))return false;
+   }
+   for(const c of s.citizens)
+     if(!["village_01",SITE_ID].includes(c.homeId)||
+       (c.homeId===SITE_ID&&(!est||c.id!==o.founderId))||
+       (est&&c.id===o.founderId&&c.homeId!==SITE_ID))return false;
+   if(s.wood+o.cargoWood+o.wood!==s.harvested-s.craftedWood-s.spentWood||
+     s.food+o.food+(o.delivery?o.delivery.food:0)!==s.foodGathered-s.foodEaten)return false;
+   for(const e of s.events.filter(e=>
+     ["approve_outpost","found_outpost","dispatch","deliver"].includes(e.action)))
+     if(!number(e.tick)||e.tick>s.tick||
+       !s.citizens.some(c=>c.id===e.actor)||!e.details||e.details.settlement!==SITE_ID)
+       return false;
+   return true;
+ }
+ return Object.freeze({SITE,SITE_ID,newState,foodAvailable,consumeFood,
+   beforeAction,afterTick,projectV2,validate});
+});
+</script>
 <script>/* GODSEED V3: isolated, deterministic settlement prototype. No network or external AI. */
 (function(root,factory){"use strict";const api=factory();
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   if(root)root.GodseedV3Society=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
-  const VERSION=2,SIZE=20,STORAGE_KEY="godseed-v3-society-v1";
+  const Frontier=typeof module!=="undefined"&&module.exports?
+    require("./frontier.js"):globalThis.GodseedV3Frontier;
+  if(!Frontier)throw Error("GODSEED frontier module missing");
+  const VERSION=3,SIZE=20,STORAGE_KEY="godseed-v3-society-v1";
   const copy=x=>JSON.parse(JSON.stringify(x));
   const validPos=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.z)&&p.x>=0&&p.z>=0&&p.x<SIZE&&p.z<SIZE;
   const number=n=>Number.isSafeInteger(n)&&n>=0;
@@ -461,8 +616,8 @@ button[aria-pressed="true"]{background:#6e6138}
     skill:template.skill,energy:20,hunger:85,health:100,alive:true,
     settled:template.id==="sim_aria",harvested:0,
     crafted:0,built:0,foraged:0,conversations:0,ordersCompleted:0,
-    role:"unassigned",memories:[],goal:"explorar",relations:{}};}
-  const MEMORY_KINDS=new Set(["craft","build","forage","eat","talk","elect","assign","council"]);
+    role:"unassigned",homeId:"village_01",memories:[],goal:"explorar",relations:{}};}
+  const MEMORY_KINDS=new Set(["craft","build","forage","eat","talk","elect","assign","council","found_outpost","deliver"]);
   function remember(c,tick,kind,subject){
     c.memories.push({tick,kind,subject:subject||null});
     if(c.memories.length>12)c.memories.shift();
@@ -472,7 +627,7 @@ button[aria-pressed="true"]{background:#6e6138}
     if(s.events.length>96)s.events.shift();
     if(MEMORY_KINDS.has(action)){
       const subject=details.with||details.site||details.recipe||details.role||
-        details.policy||details.leader||null;
+        details.policy||details.leader||details.settlement||null;
       remember(c,s.tick,action,subject);
     }
     if(action==="forage")c.foraged++;
@@ -577,8 +732,8 @@ button[aria-pressed="true"]{background:#6e6138}
     if(c.hunger===0)c.health=Math.max(0,c.health-2);
     else if(c.hunger>65)c.health=Math.min(100,c.health+1);
     if(c.health===0){c.alive=false;c.goal="fallecido";record(s,c,"death",{});return;}
-    if(c.hunger<=60&&s.food>0){
-      s.food--;s.foodEaten++;c.hunger=Math.min(100,c.hunger+40);
+    if(c.hunger<=60&&Frontier.foodAvailable(s,c)>0){
+      Frontier.consumeFood(s,c);s.foodEaten++;c.hunger=Math.min(100,c.hunger+40);
       c.goal="comer";record(s,c,"eat",{foodSpent:1});return;
     }
     if(c.energy<5){c.energy=Math.min(20,c.energy+9);c.goal="descansar";return;}
@@ -590,6 +745,7 @@ button[aria-pressed="true"]{background:#6e6138}
       }
       c.settled=true; // Milestone is persistent: do not pull a worker back from distant jobs.
     }
+    if(Frontier.beforeAction(s,c,{walk,nearest,record}))return;
     if(s.food<Math.max(2,s.citizens.length)||c.hunger<=58){
       if(s.bushes.some(b=>b.berries>0)){forage(s,c);return;}
     }
@@ -683,6 +839,7 @@ button[aria-pressed="true"]{background:#6e6138}
       wood:0,harvested:0,craftedWood:0,spentWood:0,
       axe:0,axeCrafted:0,kits:0,kitsCrafted:0,kitsUsed:0,
       food:0,foodGathered:0,foodEaten:0,foodGrown:0,
+      outpost:Frontier.newState(),
       settlement:{id:"village_01",name:"Primera Aldea",foundedAt:null,
         leaderId:null,electionTick:0,elections:0,ballots:[],orders:[],
         ordersIssued:0,policy:"none",policyTick:0,policiesSet:0,policyReason:""},events:[]});
@@ -777,8 +934,8 @@ button[aria-pressed="true"]{background:#6e6138}
       typeof e.details!=="object")return false;
     return true;
   }
-  function validate(s){
-    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
+  function validateV2(s){
+    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==2||
       !Array.isArray(s.events))return false;
     const allowed=new Set(["harvest","craft","build","forage","eat","talk",
       "arrive","elect","death","assign","council"]);
@@ -844,15 +1001,28 @@ button[aria-pressed="true"]{background:#6e6138}
   function migrateV1(value){
     if(!validateLegacy(value))throw RangeError("invalid schema-1 society save");
     const s=copy(value);
-    s.schemaVersion=VERSION;
+    s.schemaVersion=2;
     for(const c of s.citizens){
       c.foraged=0;c.ordersCompleted=0;c.role="unassigned";c.memories=[];
       c.settled=c.id==="sim_aria"||distance(c,SITES[0])<=2;
     }
     Object.assign(s.settlement,{orders:[],ordersIssued:0,
       policy:"none",policyTick:0,policiesSet:0,policyReason:""});
-    if(!validate(s))throw RangeError("unsafe schema-1 migration");
+    if(!validateV2(s))throw RangeError("unsafe schema-1 migration");
     return s;
+  }
+  function migrateV2(value){
+    if(!validateV2(value))throw RangeError("invalid schema-2 society save");
+    const s=copy(value);s.schemaVersion=VERSION;
+    for(const c of s.citizens)c.homeId="village_01";
+    s.outpost=Frontier.newState();
+    if(!validate(s))throw RangeError("unsafe schema-2 society migration");
+    return s;
+  }
+  function validate(s){
+    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
+       !Frontier.validate(s))return false;
+    return validateV2(Frontier.projectV2(s));
   }
   function instance(state){
     function snapshot(){return copy(state);}
@@ -871,6 +1041,7 @@ button[aria-pressed="true"]{background:#6e6138}
           council(state); // Schema-1 restore: never leave an active council without a policy.
         }
         if(state.settlement.leaderId&&state.tick%45===0)council(state);
+        Frontier.afterTick(state,{record});
       }
       return snapshot();
     }
@@ -882,6 +1053,7 @@ button[aria-pressed="true"]{background:#6e6138}
     if(typeof raw!=="string"||raw.length>64000)throw RangeError("invalid save");
     let value=JSON.parse(raw);
     if(value&&value.schemaVersion===1)value=migrateV1(value);
+    if(value&&value.schemaVersion===2)value=migrateV2(value);
     if(!validate(value))throw RangeError("invalid society state");
     return instance(copy(value));
   }
@@ -988,7 +1160,8 @@ button[aria-pressed="true"]{background:#6e6138}
         if(store)box(b.x+.85,.15,b.z+1.36,.38,.42,.06,[.75,.61,.32]);
       }
       for(const c of state.citizens){
-        const col=c.id==="sim_aria"?[.40,.66,.95]:c.id==="sim_bran"?[.96,.72,.34]:[.85,.52,.70];
+        const col=c.homeId==="village_02"?[.28,.85,.73]:
+          c.id==="sim_aria"?[.40,.66,.95]:c.id==="sim_bran"?[.96,.72,.34]:[.85,.52,.70];
         box(c.x+.29,0,c.z+.29,.42,.88,.42,col);
         box(c.x+.25,.88,c.z+.25,.5,.38,.5,[.80,.62,.45]);
       }
@@ -1077,6 +1250,7 @@ button[aria-pressed="true"]{background:#6e6138}
      if(store)cube(t.x+.85,.15,t.z+1.36,.38,.42,.06,"#e8cc78","#b99b4f","#937742");
     }else{
      let colors=t.actor.id==="sim_aria"?["#88c0ff","#507fc3","#3968a4"]:
+       t.actor.homeId==="village_02"?["#8be0c9","#42b7a5","#288979"]:
        t.actor.id==="sim_bran"?["#f8d785","#c09542","#a87a33"]:["#f0b4d5","#c474a2","#984e7e"];
      cube(t.x+.29,0,t.z+.29,.42,.88,.42,...colors);
      cube(t.x+.25,.88,t.z+.25,.5,.38,.5,"#e9bb8b","#b98a66","#9a6e52");
@@ -1175,6 +1349,10 @@ button[aria-pressed="true"]{background:#6e6138}
         statsPair(stats,"Elecciones",state.settlement.elections);
         statsPair(stats,"Prioridad del consejo",state.settlement.policy||"none");
         statsPair(stats,"Repartos de oficio",state.settlement.ordersIssued||0);
+        statsPair(stats,"Comunidades",state.outpost.status==="established"?2:1);
+        statsPair(stats,"Puesto oriental",state.outpost.status);
+        statsPair(stats,"Reservas orientales",state.outpost.wood+" madera / "+state.outpost.food+" comida");
+        statsPair(stats,"Entregas completadas",state.outpost.deliveries);
       }
       statsPair(stats,"Comida disponible",state.food);
       statsPair(stats,"Bayas recolectadas",state.foodGathered);
@@ -1197,6 +1375,7 @@ button[aria-pressed="true"]{background:#6e6138}
             "/100 | Energía "+c.energy+"/20 | Fabricaciones "+c.crafted+
             " | Construcciones "+c.built+" | Conversaciones "+c.conversations+
             " | Oficio "+c.role+" | Tareas de oficio "+c.ordersCompleted+
+            " | Comunidad "+c.homeId+
             " | Comida recolectada "+c.foraged+" | Recuerdos "+c.memories.length+
             (state.settlement.leaderId===c.id?" | Líder elegido":"");
         }
@@ -1241,7 +1420,10 @@ button[aria-pressed="true"]{background:#6e6138}
           talk:"conversó con "+(e.details.with||"otro habitante"),
           arrive:"llegó a la aldea",elect:"fue elegido líder",death:"falleció",
           assign:"recibió oficio "+(e.details.role||""),
-          council:"decidió priorizar "+(e.details.policy||"")};
+          council:"decidió priorizar "+(e.details.policy||""),
+          approve_outpost:"aprobó fundación de otra comunidad",
+          found_outpost:"fundó Colina Oriental",
+          dispatch:"despachó provisiones",deliver:"entregó alimentos"};
         div.textContent="Ciclo "+e.tick+" · "+e.actor+": "+(labels[e.action]||e.action)+
           (e.action==="build"&&e.details.site?" ("+e.details.site+")":"");
         events.appendChild(div);
@@ -1338,6 +1520,10 @@ button[aria-pressed="true"]{background:#6e6138}
   // Public test/inspection interface; never exposes a writable simulation object.
   root.GodseedV3Debug=Object.freeze({
     getState:()=>simulation.snapshot(),newWorld,step,save,load,
+    fastForward:(n)=>{
+      if(!paused)togglePause();
+      const result=simulation.advance(n);dirty=true;update();return result;
+    },
     isPaused:()=>paused,pause:()=>{if(!paused)togglePause();return true;},
     resume:()=>{if(paused)togglePause();return true;},
     hasWebGL:()=>rendererMode==="webgl-3d",rendererMode:()=>rendererMode,storageKey:Sim.STORAGE_KEY,
