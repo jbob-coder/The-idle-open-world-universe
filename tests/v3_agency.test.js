@@ -66,3 +66,41 @@ test("NPCs retain home founding milestones while mundane work memories are bound
   assert.ok(mind.memories.some(m=>m.action==="settler_build"));
   assert.ok(Agency.validate(mind,200));
 });
+
+
+test("NPC resource frustration expands their world search and success is remembered",()=>{
+  const mind=Agency.create("wanderer",200,200);
+  assert.equal(Agency.searchRadius(mind,"forage"),12);
+  assert.equal(Agency.observe(mind,"forage",false),-3);
+  assert.equal(Agency.searchRadius(mind,"forage"),24);
+  Agency.observe(mind,"forage",false);
+  assert.equal(Agency.searchRadius(mind,"forage"),36);
+  Agency.observe(mind,"forage",false);
+  assert.equal(Agency.searchRadius(mind,"forage"),64);
+  Agency.observe(mind,"forage",true);
+  assert.equal(mind.adaptation.forage,-7);
+  assert.equal(Agency.searchRadius(mind,"forage"),36);
+  const copy=JSON.parse(JSON.stringify(mind));
+  assert.deepEqual(copy,mind);
+  assert.equal(Agency.validate(copy,100),true);
+  assert.throws(()=>Agency.observe(mind,"talk",true),RangeError);
+  assert.throws(()=>Agency.searchRadius(mind,"build_home"),RangeError);
+});
+
+test("experience changes feasible priorities but never suppresses urgent survival",()=>{
+  const mind=Agency.create("individual",44,44);
+  mind.preferences={curiosity:25,craftsmanship:65,security:58};
+  const ctx={hunger:90,energy:20,food:3,wood:4,hasHome:false,roadPending:false};
+  assert.equal(Agency.decide(mind,ctx).action,"build_home");
+  for(let i=0;i<4;i++)Agency.observe(mind,"build_home",false);
+  const result=Agency.decide(mind,ctx);
+  assert.ok(result.alternatives.some(o=>o.action==="build_home")||
+    result.action==="build_home","failure never removes legal options");
+  const hungry={...ctx,hunger:20,food:0};
+  assert.equal(Agency.decide(mind,hungry).action,"forage");
+  const tired={...ctx,energy:2};
+  assert.equal(Agency.decide(mind,tired).action,"rest");
+  const corrupted=JSON.parse(JSON.stringify(mind));
+  corrupted.adaptation.forage=13;
+  assert.equal(Agency.validate(corrupted,100),false);
+});
