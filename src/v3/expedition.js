@@ -73,6 +73,9 @@
     record(s,tick,finisher===owner.id?"settler_build":"assist_finish_home",
       {id:"frontier_home_1",woodSpent:task.required,
         x:place.x,z:place.z,owner:owner.id},finisher);
+    if(finisher!==owner.id)
+      record(s,tick,"settler_home_completed",
+        {id:"frontier_home_1",x:place.x,z:place.z,helpedBy:finisher},owner.id);
   }
   // First inhabited wilderness camp; Mira acts on the same world clock.
   // Wilderness inventory is owned per person, never by the distant village.
@@ -499,7 +502,8 @@
     const actions=["expedition_arrive","harvest","forage","eat","discover","build_camp",
       "death","meet","assist_work_home","assist_finish_home"];
     const residentActions=["settler_arrive","settler_forage","settler_harvest",
-      "settler_eat","settler_build","settler_build_road","settler_explore","settler_death","settler_meet"];
+      "settler_eat","settler_build","settler_build_road","settler_home_completed",
+      "settler_explore","settler_death","settler_meet"];
     previous=-1;
     for(const e of s.events){
       if(!e||!positive(e.tick)||e.tick>tick||e.tick<previous||
