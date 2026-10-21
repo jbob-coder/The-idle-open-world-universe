@@ -58,10 +58,35 @@
        (c.role==="builder"&&action==="harvest")||
        (c.role==="steward"&&action==="talk"))c.ordersCompleted++;
   }
-  function walk(c,target){
-    if(c.x!==target.x)c.x+=Math.sign(target.x-c.x);
-    else if(c.z!==target.z)c.z+=Math.sign(target.z-c.z);
+  function walk(s,c,target){
+    if(distance(c,target)<=1)return true;
+    // The old direct-axis movement walked through tree trunks and houses.
+    // Use four-way shortest paths to a free adjacent work/contact tile.
+    const key=p=>p.x+","+p.z;
+    const blocked=new Set(s.forest.map(key));
+    for(const b of s.structures){
+      blocked.add(key(b));
+      blocked.add((b.x+1)+","+b.z);
+      blocked.add(b.x+","+(b.z+1));
+      blocked.add((b.x+1)+","+(b.z+1));
+    }
+    const path=[{x:c.x,z:c.z,parent:-1}],seen=new Set([key(c)]);
+    let destination=-1;
+    for(let i=0;i<path.length&&i<400;i++){
+      const p=path[i];
+      if(distance(p,target)<=1){destination=i;break;}
+      for(const [dx,dz] of [[1,0],[0,1],[-1,0],[0,-1]]){
+        const next={x:p.x+dx,z:p.z+dz,parent:i},id=key(next);
+        if(!validPos(next)||blocked.has(id)||seen.has(id))continue;
+        seen.add(id);path.push(next);
+      }
+    }
+    if(destination<0)return false; // No teleport or ghost-walking.
+    while(path[destination].parent>0)destination=path[destination].parent;
+    if(destination===0)return true;
+    c.x=path[destination].x;c.z=path[destination].z;
     c.energy=Math.max(0,c.energy-1);
+    return true;
   }
   function nearest(c,items){let best=null,score=Infinity;
     for(const item of items){
@@ -73,7 +98,7 @@
   function gathering(s,c){
     const tree=nearest(c,s.forest);
     if(!tree){c.goal="sin árboles";return;}
-    if(distance(c,tree)>1){walk(c,tree);c.goal="buscar madera";return;}
+    if(distance(c,tree)>1){walk(s,c,tree);c.goal="buscar madera";return;}
     const i=s.forest.findIndex(t=>same(t,tree));
     if(i<0)throw Error("tree ownership conflict");
     s.forest.splice(i,1);s.wood++;s.harvested++;c.harvested++;
@@ -104,7 +129,7 @@
     if(s.wood<1){c.goal="reunir madera para continuar la obra";return;}
     const blocking=nearest(c,s.forest.filter(t=>obstructs(t,site)));
     if(blocking){
-      if(distance(c,blocking)>1){walk(c,blocking);c.goal="despejar terreno";return;}
+      if(distance(c,blocking)>1){walk(s,c,blocking);c.goal="despejar terreno";return;}
       const index=s.forest.findIndex(t=>same(t,blocking));
       if(index<0)throw Error("building site timber conflict");
       s.forest.splice(index,1);s.wood++;s.harvested++;c.harvested++;
@@ -112,7 +137,7 @@
       record(s,c,"harvest",{x:blocking.x,z:blocking.z,amount:1,site:site.id});
       return;
     }
-    if(distance(c,site)>1){walk(c,site);c.goal="ir a obra";return;}
+    if(distance(c,site)>1){walk(s,c,site);c.goal="ir a obra";return;}
     if(site.id!=="home"&&s.kits<1)throw Error("construction kit missing");
     const work=s.worksite;
     if(work.siteId!==null&&work.siteId!==site.id)
@@ -135,14 +160,14 @@
   function forage(s,c){
     const bush=nearest(c,s.bushes.filter(b=>b.berries>0));
     if(!bush){c.goal="esperar bayas";return;}
-    if(distance(c,bush)>1){walk(c,bush);c.goal="buscar bayas";return;}
+    if(distance(c,bush)>1){walk(s,c,bush);c.goal="buscar bayas";return;}
     bush.berries--;s.food++;s.foodGathered++;c.energy=Math.max(0,c.energy-1);
     c.goal="recolectar alimento";record(s,c,"forage",{x:bush.x,z:bush.z,amount:1});
   }
   function social(s,c){
     const other=nearest(c,s.citizens.filter(p=>p.id!==c.id&&p.alive));
     if(!other)return false;
-    if(distance(c,other)>2){walk(c,other);c.goal="buscar compañía";return true;}
+    if(distance(c,other)>2){walk(s,c,other);c.goal="buscar compañía";return true;}
     c.relations[other.id]=(c.relations[other.id]||0)+1;
     other.relations[c.id]=(other.relations[c.id]||0)+1;
     c.conversations++;other.conversations++;
@@ -178,11 +203,11 @@
     // Newcomers must travel into the inhabited settlement before undertaking work.
     if(!c.settled&&s.structures.length){
       if(distance(c,SITES[0])>2){
-        walk(c,SITES[0]);c.goal="llegar a la aldea";return;
+        walk(s,c,SITES[0]);c.goal="llegar a la aldea";return;
       }
       c.settled=true; // Milestone is persistent: do not pull a worker back from distant jobs.
     }
-    if(Frontier.beforeAction(s,c,{walk,nearest,record}))return;
+    if(Frontier.beforeAction(s,c,{walk:(person,target)=>walk(s,person,target),nearest,record}))return;
     if(s.food<Math.max(2,s.citizens.length)||c.hunger<=58){
       if(s.bushes.some(b=>b.berries>0)){forage(s,c);return;}
     }
@@ -200,7 +225,7 @@
     if(job.type==="axe"||job.type==="kit"){craft(s,c,job.type);return;}
     if(job.type==="build"){construct(s,c,job.site);return;}
     if(s.citizens.length>1&&s.tick%5===0&&social(s,c))return;
-    const home=SITES[0];if(distance(c,home)>1){walk(c,home);c.goal="volver a casa";}
+    const home=SITES[0];if(distance(c,home)>1){walk(s,c,home);c.goal="volver a casa";}
     else{c.energy=Math.min(20,c.energy+2);c.goal="cuidar aldea";}
   }
   function arrival(s){
