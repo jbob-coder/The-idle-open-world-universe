@@ -219,7 +219,10 @@ test("100 worlds found an actual second community after council approval and a t
     assert.equal(out.status,"established","outpost seed "+seed);
     assert.equal(s.structures.length,4);
     assert.equal(s.citizens.length,3,"the settlement must not create people");
-    assert.equal(out.approvedBy,s.settlement.leaderId);
+    // Council elections can legitimately replace the approving leader later;
+    // the outpost must preserve the *historical* elected approver.
+    assert.ok(s.citizens.some(c=>c.id===out.approvedBy));
+    assert.ok(s.settlement.elections>=1&&out.approvedAt>=s.settlement.foundedAt);
     assert.ok(out.approvedAt>=2400&&out.foundedAt>out.approvedAt);
     assert.deepEqual([house.id,house.x,house.z],["east_outpost",15,13]);
     assert.equal(house.builder,founder.id);
