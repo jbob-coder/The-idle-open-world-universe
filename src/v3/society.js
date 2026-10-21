@@ -95,9 +95,13 @@
     return tree.x>=site.x-1&&tree.x<=site.x+2&&
       tree.z>=site.z-1&&tree.z<=site.z+2;
   }
+  const emptyWorksite=()=>({siteId:null,progress:0,contributors:{}});
   function construct(s,c,site){
-    if(s.wood<site.cost||s.structures.length!==SITES.indexOf(site))
+    if(s.structures.length!==SITES.indexOf(site))
       throw Error("invalid construction attempt");
+    // Timber and effort are real, separately payable shifts, not a
+    // teleporting, instant structure triggered by crossing a resource threshold.
+    if(s.wood<1){c.goal="reunir madera para continuar la obra";return;}
     const blocking=nearest(c,s.forest.filter(t=>obstructs(t,site)));
     if(blocking){
       if(distance(c,blocking)>1){walk(c,blocking);c.goal="despejar terreno";return;}
@@ -110,12 +114,22 @@
     }
     if(distance(c,site)>1){walk(c,site);c.goal="ir a obra";return;}
     if(site.id!=="home"&&s.kits<1)throw Error("construction kit missing");
-    s.wood-=site.cost;s.spentWood+=site.cost;
+    const work=s.worksite;
+    if(work.siteId!==null&&work.siteId!==site.id)
+      throw Error("conflicting settlement construction site");
+    if(work.siteId===null)work.siteId=site.id;
+    s.wood--;s.spentWood++;work.progress++;
+    work.contributors[c.id]=(work.contributors[c.id]||0)+1;
+    c.energy=Math.max(0,c.energy-3);
+    c.goal="trabajar en "+site.type+" ("+work.progress+"/"+site.cost+")";
+    record(s,c,"work",{site:site.id,progress:work.progress,woodSpent:1});
+    if(work.progress<site.cost)return;
+    if(work.progress!==site.cost)throw Error("invalid construction progress");
+    s.worksite=emptyWorksite();
     if(site.id!=="home"){s.kits--;s.kitsUsed++;}
     s.structures.push({id:site.id,type:site.type,x:site.x,z:site.z,builder:c.id,completedAt:s.tick});
-    c.built++;c.goal="construir "+site.type;
-    c.energy=Math.max(0,c.energy-3);
-    if(site.id==="home"){s.settlement.foundedAt=s.tick;}
+    c.built++;c.goal="terminó "+site.type;
+    if(site.id==="home")s.settlement.foundedAt=s.tick;
     record(s,c,"build",{site:site.id,woodSpent:site.cost,kitUsed:site.id!=="home"});
   }
   function forage(s,c){
@@ -137,15 +151,15 @@
   }
   function plan(s){
     if(!s.axe)return {type:s.wood>=2?"axe":"wood"};
-    if(!s.structures.length)return {type:s.wood>=4?"build":"wood",site:SITES[0]};
+    if(!s.structures.length)return {type:s.wood>=1?"build":"wood",site:SITES[0]};
     if(s.citizens.length>=2&&s.structures.length===1){
       if(!s.kits)return {type:s.wood>=2?"kit":"wood"};
-      return {type:s.wood>=6?"build":"wood",site:SITES[1]};
+      return {type:s.wood>=1?"build":"wood",site:SITES[1]};
     }
     // The council must choose a leader before the third public project is approved.
     if(s.citizens.length>=3&&s.structures.length===2&&s.settlement.leaderId){
       if(!s.kits)return {type:s.wood>=2?"kit":"wood"};
-      return {type:s.wood>=4?"build":"wood",site:SITES[2]};
+      return {type:s.wood>=1?"build":"wood",site:SITES[2]};
     }
     return {type:"none"};
   }
@@ -262,7 +276,7 @@
       wood:0,harvested:0,craftedWood:0,spentWood:0,
       axe:0,axeCrafted:0,kits:0,kitsCrafted:0,kitsUsed:0,
       food:0,foodGathered:0,foodEaten:0,foodGrown:0,
-      outpost:Frontier.newState(),
+      outpost:Frontier.newState(),worksite:emptyWorksite(),
       settlement:{id:"village_01",name:"Primera Aldea",foundedAt:null,
         leaderId:null,electionTick:0,elections:0,ballots:[],orders:[],
         ordersIssued:0,policy:"none",policyTick:0,policiesSet:0,policyReason:""},events:[]});
@@ -436,7 +450,7 @@
   }
   function migrateV2(value){
     if(!validateV2(value))throw RangeError("invalid schema-2 society save");
-    const s=copy(value);s.schemaVersion=VERSION;
+    const s=copy(value);s.schemaVersion=VERSION;s.worksite=emptyWorksite();
     for(const c of s.citizens)c.homeId="village_01";
     s.outpost=Frontier.newState();
     if(!validate(s))throw RangeError("unsafe schema-2 society migration");
@@ -445,7 +459,36 @@
   function validate(s){
     if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
        !Frontier.validate(s))return false;
-    return validateV2(Frontier.projectV2(s));
+    const w=s.worksite;
+    if(!w||typeof w!=="object"||Array.isArray(w)||
+       !number(w.progress)||w.progress>6||!w.contributors||
+       typeof w.contributors!=="object"||Array.isArray(w.contributors))return false;
+    const active=w.siteId!==null,site=SITES[s.structures.length];
+    if(active?(!site||w.siteId!==site.id||w.progress<1||
+         w.progress>=site.cost):w.progress!==0)return false;
+    const contributions=Object.entries(w.contributors);
+    if(contributions.length>3||(!active&&contributions.length))return false;
+    let paid=0;
+    for(const [id,units] of contributions){
+      if(!s.citizens.some(c=>c.id===id)||!number(units)||units<1||
+         (active&&units>=site.cost))return false;
+      paid+=units;
+    }
+    if(paid!==w.progress)return false;
+    // The old schema-2 validator accounts for completed buildings. Present
+    // partially paid timber as held inventory in the *validation projection*
+    // only; the actual world retains every unit spent and its labor receipt.
+    const legacy=Frontier.projectV2(s);
+    legacy.wood+=w.progress;
+    legacy.spentWood-=w.progress;
+    if(legacy.spentWood<0)return false;
+    legacy.events=legacy.events.filter(e=>e.action!=="work");
+    for(const e of s.events.filter(e=>e.action==="work"))
+      if(!e.details||!SITES.some(site=>site.id===e.details.site)||
+         e.details.woodSpent!==1||!number(e.details.progress)||
+         e.details.progress<1||e.details.progress>6||
+         !s.citizens.some(c=>c.id===e.actor))return false;
+    return validateV2(legacy);
   }
   function instance(state){
     function snapshot(){return copy(state);}
@@ -477,6 +520,10 @@
     let value=JSON.parse(raw);
     if(value&&value.schemaVersion===1)value=migrateV1(value);
     if(value&&value.schemaVersion===2)value=migrateV2(value);
+    // Additive schema-3 upgrade: old saves have no active work site,
+    // and past completed structures retain their historical builder.
+    if(value&&value.schemaVersion===VERSION&&value.worksite===undefined)
+      value.worksite=emptyWorksite();
     if(!validate(value))throw RangeError("invalid society state");
     return instance(copy(value));
   }
