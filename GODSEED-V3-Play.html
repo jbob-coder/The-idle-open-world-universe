@@ -1445,9 +1445,9 @@ button[aria-pressed="true"]{background:#6e6138}
    // Saving a meal and keeping emergency reserves have independent utility.
    add("forage",food<3?160+(3-food)*6:62+(70-hunger),
      "food_security",food<3||hunger<70);
-   add("build_home",88+p.security*.65,"shelter",!house&&wood>=4);
+   add("build_home",88+p.security*.65,"shelter",!house&&wood>=(ctx.homeProject?1:4));
    add("gather_wood",81+p.craftsmanship*.55,"building_materials",
-     (!house&&wood<4)||(house&&road&&wood<1));
+     (!house&&wood<(ctx.homeProject?1:4))||(house&&road&&wood<1));
    add("build_road",70+p.craftsmanship*.55,"connect_homes",house&&road&&wood>=1);
    add("explore",21+p.curiosity*.76+mind.curiosityUrge*.45,"discover",
      energy>=9&&hunger>=68&&food>=3);
@@ -1608,6 +1608,106 @@ button[aria-pressed="true"]{background:#6e6138}
  }
  return Object.freeze({create,advance,validate,MAX_TIES});
 });</script>
+<script>/* Persistent, actor-neutral construction work orders for a living world.
+ * Construction costs labor and physically carried timber, one unit at a time.
+ * Open orders survive hunger, rest, path interruptions and save/reload. */
+(function(root,factory){"use strict";const api=factory();
+  if(typeof module!=="undefined"&&module.exports)module.exports=api;
+  if(root)root.GodseedV3Projects=api;
+})(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
+  const COST=Object.freeze({home:4,road:1}),MAX_PROJECTS=40,MAX_CONTRIBUTORS=8;
+  const integer=n=>Number.isSafeInteger(n)&&n>=0;
+  const key=(type,site)=>type+":"+site.x+","+site.z;
+  const create=(cutoverTick=0)=>({cutoverTick,entries:[]});
+  function find(s,type,site){
+    return s.entries.find(p=>p.id===key(type,site))||null;
+  }
+  function propose(s,type,site,initiator,tick){
+    if(!Object.prototype.hasOwnProperty.call(COST,type)||!site||
+      !Number.isSafeInteger(site.x)||!Number.isSafeInteger(site.z)||
+      typeof initiator!=="string"||!initiator||!integer(tick)||
+      tick<s.cutoverTick)throw RangeError("invalid construction proposal");
+    const existing=find(s,type,site);
+    if(existing)return existing;
+    if(s.entries.length>=MAX_PROJECTS||
+       s.entries.some(p=>p.status==="active"))
+      return null; // Bounded concurrent construction, not an NPC command.
+    const order={id:key(type,site),type,x:site.x,z:site.z,
+      required:COST[type],progress:0,status:"active",initiator,
+      startedAt:tick,lastAt:tick,completedAt:null,contributors:[]};
+    s.entries.push(order);return order;
+  }
+  function contribute(s,project,actor,tick){
+    if(!project||!s||!Array.isArray(s.entries)||!s.entries.includes(project)||
+       project.status!=="active"||project.progress>=project.required||
+       !actor||actor.alive!==true||typeof actor.id!=="string"||!actor.id||
+       actor.x!==project.x||actor.z!==project.z||
+       !integer(actor.wood)||actor.wood<1||!integer(actor.energy)||actor.energy<4||
+       !integer(tick)||tick<project.lastAt)return {worked:false,completed:false};
+    let member=project.contributors.find(c=>c.id===actor.id);
+    if(!member&&project.contributors.length>=MAX_CONTRIBUTORS)
+      return {worked:false,completed:false};
+    if(!member){member={id:actor.id,units:0};project.contributors.push(member);}
+    actor.wood--;actor.energy=Math.max(0,actor.energy-2);member.units++;
+    project.progress++;project.lastAt=tick;
+    const completed=project.progress===project.required;
+    if(completed){project.status="complete";project.completedAt=tick;}
+    return {worked:true,completed,woodSpent:1,projectId:project.id};
+  }
+  function validate(s,tick,homes,roads,workers){
+    if(!s||!integer(s.cutoverTick)||s.cutoverTick>tick||
+       !Array.isArray(s.entries)||s.entries.length>MAX_PROJECTS||
+       !Array.isArray(homes)||!Array.isArray(roads)||!Array.isArray(workers))
+      return false;
+    const identities=new Map(workers.map(w=>[w.id,w]));
+    const seen=new Set();let previous=-1,active=0,units=0;
+    for(const p of s.entries){
+      if(!p||!Object.prototype.hasOwnProperty.call(COST,p.type)||
+         !Number.isSafeInteger(p.x)||!Number.isSafeInteger(p.z)||
+         p.id!==key(p.type,p)||seen.has(p.id)||
+         p.required!==COST[p.type]||!integer(p.progress)||
+         p.progress>p.required||
+         !integer(p.startedAt)||!integer(p.lastAt)||
+         p.startedAt<s.cutoverTick||p.lastAt<p.startedAt||
+         p.lastAt>tick||p.startedAt<previous||
+         !identities.has(p.initiator)||!Array.isArray(p.contributors)||
+         p.contributors.length>MAX_CONTRIBUTORS)return false;
+      seen.add(p.id);previous=p.startedAt;
+      let amount=0;const members=new Set();
+      for(const c of p.contributors){
+        const actor=identities.get(c.id);
+        if(!actor||members.has(c.id)||!integer(c.units)||c.units<1||
+           actor.bornAt>p.lastAt)return false;
+        amount+=c.units;members.add(c.id);
+      }
+      if(amount!==p.progress)return false;
+      units+=amount;
+      const complete=p.progress===p.required;
+      if(p.status!==(complete?"complete":"active")||
+         (complete?(!integer(p.completedAt)||p.completedAt!==p.lastAt):
+          (p.completedAt!==null)))return false;
+      if(!complete)active++;
+      if(complete){
+        const target=p.type==="home"?
+          homes.find(h=>h.x===p.x&&h.z===p.z&&h.completedAt===p.completedAt):
+          roads.find(r=>r.x===p.x&&r.z===p.z&&r.completedAt===p.completedAt);
+        if(!target)return false;
+      }else{
+        if(homes.some(h=>h.x===p.x&&h.z===p.z)||
+           roads.some(r=>r.x===p.x&&r.z===p.z))return false;
+      }
+    }
+    if(active>1)return false;
+    // Every finished structure built after this system activated needs a
+    // real work order. Older imported history is preserved without fabrication.
+    for(const [buildings,type] of [[homes,"home"],[roads,"road"]])
+      for(const b of buildings)if(b.completedAt>s.cutoverTick&&
+        !s.entries.some(p=>p.type===type&&p.x===b.x&&p.z===b.z&&
+          p.status==="complete"&&p.completedAt===b.completedAt))return false;
+    return units;
+  }
+  return Object.freeze({COST,MAX_PROJECTS,create,find,propose,contribute,validate});
+});</script>
 <script>/* Persistent autonomous wilderness explorer. All supplies are physically gathered.
  * Camps belong to the expedition ledger; village stores are never remotely debited. */
 (function(root,factory){"use strict";const api=factory();
@@ -1619,12 +1719,13 @@ button[aria-pressed="true"]{background:#6e6138}
   const Agency=typeof module!=="undefined"&&module.exports?require("./agency.js"):globalThis.GodseedV3Agency;
   const Discovery=typeof module!=="undefined"&&module.exports?require("./discovery.js"):globalThis.GodseedV3Discovery;
   const Social=typeof module!=="undefined"&&module.exports?require("./social.js"):globalThis.GodseedV3Social;
+  const Projects=typeof module!=="undefined"&&module.exports?require("./projects.js"):globalThis.GodseedV3Projects;
   const ROUTE=Nav.itinerary(),EVENT_LIMIT=64,CAMP_LIMIT=56;
   const copy=x=>JSON.parse(JSON.stringify(x));
   const positive=n=>Number.isSafeInteger(n)&&n>=0;
   function create(){return {explorer:null,camps:[],discoveries:[],events:[],
     knownChunks:[],woodGathered:0,woodSpent:0,foodGathered:0,foodEaten:0,
-    settlers:[],houses:[],roads:[],social:Social.create(),settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0};}
+    settlers:[],houses:[],roads:[],social:Social.create(),projects:Projects.create(),settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0};}
   function record(s,tick,action,details,actor="world_taren"){
     s.events.push({tick,actor,action,details});
     if(s.events.length>EVENT_LIMIT)s.events.shift();
@@ -1718,7 +1819,8 @@ button[aria-pressed="true"]{background:#6e6138}
     const site=s.houses.length
       ?Infra.next(world,s.camps.filter(b=>b.id===c.homeCampId).concat(s.houses),s.roads,tick):null;
     const decision=Agency.decide(c.mind,{hunger:c.hunger,energy:c.energy,
-      food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site});
+      food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site,
+      homeProject:!!Projects.find(s.projects,"home",c.homeSite||camp)});
     Agency.commitChoice(c.mind,decision.action);
     if(decision.action==="forage"){gather("food");return;}
     if(decision.action==="gather_wood"){gather("wood");return;}
@@ -1732,12 +1834,19 @@ button[aria-pressed="true"]{background:#6e6138}
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="trasladar madera al hogar";return;
       }
-      c.wood-=4;s.woodSpent+=4;c.energy=Math.max(0,c.energy-3);
-      s.houses.push({id:"frontier_home_1",type:"home",x:place.x,z:place.z,
-        campId:camp.id,builder:c.id,completedAt:tick,name:"Casa de Mira"});
-      c.goal="construir mi hogar";
-      record(s,tick,"settler_build",{id:"frontier_home_1",woodSpent:4,
-        x:place.x,z:place.z},c.id);return;
+      const task=Projects.propose(s.projects,"home",place,c.id,tick);
+      if(!task){c.goal="esperar una obra disponible";return;}
+      const step=Projects.contribute(s.projects,task,c,tick);
+      if(!step.worked){c.goal="obtener madera para la obra";return;}
+      s.woodSpent+=step.woodSpent;c.goal="construir vivienda ("+task.progress+"/"+task.required+")";
+      if(step.completed){
+        s.houses.push({id:"frontier_home_1",type:"home",x:place.x,z:place.z,
+          campId:camp.id,builder:c.id,completedAt:tick,name:"Casa de Mira"});
+        c.goal="completé mi hogar";
+        record(s,tick,"settler_build",{id:"frontier_home_1",woodSpent:task.required,
+          x:place.x,z:place.z},c.id);
+      }
+      return;
     }
     if(decision.action==="build_road"&&site){
       if(!Nav.same(c,site)){
@@ -1747,11 +1856,16 @@ button[aria-pressed="true"]{background:#6e6138}
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="transportar madera al camino";return;
       }
-      c.wood--;s.woodSpent++;
-      s.roads.push({x:site.x,z:site.z,type:"road",material:"timber",
-        builder:c.id,completedAt:tick});
-      c.energy=Math.max(0,c.energy-2);c.goal="construir camino";
-      record(s,tick,"settler_build_road",{x:site.x,z:site.z,woodSpent:1},c.id);
+      const task=Projects.propose(s.projects,"road",site,c.id,tick);
+      if(!task){c.goal="esperar una obra disponible";return;}
+      const step=Projects.contribute(s.projects,task,c,tick);
+      if(!step.worked){c.goal="buscar materiales para el camino";return;}
+      s.woodSpent+=step.woodSpent;c.goal="trabajar en camino";
+      if(step.completed){
+        s.roads.push({x:site.x,z:site.z,type:"road",material:"timber",
+          builder:c.id,completedAt:tick});
+        record(s,tick,"settler_build_road",{x:site.x,z:site.z,woodSpent:task.required},c.id);
+      }
       return;
     }
     if(decision.action==="explore"){
@@ -1806,6 +1920,13 @@ button[aria-pressed="true"]{background:#6e6138}
       previous.explorer.mind=null;
     }
     previous.social=Social.create();
+    return previous;
+  }
+  function migrateV5(state,tick){
+    const previous=copy(state);
+    // Older buildings were completed before work-order recording existed.
+    // Do not invent imaginary historical workers or timber transfers.
+    previous.projects=Projects.create(tick);
     return previous;
   }
   function advanceSocial(s,tick){return Social.advance(s,tick,record);}
@@ -1893,7 +2014,12 @@ button[aria-pressed="true"]{background:#6e6138}
     for(const k of ["woodGathered","woodSpent","foodGathered","foodEaten",
       "settlerWoodGathered","settlerFoodGathered","settlerFoodEaten"])
       if(!positive(s[k]))return false;
-    if(s.woodSpent!==(s.camps.length+s.houses.length)*4+s.roads.length||
+    const projectUnits=Projects.validate(s.projects,tick,s.houses,s.roads,
+      [s.explorer,...s.settlers].filter(Boolean));
+    if(projectUnits===false)return false;
+    const pending=s.projects.entries.filter(p=>p.status==="active")
+      .reduce((n,p)=>n+p.progress,0);
+    if(s.woodSpent!==(s.camps.length+s.houses.length)*4+s.roads.length+pending||
       s.woodGathered!==removedCount||
       s.settlerWoodGathered>s.woodGathered||
       s.settlerFoodGathered>s.foodGathered||
@@ -1916,7 +2042,7 @@ button[aria-pressed="true"]{background:#6e6138}
         if(!positive(m[k]))return false;
       if(m.energy>20||m.hunger>100||m.health>100||
         m.alive!==(m.health>0)||
-        m.wood!==s.settlerWoodGathered-s.houses.length*4-s.roads.length||
+        m.wood!==s.settlerWoodGathered-s.houses.length*4-s.roads.length-pending||
         m.food!==s.settlerFoodGathered-s.settlerFoodEaten)return false;
     }
     if(s.houses.length){
@@ -2003,7 +2129,7 @@ button[aria-pressed="true"]{background:#6e6138}
     }
     return true;
   }
-  return Object.freeze({create,advance,advanceSocial,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
+  return Object.freeze({create,advance,advanceSocial,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,migrateV5,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
 });
 </script>
 <script>/* Large-world adapter: keep the existing settlement authoritative in its home
@@ -2016,7 +2142,7 @@ button[aria-pressed="true"]{background:#6e6138}
   const Society=node?require("./society.js"):globalThis.GodseedV3Society;
   const World=node?require("./world.js"):globalThis.GodseedV3World;
   const Expedition=node?require("./expedition.js"):globalThis.GodseedV3Expedition;
-  const VERSION=5,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
+  const VERSION=6,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
   const copy=x=>JSON.parse(JSON.stringify(x));
   function instance(homeland,world,expedition){
     let home=homeland.snapshot(),sceneCache=null,sceneKey="";
@@ -2035,7 +2161,9 @@ button[aria-pressed="true"]{background:#6e6138}
         homelandCitizens:home.citizens.length,camps:expedition.camps.length,
         frontierResidents:expedition.settlers.length,frontierHomes:expedition.houses.length,
         constructedRoads:expedition.roads.length,
-        socialConnections:expedition.social.ties.length};
+        socialConnections:expedition.social.ties.length,
+        activeConstruction:expedition.projects.entries.filter(p=>p.status==="active").length,
+        completedWorkOrders:expedition.projects.entries.filter(p=>p.status==="complete").length};
       return result;
     }
     function advance(n){
@@ -2096,15 +2224,16 @@ button[aria-pressed="true"]{background:#6e6138}
   function restore(raw){
     if(typeof raw!=="string"||raw.length>SAVE_LIMIT)throw RangeError("invalid large-world save");
     const s=JSON.parse(raw);
-    if(!s||![1,2,3,4,VERSION].includes(s.schemaVersion)||!s.homeland||
+    if(!s||![1,2,3,4,5,VERSION].includes(s.schemaVersion)||!s.homeland||
       s.seed!==s.homeland.seed||!s.wilderness)
       throw RangeError("incompatible large-world save");
     const homeland=Society.restore(JSON.stringify(s.homeland)),tick=homeland.snapshot().tick;
     const world=World.create(s.seed,s.wilderness);
     const expedition=s.schemaVersion===VERSION?s.expedition:
-      Expedition.migrateV4(s.schemaVersion===1?Expedition.migrateLegacy(s.expedition):
-        s.schemaVersion===2?Expedition.migrateV2(s.expedition):
-        s.schemaVersion===3?Expedition.migrateV3(s.expedition):s.expedition);
+      Expedition.migrateV5(s.schemaVersion===5?s.expedition:
+        Expedition.migrateV4(s.schemaVersion===1?Expedition.migrateLegacy(s.expedition):
+          s.schemaVersion===2?Expedition.migrateV2(s.expedition):
+          s.schemaVersion===3?Expedition.migrateV3(s.expedition):s.expedition),tick);
     if(s.wilderness.berries.some(b=>b.at>tick)||
       !Expedition.validate(expedition,world,tick,s.wilderness.removed.length))
       throw RangeError("invalid wilderness progress");
@@ -2557,6 +2686,8 @@ button[aria-pressed="true"]{background:#6e6138}
         statsPair(stats,"Campamentos de ruta",state.world.camps);
         statsPair(stats,"Caminos construidos por NPC",state.world.constructedRoads);
         statsPair(stats,"Vínculos personales",state.world.socialConnections);
+        statsPair(stats,"Obras activas",state.world.activeConstruction);
+        statsPair(stats,"Órdenes de obra terminadas",state.world.completedWorkOrders);
       }
       statsPair(stats,"Habitantes",state.citizens.length);
       statsPair(stats,useWorld?"Madera de la aldea":"Madera disponible",state.wood);
