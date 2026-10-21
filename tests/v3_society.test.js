@@ -270,6 +270,10 @@ test("reserve accounts, forged couriers and historical founder IDs fail closed",
     s=>s.outpost.wood++,
     s=>s.outpost.food++,
     s=>s.outpost.deliveries=-1,
+    s=>s.outpost.deliveries++,
+    s=>s.outpost.shipmentsDispatched++,
+    s=>s.outpost.foodConsumed++,
+    s=>s.outpost.shipmentsDispatched=-1,
     s=>s.outpost.founderId="sim_unknown",
     s=>s.outpost.approvedAt=s.tick+1,
     s=>s.outpost.foundedAt=s.outpost.approvedAt-1,
@@ -285,4 +289,47 @@ test("reserve accounts, forged couriers and historical founder IDs fail closed",
     assert.equal(Sim.validate(s),false,corrupt.toString());
     assert.throws(()=>Sim.restore(JSON.stringify(s)),RangeError);
   }
+});
+
+
+test("expedition and subsequent courier deliveries require map travel, not instantaneous stock movement",()=>{
+  const sim=Sim.create(14);
+  let approved=null,founded=null,firstDispatch=null,firstDelivery=null;
+  let pathSteps=0,preTravel=null;
+  for(let i=0;i<2800;i++){
+    const s=sim.advance(1),out=s.outpost;
+    if(out.status==="travelling"&&!approved){
+      approved={tick:out.approvedAt,wood:out.cargoWood,food:out.food};
+      assert.equal(s.structures.length,3);
+      preTravel=s.citizens.find(c=>c.id===out.founderId);
+    }
+    if(out.status==="travelling"&&preTravel){
+      const c=s.citizens.find(c=>c.id===out.founderId);
+      if(c.x!==preTravel.x||c.z!==preTravel.z)pathSteps++;
+      preTravel=c;
+    }
+    if(out.status==="established"&&!founded){
+      const c=s.citizens.find(c=>c.id===out.founderId);
+      founded={tick:out.foundedAt,x:c.x,z:c.z};
+      assert.equal(s.structures.length,4);
+      assert.ok(Math.abs(c.x-15)+Math.abs(c.z-13)<=1);
+    }
+    if(out.delivery&&!firstDispatch)firstDispatch={tick:out.delivery.startedAt,food:s.food};
+    if(out.deliveries>0&&!firstDelivery)firstDelivery={
+      tick:s.tick,deliveries:out.deliveries,food:out.food,
+      courier:s.citizens.find(c=>c.role==="forager")
+    };
+    if(firstDelivery)break;
+  }
+  assert.ok(approved&&founded&&firstDispatch&&firstDelivery);
+  assert.ok(pathSteps>=8,"founder must travel between different map areas");
+  assert.ok(founded.tick>approved.tick+8);
+  assert.ok(firstDelivery.tick>firstDispatch.tick+8);
+  assert.ok(Math.abs(firstDelivery.courier.x-15)+Math.abs(firstDelivery.courier.z-13)<=2,
+    "courier has to be at the outpost when delivery is completed");
+  const s=sim.snapshot(),o=s.outpost;
+  assert.equal(o.shipmentsDispatched,o.deliveries+(o.delivery?1:0));
+  assert.equal(o.food+(o.delivery?o.delivery.food:0)+o.foodConsumed,
+    2+o.shipmentsDispatched*2);
+  assert.equal(Sim.validate(s),true);
 });
