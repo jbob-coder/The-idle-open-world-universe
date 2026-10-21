@@ -110,15 +110,23 @@
       c.goal=s.houses.length?"descansar en casa":"descansar en campamento";return;
     }
     const gather=kind=>{
-      const route=Nav.resource(world,c,kind,tick);
-      if(!route){c.goal=kind==="food"?"buscar nuevos frutos":"buscar nuevos árboles";return;}
+      const action=kind==="food"?"forage":"gather_wood";
+      const radius=Agency.searchRadius(c.mind,action);
+      const route=Nav.resource(world,c,kind,tick,radius,radius>=36?4096:2048);
+      if(!route){
+        Agency.observe(c.mind,action,false);
+        c.goal=kind==="food"?"buscar nuevos frutos":"buscar nuevos árboles";return;
+      }
       if(route.path.length){
         const p=route.path[0];c.x=p.x;c.z=p.z;c.energy=Math.max(0,c.energy-1);
         mark(s,c);c.goal=kind==="food"?"recolectar alimentos":"reunir madera";return;
       }
       const done=kind==="wood"?world.harvest(route.target.x,route.target.z):
         world.forage(route.target.x,route.target.z,tick);
-      if(!done){c.goal="recurso agotado";return;}
+      if(!done){
+        Agency.observe(c.mind,action,false);c.goal="recurso agotado";return;
+      }
+      Agency.observe(c.mind,action,true);
       c.energy=Math.max(0,c.energy-1);
       if(kind==="wood"){c.wood++;s.woodGathered++;s.settlerWoodGathered++;}
       else{c.food++;s.foodGathered++;s.settlerFoodGathered++;}
@@ -136,18 +144,29 @@
     if(decision.action==="gather_wood"){gather("wood");return;}
     if(decision.action==="build_home"){
       const place=c.homeSite;
-      if(!place){c.goal="investigar un terreno seguro";return;}
+      if(!place){Agency.observe(c.mind,"build_home",false);
+        c.goal="investigar un terreno seguro";return;}
       if(!Nav.same(c,place)){
         const route=Nav.local(world,c,place,tick);
-        if(!route||!route.path.length){c.goal="buscar acceso al terreno";return;}
+        if(!route||!route.path.length){
+          Agency.observe(c.mind,"build_home",false);
+          c.goal="buscar acceso al terreno";return;
+        }
         const p=route.path[0];c.x=p.x;c.z=p.z;
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="trasladar madera al hogar";return;
       }
       const task=Projects.propose(s.projects,"home",place,c.id,tick);
-      if(!task){c.goal="esperar una obra disponible";return;}
+      if(!task){
+        Agency.observe(c.mind,"build_home",false);
+        c.goal="esperar una obra disponible";return;
+      }
       const step=Projects.contribute(s.projects,task,c,tick);
-      if(!step.worked){c.goal="obtener madera para la obra";return;}
+      if(!step.worked){
+        Agency.observe(c.mind,"build_home",false);
+        c.goal="obtener madera para la obra";return;
+      }
+      Agency.observe(c.mind,"build_home",true);
       s.woodSpent+=step.woodSpent;c.goal="construir vivienda ("+task.progress+"/"+task.required+")";
       if(step.completed){
         completeFrontierHome(s,camp,c,task,tick,c.id);
@@ -158,15 +177,25 @@
     if(decision.action==="build_road"&&site){
       if(!Nav.same(c,site)){
         const route=Nav.local(world,c,site,tick);
-        if(!route||!route.path.length){c.goal="buscar acceso a la obra vial";return;}
+        if(!route||!route.path.length){
+          Agency.observe(c.mind,"build_road",false);
+          c.goal="buscar acceso a la obra vial";return;
+        }
         const p=route.path[0];c.x=p.x;c.z=p.z;
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="transportar madera al camino";return;
       }
       const task=Projects.propose(s.projects,"road",site,c.id,tick);
-      if(!task){c.goal="esperar una obra disponible";return;}
+      if(!task){
+        Agency.observe(c.mind,"build_road",false);
+        c.goal="esperar una obra disponible";return;
+      }
       const step=Projects.contribute(s.projects,task,c,tick);
-      if(!step.worked){c.goal="buscar materiales para el camino";return;}
+      if(!step.worked){
+        Agency.observe(c.mind,"build_road",false);
+        c.goal="buscar materiales para el camino";return;
+      }
+      Agency.observe(c.mind,"build_road",true);
       s.woodSpent+=step.woodSpent;c.goal="trabajar en camino";
       if(step.completed){
         s.roads.push({x:site.x,z:site.z,type:"road",material:"timber",
@@ -186,9 +215,11 @@
         if(route&&route.path.length){
           c.x=route.path[0].x;c.z=route.path[0].z;
           c.energy=Math.max(0,c.energy-1);mark(s,c);
+          Agency.observe(c.mind,"explore",true);
           c.goal="explorar por curiosidad";return;
         }
       }
+      Agency.observe(c.mind,"explore",false);
       c.goal="observar el terreno";
       if(tick%22===0)record(s,tick,"settler_explore",{x:c.x,z:c.z},c.id);
       c.energy=Math.min(20,c.energy+1);return;
