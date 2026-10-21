@@ -394,7 +394,7 @@ test("unfinished work orders reject invented timber and forged worker receipts",
     s=>s.worksite.progress++,
     s=>s.worksite.contributors.sim_unknown=1,
     s=>s.worksite.siteId="nonexistent",
-    s=>s.worksite.contributors=Object.create(null),
+    s=>s.worksite.contributors.sim_aria=0,
     s=>s.wood++,
     s=>s.spentWood--
   ];
