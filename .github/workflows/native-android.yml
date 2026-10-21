@@ -27,12 +27,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.11'
       - name: Unit-test exact-SHA emulator evidence validation
@@ -71,7 +71,7 @@ jobs:
           ! grep -RiE 'android.permission.(INTERNET|READ_EXTERNAL_STORAGE|WRITE_EXTERNAL_STORAGE|MANAGE_EXTERNAL_STORAGE)' android/gradle/app/src/main/AndroidManifest.xml
       - name: Publish separate native evaluation APK
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: godseed-gradle-webview-native-evaluation
           path: |
@@ -90,8 +90,8 @@ jobs:
       GODSEED_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       GODSEED_TESTED_SHA: ${{ github.sha }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
         with:
           name: godseed-gradle-webview-native-evaluation
           path: android/gradle/app/build/outputs/apk
@@ -124,7 +124,7 @@ jobs:
           script: bash tests/native/run-emulator-acceptance.sh
       - name: Publish emulator-only install, screenshot and test logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: godseed-native-android-emulator-smoke
           retention-days: 14
