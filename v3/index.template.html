@@ -38,12 +38,35 @@ button[aria-pressed="true"]{background:#6e6138}
 #bottom button{padding:7px;font-size:11px;min-height:35px}
 #worldTools{top:40px;max-width:53vw}#worldTools button{font-size:10px;padding:5px 7px;min-height:32px}
 #atlas{inset:38px 12% 82px}#panel{max-height:calc(100% - 135px)}}
+
+/* The actual world starts map-first. Diagnostics remain available on demand,
+   rather than covering the gameplay area by default on a small phone. */
+#quickbar{display:none;position:fixed;z-index:5;left:max(8px,env(safe-area-inset-left));top:49px;gap:6px;align-items:center}
+#quickbar button{padding:7px 10px;min-height:35px;background:#102220d9;border-color:#accaa083}
+body.world-mode #quickbar{display:flex}
+body.world-mode #panel,body.world-mode #bottom,body.world-mode #worldTools,body.world-mode #hint{display:none}
+body.world-mode.ui-inspector-open #panel{display:block;z-index:6}
+body.world-mode.ui-menu-open #bottom{display:flex;z-index:6}
+body.world-mode.ui-menu-open #worldTools{display:flex;z-index:6}
+body.world-mode #top{padding-bottom:6px;background:linear-gradient(#0a1616e9,#0a161600)}
+body.world-mode #top strong{font-size:12px;letter-spacing:.09em}
+body.world-mode #top #headline{font-size:11px;max-width:64%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+body.world-mode #panel{top:93px;width:min(310px,82vw);max-height:calc(100% - 115px);box-shadow:0 10px 28px #0009}
+body.world-mode #bottom{background:#0b191bdc;padding:7px;border-radius:10px;max-height:40vh;overflow:auto}
+body.world-mode #worldTools{left:max(8px,env(safe-area-inset-left));top:91px;max-width:min(470px,90vw)}
+@media(max-width:670px){body.world-mode #quickbar{top:37px}body.world-mode #panel{top:82px;max-height:calc(100% - 95px)}
+body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}}
 </style>
 </head>
 <body>
 <canvas id="scene" aria-label="Mundo 3D autónomo de GODSEED"></canvas>
 <div id="top"><strong>GODSEED · V3 PREVIEW</strong><span id="headline">Iniciando mundo sin conexión…</span></div>
 <div id="hint">Arrastra para girar la cámara · rueda o botones +/- para acercar</div>
+<div id="quickbar" role="toolbar" aria-label="Controles compactos del mundo">
+<button id="quickAtlas" type="button" aria-controls="atlas">Mapa</button>
+<button id="menuToggle" type="button" aria-expanded="false" aria-controls="bottom worldTools">Menú</button>
+<button id="infoToggle" type="button" aria-expanded="false" aria-controls="panel">Inspeccionar</button>
+</div>
 <nav id="worldTools" aria-label="Explorar el gran mundo">
 <button id="atlasToggle" type="button" aria-expanded="false" aria-controls="atlas">Atlas 1.024 × 1.024</button>
 <button id="homeCamera" type="button">Volver a la aldea</button>
