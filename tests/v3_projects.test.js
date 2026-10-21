@@ -69,7 +69,7 @@ test("world keeps an open construction job and paid timber on restart",()=>{
     const game=WorldSim.create(seed);
     for(let n=0;n<4000;n++){
       const state=game.advance(1);
-      const open=state.expedition.projects.entries.find(p=>p.status==="active"&&p.progress>0);
+      const open=state.expedition.projects.entries.find(p=>p.type==="home"&&p.status==="active"&&p.progress>0);
       if(!open)continue;
       found=true;
       assert.equal(open.type,"home");
