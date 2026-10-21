@@ -67,6 +67,7 @@
      if(store)cube(t.x+.85,.15,t.z+1.36,.38,.42,.06,"#e8cc78","#b99b4f","#937742");
     }else{
      let colors=t.actor.id==="sim_aria"?["#88c0ff","#507fc3","#3968a4"]:
+       t.actor.homeId==="village_02"?["#8be0c9","#42b7a5","#288979"]:
        t.actor.id==="sim_bran"?["#f8d785","#c09542","#a87a33"]:["#f0b4d5","#c474a2","#984e7e"];
      cube(t.x+.29,0,t.z+.29,.42,.88,.42,...colors);
      cube(t.x+.25,.88,t.z+.25,.5,.38,.5,"#e9bb8b","#b98a66","#9a6e52");
