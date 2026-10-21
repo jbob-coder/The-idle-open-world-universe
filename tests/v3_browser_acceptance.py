@@ -39,7 +39,7 @@ def run():
             wait_for_state(page,"() => Boolean(window.GodseedV3Debug)",20)
             assert page.evaluate("GodseedV3Debug.hasWebGL()"), "WebGL 3D context unavailable"
             assert page.evaluate("typeof Element.prototype.replaceChildren") == "undefined"
-            assert page.locator("#stats dt").count() == 10
+            assert page.locator("#stats dt").count() == 12
             assert page.locator("#citizens .person").count() == 1
             initial=page.evaluate("""() => {
                 const s=GodseedV3Debug.newWorld(14);
@@ -63,6 +63,8 @@ def run():
             assert built["spent"]==4 and built["wood"]==built["harvested"]-4
             assert len(built["structures"])==1 and len(built["citizens"])==1 and built["citizens"][0]["alive"]
             assert built["schemaVersion"] == 3
+            assert page.locator("#stats").inner_text().find("Día")>=0
+            assert page.locator("#stats").inner_text().find("Momento")>=0
             assert len(built["citizens"][0]["mind"]["memories"]) >= 2
             assert page.locator("#memories").count() == 1
             assert page.evaluate("GodseedV3Debug.save()"), "V3 persistence failed"

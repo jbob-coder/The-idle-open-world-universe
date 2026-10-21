@@ -57,6 +57,15 @@ button[aria-pressed="true"]{background:#6e6138}
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
   const VERSION=3,SIZE=20,STORAGE_KEY="godseed-v3-prototype-v1";
   const copy=x=>JSON.parse(JSON.stringify(x));
+  // A day is derived from the simulation tick: no wall clock, extra state or save migration.
+  const DAY_LENGTH=160;
+  function dayInfo(tick){
+    if(!Number.isSafeInteger(tick)||tick<0)throw new RangeError("invalid world time");
+    const hour=tick%DAY_LENGTH;
+    return {day:Math.floor(tick/DAY_LENGTH)+1,
+      phase:hour>=120?"noche":hour>=104?"atardecer":hour<24?"amanecer":"día",
+      hour};
+  }
   const pos=(x,z)=>Number.isSafeInteger(x)&&Number.isSafeInteger(z)&&x>=0&&z>=0&&x<SIZE&&z<SIZE;
   const uint32=x=>Number.isSafeInteger(x)&&x>=0&&x<=0xffffffff;
   const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.z-b.z);
@@ -168,6 +177,20 @@ button[aria-pressed="true"]{background:#6e6138}
     if(c.hunger<=60&&s.food>0){
       s.food--;s.foodEaten++;c.hunger=Math.min(100,c.hunger+38);
       c.goal="comer";record(s,c,"eat",{foodSpent:1});return;
+    }
+    // At night, return to the actual shelter and sleep, but never ignore hunger
+    // or an empty pantry. Sleep is chosen by Aria, not requested by the player.
+    const hour=s.tick%DAY_LENGTH;
+    if(hour>=120&&s.structures.length&&s.food>0&&c.hunger>=65){
+      const home=s.structures[0];
+      if(distance(c,home)>1){
+        walk(c,home);c.goal="regresar a dormir";
+      }else{
+        c.energy=Math.min(20,c.energy+5);
+        c.goal="dormir";
+        if(hour===120||hour%20===0)record(s,c,"sleep",{energy:c.energy});
+      }
+      return;
     }
     if(c.energy<5&&!(c.hunger<20&&s.food===0)){
       c.energy=Math.min(20,c.energy+8);c.goal="descansar";
@@ -315,9 +338,9 @@ button[aria-pressed="true"]{background:#6e6138}
     if(!Array.isArray(s.events)||s.events.length>48)return false;
     if(!s.events.every(e=>e&&Number.isSafeInteger(e.tick)&&e.tick>=0&&
         e.tick<=s.tick&&["sim_aria","sim_bran"].includes(e.actor)&&
-        ["build","harvest","forage","eat","rest","discover","reflect","hardship"].includes(e.action)))return false;
+        ["build","harvest","forage","eat","rest","sleep","discover","reflect","hardship"].includes(e.action)))return false;
     const prior=Object.assign({},s,{schemaVersion:2,
-      events:s.events.filter(e=>!["discover","reflect","hardship"].includes(e.action))});
+      events:s.events.filter(e=>!["discover","reflect","hardship","sleep"].includes(e.action))});
     if(!validateV2(prior))return false;
     const c=s.citizens[0],m=c.mind;
     if(!m||typeof m!=="object"||Array.isArray(m)||
@@ -420,7 +443,7 @@ button[aria-pressed="true"]{background:#6e6138}
     if(!validate(state))throw new RangeError("corrupt V3 save");
     return instance(copy(state));
   }
-    return Object.freeze({VERSION,SIZE,STORAGE_KEY,create,restore,validate});
+    return Object.freeze({VERSION,SIZE,STORAGE_KEY,DAY_LENGTH,dayInfo,create,restore,validate});
 });</script>
 <script>/* GODSEED V3: offline WebGL1 cubic Pixel Squares spectator, no CDN or game-state writes. */
 (function(root,factory){"use strict";const api=factory();
@@ -459,11 +482,11 @@ button[aria-pressed="true"]{background:#6e6138}
     const vert=shader(gl,gl.VERTEX_SHADER,
       "attribute vec3 p;attribute vec3 c;uniform mat4 m;varying vec3 v;void main(){gl_Position=m*vec4(p,1.0);v=c;}");
     const frag=shader(gl,gl.FRAGMENT_SHADER,
-      "precision mediump float;varying vec3 v;void main(){gl_FragColor=vec4(v,1.0);}");
+      "precision mediump float;varying vec3 v;uniform float light;void main(){gl_FragColor=vec4(v*light,1.0);}");
     const program=gl.createProgram();gl.attachShader(program,vert);gl.attachShader(program,frag);gl.linkProgram(program);
     if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error("WebGL link: "+gl.getProgramInfoLog(program));
     gl.useProgram(program);
-    const p=gl.getAttribLocation(program,"p"),c=gl.getAttribLocation(program,"c"),m=gl.getUniformLocation(program,"m");
+    const p=gl.getAttribLocation(program,"p"),c=gl.getAttribLocation(program,"c"),m=gl.getUniformLocation(program,"m"),lightUniform=gl.getUniformLocation(program,"light");
     const buffer=gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
     gl.enableVertexAttribArray(p);gl.enableVertexAttribArray(c);
@@ -517,9 +540,25 @@ button[aria-pressed="true"]{background:#6e6138}
         box(b.x+.25,.12,b.z+1.36,.43,.79,.04,[.29,.17,.10]);
       }
       for(const c of state.citizens){
-        const col=c.id==="sim_aria"?[.40,.66,.95]:[.96,.72,.34];
-        box(c.x+.29,0,c.z+.29,.42,.88,.42,col);
-        box(c.x+.25,.88,c.z+.25,.5,.38,.5,[.80,.62,.45]);
+        const troubled=c.mind&&c.mind.emotions.stress>=55;
+        const cloth=troubled?[.65,.45,.35]:[.40,.66,.95];
+        const skin=[.80,.62,.45],pants=[.23,.30,.42];
+        const walking=/caminar|buscar|regresar|explorar/.test(c.goal);
+        const stride=walking?(state.tick%2===0?.11:-.11):0;
+        if(c.goal==="dormir"){
+          // A horizontal resting pose inside the shelter, not a standing puppet.
+          box(c.x+.17,.10,c.z+.24,.87,.28,.47,cloth);
+          box(c.x+.91,.11,c.z+.26,.30,.27,.43,skin);
+        }else{
+          box(c.x+.28,.05,c.z+.30,.18,.48+stride,.23,pants);
+          box(c.x+.55,.05,c.z+.30,.18,.48-stride,.23,pants);
+          box(c.x+.33,.56,c.z+.29,.39,.52,.43,cloth);
+          box(c.x+.19,.57,c.z+.31,.13,.47-stride,.23,cloth);
+          box(c.x+.73,.57,c.z+.31,.13,.47+stride,.23,cloth);
+          box(c.x+.30,1.08,c.z+.26,.45,.39,.46,skin);
+          box(c.x+.39,1.26,c.z+.72,.09,.08,.03,[.12,.15,.16]);
+          box(c.x+.59,1.26,c.z+.72,.09,.08,.03,[.12,.15,.16]);
+        }
       }
       const target=[9.5,0,9.5],eye=[
         9.5+radius*Math.cos(elevation)*Math.sin(yaw),
@@ -527,7 +566,12 @@ button[aria-pressed="true"]{background:#6e6138}
         9.5+radius*Math.cos(elevation)*Math.cos(yaw)
       ];
       gl.viewport(0,0,canvas.width,canvas.height);
+      // A reproducible light cycle is derived from tick and costs one uniform.
+      const hour=state.tick%160;
+      const light=hour>=120?.42:hour>=104?.70:hour<24?.70:1;
+      gl.clearColor(.10*light,.15*light,.20*light,1);
       gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+      gl.uniform1f(lightUniform,light);
       const proj=perspective(Math.PI/3,canvas.width/canvas.height,.1,140);
       gl.uniformMatrix4fv(m,false,multiply(proj,lookAt(eye,target)));
       gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(v),gl.DYNAMIC_DRAW);
@@ -599,11 +643,26 @@ button[aria-pressed="true"]{background:#6e6138}
      cube(t.x-.25,0,t.z-.15,1.6,1.35,1.5,"#b99a62","#94734b","#795b3e");
      cube(t.x-.39,1.35,t.z-.28,1.86,.5,1.76,"#b75b49","#964638","#77392f");
     }else{
-     let colors=t.actor.id==="sim_aria"?["#88c0ff","#507fc3","#3968a4"]:["#f8d785","#c09542","#a87a33"];
-     cube(t.x+.29,0,t.z+.29,.42,.88,.42,...colors);
-     cube(t.x+.25,.88,t.z+.25,.5,.38,.5,"#e9bb8b","#b98a66","#9a6e52");
+     const goal=t.actor.goal,stress=t.actor.mind&&t.actor.mind.emotions.stress>=55;
+     const colors=stress?["#ca9065","#906344","#6e4936"]:["#88c0ff","#507fc3","#3968a4"];
+     const walking=/caminar|buscar|regresar|explorar/.test(goal);
+     const stride=walking?(s.tick%2===0?.11:-.11):0;
+     if(goal==="dormir"){
+      cube(t.x+.17,.10,t.z+.24,.87,.28,.47,...colors);
+      cube(t.x+.91,.11,t.z+.26,.30,.27,.43,"#e9bb8b","#b98a66","#9a6e52");
+     }else{
+      cube(t.x+.28,.05,t.z+.30,.18,.48+stride,.23,"#6680a0","#394761","#293750");
+      cube(t.x+.55,.05,t.z+.30,.18,.48-stride,.23,"#6680a0","#394761","#293750");
+      cube(t.x+.33,.56,t.z+.29,.39,.52,.43,...colors);
+      cube(t.x+.19,.57,t.z+.31,.13,.47-stride,.23,...colors);
+      cube(t.x+.73,.57,t.z+.31,.13,.47+stride,.23,...colors);
+      cube(t.x+.30,1.08,t.z+.26,.45,.39,.46,"#e9bb8b","#b98a66","#9a6e52");
+     }
     }
    }
+   const hour=s.tick%160;
+   const darkness=hour>=120?.47:hour>=104?.22:hour<24?.22:0;
+   if(darkness){ctx.fillStyle="rgba(6,14,33,"+darkness+")";ctx.fillRect(0,0,w,h);}
   }
   return Object.freeze({render,rotate,zoom,mode:"canvas-2d-fallback"});
  }
@@ -683,6 +742,8 @@ button[aria-pressed="true"]{background:#6e6138}
       const stats=el("stats");stats.textContent="";
       statsPair(stats,"Semilla",state.seed);
       statsPair(stats,"Ciclo",state.tick);
+      statsPair(stats,"Día",Sim.dayInfo(state.tick).day);
+      statsPair(stats,"Momento",Sim.dayInfo(state.tick).phase);
       statsPair(stats,"Habitantes",state.citizens.length);
       statsPair(stats,"Madera disponible",state.wood);
       statsPair(stats,"Madera recolectada",state.harvested);
@@ -720,7 +781,8 @@ button[aria-pressed="true"]{background:#6e6138}
         const div=document.createElement("div");
         const labels={build:"construyó refugio",harvest:"recolectó madera",
           forage:"recolectó bayas",eat:"comió",rest:"descansó",
-          discover:"descubrió un lugar",reflect:"reflexionó",hardship:"pasó hambre"};
+          discover:"descubrió un lugar",reflect:"reflexionó",hardship:"pasó hambre",
+          sleep:"durmió en el refugio"};
         div.textContent="Ciclo "+e.tick+" · "+e.actor+": "+(labels[e.action]||e.action);
         events.appendChild(div);
       }

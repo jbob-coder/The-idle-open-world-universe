@@ -71,6 +71,8 @@
       const stats=el("stats");stats.textContent="";
       statsPair(stats,"Semilla",state.seed);
       statsPair(stats,"Ciclo",state.tick);
+      statsPair(stats,"Día",Sim.dayInfo(state.tick).day);
+      statsPair(stats,"Momento",Sim.dayInfo(state.tick).phase);
       statsPair(stats,"Habitantes",state.citizens.length);
       statsPair(stats,"Madera disponible",state.wood);
       statsPair(stats,"Madera recolectada",state.harvested);
@@ -108,7 +110,8 @@
         const div=document.createElement("div");
         const labels={build:"construyó refugio",harvest:"recolectó madera",
           forage:"recolectó bayas",eat:"comió",rest:"descansó",
-          discover:"descubrió un lugar",reflect:"reflexionó",hardship:"pasó hambre"};
+          discover:"descubrió un lugar",reflect:"reflexionó",hardship:"pasó hambre",
+          sleep:"durmió en el refugio"};
         div.textContent="Ciclo "+e.tick+" · "+e.actor+": "+(labels[e.action]||e.action);
         events.appendChild(div);
       }

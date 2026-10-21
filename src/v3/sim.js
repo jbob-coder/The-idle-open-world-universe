@@ -5,6 +5,15 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
   const VERSION=3,SIZE=20,STORAGE_KEY="godseed-v3-prototype-v1";
   const copy=x=>JSON.parse(JSON.stringify(x));
+  // A day is derived from the simulation tick: no wall clock, extra state or save migration.
+  const DAY_LENGTH=160;
+  function dayInfo(tick){
+    if(!Number.isSafeInteger(tick)||tick<0)throw new RangeError("invalid world time");
+    const hour=tick%DAY_LENGTH;
+    return {day:Math.floor(tick/DAY_LENGTH)+1,
+      phase:hour>=120?"noche":hour>=104?"atardecer":hour<24?"amanecer":"día",
+      hour};
+  }
   const pos=(x,z)=>Number.isSafeInteger(x)&&Number.isSafeInteger(z)&&x>=0&&z>=0&&x<SIZE&&z<SIZE;
   const uint32=x=>Number.isSafeInteger(x)&&x>=0&&x<=0xffffffff;
   const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.z-b.z);
@@ -116,6 +125,20 @@
     if(c.hunger<=60&&s.food>0){
       s.food--;s.foodEaten++;c.hunger=Math.min(100,c.hunger+38);
       c.goal="comer";record(s,c,"eat",{foodSpent:1});return;
+    }
+    // At night, return to the actual shelter and sleep, but never ignore hunger
+    // or an empty pantry. Sleep is chosen by Aria, not requested by the player.
+    const hour=s.tick%DAY_LENGTH;
+    if(hour>=120&&s.structures.length&&s.food>0&&c.hunger>=65){
+      const home=s.structures[0];
+      if(distance(c,home)>1){
+        walk(c,home);c.goal="regresar a dormir";
+      }else{
+        c.energy=Math.min(20,c.energy+5);
+        c.goal="dormir";
+        if(hour===120||hour%20===0)record(s,c,"sleep",{energy:c.energy});
+      }
+      return;
     }
     if(c.energy<5&&!(c.hunger<20&&s.food===0)){
       c.energy=Math.min(20,c.energy+8);c.goal="descansar";
@@ -263,9 +286,9 @@
     if(!Array.isArray(s.events)||s.events.length>48)return false;
     if(!s.events.every(e=>e&&Number.isSafeInteger(e.tick)&&e.tick>=0&&
         e.tick<=s.tick&&["sim_aria","sim_bran"].includes(e.actor)&&
-        ["build","harvest","forage","eat","rest","discover","reflect","hardship"].includes(e.action)))return false;
+        ["build","harvest","forage","eat","rest","sleep","discover","reflect","hardship"].includes(e.action)))return false;
     const prior=Object.assign({},s,{schemaVersion:2,
-      events:s.events.filter(e=>!["discover","reflect","hardship"].includes(e.action))});
+      events:s.events.filter(e=>!["discover","reflect","hardship","sleep"].includes(e.action))});
     if(!validateV2(prior))return false;
     const c=s.citizens[0],m=c.mind;
     if(!m||typeof m!=="object"||Array.isArray(m)||
@@ -368,5 +391,5 @@
     if(!validate(state))throw new RangeError("corrupt V3 save");
     return instance(copy(state));
   }
-    return Object.freeze({VERSION,SIZE,STORAGE_KEY,create,restore,validate});
+    return Object.freeze({VERSION,SIZE,STORAGE_KEY,DAY_LENGTH,dayInfo,create,restore,validate});
 });

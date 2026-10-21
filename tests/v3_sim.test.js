@@ -133,6 +133,8 @@ test("V3 v2 save migrates without changing survival counters or world resources"
   const current=V3.create(42).advance(300);
   const legacy=JSON.parse(JSON.stringify(current));
   legacy.schemaVersion=2;
+  // A historical v2 save cannot contain the sleep event added in this version.
+  legacy.events=legacy.events.filter(e=>e.action!=="sleep");
   delete legacy.citizens[0].mind;
   const loaded=V3.restore(JSON.stringify(legacy)).snapshot();
   assert.equal(loaded.schemaVersion,3);
@@ -159,5 +161,38 @@ test("memory stays bounded and tampering is rejected across 20k ticks",()=>{
     corrupt.citizens[0].mind.memories[0].tick=s.tick+1;
     assert.equal(V3.validate(corrupt),false);
     assert.throws(()=>V3.restore(JSON.stringify(corrupt)),RangeError);
+  }
+});
+
+test("derived world clock never changes saves and rolls through all four periods",()=>{
+  assert.equal(V3.DAY_LENGTH,160);
+  assert.deepEqual(V3.dayInfo(0),{day:1,phase:"amanecer",hour:0});
+  assert.equal(V3.dayInfo(24).phase,"día");
+  assert.equal(V3.dayInfo(104).phase,"atardecer");
+  assert.equal(V3.dayInfo(120).phase,"noche");
+  assert.deepEqual(V3.dayInfo(160),{day:2,phase:"amanecer",hour:0});
+  assert.throws(()=>V3.dayInfo(-1),RangeError);
+});
+test("Aria chooses to return home and sleep at night while preserving survival",()=>{
+  for(const seed of [1,14,42,100,2026]){
+    const g=V3.create(seed),full=V3.create(seed);
+    let slept=0, walkedHome=0;
+    for(let i=0;i<1800;i++){
+      const state=g.advance(1),c=state.citizens[0];
+      if(c.goal==="dormir"){
+        slept++;
+        assert.equal(V3.dayInfo(state.tick).phase,"noche");
+        assert.equal(state.structures.length,1);
+        assert.ok(Math.abs(c.x-5)+Math.abs(c.z-5)<=1);
+      }
+      if(c.goal==="regresar a dormir")walkedHome++;
+    }
+    const final=g.snapshot();
+    assert.ok(slept>0,"Aria must sleep autonomously in seed "+seed);
+    assert.ok(final.citizens[0].alive,"Aria survives seed "+seed);
+    assert.equal(final.citizens.length,1);
+    assert.equal(V3.validate(final),true);
+    assert.deepEqual(final,full.advance(1800),"deterministic day/night state "+seed);
+    assert.deepEqual(V3.restore(g.serialize()).snapshot(),final);
   }
 });

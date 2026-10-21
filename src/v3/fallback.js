@@ -60,11 +60,26 @@
      cube(t.x-.25,0,t.z-.15,1.6,1.35,1.5,"#b99a62","#94734b","#795b3e");
      cube(t.x-.39,1.35,t.z-.28,1.86,.5,1.76,"#b75b49","#964638","#77392f");
     }else{
-     let colors=t.actor.id==="sim_aria"?["#88c0ff","#507fc3","#3968a4"]:["#f8d785","#c09542","#a87a33"];
-     cube(t.x+.29,0,t.z+.29,.42,.88,.42,...colors);
-     cube(t.x+.25,.88,t.z+.25,.5,.38,.5,"#e9bb8b","#b98a66","#9a6e52");
+     const goal=t.actor.goal,stress=t.actor.mind&&t.actor.mind.emotions.stress>=55;
+     const colors=stress?["#ca9065","#906344","#6e4936"]:["#88c0ff","#507fc3","#3968a4"];
+     const walking=/caminar|buscar|regresar|explorar/.test(goal);
+     const stride=walking?(s.tick%2===0?.11:-.11):0;
+     if(goal==="dormir"){
+      cube(t.x+.17,.10,t.z+.24,.87,.28,.47,...colors);
+      cube(t.x+.91,.11,t.z+.26,.30,.27,.43,"#e9bb8b","#b98a66","#9a6e52");
+     }else{
+      cube(t.x+.28,.05,t.z+.30,.18,.48+stride,.23,"#6680a0","#394761","#293750");
+      cube(t.x+.55,.05,t.z+.30,.18,.48-stride,.23,"#6680a0","#394761","#293750");
+      cube(t.x+.33,.56,t.z+.29,.39,.52,.43,...colors);
+      cube(t.x+.19,.57,t.z+.31,.13,.47-stride,.23,...colors);
+      cube(t.x+.73,.57,t.z+.31,.13,.47+stride,.23,...colors);
+      cube(t.x+.30,1.08,t.z+.26,.45,.39,.46,"#e9bb8b","#b98a66","#9a6e52");
+     }
     }
    }
+   const hour=s.tick%160;
+   const darkness=hour>=120?.47:hour>=104?.22:hour<24?.22:0;
+   if(darkness){ctx.fillStyle="rgba(6,14,33,"+darkness+")";ctx.fillRect(0,0,w,h);}
   }
   return Object.freeze({render,rotate,zoom,mode:"canvas-2d-fallback"});
  }

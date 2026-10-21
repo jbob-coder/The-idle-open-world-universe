@@ -35,11 +35,11 @@
     const vert=shader(gl,gl.VERTEX_SHADER,
       "attribute vec3 p;attribute vec3 c;uniform mat4 m;varying vec3 v;void main(){gl_Position=m*vec4(p,1.0);v=c;}");
     const frag=shader(gl,gl.FRAGMENT_SHADER,
-      "precision mediump float;varying vec3 v;void main(){gl_FragColor=vec4(v,1.0);}");
+      "precision mediump float;varying vec3 v;uniform float light;void main(){gl_FragColor=vec4(v*light,1.0);}");
     const program=gl.createProgram();gl.attachShader(program,vert);gl.attachShader(program,frag);gl.linkProgram(program);
     if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error("WebGL link: "+gl.getProgramInfoLog(program));
     gl.useProgram(program);
-    const p=gl.getAttribLocation(program,"p"),c=gl.getAttribLocation(program,"c"),m=gl.getUniformLocation(program,"m");
+    const p=gl.getAttribLocation(program,"p"),c=gl.getAttribLocation(program,"c"),m=gl.getUniformLocation(program,"m"),lightUniform=gl.getUniformLocation(program,"light");
     const buffer=gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
     gl.enableVertexAttribArray(p);gl.enableVertexAttribArray(c);
@@ -93,9 +93,25 @@
         box(b.x+.25,.12,b.z+1.36,.43,.79,.04,[.29,.17,.10]);
       }
       for(const c of state.citizens){
-        const col=c.id==="sim_aria"?[.40,.66,.95]:[.96,.72,.34];
-        box(c.x+.29,0,c.z+.29,.42,.88,.42,col);
-        box(c.x+.25,.88,c.z+.25,.5,.38,.5,[.80,.62,.45]);
+        const troubled=c.mind&&c.mind.emotions.stress>=55;
+        const cloth=troubled?[.65,.45,.35]:[.40,.66,.95];
+        const skin=[.80,.62,.45],pants=[.23,.30,.42];
+        const walking=/caminar|buscar|regresar|explorar/.test(c.goal);
+        const stride=walking?(state.tick%2===0?.11:-.11):0;
+        if(c.goal==="dormir"){
+          // A horizontal resting pose inside the shelter, not a standing puppet.
+          box(c.x+.17,.10,c.z+.24,.87,.28,.47,cloth);
+          box(c.x+.91,.11,c.z+.26,.30,.27,.43,skin);
+        }else{
+          box(c.x+.28,.05,c.z+.30,.18,.48+stride,.23,pants);
+          box(c.x+.55,.05,c.z+.30,.18,.48-stride,.23,pants);
+          box(c.x+.33,.56,c.z+.29,.39,.52,.43,cloth);
+          box(c.x+.19,.57,c.z+.31,.13,.47-stride,.23,cloth);
+          box(c.x+.73,.57,c.z+.31,.13,.47+stride,.23,cloth);
+          box(c.x+.30,1.08,c.z+.26,.45,.39,.46,skin);
+          box(c.x+.39,1.26,c.z+.72,.09,.08,.03,[.12,.15,.16]);
+          box(c.x+.59,1.26,c.z+.72,.09,.08,.03,[.12,.15,.16]);
+        }
       }
       const target=[9.5,0,9.5],eye=[
         9.5+radius*Math.cos(elevation)*Math.sin(yaw),
@@ -103,7 +119,12 @@
         9.5+radius*Math.cos(elevation)*Math.cos(yaw)
       ];
       gl.viewport(0,0,canvas.width,canvas.height);
+      // A reproducible light cycle is derived from tick and costs one uniform.
+      const hour=state.tick%160;
+      const light=hour>=120?.42:hour>=104?.70:hour<24?.70:1;
+      gl.clearColor(.10*light,.15*light,.20*light,1);
       gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+      gl.uniform1f(lightUniform,light);
       const proj=perspective(Math.PI/3,canvas.width/canvas.height,.1,140);
       gl.uniformMatrix4fv(m,false,multiply(proj,lookAt(eye,target)));
       gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(v),gl.DYNAMIC_DRAW);
