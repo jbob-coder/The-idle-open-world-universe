@@ -19,9 +19,9 @@ test("frontier homesteader actually harvests, eats, and builds from finite resou
   assert.ok(house.completedAt>=mira.bornAt);
   assert.ok(s.expedition.settlerWoodGathered>=4);
   assert.ok(s.expedition.settlerFoodGathered>=3);
-  assert.equal(mira.wood,s.expedition.settlerWoodGathered-4);
+  assert.equal(mira.wood,s.expedition.settlerWoodGathered-4-s.expedition.roads.length);
   assert.equal(mira.food,s.expedition.settlerFoodGathered-s.expedition.settlerFoodEaten);
-  assert.equal(s.expedition.woodSpent,(s.expedition.camps.length+1)*4);
+  assert.equal(s.expedition.woodSpent,(s.expedition.camps.length+1)*4+s.expedition.roads.length);
   assert.equal(s.expedition.foodGathered-s.expedition.foodEaten,
     s.expedition.explorer.food+mira.food);
   assert.deepEqual(WorldSim.restore(a.serialize()).snapshot(),s);
@@ -33,13 +33,13 @@ test("schema 1 world saves remain loadable without retroactive NPC creation",()=
   const original=game.snapshot();
   assert.equal(original.expedition.camps.length,0);
   const raw=JSON.parse(game.serialize());
-  assert.equal(raw.schemaVersion,2);
+  assert.equal(raw.schemaVersion,3);
   raw.schemaVersion=1;
   for(const key of ["settlers","houses","settlerWoodGathered",
     "settlerFoodGathered","settlerFoodEaten"])delete raw.expedition[key];
   const migrated=WorldSim.restore(JSON.stringify(raw));
   assert.deepEqual(migrated.snapshot().expedition,original.expedition);
-  assert.equal(JSON.parse(migrated.serialize()).schemaVersion,2);
+  assert.equal(JSON.parse(migrated.serialize()).schemaVersion,3);
   assert.equal(migrated.snapshot().world.frontierResidents,0);
 });
 
@@ -83,6 +83,59 @@ test("settlers can pass beyond a depleted local grove and return home",()=>{
   assert.ok(home,"the resident built after travelling beyond the first grove");
   assert.equal(home.builder,resident.id);
   assert.equal(resident.wood,
-    state.expedition.settlerWoodGathered-state.expedition.houses.length*4);
+    state.expedition.settlerWoodGathered-state.expedition.houses.length*4-state.expedition.roads.length);
   assert.deepEqual(WorldSim.restore(game.serialize()).snapshot(),state);
+});
+
+test("NPC roads arise from built settlement structures and survive reload",()=>{
+  const game=WorldSim.create(14);
+  const before=game.snapshot();
+  assert.equal(before.expedition.roads.length,0,"world starts with no NPC roads");
+  let state;
+  for(let i=0;i<20;i++){
+    state=game.advance(500);
+    if(state.world.constructedRoads>0)break;
+  }
+  assert.ok(state.world.frontierHomes>0,"survival and shelter prerequisite must occur");
+  assert.ok(state.world.constructedRoads>0,"Mira must autonomously build a road after her home");
+  const roads=state.expedition.roads;
+  assert.equal(state.world.constructedRoads,roads.length);
+  assert.ok(roads.every(r=>r.builder==="world_mira"&&r.type==="road"&&r.material==="timber"));
+  const mira=state.expedition.settlers[0], e=state.expedition;
+  assert.equal(e.woodGathered,e.woodSpent+e.explorer.wood+mira.wood);
+  assert.equal(e.woodSpent,4*(e.camps.length+e.houses.length)+roads.length);
+  const road=roads[0],scene=game.scene(road.x,road.z,16);
+  assert.equal(scene.terrain.find(t=>t.x===road.x&&t.z===road.z).kind,"road");
+  assert.deepEqual(WorldSim.restore(game.serialize()).snapshot(),state);
+});
+
+test("schema 2 world migrates roads to an empty list without fabrication",()=>{
+  const game=WorldSim.create(77);game.advance(650);
+  const prior=JSON.parse(game.serialize());
+  assert.equal(prior.schemaVersion,3);
+  assert.equal(prior.expedition.roads.length,0,"legacy fixture cannot include new roads");
+  prior.schemaVersion=2;
+  delete prior.expedition.roads;
+  const restored=WorldSim.restore(JSON.stringify(prior));
+  assert.deepEqual(restored.snapshot(),game.snapshot());
+  assert.equal(JSON.parse(restored.serialize()).schemaVersion,3);
+});
+
+test("world rejects road material forgery and forged construction chronology",()=>{
+  const game=WorldSim.create(14);let state;
+  for(let i=0;i<20;i++){state=game.advance(500);if(state.expedition.roads.length)break;}
+  assert.ok(state.expedition.roads.length>0);
+  const saved=JSON.parse(game.serialize());
+  const alterations=[
+    x=>x.expedition.roads[0].builder="world_taren",
+    x=>x.expedition.roads[0].x+=1,
+    x=>x.expedition.roads[0].completedAt=x.homeland.tick+1,
+    x=>x.expedition.woodSpent-=1,
+    x=>x.expedition.settlers[0].wood+=1,
+    x=>x.expedition.roads.push({...x.expedition.roads[0]})
+  ];
+  for(const modify of alterations){
+    const attack=JSON.parse(JSON.stringify(saved));modify(attack);
+    assert.throws(()=>WorldSim.restore(JSON.stringify(attack)),RangeError);
+  }
 });
