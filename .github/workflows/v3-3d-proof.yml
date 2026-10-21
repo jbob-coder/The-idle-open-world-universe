@@ -37,6 +37,7 @@ jobs:
       - name: Validate JavaScript syntax and simulate 100 seeds
         run: |
           node --check src/v3/sim.js
+          node --check src/v3/frontier.js
           node --check src/v3/society.js
           node --check src/v3/view.js
           node --check src/v3/fallback.js
