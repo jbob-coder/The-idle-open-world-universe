@@ -133,6 +133,8 @@ test("V3 v2 save migrates without changing survival counters or world resources"
   const current=V3.create(42).advance(300);
   const legacy=JSON.parse(JSON.stringify(current));
   legacy.schemaVersion=2;
+  // A historical v2 save cannot contain the sleep event added in this version.
+  legacy.events=legacy.events.filter(e=>e.action!=="sleep");
   delete legacy.citizens[0].mind;
   const loaded=V3.restore(JSON.stringify(legacy)).snapshot();
   assert.equal(loaded.schemaVersion,3);
