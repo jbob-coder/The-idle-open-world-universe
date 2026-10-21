@@ -194,3 +194,26 @@ test("advancing 3000 ticks in chunks is identical to a single 3000-tick step",()
   assert.deepEqual(Big.restore(a.serialize()).snapshot(),expected);
   assert.ok(a.metrics().cachedChunks<=48&&b.metrics().cachedChunks<=48);
 });
+
+
+test("full 20k tick itinerary reaches 224 unique landmarks, pays 56 camps and stays recoverable",()=>{
+  const game=Big.create(14),s=game.advance(20000),exp=s.expedition;
+  assert.equal(exp.explorer.alive,true);
+  assert.equal(exp.explorer.health,100);
+  assert.equal(exp.explorer.routeIndex,224);
+  assert.equal(exp.discoveries.length,224);
+  assert.equal(exp.camps.length,56);
+  assert.equal(exp.woodSpent,224);
+  assert.equal(exp.woodGathered-exp.woodSpent,exp.explorer.wood);
+  assert.equal(exp.foodGathered-exp.foodEaten,exp.explorer.food);
+  for(let i=0;i<exp.camps.length;i++){
+    const camp=exp.camps[i],d=exp.discoveries[4*i];
+    assert.equal(camp.id,"camp_"+(4*i+1));
+    assert.equal(camp.x,d.x+2);
+    assert.equal(camp.z,d.z+2);
+    assert.ok(camp.completedAt>=d.tick);
+  }
+  assert.ok(game.serialize().length<1500000);
+  assert.ok(game.metrics().cachedChunks<=48);
+  assert.deepEqual(Big.restore(game.serialize()).snapshot(),s);
+});
