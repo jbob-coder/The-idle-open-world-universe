@@ -1262,9 +1262,9 @@ button[aria-pressed="true"]{background:#6e6138}
   const same=(a,b)=>a.x===b.x&&a.z===b.z;
   const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.z-b.z);
   const DIRS=[[1,0],[0,1],[-1,0],[0,-1]];
-  function search(world,start,predicate,tick,radius){
+  function search(world,start,predicate,tick,radius,maxNodes=768){
     const queue=[{x:start.x,z:start.z,parent:-1}],seen=new Set([key(start)]);
-    for(let head=0;head<queue.length&&head<768;head++){
+    for(let head=0;head<queue.length&&head<maxNodes;head++){
       const p=queue[head],tile=world.sample(p.x,p.z,tick);
       if(tile&&predicate(tile)){
         const path=[];let i=head;
@@ -1274,16 +1274,30 @@ button[aria-pressed="true"]{background:#6e6138}
       if(distance(start,p)>=radius)continue;
       for(const d of DIRS){
         const next={x:p.x+d[0],z:p.z+d[1]},id=key(next);
-        if(seen.has(id)||!world.walkable(next.x,next.z)||queue.length>=768)continue;
+        if(seen.has(id)||!world.walkable(next.x,next.z)||queue.length>=maxNodes)continue;
         seen.add(id);queue.push({x:next.x,z:next.z,parent:head});
       }
     }
     return null;
   }
-  function resource(world,start,kind,tick){
-    return search(world,start,t=>kind==="wood"?t.tree:t.bush&&t.berries>0,tick,12);
+  function resource(world,start,kind,tick,radius=12,maxNodes=768){
+    // Search budgets are per route calculation, never travel or world borders.
+    // Camp residents may need to reach timber outside a harvested local grove.
+    // The explorer keeps the smaller search budget.
+    if(start.worldSettler&&kind==="wood"){
+      radius=Math.max(radius,32);
+      maxNodes=Math.max(maxNodes,2048);
+    }
+    return search(world,start,t=>kind==="wood"?t.tree:t.bush&&t.berries>0,
+      tick,radius,maxNodes);
   }
-  function local(world,start,target,tick){return search(world,start,t=>same(t,target),tick,24);}
+  function local(world,start,target,tick,radius=24,maxNodes=768){
+    if(start.worldSettler){
+      radius=Math.max(radius,36);
+      maxNodes=Math.max(maxNodes,4096);
+    }
+    return search(world,start,t=>same(t,target),tick,radius,maxNodes);
+  }
   function roadStep(world,start,target){
     if(same(start,target))return null;
     const next=start.x!==target.x?{x:start.x+Math.sign(target.x-start.x),z:start.z}:
@@ -1320,9 +1334,10 @@ button[aria-pressed="true"]{background:#6e6138}
   const copy=x=>JSON.parse(JSON.stringify(x));
   const positive=n=>Number.isSafeInteger(n)&&n>=0;
   function create(){return {explorer:null,camps:[],discoveries:[],events:[],
-    knownChunks:[],woodGathered:0,woodSpent:0,foodGathered:0,foodEaten:0};}
-  function record(s,tick,action,details){
-    s.events.push({tick,actor:"world_taren",action,details});
+    knownChunks:[],woodGathered:0,woodSpent:0,foodGathered:0,foodEaten:0,
+    settlers:[],houses:[],settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0};}
+  function record(s,tick,action,details,actor="world_taren"){
+    s.events.push({tick,actor,action,details});
     if(s.events.length>EVENT_LIMIT)s.events.shift();
   }
   function mark(s,p){
@@ -1359,8 +1374,81 @@ button[aria-pressed="true"]{background:#6e6138}
     }
     c.routeIndex++;c.goal="reconocer nueva región";
   }
+
+  // First inhabited wilderness camp; Mira acts on the same world clock.
+  // Wilderness inventory is owned per person, never by the distant village.
+  function advanceSettler(s,world,tick){
+    const camp=s.camps[0];if(!camp)return;
+    if(!s.settlers.length){
+      const c={id:"world_mira",name:"Mira",trait:"colona",worldSettler:true,
+        homeCampId:camp.id,x:camp.x,z:camp.z,energy:20,hunger:90,health:100,
+        alive:true,wood:0,food:0,goal:"establecer hogar",bornAt:tick};
+      s.settlers.push(c);mark(s,c);
+      record(s,tick,"settler_arrive",{campId:camp.id,x:c.x,z:c.z},c.id);return;
+    }
+    const c=s.settlers[0];if(!c.alive)return;
+    if(tick%4===0){
+      c.hunger=Math.max(0,c.hunger-1);
+      if(c.hunger===0)c.health=Math.max(0,c.health-2);
+      else if(c.hunger>60)c.health=Math.min(100,c.health+1);
+      if(c.health===0){c.alive=false;c.goal="fallecida";
+        record(s,tick,"settler_death",{},c.id);return;}
+    }
+    if(c.hunger<=62&&c.food>0){
+      c.food--;s.foodEaten++;s.settlerFoodEaten++;
+      c.hunger=Math.min(100,c.hunger+36);c.goal="comer provisiones";
+      record(s,tick,"settler_eat",{foodSpent:1},c.id);return;
+    }
+    if(c.energy<4){
+      c.energy=Math.min(20,c.energy+(s.houses.length?12:8));
+      c.goal=s.houses.length?"descansar en casa":"descansar en campamento";return;
+    }
+    const gather=kind=>{
+      const route=Nav.resource(world,c,kind,tick);
+      if(!route){c.goal=kind==="food"?"buscar nuevos frutos":"buscar nuevos árboles";return;}
+      if(route.path.length){
+        const p=route.path[0];c.x=p.x;c.z=p.z;c.energy=Math.max(0,c.energy-1);
+        mark(s,c);c.goal=kind==="food"?"recolectar alimentos":"reunir madera";return;
+      }
+      const done=kind==="wood"?world.harvest(c.x,c.z):world.forage(c.x,c.z,tick);
+      if(!done){c.goal="recurso agotado";return;}
+      c.energy=Math.max(0,c.energy-1);
+      if(kind==="wood"){c.wood++;s.woodGathered++;s.settlerWoodGathered++;}
+      else{c.food++;s.foodGathered++;s.settlerFoodGathered++;}
+      c.goal=kind==="wood"?"madera reunida":"provisiones reunidas";
+      record(s,tick,kind==="wood"?"settler_harvest":"settler_forage",
+        {x:c.x,z:c.z,amount:1},c.id);
+    };
+    if(c.hunger<40&&c.food===0){gather("food");return;}
+    if(c.food<3){gather("food");return;}
+    if(!s.houses.length){
+      if(c.wood<4){gather("wood");return;}
+      // Distinct walkable site inside the seeded landmark plaza.
+      const site={x:camp.anchorX-2,z:camp.anchorZ+2};
+      if(!Nav.same(c,site)){
+        const route=Nav.local(world,c,site,tick);
+        if(!route||!route.path.length){c.goal="buscar acceso al solar";return;}
+        const p=route.path[0];c.x=p.x;c.z=p.z;
+        c.energy=Math.max(0,c.energy-1);mark(s,c);
+        c.goal="transportar madera al solar";return;
+      }
+      c.wood-=4;s.woodSpent+=4;c.energy=Math.max(0,c.energy-3);
+      s.houses.push({id:"frontier_home_1",type:"home",x:site.x,z:site.z,
+        campId:camp.id,builder:c.id,completedAt:tick,name:"Casa de Mira"});
+      c.goal="casa construida";
+      record(s,tick,"settler_build",{id:"frontier_home_1",woodSpent:4,
+        x:site.x,z:site.z},c.id);return;
+    }
+    c.goal="cuidar su comunidad";c.energy=Math.min(20,c.energy+1);
+  }
+  function migrateLegacy(state){
+    if(!state||typeof state!=="object"||Array.isArray(state))return state;
+    return Object.assign({},state,{settlers:[],houses:[],
+      settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0});
+  }
   function advance(s,world,homeland){
     const tick=homeland.tick;
+    advanceSettler(s,world,tick);
     if(!s.explorer){
       // A developed homeland attracts one independent traveler, without creating a population on the atlas.
       if(tick<600||!homeland.structures.some(b=>b.type==="workshop"))return;
@@ -1412,12 +1500,45 @@ button[aria-pressed="true"]{background:#6e6138}
   }
   function validate(s,world,tick,removedCount){
     if(!s||!Array.isArray(s.camps)||s.camps.length>CAMP_LIMIT||
+      !Array.isArray(s.settlers)||s.settlers.length>1||
+      !Array.isArray(s.houses)||s.houses.length>1||
       !Array.isArray(s.discoveries)||s.discoveries.length>ROUTE.length||
       !Array.isArray(s.events)||s.events.length>EVENT_LIMIT||
       !Array.isArray(s.knownChunks)||s.knownChunks.length>4096)return false;
-    for(const k of ["woodGathered","woodSpent","foodGathered","foodEaten"])
+    for(const k of ["woodGathered","woodSpent","foodGathered","foodEaten",
+      "settlerWoodGathered","settlerFoodGathered","settlerFoodEaten"])
       if(!positive(s[k]))return false;
-    if(s.woodSpent!==s.camps.length*4||s.woodGathered!==removedCount)return false;
+    if(s.woodSpent!==(s.camps.length+s.houses.length)*4||
+      s.woodGathered!==removedCount||
+      s.settlerWoodGathered>s.woodGathered||
+      s.settlerFoodGathered>s.foodGathered||
+      s.settlerFoodEaten>s.foodEaten)return false;
+    const m=s.settlers[0],first=s.camps[0];
+    if(!m){
+      if(s.houses.length||s.settlerWoodGathered||
+        s.settlerFoodGathered||s.settlerFoodEaten)return false;
+    }else{
+      if(!first||m.id!=="world_mira"||m.name!=="Mira"||
+        m.trait!=="colona"||m.worldSettler!==true||
+        m.homeCampId!==first.id||!positive(m.bornAt)||
+        m.bornAt<first.completedAt||m.bornAt>tick||
+        !world.walkable(m.x,m.z)||typeof m.goal!=="string"||
+        m.goal.length>80)return false;
+      for(const k of ["energy","hunger","health","food","wood"])
+        if(!positive(m[k]))return false;
+      if(m.energy>20||m.hunger>100||m.health>100||
+        m.alive!==(m.health>0)||
+        m.wood!==s.settlerWoodGathered-s.houses.length*4||
+        m.food!==s.settlerFoodGathered-s.settlerFoodEaten)return false;
+    }
+    if(s.houses.length){
+      const h=s.houses[0];
+      if(!m||!h||h.id!=="frontier_home_1"||h.type!=="home"||
+        h.x!==first.anchorX-2||h.z!==first.anchorZ+2||
+        h.campId!==first.id||h.builder!==m.id||
+        h.name!=="Casa de Mira"||!positive(h.completedAt)||
+        h.completedAt<m.bornAt||h.completedAt>tick)return false;
+    }
     const chunks=new Set();
     for(const id of s.knownChunks){
       if(typeof id!=="string"||!/^(-?\d+),(-?\d+)$/.test(id)||chunks.has(id))return false;
@@ -1426,6 +1547,7 @@ button[aria-pressed="true"]{background:#6e6138}
     }
     const c=s.explorer;
     if(c===null)return !s.camps.length&&!s.discoveries.length&&!s.events.length&&
+      !s.settlers.length&&!s.houses.length&&
       !s.knownChunks.length&&!s.woodGathered&&!s.woodSpent&&!s.foodGathered&&!s.foodEaten;
     if(!c||c.id!=="world_taren"||c.name!=="Taren"||c.trait!=="cartógrafo"||c.worldExplorer!==true||
       !positive(c.bornAt)||c.bornAt<600||c.bornAt>tick||!world.walkable(c.x,c.z)||
@@ -1437,9 +1559,11 @@ button[aria-pressed="true"]{background:#6e6138}
       typeof c.goal!=="string"||c.goal.length>80)return false;
     for(const k of ["energy","hunger","health","food","wood"])if(!positive(c[k]))return false;
     if(c.energy>20||c.hunger>100||c.health>100||c.alive!==(c.health>0)||
-      c.wood!==s.woodGathered-s.woodSpent||c.food!==s.foodGathered-s.foodEaten||
+      c.wood!==s.woodGathered-s.settlerWoodGathered-s.camps.length*4||
+      c.food!==s.foodGathered-s.settlerFoodGathered-(s.foodEaten-s.settlerFoodEaten)||
       s.discoveries.length!==c.routeIndex||
-      !chunks.has(Math.floor(c.x/16)+","+Math.floor(c.z/16)))return false;
+      !chunks.has(Math.floor(c.x/16)+","+Math.floor(c.z/16))||
+      (m&&!chunks.has(Math.floor(m.x/16)+","+Math.floor(m.z/16))))return false;
     const expected=c.routeIndex?ROUTE[c.routeIndex-1]:{x:24,z:24};
     if(!Nav.same(c.anchor,expected))return false;
     let previous=-1;
@@ -1460,15 +1584,19 @@ button[aria-pressed="true"]{background:#6e6138}
       ids.add(camp.id);previous=camp.completedAt;
     }
     const actions=["expedition_arrive","harvest","forage","eat","discover","build_camp","death"];
+    const residentActions=["settler_arrive","settler_forage","settler_harvest",
+      "settler_eat","settler_build","settler_death"];
     previous=-1;
     for(const e of s.events){
-      if(!e||e.actor!==c.id||!positive(e.tick)||e.tick<c.bornAt||e.tick>tick||e.tick<previous||
-        !actions.includes(e.action)||!e.details||typeof e.details!=="object"||Array.isArray(e.details))return false;
+      if(!e||!positive(e.tick)||e.tick>tick||e.tick<previous||
+        !(e.actor===c.id&&e.tick>=c.bornAt&&actions.includes(e.action))&&
+        !(m&&e.actor===m.id&&e.tick>=m.bornAt&&residentActions.includes(e.action))||
+        !e.details||typeof e.details!=="object"||Array.isArray(e.details))return false;
       previous=e.tick;
     }
     return true;
   }
-  return Object.freeze({create,advance,validate,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
+  return Object.freeze({create,advance,validate,migrateLegacy,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
 });
 </script>
 <script>/* Large-world adapter: keep the existing settlement authoritative in its home
@@ -1481,21 +1609,23 @@ button[aria-pressed="true"]{background:#6e6138}
   const Society=node?require("./society.js"):globalThis.GodseedV3Society;
   const World=node?require("./world.js"):globalThis.GodseedV3World;
   const Expedition=node?require("./expedition.js"):globalThis.GodseedV3Expedition;
-  const VERSION=1,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
+  const VERSION=2,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
   const copy=x=>JSON.parse(JSON.stringify(x));
   function instance(homeland,world,expedition){
     let home=homeland.snapshot(),sceneCache=null,sceneKey="";
     function snapshot(){
       const result=copy(home),c=expedition.explorer;
       if(c)result.citizens.push(copy(c));
-      result.structures=result.structures.concat(copy(expedition.camps));
+      result.citizens=result.citizens.concat(copy(expedition.settlers));
+      result.structures=result.structures.concat(copy(expedition.camps),copy(expedition.houses));
       result.events=result.events.concat(copy(expedition.events)).sort((a,b)=>a.tick-b.tick).slice(-96);
       result.expedition=Expedition.snapshot(expedition);
       result.world={size:World.SIZE,min:World.MIN,max:World.MAX,tileCount:World.SIZE*World.SIZE,
         chunkSize:World.CHUNK,regionSize:World.REGION,regions:256,
         discoveredRegions:expedition.discoveries.length,knownChunks:expedition.knownChunks.length,
         biome:World.terrain(home.seed,c?c.x:5,c?c.z:5).biome,
-        homelandCitizens:home.citizens.length,camps:expedition.camps.length};
+        homelandCitizens:home.citizens.length,camps:expedition.camps.length,
+        frontierResidents:expedition.settlers.length,frontierHomes:expedition.houses.length};
       return result;
     }
     function advance(n){
@@ -1549,14 +1679,16 @@ button[aria-pressed="true"]{background:#6e6138}
   function restore(raw){
     if(typeof raw!=="string"||raw.length>SAVE_LIMIT)throw RangeError("invalid large-world save");
     const s=JSON.parse(raw);
-    if(!s||s.schemaVersion!==VERSION||!s.homeland||s.seed!==s.homeland.seed||!s.wilderness)
+    if(!s||![1,VERSION].includes(s.schemaVersion)||!s.homeland||
+      s.seed!==s.homeland.seed||!s.wilderness)
       throw RangeError("incompatible large-world save");
     const homeland=Society.restore(JSON.stringify(s.homeland)),tick=homeland.snapshot().tick;
     const world=World.create(s.seed,s.wilderness);
+    const expedition=s.schemaVersion===1?Expedition.migrateLegacy(s.expedition):s.expedition;
     if(s.wilderness.berries.some(b=>b.at>tick)||
-      !Expedition.validate(s.expedition,world,tick,s.wilderness.removed.length))
+      !Expedition.validate(expedition,world,tick,s.wilderness.removed.length))
       throw RangeError("invalid wilderness progress");
-    return instance(homeland,world,copy(s.expedition));
+    return instance(homeland,world,copy(expedition));
   }
   return Object.freeze({VERSION,STORAGE_KEY,create,restore,fromSociety});
 });
