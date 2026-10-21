@@ -8,6 +8,8 @@ on:
       - 'GODSEED-V3-Play.html'
       - 'tests/v3_sim.test.js'
       - 'tests/v3_society.test.js'
+      - 'tests/v3_world.test.js'
+      - 'tests/v3_world_browser_acceptance.py'
       - 'tests/v3_browser_acceptance.py'
       - '.github/workflows/v3-3d-proof.yml'
   pull_request:
@@ -18,6 +20,8 @@ on:
       - 'GODSEED-V3-Play.html'
       - 'tests/v3_sim.test.js'
       - 'tests/v3_society.test.js'
+      - 'tests/v3_world.test.js'
+      - 'tests/v3_world_browser_acceptance.py'
       - 'tests/v3_browser_acceptance.py'
       - '.github/workflows/v3-3d-proof.yml'
   workflow_dispatch:
@@ -39,11 +43,17 @@ jobs:
           node --check src/v3/sim.js
           node --check src/v3/frontier.js
           node --check src/v3/society.js
+          node --check src/v3/world.js
+          node --check src/v3/world_travel.js
+          node --check src/v3/expedition.js
+          node --check src/v3/world_sim.js
+          node --check src/v3/atlas.js
           node --check src/v3/view.js
           node --check src/v3/fallback.js
           node --check src/v3/app.js
           node --test tests/v3_sim.test.js
           node --test tests/v3_society.test.js
+          node --test tests/v3_world.test.js
       - name: Rebuild self-contained V3 HTML and verify committed artifact
         run: |
           python build_v3.py
@@ -53,7 +63,9 @@ jobs:
           python -m pip install playwright
           python -m playwright install --with-deps chromium
       - name: Test WebGL 3D and Canvas2D fallback with autonomous shelter and save/reload
-        run: python tests/v3_browser_acceptance.py
+        run: |
+          python tests/v3_browser_acceptance.py
+          python tests/v3_world_browser_acceptance.py
       - name: Preserve V3 HTML and real Chromium screenshots
         if: success()
         uses: actions/upload-artifact@v4
@@ -70,3 +82,5 @@ jobs:
             qa-screenshots/godseed-v3-society-canvas-640x360.png
             qa-screenshots/godseed-v3-two-communities-webgl-960x540.png
             qa-screenshots/godseed-v3-two-communities-canvas-640x360.png
+            qa-screenshots/godseed-v3-large-world-webgl-960x540.png
+            qa-screenshots/godseed-v3-large-world-canvas-640x360.png
