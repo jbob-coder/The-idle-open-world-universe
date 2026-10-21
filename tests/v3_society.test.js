@@ -333,3 +333,21 @@ test("expedition and subsequent courier deliveries require map travel, not insta
     2+o.shipmentsDispatched*2);
   assert.equal(Sim.validate(s),true);
 });
+
+
+test("food access is geographic: couriers use local pantry and founders carry reserved travel food",()=>{
+  const Frontier=require("../src/v3/frontier.js");
+  const g=Sim.create(14);
+  const approved=g.advance(2400);
+  assert.equal(approved.outpost.status,"travelling");
+  const founder=approved.citizens.find(c=>c.id===approved.outpost.founderId);
+  assert.equal(Frontier.foodAvailable(approved,founder),approved.outpost.food);
+  const mainCitizen=approved.citizens.find(c=>c.id!==founder.id);
+  assert.equal(Frontier.foodAvailable(approved,mainCitizen),approved.food);
+  const established=g.advance(1200);
+  assert.equal(established.outpost.status,"established");
+  const courier={...established.citizens.find(c=>c.role==="forager"),x:15,z:13};
+  assert.equal(Frontier.foodAvailable(established,courier),established.outpost.food);
+  const inVillage={...courier,x:5,z:5};
+  assert.equal(Frontier.foodAvailable(established,inVillage),established.food);
+});
