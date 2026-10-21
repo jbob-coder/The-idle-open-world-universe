@@ -123,7 +123,11 @@
           desc.textContent="Objetivo: "+c.goal+" | Posición "+c.x+", "+c.z+
             " | Salud "+c.health+"/100 | Saciedad "+c.hunger+"/100"+
             " | Energía "+c.energy+"/20 | Mochila "+c.food+" comida / "+
-            c.wood+" madera | Campamento "+c.homeCampId;
+            c.wood+" madera | Campamento "+c.homeCampId+
+            (c.mind?" | Decisión "+(c.mind.lastChoice||"considerando opciones")+
+            " | Curiosidad "+c.mind.preferences.curiosity+
+            " | Seguridad "+c.mind.preferences.security+
+            " | Memorias "+c.mind.memories.length:"");
         }else if(c.mind){
           const mind=c.mind;
           desc.textContent="Objetivo: "+c.goal+
