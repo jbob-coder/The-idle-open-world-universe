@@ -10,6 +10,8 @@ def build():
     html = TEMPLATE.read_text(encoding="utf-8")
     for marker, path in (
         ("/*V3_SIM_SOURCE*/", "src/v3/sim.js"),
+        ("/*V3_FRONTIER_SOURCE*/", "src/v3/frontier.js"),
+        ("/*V3_SOCIETY_SOURCE*/", "src/v3/society.js"),
         ("/*V3_VIEW_SOURCE*/", "src/v3/view.js"),
         ("/*V3_FALLBACK_SOURCE*/", "src/v3/fallback.js"),
         ("/*V3_APP_SOURCE*/", "src/v3/app.js"),
