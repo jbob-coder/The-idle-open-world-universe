@@ -102,3 +102,31 @@ test("schema 5 saves migrate without inventing historical construction shifts",(
   assert.equal(s.expedition.projects.entries.length,0);
   assert.equal(s.expedition.projects.cutoverTick,s.tick);
 });
+
+test("live explorer finances a camp through shifts, independent of Mira's housing job",()=>{
+  const game=WorldSim.create(14);
+  game.advance(600);
+  let checkpoint=null;
+  for(let n=0;n<3200;n++){
+    const state=game.advance(1);
+    const job=state.expedition.projects.entries.find(p=>
+      p.type==="camp"&&p.status==="active"&&p.progress>0);
+    if(job){checkpoint=state;break;}
+  }
+  assert.ok(checkpoint,"the explorer must autonomously begin constructing a real camp");
+  const p=checkpoint.expedition.projects.entries.find(p=>p.type==="camp");
+  assert.equal(p.initiator,"world_taren");
+  assert.equal(p.required,4);
+  assert.ok(p.progress>=1&&p.progress<4);
+  assert.equal(checkpoint.expedition.camps.length,0,
+    "partial labor never produces a fully formed building");
+  assert.equal(checkpoint.expedition.woodSpent,p.progress);
+  assert.deepEqual(WorldSim.restore(game.serialize()).snapshot(),checkpoint);
+  const later=game.advance(100);
+  assert.ok(later.expedition.camps.length>0);
+  assert.ok(later.expedition.projects.entries.some(p=>
+    p.type==="camp"&&p.status==="complete"));
+  assert.ok(later.expedition.settlers.length>0,
+    "Mira should enter only after a physical shelter is actually built");
+  assert.deepEqual(WorldSim.restore(game.serialize()).snapshot(),later);
+});
