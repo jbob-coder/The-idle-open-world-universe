@@ -49,9 +49,10 @@
    // Priorities above are scores evaluated only on feasible actions, never
    // instructions of what must happen on a particular world tick.
    options.sort((a,b)=>b.utility-a.utility||ACTIONS.indexOf(a.action)-ACTIONS.indexOf(b.action));
-   return {action:options[0]?.action||"reflect",
-     reason:options[0]?.reason||"no_viable_work",
-     utility:options[0]?.utility||0,
+   const chosen=options[0];
+   return {action:chosen?chosen.action:"reflect",
+     reason:chosen?chosen.reason:"no_viable_work",
+     utility:chosen?chosen.utility:0,
      alternatives:options.slice(1,4).map(o=>({action:o.action,utility:o.utility}))};
  }
  function commitChoice(mind,action){
