@@ -46,11 +46,11 @@
   // A character can *offer* labor to another resident's active project.
   // Neither project ownership nor the simulation tick issues commands.
   // The caller must still walk to the site and pay through contribute().
-  function chooseVoluntaryWork(s,actor,social,tick,types=["home","road","camp"]){
+  function chooseVoluntaryWork(s,actor,social,tick,types=["home","road","camp"],allowGather=false){
     if(!s||!Array.isArray(s.entries)||!actor||!actor.alive||
        !actor.mind||!actor.mind.preferences||
        !social||!Array.isArray(social.ties)||!integer(tick)||
-       !integer(actor.wood)||actor.wood<1||
+       !integer(actor.wood)||(!allowGather&&actor.wood<1)||
        !integer(actor.energy)||actor.energy<10||
        !integer(actor.food)||actor.food<2||
        !integer(actor.hunger)||actor.hunger<68||
@@ -64,7 +64,7 @@
          p.initiator===actor.id||p.startedAt>tick||
          p.progress>=p.required)continue;
       const distance=Math.abs(actor.x-p.x)+Math.abs(actor.z-p.z);
-      if(distance>12)continue; // Local offers, not interregional orders.
+      if(distance>(allowGather?24:12))continue; // Locally reachable opportunities only.
       const tie=social.ties.find(t=>
         (t.a===actor.id&&t.b===p.initiator)||
         (t.b===actor.id&&t.a===p.initiator));
@@ -72,14 +72,15 @@
       // Individual craftsmanship, trust, safety and real travel cost compete.
       // There is no fixed date or required construction goal.
       const score=craft+tie.trust-Math.floor(security/3)-
-        distance*3+(p.progress>0?12:0);
+        distance*3+(p.progress>0?12:0)-(actor.wood===0?5:0);
       if(score<67)continue;
       if(score>bestScore||(score===bestScore&&p.id<best.id)){
         best=p;bestScore=score;
       }
     }
     return best?{id:best.id,type:best.type,x:best.x,z:best.z,
-      score:bestScore,reason:"voluntary_community_work"}:null;
+      score:bestScore,needsWood:actor.wood===0,
+      reason:"voluntary_community_work"}:null;
   }
   function validate(s,tick,homes,roads,workers,camps=[]){
     if(!s||!integer(s.cutoverTick)||s.cutoverTick>tick||
