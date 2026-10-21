@@ -26,6 +26,8 @@ jobs:
         run: |
           node --check src/sim.js
           node --check src/ui.js
+          # Check every V3 gameplay module, including newly added NPC systems.
+          for file in src/v3/*.js; do node --check "$file"; done
           node --test tests/*.test.js
       - name: Verify Codex starter-art contract and reproducibility
         run: |
