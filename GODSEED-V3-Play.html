@@ -1615,7 +1615,7 @@ button[aria-pressed="true"]{background:#6e6138}
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   if(root)root.GodseedV3Projects=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
-  const COST=Object.freeze({home:4,road:1,camp:4}),MAX_PROJECTS=128,MAX_CONTRIBUTORS=8;
+  const COST=Object.freeze({home:4,road:1,camp:4}),MAX_ACTIVE_PROJECTS=3,MAX_CONTRIBUTORS=8;
   const integer=n=>Number.isSafeInteger(n)&&n>=0;
   const key=(type,site)=>type+":"+site.x+","+site.z;
   const create=(cutoverTick=0)=>({cutoverTick,entries:[]});
@@ -1629,8 +1629,7 @@ button[aria-pressed="true"]{background:#6e6138}
       tick<s.cutoverTick)throw RangeError("invalid construction proposal");
     const existing=find(s,type,site);
     if(existing)return existing;
-    if(s.entries.length>=MAX_PROJECTS||
-       s.entries.filter(p=>p.status==="active").length>=3)
+    if(s.entries.filter(p=>p.status==="active").length>=MAX_ACTIVE_PROJECTS)
       return null; // Bounded concurrent construction, not an NPC command.
     const order={id:key(type,site),type,x:site.x,z:site.z,
       required:COST[type],progress:0,status:"active",initiator,
@@ -1656,11 +1655,22 @@ button[aria-pressed="true"]{background:#6e6138}
   }
   function validate(s,tick,homes,roads,workers,camps=[]){
     if(!s||!integer(s.cutoverTick)||s.cutoverTick>tick||
-       !Array.isArray(s.entries)||s.entries.length>MAX_PROJECTS||
+       !Array.isArray(s.entries)||
        !Array.isArray(homes)||!Array.isArray(roads)||!Array.isArray(workers)||
        !Array.isArray(camps))
       return false;
+    // Completed orders are bounded by actual structures, not an arbitrary
+    // lifetime counter. Only live worksite concurrency has a fixed limit.
+    if(s.entries.length>homes.length+roads.length+camps.length+MAX_ACTIVE_PROJECTS)
+      return false;
     const identities=new Map(workers.map(w=>[w.id,w]));
+    const built=new Set(),occupied=new Set(),completedOrders=new Set();
+    const structureLists=[["home",homes],["road",roads],["camp",camps]];
+    for(const [type,structures] of structureLists)for(const b of structures){
+      const site=b.x+","+b.z;
+      occupied.add(site);
+      built.add(type+":"+site+"@"+b.completedAt);
+    }
     const seen=new Set();let previous=-1,active=0,units=0;
     for(const p of s.entries){
       if(!p||!Object.prototype.hasOwnProperty.call(COST,p.type)||
@@ -1689,26 +1699,21 @@ button[aria-pressed="true"]{background:#6e6138}
           (p.completedAt!==null)))return false;
       if(!complete)active++;
       if(complete){
-        const buildings=p.type==="home"?homes:p.type==="road"?roads:camps;
-        const target=buildings.find(h=>h.x===p.x&&h.z===p.z&&
-          h.completedAt===p.completedAt);
-        if(!target)return false;
-      }else{
-        if(homes.some(h=>h.x===p.x&&h.z===p.z)||
-           roads.some(r=>r.x===p.x&&r.z===p.z)||
-           camps.some(c=>c.x===p.x&&c.z===p.z))return false;
-      }
+        const receipt=p.id+"@"+p.completedAt;
+        if(!built.has(receipt))return false;
+        completedOrders.add(receipt);
+      }else if(occupied.has(p.x+","+p.z))return false;
     }
-    if(active>3)return false;
-    // Every finished structure built after this system activated needs a
-    // real work order. Older imported history is preserved without fabrication.
-    for(const [buildings,type] of [[homes,"home"],[roads,"road"],[camps,"camp"]])
-      for(const b of buildings)if(b.completedAt>s.cutoverTick&&
-        !s.entries.some(p=>p.type===type&&p.x===b.x&&p.z===b.z&&
-          p.status==="complete"&&p.completedAt===b.completedAt))return false;
+    if(active>MAX_ACTIVE_PROJECTS)return false;
+    // Post-cutover structures must have a matching paid work order. Lookups
+    // remain linear in world size rather than quadratic as settlements grow.
+    for(const [type,structures] of structureLists)
+      for(const b of structures)if(b.completedAt>s.cutoverTick&&
+        !completedOrders.has(type+":"+b.x+","+b.z+"@"+b.completedAt))
+        return false;
     return units;
   }
-  return Object.freeze({COST,MAX_PROJECTS,create,find,propose,contribute,validate});
+  return Object.freeze({COST,MAX_ACTIVE_PROJECTS,create,find,propose,contribute,validate});
 });</script>
 <script>/* Persistent autonomous wilderness explorer. All supplies are physically gathered.
  * Camps belong to the expedition ledger; village stores are never remotely debited. */

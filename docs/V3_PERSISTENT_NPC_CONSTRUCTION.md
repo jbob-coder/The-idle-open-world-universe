@@ -23,7 +23,16 @@ GODSEED is an open-ended simulation without chapters. NPCs decide how and whethe
 2. Work progress is incremented **only when the worker is alive, physically on-site, has available energy, and pays exactly one timber**. No remote construction, automatic construction by drawing/map queries, or free timber.
 3. Job progress cannot exceed its material cost. Worker contribution totals must equal progress, and completion tick must match the built structure. Workers cannot spend on detached/forged jobs.
 4. In-progress timber has its own accounting: `total wood spent = route camps ×4 + completed homes ×4 + completed road tiles + material paid into active projects`. The worker's carried wood decreases at the same time.
-5. The project list and contributor count are bounded to avoid runaway mobile save size. Every project has a unique type/coordinate identity, and older saves migrate without moving existing structures.
+5. At most three projects may be active at once, and each project has at most eight distinct contributors. Completed orders remain in the persistent audit ledger and must match actual completed structures. No lifetime project-count cap may prevent further construction; the validator rejects ledgers longer than the number of real structures plus three active worksites.
+
+
+## Ledger scaling and persistence (follow-up)
+
+The original work-order implementation stopped accepting every new project after 128 lifetime entries, including completed roads. That would eventually freeze construction in an expanding civilization. The follow-up removes the historical-count cap without changing save schema 6, removing past work orders, resetting NPCs, or changing timber costs. At most three **unfinished** worksites remain allowed at once.
+
+Save validation indexes completed structures and paid construction receipts by type, coordinates, and completion tick. It rejects orphaned jobs, missing post-cutover receipts, duplicate project identities, unsupported contributors, and more project records than actual buildings plus the active-site allowance. Receipt lookups are linear in ledger size instead of repeatedly scanning every structure for each completed job. A 160-project regression checks that paid work continues beyond the old limit.
+
+**Remaining scaling debt:** Completed jobs persist as one receipt per world structure. This is intentional audit preservation, but serialization size and linear find() lookups still grow with genuinely constructed roads and buildings. For much larger worlds, introduce versioned regional receipt compaction and an indexed live-project lookup, with explicit migration and tamper/conservation tests. Do not silently prune completed jobs under schema 6: it would invalidate the existing save proof for post-cutover structures.
 
 ## Limits — do not advertise a completed civilization
 
