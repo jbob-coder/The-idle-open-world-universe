@@ -1,21 +1,25 @@
 /* GODSEED V3 proof controls: deterministic simulation tick, read-only render, isolated storage. */
 (function(root){"use strict";
-  const useSociety=/(?:^|[?&])mode=society(?:&|$)/.test(root.location.search||"");
-  const Sim=useSociety?root.GodseedV3Society:root.GodseedV3Sim;
+  const useWorld=/(?:^|[?&])mode=world(?:&|$)/.test(root.location.search||"");
+  const useSociety=useWorld||/(?:^|[?&])mode=society(?:&|$)/.test(root.location.search||"");
+  const Sim=useWorld?root.GodseedV3WorldSim:useSociety?root.GodseedV3Society:root.GodseedV3Sim;
   const View=root.GodseedV3View,Fallback=root.GodseedV3Fallback;
   if(!Sim||!View||!Fallback)throw new Error("GODSEED V3 modules missing");
   const el=id=>document.getElementById(id);
   let canvas=el("scene");
   let simulation,view=null,rendererMode="unavailable",paused=false,speed=1,last=0,acc=0,dirty=true;
   let lastPersistedTick=-1,lastShownTick=-1,lastDraw=0,status="";
+  let atlas=null,atlasOpen=false,followExplorer=false,orbitCamera=false;
   function setStatus(message){status=message;el("headline").textContent=message;}
   function seedNow(){return ((Date.now()>>>0)^0x5a17b913)>>>0;}
   function newWorld(seed){
     simulation=Sim.create(seed===undefined?seedNow():seed);
+    if(view&&view.focus)view.focus(9.5,9.5);
     paused=false;acc=0;last=0;lastPersistedTick=-1;lastShownTick=-1;dirty=true;
     el("pause").setAttribute("aria-pressed","false");
     el("pause").textContent="Pausar";
-    setStatus(useSociety?"Sociedad autónoma · fabricación y elecciones":"Nuevo mundo autónomo · sin comandos a los Sims");
+    setStatus(useWorld?"Gran mundo · 1.048.576 casillas · vida autónoma":
+      useSociety?"Sociedad autónoma · fabricación y elecciones":"Nuevo mundo autónomo · sin comandos a los Sims");
     update();
     return simulation.snapshot();
   }
@@ -34,13 +38,19 @@
   function load(){
     try{
       const raw=root.localStorage.getItem(Sim.STORAGE_KEY);
-      if(!raw)return false;
-      const loaded=Sim.restore(raw);simulation=loaded;
+      let loaded;
+      if(!raw){
+        if(!useWorld)return false;
+        const societySave=root.localStorage.getItem(root.GodseedV3Society.STORAGE_KEY);
+        if(!societySave)return false;
+        loaded=Sim.fromSociety(societySave);
+      }else loaded=Sim.restore(raw);
+      simulation=loaded;
       paused=true;acc=0;last=0;dirty=true;
       lastPersistedTick=simulation.snapshot().tick;lastShownTick=-1;
       el("pause").setAttribute("aria-pressed","true");
       el("pause").textContent="Continuar";
-      setStatus("Partida V3 recuperada y pausada");
+      setStatus(useWorld&&!raw?"Tu aldea se amplió al gran mundo · copia independiente y pausada":"Partida V3 recuperada y pausada");
       update();
       return true;
     }catch(error){
@@ -73,8 +83,14 @@
       const stats=el("stats");stats.textContent="";
       statsPair(stats,"Semilla",state.seed);
       statsPair(stats,"Ciclo",state.tick);
+      if(useWorld){
+        statsPair(stats,"Mundo",state.world.size+" × "+state.world.size);
+        statsPair(stats,"Regiones",state.world.regions);
+        statsPair(stats,"Lugares descubiertos",state.world.discoveredRegions);
+        statsPair(stats,"Campamentos de ruta",state.world.camps);
+      }
       statsPair(stats,"Habitantes",state.citizens.length);
-      statsPair(stats,"Madera disponible",state.wood);
+      statsPair(stats,useWorld?"Madera de la aldea":"Madera disponible",state.wood);
       statsPair(stats,"Madera recolectada",state.harvested);
       statsPair(stats,"Madera gastada",useSociety?state.spentWood:state.spent);
       statsPair(stats,useSociety?"Edificios terminados":"Refugios construidos",state.structures.length);
@@ -90,7 +106,7 @@
         statsPair(stats,"Reservas orientales",state.outpost.wood+" madera / "+state.outpost.food+" comida");
         statsPair(stats,"Entregas completadas",state.outpost.deliveries);
       }
-      statsPair(stats,"Comida disponible",state.food);
+      statsPair(stats,useWorld?"Comida de la aldea":"Comida disponible",state.food);
       statsPair(stats,"Bayas recolectadas",state.foodGathered);
       statsPair(stats,"Raciones consumidas",state.foodEaten);
       const people=el("citizens");people.textContent="";
@@ -98,7 +114,11 @@
         const div=document.createElement("div");div.className="person";
         const title=document.createElement("strong");title.textContent=c.name+" · "+c.trait;
         const desc=document.createElement("div");
-        if(c.mind){
+        if(c.worldExplorer){
+          desc.textContent="Objetivo: "+c.goal+" | Posición "+c.x+", "+c.z+
+            " | Salud "+c.health+"/100 | Saciedad "+c.hunger+"/100 | Energía "+c.energy+
+            "/20 | Mochila: "+c.food+" comida / "+c.wood+" madera | Regiones visitadas "+c.routeIndex;
+        }else if(c.mind){
           const mind=c.mind;
           desc.textContent="Objetivo: "+c.goal+
             " | Salud "+c.health+"/100 | Hambre "+c.hunger+"/100 | Energía "+c.energy+"/20"+
@@ -130,10 +150,19 @@
         policy.textContent="Prioridad: "+council.policy+" | Evidencia: "+council.policyReason;
         memoryPanel.appendChild(policy);
         for(const person of state.citizens){
+          if(person.worldExplorer)continue;
           const note=document.createElement("div");
           const latest=person.memories.length?person.memories[person.memories.length-1]:null;
           note.textContent=person.name+" · "+person.role+" · "+person.ordersCompleted+
             " tareas · recuerdo: "+(latest?latest.kind+" (ciclo "+latest.tick+")":"sin recuerdos");
+          memoryPanel.appendChild(note);
+        }
+        if(useWorld){
+          const note=document.createElement("div");
+          const discoveries=state.expedition.discoveries;
+          note.textContent=state.expedition.explorer?
+            "Expedición: "+discoveries.length+" lugares. "+(discoveries.length?"Último: "+discoveries[discoveries.length-1].name:""):
+            "Un cartógrafo llegará cuando exista un taller y transcurran 600 ciclos.";
           memoryPanel.appendChild(note);
         }
       }else{
@@ -159,9 +188,12 @@
           council:"decidió priorizar "+(e.details.policy||""),
           approve_outpost:"aprobó fundación de otra comunidad",
           found_outpost:"fundó Colina Oriental",
-          dispatch:"despachó provisiones",deliver:"entregó alimentos"};
+          dispatch:"despachó provisiones",deliver:"entregó alimentos",
+          expedition_arrive:"llegó para explorar el gran mundo",
+          build_camp:"construyó un refugio de ruta"};
         div.textContent="Ciclo "+e.tick+" · "+e.actor+": "+(labels[e.action]||e.action)+
-          (e.action==="build"&&e.details.site?" ("+e.details.site+")":"");
+          (e.action==="build"&&e.details.site?" ("+e.details.site+")":"")+
+          (e.action==="discover"&&e.details.name?" · "+e.details.name:"");
         events.appendChild(div);
       }
       lastShownTick=state.tick;
@@ -171,7 +203,17 @@
       const w=Math.max(1,Math.floor(canvas.clientWidth*factor));
       const h=Math.max(1,Math.floor(canvas.clientHeight*factor));
       if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;dirty=true;}
-      if(dirty){view.render(state);dirty=false;}
+      if(dirty){
+        if(useWorld){
+          if(followExplorer){const target=state.expedition.explorer||state.citizens[0];view.focus(target.x,target.z);}
+          const camera=view.camera(),region=simulation.region(camera.x,camera.z);
+          el("hint").textContent=region.name+" · "+Math.round(camera.x)+", "+Math.round(camera.z)+
+            " · "+(orbitCamera?"Arrastra para girar":"Arrastra para viajar con la cámara");
+          view.render(simulation.scene(camera.x,camera.z,camera.half));
+          if(atlasOpen&&atlas)atlas.render(state,camera);
+        }else view.render(state);
+        dirty=false;
+      }
     }
   }
   function loop(now){
@@ -198,12 +240,41 @@
     el("zoomIn").addEventListener("click",()=>{if(view){view.zoom(-3);dirty=true;}});
     el("zoomOut").addEventListener("click",()=>{if(view){view.zoom(3);dirty=true;}});
     el("save").addEventListener("click",save);
+    function switchMode(mode){
+      if(!save())return;
+      root.location.search="mode="+mode+(rendererMode==="canvas-2d-fallback"?"&renderer=2d":"");
+    }
     el("mode").textContent=useSociety?"Modo Aria sola":"Modo sociedad";
     el("mode").addEventListener("click",function(){
       // Switching simulations reloads the page and never touches the other save key.
-      save();
-      root.location.search=useSociety?"mode=solo":"mode=society";
+      switchMode(useSociety?"solo":"society");
     });
+    el("largeWorld").textContent=useWorld?"Aldea local":"Gran mundo";
+    el("largeWorld").addEventListener("click",()=>switchMode(useWorld?"society":"world"));
+    function setAtlas(open){
+      atlasOpen=open;el("atlas").style.display=open?"flex":"none";
+      el("atlasToggle").setAttribute("aria-expanded",String(open));dirty=true;
+      if(open)el("atlasClose").focus();
+    }
+    function stopFollowing(){followExplorer=false;el("followExplorer").setAttribute("aria-pressed","false");}
+    if(useWorld){
+      el("worldTools").style.display="flex";
+      atlas=root.GodseedV3Atlas.create(el("atlasMap"),(x,z)=>{
+        if(view){stopFollowing();view.focus(x,z);setAtlas(false);dirty=true;}
+      });
+      el("atlasToggle").addEventListener("click",()=>setAtlas(!atlasOpen));
+      el("atlasClose").addEventListener("click",()=>setAtlas(false));
+      el("homeCamera").addEventListener("click",()=>{
+        if(view){stopFollowing();view.focus(9.5,9.5);dirty=true;}
+      });
+      el("followExplorer").addEventListener("click",()=>{
+        followExplorer=!followExplorer;el("followExplorer").setAttribute("aria-pressed",String(followExplorer));dirty=true;
+      });
+      el("orbitCamera").addEventListener("click",()=>{
+        orbitCamera=!orbitCamera;el("orbitCamera").setAttribute("aria-pressed",String(orbitCamera));
+        el("orbitCamera").textContent=orbitCamera?"Cámara: girar":"Cámara: desplazar";dirty=true;
+      });
+    }
     el("reset").addEventListener("click",function(){
       try{root.localStorage.removeItem(Sim.STORAGE_KEY);}catch(error){}
       newWorld();
@@ -215,8 +286,10 @@
     });
     canvas.addEventListener("pointermove",function(e){
       if(!lastPointer||lastPointer.id!==e.pointerId||!view)return;
-      view.rotate((e.clientX-lastPointer.x)/Math.max(100,canvas.clientWidth),
-        (e.clientY-lastPointer.y)/Math.max(100,canvas.clientHeight));
+      const dx=(e.clientX-lastPointer.x)/Math.max(100,canvas.clientWidth),
+        dy=(e.clientY-lastPointer.y)/Math.max(100,canvas.clientHeight);
+      if(useWorld&&!orbitCamera&&!e.shiftKey){stopFollowing();view.pan(dx,dy);}
+      else view.rotate(dx,dy);
       lastPointer.x=e.clientX;lastPointer.y=e.clientY;dirty=true;
     });
     for(const type of ["pointerup","pointercancel","lostpointercapture"])
@@ -227,6 +300,13 @@
       if(document.hidden){if(!paused)togglePause();save();}
     });
     root.addEventListener("keydown",function(e){
+      if(e.key==="Escape"){setAtlas(false);return;}
+      if(e.target&&/^(BUTTON|INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))return;
+      if(useWorld&&view&&["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)){
+        e.preventDefault();stopFollowing();const camera=view.camera();
+        view.focus(camera.x+(e.key==="ArrowLeft"?-8:e.key==="ArrowRight"?8:0),
+          camera.z+(e.key==="ArrowUp"?-8:e.key==="ArrowDown"?8:0));dirty=true;return;
+      }
       if(e.code==="Space"){e.preventDefault();togglePause();}
       if(view&&e.key==="ArrowLeft"){view.rotate(-.12,0);dirty=true;}
       if(view&&e.key==="ArrowRight"){view.rotate(.12,0);dirty=true;}
@@ -263,7 +343,10 @@
     isPaused:()=>paused,pause:()=>{if(!paused)togglePause();return true;},
     resume:()=>{if(paused)togglePause();return true;},
     hasWebGL:()=>rendererMode==="webgl-3d",rendererMode:()=>rendererMode,storageKey:Sim.STORAGE_KEY,
-    mode:()=>useSociety?"society":"solo"
+    mode:()=>useWorld?"world":useSociety?"society":"solo",
+    worldMetrics:()=>useWorld?simulation.metrics():null,
+    camera:()=>view&&view.camera?view.camera():null,
+    observe:(x,z)=>{if(useWorld&&view){followExplorer=false;view.focus(x,z);dirty=true;update();}}
   });
   root.requestAnimationFrame(loop);
 })(typeof window!=="undefined"?window:globalThis);

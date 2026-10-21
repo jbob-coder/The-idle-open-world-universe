@@ -25,15 +25,36 @@ button:focus-visible{outline:2px solid #f5da92}
 button[aria-pressed="true"]{background:#6e6138}
 #hint{position:fixed;left:10px;top:48px;font-size:11px;color:#d6e1d5;background:#101a1fc9;padding:6px 9px;border-radius:6px;max-width:38vw}
 #warning{display:none;position:fixed;inset:30% 15%;background:#1d2631;border:2px solid #f5cf8f;padding:16px;text-align:center}
+#worldTools{display:none;position:fixed;left:10px;top:85px;max-width:55vw;gap:5px;flex-wrap:wrap}
+#worldTools button{padding:7px 9px;font-size:11px;min-height:36px;background:#192f2def}
+#atlas{display:none;position:fixed;inset:48px 22% 75px;z-index:4;background:#101e24f5;border:1px solid #9caf89;padding:10px;align-items:center;gap:5px;flex-direction:column}
+#atlas header{width:100%;display:flex;align-items:center;justify-content:space-between;font-size:12px;gap:8px}
+#atlas header button{min-height:30px;padding:4px 10px}
+#atlasMap{display:block;min-height:0;max-width:100%;height:calc(100% - 65px);width:auto;aspect-ratio:1;image-rendering:pixelated;cursor:crosshair;touch-action:none}
+#atlas small{font-size:10px;color:#bed3ca;text-align:center}
+#largeWorld{border-color:#e5c477;background:#51472c}
 @media(max-width:670px){#panel{width:min(205px,42vw);font-size:11px;top:38px;max-height:calc(100% - 100px);padding:6px}
 #panel h2{font-size:12px}#events,#memories{max-height:48px}#hint{display:none}#top strong{font-size:11px}
-#bottom button{padding:7px;font-size:11px;min-height:35px}}
+#bottom button{padding:7px;font-size:11px;min-height:35px}
+#worldTools{top:40px;max-width:53vw}#worldTools button{font-size:10px;padding:5px 7px;min-height:32px}
+#atlas{inset:38px 12% 82px}#panel{max-height:calc(100% - 135px)}}
 </style>
 </head>
 <body>
 <canvas id="scene" aria-label="Mundo 3D autónomo de GODSEED"></canvas>
 <div id="top"><strong>GODSEED · V3 PREVIEW</strong><span id="headline">Iniciando mundo sin conexión…</span></div>
 <div id="hint">Arrastra para girar la cámara · rueda o botones +/- para acercar</div>
+<nav id="worldTools" aria-label="Explorar el gran mundo">
+<button id="atlasToggle" type="button" aria-expanded="false" aria-controls="atlas">Atlas 1.024 × 1.024</button>
+<button id="homeCamera" type="button">Volver a la aldea</button>
+<button id="followExplorer" type="button" aria-pressed="false">Seguir explorador</button>
+<button id="orbitCamera" type="button" aria-pressed="false">Cámara: desplazar</button>
+</nav>
+<section id="atlas" aria-label="Atlas del mundo">
+<header><span>Atlas · toca una región para observarla</span><button id="atlasClose" type="button" aria-label="Cerrar atlas">Cerrar</button></header>
+<canvas id="atlasMap" aria-label="Mapa de biomas; toca para mover la cámara"></canvas>
+<small>Azul: aldea · dorado: explorador · naranja: refugios · blanco: cámara</small>
+</section>
 <aside id="panel" aria-label="Observatorio del mundo">
 <h2>Observatorio divino</h2><dl id="stats"></dl>
 <div id="citizens" aria-live="off"></div>
@@ -49,11 +70,17 @@ button[aria-pressed="true"]{background:#6e6138}
 <button id="save" type="button">Guardar</button>
 <button id="reset" type="button">Mundo nuevo</button>
 <button id="mode" type="button">Modo sociedad</button>
+<button id="largeWorld" type="button">Gran mundo</button>
 </div>
 <div id="warning" role="alert"></div>
 <script>/*V3_SIM_SOURCE*/</script>
 <script>/*V3_FRONTIER_SOURCE*/</script>
 <script>/*V3_SOCIETY_SOURCE*/</script>
+<script>/*V3_WORLD_SOURCE*/</script>
+<script>/*V3_WORLD_TRAVEL_SOURCE*/</script>
+<script>/*V3_EXPEDITION_SOURCE*/</script>
+<script>/*V3_WORLD_SIM_SOURCE*/</script>
+<script>/*V3_ATLAS_SOURCE*/</script>
 <script>/*V3_VIEW_SOURCE*/</script>
 <script>/*V3_FALLBACK_SOURCE*/</script>
 <script>/*V3_APP_SOURCE*/</script>

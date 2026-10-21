@@ -1,3 +1,23 @@
+# Current owner task — large V3 world — 2026-10-20
+
+CURRENT_OBJECTIVE: Create a larger world and advance gameplay development, following Jack's request to focus on implementation in this session.
+
+SOURCE_BASE: `feat/godseed-v3-crafting-settlement-leader-20261020` at `75bcf267891eb1d84d7e2797b3a67aa46f0570e9`.
+
+WORKING_BRANCH: `feat/godseed-v3-large-world-20261020`.
+
+COMPLETED_CODE: 1,024 × 1,024 seeded terrain; 256 regions; 16 × 16 chunks with a 48-chunk cache cap; six land biomes, rivers/lakes, roads/bridges, elevation and 255 landmarks; god atlas, camera pan/orbit/follow; material-funded autonomous exploration and camps; sparse resource persistence; separate large-world save slot and copy-on-first-entry from local society; WebGL and projected Canvas rendering integration; single-file HTML bundling.
+
+VERIFICATION: Gameplay tests, browser/emulator acceptance, and physical-device profiling NOT_RUN at the owner's request. HTML assembly is packaging only. Earlier passing evidence below does not cover the new world implementation. No release or new APK claimed.
+
+SAVE_OWNERSHIP: Existing solo and local society slots remain separate. Large-world state uses `godseed-v3-large-world-v1`. The homeland copy and wilderness advance on one simulation clock; camera movement does not advance agents or mutate their discoveries.
+
+NEXT_ACTION: Develop migration from actual camps into inhabited frontier settlements and real regional supply chains. Validation remains a separate follow-up when requested; no population/FPS/performance claims are established by this change.
+
+CONTINUITY_GRAPH_AND_DETAILS: [V3_LARGE_WORLD_2026-10-20.md](docs/V3_LARGE_WORLD_2026-10-20.md).
+
+---
+
 ## Chapter I autonomous playable milestone — 2026-10-18
 
 BRANCH: `feat/godseed-chapter-one-complete`, based on `feat/godseed-android-storage-host` (PR #6), based on GODSEED v1 PR #5. No merge to `main`.
