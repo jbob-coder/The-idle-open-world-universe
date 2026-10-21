@@ -1,0 +1,86 @@
+"use strict";
+const test=require("node:test");
+const assert=require("node:assert/strict");
+const Projects=require("../src/v3/projects.js");
+const Agency=require("../src/v3/agency.js");
+
+function person(id,options={}){
+  const x=options.x??9,z=options.z??9;
+  const mind=Agency.create(id,x,z);
+  mind.preferences.craftsmanship=options.craftsmanship??83;
+  mind.preferences.security=options.security??32;
+  return {id,x,z,alive:true,bornAt:1,wood:options.wood??5,
+    food:options.food??5,energy:options.energy??20,
+    hunger:options.hunger??90,mind};
+}
+
+test("two willing NPCs choose the same real work site and individually pay for labor",()=>{
+  const jobs=Projects.create();
+  const mira=person("world_mira",{wood:1});
+  const taren=person("world_taren",{wood:3});
+  const plot={x:9,z:9};
+  const home=Projects.propose(jobs,"home",plot,mira.id,10);
+  const tie={ties:[{a:taren.id,b:mira.id,trust:42}]};
+  assert.equal(Projects.contribute(jobs,home,mira,11).worked,true);
+  const serialized=JSON.stringify(jobs);
+  const opportunity=Projects.chooseVoluntaryWork(jobs,taren,tie,12,["home"]);
+  assert.deepEqual({id:opportunity.id,type:opportunity.type,x:opportunity.x,z:opportunity.z},
+    {id:home.id,type:"home",x:9,z:9});
+  assert.equal(JSON.stringify(jobs),serialized,"scoring may not mutate world state");
+  assert.equal(Projects.contribute(jobs,home,taren,12).completed,false);
+  assert.equal(Projects.contribute(jobs,home,taren,13).completed,false);
+  assert.equal(Projects.contribute(jobs,home,taren,14).completed,true);
+  assert.equal(taren.wood,0);
+  assert.equal(mira.wood,0);
+  assert.equal(home.contributors.find(c=>c.id===taren.id).units,3);
+  assert.equal(home.contributors.find(c=>c.id===mira.id).units,1);
+  assert.equal(Projects.validate(JSON.parse(JSON.stringify(jobs)),14,
+    [{x:9,z:9,completedAt:14}],[],[mira,taren]),4);
+  assert.equal(Projects.chooseVoluntaryWork(jobs,taren,tie,15,["home"]),null);
+});
+
+test("voluntary construction requires actual relationship, safety and physical resources",()=>{
+  const jobs=Projects.create();
+  const owner=person("builder",{wood:1});
+  const helper=person("visitor",{wood:2});
+  const work=Projects.propose(jobs,"home",{x:9,z:9},owner.id,10);
+  const friends={ties:[{a:owner.id,b:helper.id,trust:44}]};
+  const select=()=>Projects.chooseVoluntaryWork(jobs,helper,friends,11,["home"]);
+  assert.ok(select());
+  assert.equal(Projects.chooseVoluntaryWork(jobs,helper,{ties:[]},11,["home"]),null);
+  friends.ties[0].trust=20;
+  assert.equal(select(),null);
+  friends.ties[0].trust=44;
+  helper.x=50;
+  assert.equal(select(),null,"no magically assigned distant labor");
+  helper.x=9;
+  helper.hunger=50;
+  assert.equal(select(),null,"hungry NPC is free to prioritize survival");
+  helper.hunger=90;helper.energy=2;
+  assert.equal(select(),null,"exhaustion blocks volunteering");
+  helper.energy=20;helper.wood=0;
+  assert.equal(select(),null,"unfunded work must not be promised");
+  helper.wood=2;helper.food=1;
+  assert.equal(select(),null,"food security takes priority over outside work");
+  helper.food=5;helper.alive=false;
+  assert.equal(select(),null);
+  helper.alive=true;
+  assert.equal(select()?.id,work.id);
+});
+
+test("workers choose work from competing actual projects, not a fixed NPC itinerary",()=>{
+  const jobs=Projects.create();
+  const worker=person("worker",{x:0,z:0,wood:2});
+  const a=person("alice"),b=person("bob");
+  Projects.propose(jobs,"road",{x:1,z:0},a.id,5);
+  Projects.propose(jobs,"home",{x:6,z:0},b.id,6);
+  const ties={ties:[{a:worker.id,b:a.id,trust:30},
+    {a:worker.id,b:b.id,trust:85}]};
+  const choice=Projects.chooseVoluntaryWork(jobs,worker,ties,12);
+  assert.equal(choice.type,"home","trust may outweigh travel distance");
+  ties.ties[1].trust=23;
+  const changed=Projects.chooseVoluntaryWork(jobs,worker,ties,12);
+  assert.equal(changed.type,"road","a weaker personal tie changes the decision");
+  assert.equal(jobs.entries.every(p=>p.progress===0),true,
+    "decisions do not automatically spend resources or construct a road");
+});
