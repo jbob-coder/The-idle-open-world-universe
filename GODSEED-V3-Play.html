@@ -1429,7 +1429,7 @@ button[aria-pressed="true"]{background:#6e6138}
    const seed=hash(id,x,z);
    return {preferences:{curiosity:25+(seed%65),craftsmanship:25+((seed>>>8)%65),
        security:25+((seed>>>16)%65)},
-     memories:[],lastChoice:null,choices:0,explorations:0};
+     memories:[],lastChoice:null,choices:0,explorations:0,curiosityUrge:70};
  }
  function decide(mind,ctx){
    const p=mind.preferences,options=[];
@@ -1441,14 +1441,15 @@ button[aria-pressed="true"]{background:#6e6138}
    add("eat",220+(62-hunger), "hunger",hunger<=62&&food>0);
    add("rest",200+(4-energy)*10,"exhaustion",energy<4);
    // Saving a meal and keeping emergency reserves have independent utility.
-   add("forage",food<3?136+(3-food)*5:60+(70-hunger),
+   add("forage",food<3?160+(3-food)*6:62+(70-hunger),
      "food_security",food<3||hunger<70);
-   add("build_home",135+p.security/5,"shelter",!house&&wood>=4);
-   add("gather_wood",115+p.craftsmanship/5,"building_materials",
+   add("build_home",88+p.security*.65,"shelter",!house&&wood>=4);
+   add("gather_wood",81+p.craftsmanship*.55,"building_materials",
      (!house&&wood<4)||(house&&road&&wood<1));
-   add("build_road",106+p.craftsmanship/5,"connect_homes",house&&road&&wood>=1);
-   add("explore",42+p.curiosity/2,"discover",house&&energy>=8&&hunger>=60);
-   add("reflect",25+p.security/5,"wellbeing",house);
+   add("build_road",70+p.craftsmanship*.55,"connect_homes",house&&road&&wood>=1);
+   add("explore",21+p.curiosity*.76+mind.curiosityUrge*.45,"discover",
+     energy>=9&&hunger>=68&&food>=3);
+   add("reflect",25+p.security/5,"wellbeing",energy>=5);
    // Priorities above are scores evaluated only on feasible actions, never
    // instructions of what must happen on a particular world tick.
    options.sort((a,b)=>b.utility-a.utility||ACTIONS.indexOf(a.action)-ACTIONS.indexOf(b.action));
@@ -1456,6 +1457,13 @@ button[aria-pressed="true"]{background:#6e6138}
      reason:options[0]?.reason||"no_viable_work",
      utility:options[0]?.utility||0,
      alternatives:options.slice(1,4).map(o=>({action:o.action,utility:o.utility}))};
+ }
+ function commitChoice(mind,action){
+   if(!ACTIONS.includes(action))throw RangeError("invalid NPC decision");
+   mind.lastChoice=action;mind.choices++;
+   // Curiosity gradually returns during ordinary work. Exploring satisfies it;
+   // the individual can change priorities later instead of repeating a script.
+   mind.curiosityUrge=clamp(mind.curiosityUrge+(action==="explore"?-18:2));
  }
  function remember(mind,tick,action,details){
    if(!EVENTS.has(action))return;
@@ -1475,7 +1483,8 @@ button[aria-pressed="true"]{background:#6e6138}
       !mind.preferences||!Array.isArray(mind.memories)||
       mind.memories.length>MAX_MEMORIES||!positive(mind.choices)||
       mind.choices>tick||!positive(mind.explorations)||
-      mind.explorations>mind.choices||
+      mind.explorations>mind.choices||!positive(mind.curiosityUrge)||
+      mind.curiosityUrge>100||
       !(mind.lastChoice===null||ACTIONS.includes(mind.lastChoice)))return false;
    for(const k of ["curiosity","craftsmanship","security"]){
      const v=mind.preferences[k];if(!positive(v)||v<25||v>89)return false;
@@ -1487,7 +1496,7 @@ button[aria-pressed="true"]{background:#6e6138}
    }
    return true;
  }
- return Object.freeze({ACTIONS,create,decide,remember,validate,MAX_MEMORIES});
+ return Object.freeze({ACTIONS,create,decide,commitChoice,remember,validate,MAX_MEMORIES});
 });</script>
 <script>/* Persistent autonomous wilderness explorer. All supplies are physically gathered.
  * Camps belong to the expedition ledger; village stores are never remotely debited. */
@@ -1594,7 +1603,7 @@ button[aria-pressed="true"]{background:#6e6138}
       ?Infra.next(world,s.camps.concat(s.houses),s.roads,tick):null;
     const decision=Agency.decide(c.mind,{hunger:c.hunger,energy:c.energy,
       food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site});
-    c.mind.choices++;c.mind.lastChoice=decision.action;
+    Agency.commitChoice(c.mind,decision.action);
     if(decision.action==="forage"){gather("food");return;}
     if(decision.action==="gather_wood"){gather("wood");return;}
     if(decision.action==="build_home"){
