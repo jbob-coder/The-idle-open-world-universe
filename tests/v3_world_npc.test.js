@@ -19,7 +19,7 @@ test("frontier homesteader actually harvests, eats, and builds from finite resou
   assert.ok(house.completedAt>=mira.bornAt);
   assert.ok(s.expedition.settlerWoodGathered>=4);
   assert.ok(s.expedition.settlerFoodGathered>=3);
-  assert.equal(mira.wood,s.expedition.settlerWoodGathered-4);
+  assert.equal(mira.wood,s.expedition.settlerWoodGathered-4-s.expedition.roads.length);
   assert.equal(mira.food,s.expedition.settlerFoodGathered-s.expedition.settlerFoodEaten);
   assert.equal(s.expedition.woodSpent,(s.expedition.camps.length+1)*4);
   assert.equal(s.expedition.foodGathered-s.expedition.foodEaten,
@@ -83,7 +83,7 @@ test("settlers can pass beyond a depleted local grove and return home",()=>{
   assert.ok(home,"the resident built after travelling beyond the first grove");
   assert.equal(home.builder,resident.id);
   assert.equal(resident.wood,
-    state.expedition.settlerWoodGathered-state.expedition.houses.length*4);
+    state.expedition.settlerWoodGathered-state.expedition.houses.length*4-state.expedition.roads.length);
   assert.deepEqual(WorldSim.restore(game.serialize()).snapshot(),state);
 });
 
@@ -110,9 +110,10 @@ test("NPC roads arise from built settlement structures and survive reload",()=>{
 });
 
 test("schema 2 world migrates roads to an empty list without fabrication",()=>{
-  const game=WorldSim.create(77);game.advance(800);
+  const game=WorldSim.create(77);game.advance(650);
   const prior=JSON.parse(game.serialize());
   assert.equal(prior.schemaVersion,3);
+  assert.equal(prior.expedition.roads.length,0,"legacy fixture cannot include new roads");
   prior.schemaVersion=2;
   delete prior.expedition.roads;
   const restored=WorldSim.restore(JSON.stringify(prior));
