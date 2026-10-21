@@ -26,7 +26,8 @@
         biome:World.terrain(home.seed,c?c.x:5,c?c.z:5).biome,
         homelandCitizens:home.citizens.length,camps:expedition.camps.length,
         frontierResidents:expedition.settlers.length,frontierHomes:expedition.houses.length,
-        constructedRoads:expedition.roads.length};
+        constructedRoads:expedition.roads.length,
+        socialConnections:expedition.social.ties.length};
       return result;
     }
     function advance(n){
@@ -34,6 +35,7 @@
       for(let i=0;i<n;i++){
         home=homeland.advance(1);
         Expedition.advance(expedition,world,home);
+        Expedition.advanceSocial(expedition,home.tick);
       }
       sceneCache=null;return snapshot();
     }
