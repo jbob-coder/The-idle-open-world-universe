@@ -1656,11 +1656,11 @@ button[aria-pressed="true"]{background:#6e6138}
   // A character can *offer* labor to another resident's active project.
   // Neither project ownership nor the simulation tick issues commands.
   // The caller must still walk to the site and pay through contribute().
-  function chooseVoluntaryWork(s,actor,social,tick,types=["home","road","camp"]){
+  function chooseVoluntaryWork(s,actor,social,tick,types=["home","road","camp"],allowGather=false){
     if(!s||!Array.isArray(s.entries)||!actor||!actor.alive||
        !actor.mind||!actor.mind.preferences||
        !social||!Array.isArray(social.ties)||!integer(tick)||
-       !integer(actor.wood)||actor.wood<1||
+       !integer(actor.wood)||(!allowGather&&actor.wood<1)||
        !integer(actor.energy)||actor.energy<10||
        !integer(actor.food)||actor.food<2||
        !integer(actor.hunger)||actor.hunger<68||
@@ -1674,7 +1674,7 @@ button[aria-pressed="true"]{background:#6e6138}
          p.initiator===actor.id||p.startedAt>tick||
          p.progress>=p.required)continue;
       const distance=Math.abs(actor.x-p.x)+Math.abs(actor.z-p.z);
-      if(distance>12)continue; // Local offers, not interregional orders.
+      if(distance>(allowGather?24:12))continue; // Locally reachable opportunities only.
       const tie=social.ties.find(t=>
         (t.a===actor.id&&t.b===p.initiator)||
         (t.b===actor.id&&t.a===p.initiator));
@@ -1682,14 +1682,15 @@ button[aria-pressed="true"]{background:#6e6138}
       // Individual craftsmanship, trust, safety and real travel cost compete.
       // There is no fixed date or required construction goal.
       const score=craft+tie.trust-Math.floor(security/3)-
-        distance*3+(p.progress>0?12:0);
+        distance*3+(p.progress>0?12:0)-(actor.wood===0?5:0);
       if(score<67)continue;
       if(score>bestScore||(score===bestScore&&p.id<best.id)){
         best=p;bestScore=score;
       }
     }
     return best?{id:best.id,type:best.type,x:best.x,z:best.z,
-      score:bestScore,reason:"voluntary_community_work"}:null;
+      score:bestScore,needsWood:actor.wood===0,
+      reason:"voluntary_community_work"}:null;
   }
   function validate(s,tick,homes,roads,workers,camps=[]){
     if(!s||!integer(s.cutoverTick)||s.cutoverTick>tick||
@@ -2020,13 +2021,18 @@ button[aria-pressed="true"]{background:#6e6138}
     // help an active local home, but never receives a forced construction job.
     // Historical itinerary saves keep their original behavior.
     const offer=c.routeMode==="free"&&c.stage!=="travel"?
-      Projects.chooseVoluntaryWork(s.projects,c,s.social,tick,["home"]):null;
+      Projects.chooseVoluntaryWork(s.projects,c,s.social,tick,["home"],true):null;
     if(offer){
       const project=Projects.find(s.projects,offer.type,offer);
       const owner=s.settlers.find(person=>person.id===project.initiator);
       const homeCamp=owner?s.camps.find(b=>b.id===owner.homeCampId):null;
       if(owner&&owner.alive&&homeCamp&&owner.homeSite&&
          Nav.same(owner.homeSite,offer)&&!s.houses.length){
+        if(offer.needsWood){
+          gather(s,world,"wood",tick,true);
+          c.goal="reunir madera para colaborar";
+          return;
+        }
         if(!Nav.same(c,offer)){
           const approach=Nav.local(world,c,offer,tick,16,2048);
           if(approach&&approach.path.length){
