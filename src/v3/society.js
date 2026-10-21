@@ -3,7 +3,10 @@
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   if(root)root.GodseedV3Society=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
-  const VERSION=2,SIZE=20,STORAGE_KEY="godseed-v3-society-v1";
+  const Frontier=typeof module!=="undefined"&&module.exports?
+    require("./frontier.js"):globalThis.GodseedV3Frontier;
+  if(!Frontier)throw Error("GODSEED frontier module missing");
+  const VERSION=3,SIZE=20,STORAGE_KEY="godseed-v3-society-v1";
   const copy=x=>JSON.parse(JSON.stringify(x));
   const validPos=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.z)&&p.x>=0&&p.z>=0&&p.x<SIZE&&p.z<SIZE;
   const number=n=>Number.isSafeInteger(n)&&n>=0;
@@ -36,8 +39,8 @@
     skill:template.skill,energy:20,hunger:85,health:100,alive:true,
     settled:template.id==="sim_aria",harvested:0,
     crafted:0,built:0,foraged:0,conversations:0,ordersCompleted:0,
-    role:"unassigned",memories:[],goal:"explorar",relations:{}};}
-  const MEMORY_KINDS=new Set(["craft","build","forage","eat","talk","elect","assign","council"]);
+    role:"unassigned",homeId:"village_01",memories:[],goal:"explorar",relations:{}};}
+  const MEMORY_KINDS=new Set(["craft","build","forage","eat","talk","elect","assign","council","found_outpost","deliver"]);
   function remember(c,tick,kind,subject){
     c.memories.push({tick,kind,subject:subject||null});
     if(c.memories.length>12)c.memories.shift();
@@ -47,7 +50,7 @@
     if(s.events.length>96)s.events.shift();
     if(MEMORY_KINDS.has(action)){
       const subject=details.with||details.site||details.recipe||details.role||
-        details.policy||details.leader||null;
+        details.policy||details.leader||details.settlement||null;
       remember(c,s.tick,action,subject);
     }
     if(action==="forage")c.foraged++;
@@ -152,8 +155,8 @@
     if(c.hunger===0)c.health=Math.max(0,c.health-2);
     else if(c.hunger>65)c.health=Math.min(100,c.health+1);
     if(c.health===0){c.alive=false;c.goal="fallecido";record(s,c,"death",{});return;}
-    if(c.hunger<=60&&s.food>0){
-      s.food--;s.foodEaten++;c.hunger=Math.min(100,c.hunger+40);
+    if(c.hunger<=60&&Frontier.foodAvailable(s,c)>0){
+      Frontier.consumeFood(s,c);s.foodEaten++;c.hunger=Math.min(100,c.hunger+40);
       c.goal="comer";record(s,c,"eat",{foodSpent:1});return;
     }
     if(c.energy<5){c.energy=Math.min(20,c.energy+9);c.goal="descansar";return;}
@@ -165,6 +168,7 @@
       }
       c.settled=true; // Milestone is persistent: do not pull a worker back from distant jobs.
     }
+    if(Frontier.beforeAction(s,c,{walk,nearest,record}))return;
     if(s.food<Math.max(2,s.citizens.length)||c.hunger<=58){
       if(s.bushes.some(b=>b.berries>0)){forage(s,c);return;}
     }
@@ -258,6 +262,7 @@
       wood:0,harvested:0,craftedWood:0,spentWood:0,
       axe:0,axeCrafted:0,kits:0,kitsCrafted:0,kitsUsed:0,
       food:0,foodGathered:0,foodEaten:0,foodGrown:0,
+      outpost:Frontier.newState(),
       settlement:{id:"village_01",name:"Primera Aldea",foundedAt:null,
         leaderId:null,electionTick:0,elections:0,ballots:[],orders:[],
         ordersIssued:0,policy:"none",policyTick:0,policiesSet:0,policyReason:""},events:[]});
@@ -352,8 +357,8 @@
       typeof e.details!=="object")return false;
     return true;
   }
-  function validate(s){
-    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
+  function validateV2(s){
+    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==2||
       !Array.isArray(s.events))return false;
     const allowed=new Set(["harvest","craft","build","forage","eat","talk",
       "arrive","elect","death","assign","council"]);
@@ -419,15 +424,28 @@
   function migrateV1(value){
     if(!validateLegacy(value))throw RangeError("invalid schema-1 society save");
     const s=copy(value);
-    s.schemaVersion=VERSION;
+    s.schemaVersion=2;
     for(const c of s.citizens){
       c.foraged=0;c.ordersCompleted=0;c.role="unassigned";c.memories=[];
       c.settled=c.id==="sim_aria"||distance(c,SITES[0])<=2;
     }
     Object.assign(s.settlement,{orders:[],ordersIssued:0,
       policy:"none",policyTick:0,policiesSet:0,policyReason:""});
-    if(!validate(s))throw RangeError("unsafe schema-1 migration");
+    if(!validateV2(s))throw RangeError("unsafe schema-1 migration");
     return s;
+  }
+  function migrateV2(value){
+    if(!validateV2(value))throw RangeError("invalid schema-2 society save");
+    const s=copy(value);s.schemaVersion=VERSION;
+    for(const c of s.citizens)c.homeId="village_01";
+    s.outpost=Frontier.newState();
+    if(!validate(s))throw RangeError("unsafe schema-2 society migration");
+    return s;
+  }
+  function validate(s){
+    if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
+       !Frontier.validate(s))return false;
+    return validateV2(Frontier.projectV2(s));
   }
   function instance(state){
     function snapshot(){return copy(state);}
@@ -446,6 +464,7 @@
           council(state); // Schema-1 restore: never leave an active council without a policy.
         }
         if(state.settlement.leaderId&&state.tick%45===0)council(state);
+        Frontier.afterTick(state,{record});
       }
       return snapshot();
     }
@@ -457,6 +476,7 @@
     if(typeof raw!=="string"||raw.length>64000)throw RangeError("invalid save");
     let value=JSON.parse(raw);
     if(value&&value.schemaVersion===1)value=migrateV1(value);
+    if(value&&value.schemaVersion===2)value=migrateV2(value);
     if(!validate(value))throw RangeError("invalid society state");
     return instance(copy(value));
   }
