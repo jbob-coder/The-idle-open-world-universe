@@ -6,6 +6,7 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
   const Nav=typeof module!=="undefined"&&module.exports?require("./world_travel.js"):globalThis.GodseedV3WorldTravel;
   const Infra=typeof module!=="undefined"&&module.exports?require("./infrastructure.js"):globalThis.GodseedV3Infrastructure;
+  const Agency=typeof module!=="undefined"&&module.exports?require("./agency.js"):globalThis.GodseedV3Agency;
   const ROUTE=Nav.itinerary(),EVENT_LIMIT=64,CAMP_LIMIT=56;
   const copy=x=>JSON.parse(JSON.stringify(x));
   const positive=n=>Number.isSafeInteger(n)&&n>=0;
@@ -15,6 +16,7 @@
   function record(s,tick,action,details,actor="world_taren"){
     s.events.push({tick,actor,action,details});
     if(s.events.length>EVENT_LIMIT)s.events.shift();
+    if(actor==="world_mira"&&s.settlers.length)Agency.remember(s.settlers[0].mind,tick,action,details);
   }
   function mark(s,p){
     const id=Math.floor(p.x/16)+","+Math.floor(p.z/16);
@@ -59,6 +61,8 @@
       const c={id:"world_mira",name:"Mira",trait:"colona",worldSettler:true,
         homeCampId:camp.id,x:camp.x,z:camp.z,energy:20,hunger:90,health:100,
         alive:true,wood:0,food:0,goal:"establecer hogar",bornAt:tick};
+      c.mind=Agency.create(c.id,camp.x,camp.z);
+      c.homeSite=Infra.chooseHomeSite(world,camp,c.mind.preferences,tick);
       s.settlers.push(c);mark(s,c);
       record(s,tick,"settler_arrive",{campId:camp.id,x:c.x,z:c.z},c.id);return;
     }
@@ -95,54 +99,85 @@
       record(s,tick,kind==="wood"?"settler_harvest":"settler_forage",
         {x:c.x,z:c.z,amount:1},c.id);
     };
-    if(c.hunger<40&&c.food===0){gather("food");return;}
-    if(c.food<3){gather("food");return;}
-    if(!s.houses.length){
-      if(c.wood<4){gather("wood");return;}
-      // Distinct walkable site inside the seeded landmark plaza.
-      const site={x:camp.anchorX-2,z:camp.anchorZ+2};
-      if(!Nav.same(c,site)){
-        const route=Nav.local(world,c,site,tick);
-        if(!route||!route.path.length){c.goal="buscar acceso al solar";return;}
+    const site=s.houses.length
+      ?Infra.next(world,s.camps.concat(s.houses),s.roads,tick):null;
+    const decision=Agency.decide(c.mind,{hunger:c.hunger,energy:c.energy,
+      food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site});
+    c.mind.choices++;c.mind.lastChoice=decision.action;
+    if(decision.action==="forage"){gather("food");return;}
+    if(decision.action==="gather_wood"){gather("wood");return;}
+    if(decision.action==="build_home"){
+      const place=c.homeSite;
+      if(!place){c.goal="investigar un terreno seguro";return;}
+      if(!Nav.same(c,place)){
+        const route=Nav.local(world,c,place,tick);
+        if(!route||!route.path.length){c.goal="buscar acceso al terreno";return;}
         const p=route.path[0];c.x=p.x;c.z=p.z;
         c.energy=Math.max(0,c.energy-1);mark(s,c);
-        c.goal="transportar madera al solar";return;
+        c.goal="trasladar madera al hogar";return;
       }
       c.wood-=4;s.woodSpent+=4;c.energy=Math.max(0,c.energy-3);
-      s.houses.push({id:"frontier_home_1",type:"home",x:site.x,z:site.z,
+      s.houses.push({id:"frontier_home_1",type:"home",x:place.x,z:place.z,
         campId:camp.id,builder:c.id,completedAt:tick,name:"Casa de Mira"});
-      c.goal="casa construida";
+      c.goal="construir mi hogar";
       record(s,tick,"settler_build",{id:"frontier_home_1",woodSpent:4,
-        x:site.x,z:site.z},c.id);return;
+        x:place.x,z:place.z},c.id);return;
     }
-    // No prescribed road blueprint: link actual, completed structures on terrain.
-    const site=Infra.next(world,s.camps.concat(s.houses),s.roads,tick);
-    if(site){
-      if(c.wood<1){gather("wood");return;}
+    if(decision.action==="build_road"&&site){
       if(!Nav.same(c,site)){
         const route=Nav.local(world,c,site,tick);
         if(!route||!route.path.length){c.goal="buscar acceso a la obra vial";return;}
-        const p=route.path[0];c.x=p.x;c.z=p.z;c.energy=Math.max(0,c.energy-1);
-        mark(s,c);c.goal="llevar madera al camino";return;
+        const p=route.path[0];c.x=p.x;c.z=p.z;
+        c.energy=Math.max(0,c.energy-1);mark(s,c);
+        c.goal="transportar madera al camino";return;
       }
       c.wood--;s.woodSpent++;
-      const road={x:site.x,z:site.z,type:"road",material:"timber",
-        builder:c.id,completedAt:tick};
-      s.roads.push(road);c.energy=Math.max(0,c.energy-2);
-      c.goal="construir camino";
+      s.roads.push({x:site.x,z:site.z,type:"road",material:"timber",
+        builder:c.id,completedAt:tick});
+      c.energy=Math.max(0,c.energy-2);c.goal="construir camino";
       record(s,tick,"settler_build_road",{x:site.x,z:site.z,woodSpent:1},c.id);
       return;
     }
-    c.goal="mantener caminos y refugio";c.energy=Math.min(20,c.energy+1);
+    if(decision.action==="explore"){
+      // Exploration is an optional choice after shelter. Deterministic interests
+      // change the direction; camera/player commands never select a destination.
+      const home=c.homeSite||camp,turn=Math.floor(tick/22);
+      const place={x:home.x+((turn+c.mind.preferences.curiosity)%5)-2,
+        z:home.z+((turn+c.mind.preferences.security)%5)-2};
+      if(world.walkable(place.x,place.z)&&!Nav.same(c,place)){
+        const route=Nav.local(world,c,place,tick);
+        if(route&&route.path.length){
+          c.x=route.path[0].x;c.z=route.path[0].z;
+          c.energy=Math.max(0,c.energy-1);mark(s,c);
+          c.goal="explorar por curiosidad";return;
+        }
+      }
+      c.goal="observar el terreno";
+      if(tick%22===0)record(s,tick,"settler_explore",{x:c.x,z:c.z},c.id);
+      c.energy=Math.min(20,c.energy+1);return;
+    }
+    c.goal="descansar y pensar";c.energy=Math.min(20,c.energy+1);
   }
   function migrateLegacy(state){
     if(!state||typeof state!=="object"||Array.isArray(state))return state;
     return Object.assign({},state,{settlers:[],houses:[],roads:[],
       settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0});
   }
+  function migrateV3(state){
+    if(!state||typeof state!=="object"||Array.isArray(state))return state;
+    const migrated=Object.assign({},state,{settlers:state.settlers.map(c=>Object.assign({},c))});
+    const m=migrated.settlers[0],camp=migrated.camps[0],house=migrated.houses[0];
+    if(m&&camp){
+      m.mind=Agency.create(m.id,camp.x,camp.z);
+      // Historical houses cannot move merely because a save was loaded.
+      m.homeSite=house?{x:house.x,z:house.z}:
+        {x:camp.anchorX-2,z:camp.anchorZ+2};
+    }
+    return migrated;
+  }
   function migrateV2(state){
     if(!state||typeof state!=="object"||Array.isArray(state))return state;
-    return Object.assign({},state,{roads:[]});
+    return migrateV3(Object.assign({},state,{roads:[]}));
   }
   function advance(s,world,homeland){
     const tick=homeland.tick;
@@ -221,7 +256,10 @@
         m.trait!=="colona"||m.worldSettler!==true||
         m.homeCampId!==first.id||!positive(m.bornAt)||
         m.bornAt<first.completedAt||m.bornAt>tick||
-        !world.walkable(m.x,m.z)||typeof m.goal!=="string"||
+        !world.walkable(m.x,m.z)||!m.homeSite||
+        !world.walkable(m.homeSite.x,m.homeSite.z)||
+        Nav.distance(m.homeSite,first)<2||Nav.distance(m.homeSite,first)>12||
+        !Agency.validate(m.mind,tick)||typeof m.goal!=="string"||
         m.goal.length>80)return false;
       for(const k of ["energy","hunger","health","food","wood"])
         if(!positive(m[k]))return false;
@@ -233,7 +271,7 @@
     if(s.houses.length){
       const h=s.houses[0];
       if(!m||!h||h.id!=="frontier_home_1"||h.type!=="home"||
-        h.x!==first.anchorX-2||h.z!==first.anchorZ+2||
+        h.x!==m.homeSite.x||h.z!==m.homeSite.z||
         h.campId!==first.id||h.builder!==m.id||
         h.name!=="Casa de Mira"||!positive(h.completedAt)||
         h.completedAt<m.bornAt||h.completedAt>tick)return false;
@@ -287,7 +325,7 @@
     }
     const actions=["expedition_arrive","harvest","forage","eat","discover","build_camp","death"];
     const residentActions=["settler_arrive","settler_forage","settler_harvest",
-      "settler_eat","settler_build","settler_build_road","settler_death"];
+      "settler_eat","settler_build","settler_build_road","settler_explore","settler_death"];
     previous=-1;
     for(const e of s.events){
       if(!e||!positive(e.tick)||e.tick>tick||e.tick<previous||
@@ -298,5 +336,5 @@
     }
     return true;
   }
-  return Object.freeze({create,advance,validate,migrateLegacy,migrateV2,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
+  return Object.freeze({create,advance,validate,migrateLegacy,migrateV2,migrateV3,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
 });
