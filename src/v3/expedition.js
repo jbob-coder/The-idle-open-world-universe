@@ -265,13 +265,18 @@
     // help an active local home, but never receives a forced construction job.
     // Historical itinerary saves keep their original behavior.
     const offer=c.routeMode==="free"&&c.stage!=="travel"?
-      Projects.chooseVoluntaryWork(s.projects,c,s.social,tick,["home"]):null;
+      Projects.chooseVoluntaryWork(s.projects,c,s.social,tick,["home"],true):null;
     if(offer){
       const project=Projects.find(s.projects,offer.type,offer);
       const owner=s.settlers.find(person=>person.id===project.initiator);
       const homeCamp=owner?s.camps.find(b=>b.id===owner.homeCampId):null;
       if(owner&&owner.alive&&homeCamp&&owner.homeSite&&
          Nav.same(owner.homeSite,offer)&&!s.houses.length){
+        if(offer.needsWood){
+          gather(s,world,"wood",tick,true);
+          c.goal="reunir madera para colaborar";
+          return;
+        }
         if(!Nav.same(c,offer)){
           const approach=Nav.local(world,c,offer,tick,16,2048);
           if(approach&&approach.path.length){
