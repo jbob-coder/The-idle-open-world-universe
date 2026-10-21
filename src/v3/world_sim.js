@@ -8,7 +8,7 @@
   const Society=node?require("./society.js"):globalThis.GodseedV3Society;
   const World=node?require("./world.js"):globalThis.GodseedV3World;
   const Expedition=node?require("./expedition.js"):globalThis.GodseedV3Expedition;
-  const VERSION=2,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
+  const VERSION=3,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
   const copy=x=>JSON.parse(JSON.stringify(x));
   function instance(homeland,world,expedition){
     let home=homeland.snapshot(),sceneCache=null,sceneKey="";
@@ -17,6 +17,7 @@
       if(c)result.citizens.push(copy(c));
       result.citizens=result.citizens.concat(copy(expedition.settlers));
       result.structures=result.structures.concat(copy(expedition.camps),copy(expedition.houses));
+      result.roads=copy(expedition.roads);
       result.events=result.events.concat(copy(expedition.events)).sort((a,b)=>a.tick-b.tick).slice(-96);
       result.expedition=Expedition.snapshot(expedition);
       result.world={size:World.SIZE,min:World.MIN,max:World.MAX,tileCount:World.SIZE*World.SIZE,
@@ -24,7 +25,8 @@
         discoveredRegions:expedition.discoveries.length,knownChunks:expedition.knownChunks.length,
         biome:World.terrain(home.seed,c?c.x:5,c?c.z:5).biome,
         homelandCitizens:home.citizens.length,camps:expedition.camps.length,
-        frontierResidents:expedition.settlers.length,frontierHomes:expedition.houses.length};
+        frontierResidents:expedition.settlers.length,frontierHomes:expedition.houses.length,
+        constructedRoads:expedition.roads.length};
       return result;
     }
     function advance(n){
@@ -45,6 +47,12 @@
       if(sceneCache&&sceneKey===id)return sceneCache;
       const result=snapshot(),visible=p=>Math.abs(p.x-cx)<=radius&&Math.abs(p.z-cz)<=radius;
       result.terrain=world.windowAt(cx,cz,radius,home.tick);
+      // Apply only completed, paid NPC roads as presentation overlays.
+      // The terrain generator remains authoritative for collision and geography.
+      const made=new Set(expedition.roads.map(p=>p.x+","+p.z));
+      for(const tile of result.terrain)if(made.has(tile.x+","+tile.z)){
+        tile.kind="road";tile.color=[.58,.43,.29];
+      }
       result.forest=home.forest.filter(visible).map(p=>Object.assign({},p));
       result.bushes=home.bushes.filter(visible).map(p=>Object.assign({},p));
       for(const tile of result.terrain){
@@ -78,12 +86,13 @@
   function restore(raw){
     if(typeof raw!=="string"||raw.length>SAVE_LIMIT)throw RangeError("invalid large-world save");
     const s=JSON.parse(raw);
-    if(!s||![1,VERSION].includes(s.schemaVersion)||!s.homeland||
+    if(!s||![1,2,VERSION].includes(s.schemaVersion)||!s.homeland||
       s.seed!==s.homeland.seed||!s.wilderness)
       throw RangeError("incompatible large-world save");
     const homeland=Society.restore(JSON.stringify(s.homeland)),tick=homeland.snapshot().tick;
     const world=World.create(s.seed,s.wilderness);
-    const expedition=s.schemaVersion===1?Expedition.migrateLegacy(s.expedition):s.expedition;
+    const expedition=s.schemaVersion===1?Expedition.migrateLegacy(s.expedition):
+      s.schemaVersion===2?Expedition.migrateV2(s.expedition):s.expedition;
     if(s.wilderness.berries.some(b=>b.at>tick)||
       !Expedition.validate(expedition,world,tick,s.wilderness.removed.length))
       throw RangeError("invalid wilderness progress");
