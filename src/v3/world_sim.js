@@ -8,7 +8,7 @@
   const Society=node?require("./society.js"):globalThis.GodseedV3Society;
   const World=node?require("./world.js"):globalThis.GodseedV3World;
   const Expedition=node?require("./expedition.js"):globalThis.GodseedV3Expedition;
-  const VERSION=5,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
+  const VERSION=6,STORAGE_KEY="godseed-v3-large-world-v1",SAVE_LIMIT=1500000;
   const copy=x=>JSON.parse(JSON.stringify(x));
   function instance(homeland,world,expedition){
     let home=homeland.snapshot(),sceneCache=null,sceneKey="";
@@ -27,7 +27,9 @@
         homelandCitizens:home.citizens.length,camps:expedition.camps.length,
         frontierResidents:expedition.settlers.length,frontierHomes:expedition.houses.length,
         constructedRoads:expedition.roads.length,
-        socialConnections:expedition.social.ties.length};
+        socialConnections:expedition.social.ties.length,
+        activeConstruction:expedition.projects.entries.filter(p=>p.status==="active").length,
+        completedWorkOrders:expedition.projects.entries.filter(p=>p.status==="complete").length};
       return result;
     }
     function advance(n){
@@ -88,15 +90,16 @@
   function restore(raw){
     if(typeof raw!=="string"||raw.length>SAVE_LIMIT)throw RangeError("invalid large-world save");
     const s=JSON.parse(raw);
-    if(!s||![1,2,3,4,VERSION].includes(s.schemaVersion)||!s.homeland||
+    if(!s||![1,2,3,4,5,VERSION].includes(s.schemaVersion)||!s.homeland||
       s.seed!==s.homeland.seed||!s.wilderness)
       throw RangeError("incompatible large-world save");
     const homeland=Society.restore(JSON.stringify(s.homeland)),tick=homeland.snapshot().tick;
     const world=World.create(s.seed,s.wilderness);
     const expedition=s.schemaVersion===VERSION?s.expedition:
-      Expedition.migrateV4(s.schemaVersion===1?Expedition.migrateLegacy(s.expedition):
-        s.schemaVersion===2?Expedition.migrateV2(s.expedition):
-        s.schemaVersion===3?Expedition.migrateV3(s.expedition):s.expedition);
+      Expedition.migrateV5(s.schemaVersion===5?s.expedition:
+        Expedition.migrateV4(s.schemaVersion===1?Expedition.migrateLegacy(s.expedition):
+          s.schemaVersion===2?Expedition.migrateV2(s.expedition):
+          s.schemaVersion===3?Expedition.migrateV3(s.expedition):s.expedition),tick);
     if(s.wilderness.berries.some(b=>b.at>tick)||
       !Expedition.validate(expedition,world,tick,s.wilderness.removed.length))
       throw RangeError("invalid wilderness progress");

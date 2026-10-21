@@ -9,12 +9,13 @@
   const Agency=typeof module!=="undefined"&&module.exports?require("./agency.js"):globalThis.GodseedV3Agency;
   const Discovery=typeof module!=="undefined"&&module.exports?require("./discovery.js"):globalThis.GodseedV3Discovery;
   const Social=typeof module!=="undefined"&&module.exports?require("./social.js"):globalThis.GodseedV3Social;
+  const Projects=typeof module!=="undefined"&&module.exports?require("./projects.js"):globalThis.GodseedV3Projects;
   const ROUTE=Nav.itinerary(),EVENT_LIMIT=64,CAMP_LIMIT=56;
   const copy=x=>JSON.parse(JSON.stringify(x));
   const positive=n=>Number.isSafeInteger(n)&&n>=0;
   function create(){return {explorer:null,camps:[],discoveries:[],events:[],
     knownChunks:[],woodGathered:0,woodSpent:0,foodGathered:0,foodEaten:0,
-    settlers:[],houses:[],roads:[],social:Social.create(),settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0};}
+    settlers:[],houses:[],roads:[],social:Social.create(),projects:Projects.create(),settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0};}
   function record(s,tick,action,details,actor="world_taren"){
     s.events.push({tick,actor,action,details});
     if(s.events.length>EVENT_LIMIT)s.events.shift();
@@ -31,13 +32,17 @@
   }
   function goLocal(s,world,target,tick){
     const c=s.explorer;if(Nav.same(c,target))return true;
-    const route=Nav.local(world,c,target,tick);
+    const route=c.routeMode==="free"?
+      Nav.local(world,c,target,tick,64,4096):
+      Nav.local(world,c,target,tick);
     if(route&&route.path.length)move(s,route.path[0]);
     else c.goal="buscar paso seguro";
     return false;
   }
-  function gather(s,world,kind,tick){
-    const c=s.explorer,route=Nav.resource(world,c,kind,tick);
+  function gather(s,world,kind,tick,extended=false){
+    const c=s.explorer,route=extended?
+      Nav.resource(world,c,kind,tick,32,2048):
+      Nav.resource(world,c,kind,tick);
     if(!route){c.goal=kind==="food"?"esperar frutos silvestres":"buscar otro bosque";return false;}
     if(route.path.length){move(s,route.path[0]);c.goal=kind==="food"?"buscar provisiones":"buscar madera para campamento";return true;}
     const accepted=kind==="wood"?world.harvest(c.x,c.z):world.forage(c.x,c.z,tick);
@@ -108,7 +113,8 @@
     const site=s.houses.length
       ?Infra.next(world,s.camps.filter(b=>b.id===c.homeCampId).concat(s.houses),s.roads,tick):null;
     const decision=Agency.decide(c.mind,{hunger:c.hunger,energy:c.energy,
-      food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site});
+      food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site,
+      homeProject:!!Projects.find(s.projects,"home",c.homeSite||camp)});
     Agency.commitChoice(c.mind,decision.action);
     if(decision.action==="forage"){gather("food");return;}
     if(decision.action==="gather_wood"){gather("wood");return;}
@@ -122,12 +128,19 @@
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="trasladar madera al hogar";return;
       }
-      c.wood-=4;s.woodSpent+=4;c.energy=Math.max(0,c.energy-3);
-      s.houses.push({id:"frontier_home_1",type:"home",x:place.x,z:place.z,
-        campId:camp.id,builder:c.id,completedAt:tick,name:"Casa de Mira"});
-      c.goal="construir mi hogar";
-      record(s,tick,"settler_build",{id:"frontier_home_1",woodSpent:4,
-        x:place.x,z:place.z},c.id);return;
+      const task=Projects.propose(s.projects,"home",place,c.id,tick);
+      if(!task){c.goal="esperar una obra disponible";return;}
+      const step=Projects.contribute(s.projects,task,c,tick);
+      if(!step.worked){c.goal="obtener madera para la obra";return;}
+      s.woodSpent+=step.woodSpent;c.goal="construir vivienda ("+task.progress+"/"+task.required+")";
+      if(step.completed){
+        s.houses.push({id:"frontier_home_1",type:"home",x:place.x,z:place.z,
+          campId:camp.id,builder:c.id,completedAt:tick,name:"Casa de Mira"});
+        c.goal="completé mi hogar";
+        record(s,tick,"settler_build",{id:"frontier_home_1",woodSpent:task.required,
+          x:place.x,z:place.z},c.id);
+      }
+      return;
     }
     if(decision.action==="build_road"&&site){
       if(!Nav.same(c,site)){
@@ -137,11 +150,16 @@
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="transportar madera al camino";return;
       }
-      c.wood--;s.woodSpent++;
-      s.roads.push({x:site.x,z:site.z,type:"road",material:"timber",
-        builder:c.id,completedAt:tick});
-      c.energy=Math.max(0,c.energy-2);c.goal="construir camino";
-      record(s,tick,"settler_build_road",{x:site.x,z:site.z,woodSpent:1},c.id);
+      const task=Projects.propose(s.projects,"road",site,c.id,tick);
+      if(!task){c.goal="esperar una obra disponible";return;}
+      const step=Projects.contribute(s.projects,task,c,tick);
+      if(!step.worked){c.goal="buscar materiales para el camino";return;}
+      s.woodSpent+=step.woodSpent;c.goal="trabajar en camino";
+      if(step.completed){
+        s.roads.push({x:site.x,z:site.z,type:"road",material:"timber",
+          builder:c.id,completedAt:tick});
+        record(s,tick,"settler_build_road",{x:site.x,z:site.z,woodSpent:task.required},c.id);
+      }
       return;
     }
     if(decision.action==="explore"){
@@ -198,6 +216,15 @@
     previous.social=Social.create();
     return previous;
   }
+  function migrateV5(state,tick){
+    const previous=copy(state);
+    // Older buildings were completed before work-order recording existed.
+    // Do not invent imaginary historical workers or timber transfers.
+    previous.projects=Projects.create(tick);
+    if(previous.explorer&&previous.explorer.campSite===undefined)
+      previous.explorer.campSite=null;
+    return previous;
+  }
   function advanceSocial(s,tick){return Social.advance(s,tick,record);}
   function advance(s,world,homeland){
     const tick=homeland.tick;
@@ -207,7 +234,8 @@
       if(tick<600||!homeland.structures.some(b=>b.type==="workshop"))return;
       s.explorer={id:"world_taren",name:"Taren",trait:"cartógrafo",worldExplorer:true,
         x:24,z:24,energy:20,hunger:90,health:100,alive:true,wood:0,food:0,
-        anchor:{x:24,z:24},routeIndex:0,stage:"supply",goal:"preparar expedición",bornAt:tick};
+        anchor:{x:24,z:24},routeIndex:0,stage:"supply",campSite:null,
+        goal:"preparar expedición",bornAt:tick};
       s.explorer.routeMode="free";
       s.explorer.target=null;
       s.explorer.mind=Agency.create(s.explorer.id,24,24);
@@ -244,16 +272,34 @@
       (c.routeIndex>0&&(c.routeIndex-1)%4===0&&s.camps.length<CAMP_LIMIT&&
        !s.camps.some(b=>b.anchorX===c.anchor.x&&b.anchorZ===c.anchor.z));
     if(c.food<4){gather(s,world,"food",tick);return;}
-    if(needsCamp&&c.wood<4){gather(s,world,"wood",tick);return;}
     if(needsCamp){
-      const site={x:c.anchor.x+2,z:c.anchor.z+2};
-      if(!goLocal(s,world,site,tick)){c.goal="llevar materiales a campamento";return;}
-      c.wood-=4;s.woodSpent+=4;c.energy=Math.max(0,c.energy-3);
-      const camp={id:"camp_"+c.routeIndex,type:"camp",x:site.x,z:site.z,
-        anchorX:c.anchor.x,anchorZ:c.anchor.z,builder:c.id,completedAt:tick,
-        name:"Refugio de ruta "+(s.camps.length+1)};
-      s.camps.push(camp);c.goal="construir refugio de ruta";
-      record(s,tick,"build_camp",{id:camp.id,woodSpent:4,x:site.x,z:site.z});return;
+      const site=c.routeMode==="free"?
+        (c.campSite||(c.campSite=Infra.chooseHomeSite(world,c.anchor,c.mind.preferences,tick))):
+        {x:c.anchor.x+2,z:c.anchor.z+2};
+      if(!site){c.goal="buscar un sitio viable para refugio";return;}
+      // Migrated travelers preserve their historical waypoint and site choices;
+      // future construction still uses real, auditable work shifts.
+      const current=Projects.find(s.projects,"camp",site);
+      if(c.wood<(current?1:4)){gather(s,world,"wood",tick,true);return;}
+      if(!goLocal(s,world,site,tick)){
+        c.goal="transportar madera al refugio";return;
+      }
+      const task=Projects.propose(s.projects,"camp",site,c.id,tick);
+      if(!task){c.goal="esperar acceso al proyecto";return;}
+      const step=Projects.contribute(s.projects,task,c,tick);
+      if(!step.worked){c.goal="obtener provisiones para construir";return;}
+      s.woodSpent+=step.woodSpent;
+      c.goal="construir refugio ("+task.progress+"/"+task.required+")";
+      if(step.completed){
+        const camp={id:"camp_"+c.routeIndex,type:"camp",x:site.x,z:site.z,
+          anchorX:c.anchor.x,anchorZ:c.anchor.z,builder:c.id,completedAt:tick,
+          name:"Refugio de ruta "+(s.camps.length+1)};
+        s.camps.push(camp);c.campSite=null;
+        c.goal="terminé mi refugio";
+        record(s,tick,"build_camp",{id:camp.id,woodSpent:task.required,
+          x:site.x,z:site.z},c.id);
+      }
+      return;
     }
     if(!goLocal(s,world,c.anchor,tick)){c.goal="volver al camino";return;}
     if(c.routeMode==="legacy"){
@@ -283,7 +329,15 @@
     for(const k of ["woodGathered","woodSpent","foodGathered","foodEaten",
       "settlerWoodGathered","settlerFoodGathered","settlerFoodEaten"])
       if(!positive(s[k]))return false;
-    if(s.woodSpent!==(s.camps.length+s.houses.length)*4+s.roads.length||
+    const projectUnits=Projects.validate(s.projects,tick,s.houses,s.roads,
+      [s.explorer,...s.settlers].filter(Boolean),s.camps);
+    if(projectUnits===false)return false;
+    const pending=s.projects.entries.filter(p=>p.status==="active")
+      .reduce((n,p)=>n+p.progress,0);
+    const pendingCamp=s.projects.entries.filter(p=>p.status==="active"&&
+      p.type==="camp").reduce((n,p)=>n+p.progress,0);
+    const pendingSettler=pending-pendingCamp;
+    if(s.woodSpent!==(s.camps.length+s.houses.length)*4+s.roads.length+pending||
       s.woodGathered!==removedCount||
       s.settlerWoodGathered>s.woodGathered||
       s.settlerFoodGathered>s.foodGathered||
@@ -306,7 +360,7 @@
         if(!positive(m[k]))return false;
       if(m.energy>20||m.hunger>100||m.health>100||
         m.alive!==(m.health>0)||
-        m.wood!==s.settlerWoodGathered-s.houses.length*4-s.roads.length||
+        m.wood!==s.settlerWoodGathered-s.houses.length*4-s.roads.length-pendingSettler||
         m.food!==s.settlerFoodGathered-s.settlerFoodEaten)return false;
     }
     if(s.houses.length){
@@ -335,6 +389,11 @@
       !c.anchor||!Number.isInteger(c.anchor.x)||!Number.isInteger(c.anchor.z)||
       c.anchor.x< -488||c.anchor.x>472||c.anchor.z< -488||c.anchor.z>472||
       (c.anchor.x-24)%64!==0||(c.anchor.z-24)%64!==0||
+      (c.campSite!==null&&
+        (!c.campSite||!Number.isSafeInteger(c.campSite.x)||
+         !Number.isSafeInteger(c.campSite.z)||
+         !world.walkable(c.campSite.x,c.campSite.z)||
+         Nav.distance(c.campSite,c.anchor)>12))||
       !positive(c.routeIndex)||c.routeIndex>(c.routeMode==="free"?
         Discovery.MAX_DISCOVERIES:ROUTE.length)||
       !["free","legacy"].includes(c.routeMode)||
@@ -346,7 +405,7 @@
       typeof c.goal!=="string"||c.goal.length>80)return false;
     for(const k of ["energy","hunger","health","food","wood"])if(!positive(c[k]))return false;
     if(c.energy>20||c.hunger>100||c.health>100||c.alive!==(c.health>0)||
-      c.wood!==s.woodGathered-s.settlerWoodGathered-s.camps.length*4||
+      c.wood!==s.woodGathered-s.settlerWoodGathered-s.camps.length*4-pendingCamp||
       c.food!==s.foodGathered-s.settlerFoodGathered-(s.foodEaten-s.settlerFoodEaten)||
       s.discoveries.length!==c.routeIndex||
       !chunks.has(Math.floor(c.x/16)+","+Math.floor(c.z/16))||
@@ -374,7 +433,11 @@
       if(!camp||!d||index<0||camp.id!=="camp_"+(index+1)||
         (c.routeMode==="legacy"&&index!==position*4)||
         camp.type!=="camp"||ids.has(camp.id)||
-        camp.x!==d.x+2||camp.z!==d.z+2||camp.anchorX!==d.x||camp.anchorZ!==d.z||
+        (c.routeMode==="legacy"?
+          (camp.x!==d.x+2||camp.z!==d.z+2):
+          (Nav.distance(camp,d)<4||Nav.distance(camp,d)>12||
+           !world.walkable(camp.x,camp.z)))||
+        camp.anchorX!==d.x||camp.anchorZ!==d.z||
         camp.builder!==c.id||!positive(camp.completedAt)||camp.completedAt<d.tick||
         camp.completedAt>tick||camp.completedAt<previous||
         camp.name!=="Refugio de ruta "+(position+1))return false;
@@ -393,5 +456,5 @@
     }
     return true;
   }
-  return Object.freeze({create,advance,advanceSocial,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
+  return Object.freeze({create,advance,advanceSocial,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,migrateV5,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
 });

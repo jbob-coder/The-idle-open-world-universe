@@ -18,6 +18,7 @@ def build():
         ("/*V3_AGENCY_SOURCE*/", "src/v3/agency.js"),
         ("/*V3_DISCOVERY_SOURCE*/", "src/v3/discovery.js"),
         ("/*V3_SOCIAL_SOURCE*/", "src/v3/social.js"),
+        ("/*V3_PROJECTS_SOURCE*/", "src/v3/projects.js"),
         ("/*V3_EXPEDITION_SOURCE*/", "src/v3/expedition.js"),
         ("/*V3_WORLD_SIM_SOURCE*/", "src/v3/world_sim.js"),
         ("/*V3_ATLAS_SOURCE*/", "src/v3/atlas.js"),
