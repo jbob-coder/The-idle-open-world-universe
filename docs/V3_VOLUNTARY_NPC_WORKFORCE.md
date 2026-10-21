@@ -7,6 +7,7 @@ GODSEED is a chapterless living-world simulation. The player supplies no ordered
 ## Implemented vertical slice
 
 - `src/v3/projects.js` exports `chooseVoluntaryWork`. It is actor-neutral: from existing active projects, ties, preferences, local distance and urgent needs, it selects an **offer**, not an order. Candidates are bounded to twelve Manhattan tiles; healthy, nourished, equipped workers may decline if trust or utility is insufficient.
+- When an interested, locally connected NPC has no timber, the offer may include a materials-needed flag: Taren can forage actual wood first rather than receiving free supplies. The plan is re-evaluated each tick, so hunger or distance may interrupt it; a distant supply search may cause the NPC to abandon the opportunity. No extra save fields or mandatory orders are introduced.
 - `src/v3/expedition.js` lets Taren optionally help finish Mira's real open home project. The traveler walks to the site, pays one timber from **his own** carried inventory per contribution and consumes energy. Mira remains recorded as the home's original owner. Contributor IDs and material costs remain in the original project ledger. Legacy scripted-route saves are not opted in.
 - Save validation attributes mixed timber spending to **the actual contributing worker** rather than blindly charging all home/road wood to Mira. Existing world save schema 6 and historical buildings remain unchanged.
 - `src/v3/agency.js` admits the new cooperative events to the bounded personal memory log. The offline WebGL HTML is regenerated to match source.
