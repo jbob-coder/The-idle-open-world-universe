@@ -277,17 +277,8 @@
         (c.campSite||(c.campSite=Infra.chooseHomeSite(world,c.anchor,c.mind.preferences,tick))):
         {x:c.anchor.x+2,z:c.anchor.z+2};
       if(!site){c.goal="buscar un sitio viable para refugio";return;}
-      // Legacy travelers continue using their historical construction behavior.
-      if(c.routeMode==="legacy"){
-        if(c.wood<4){gather(s,world,"wood",tick);return;}
-        if(!goLocal(s,world,site,tick)){c.goal="llevar materiales a campamento";return;}
-        c.wood-=4;s.woodSpent+=4;c.energy=Math.max(0,c.energy-3);
-        const camp={id:"camp_"+c.routeIndex,type:"camp",x:site.x,z:site.z,
-          anchorX:c.anchor.x,anchorZ:c.anchor.z,builder:c.id,completedAt:tick,
-          name:"Refugio de ruta "+(s.camps.length+1)};
-        s.camps.push(camp);c.goal="construir refugio de ruta";
-        record(s,tick,"build_camp",{id:camp.id,woodSpent:4,x:site.x,z:site.z});return;
-      }
+      // Migrated travelers preserve their historical waypoint and site choices;
+      // future construction still uses real, auditable work shifts.
       const current=Projects.find(s.projects,"camp",site);
       if(c.wood<(current?1:4)){gather(s,world,"wood",tick,true);return;}
       if(!goLocal(s,world,site,tick)){
