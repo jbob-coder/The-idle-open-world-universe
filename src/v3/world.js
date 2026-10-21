@@ -141,6 +141,20 @@
         berries:t.bush?berryCount(t.x,t.z,tick):0});
     }
     function sample(x,z,tick){return decorate(base(x,z),tick);}
+    function nextVisualChange(tick){
+      // Berries regrow at each patch's own timestamp, not at global tick % 40.
+      // Consumers can reuse a previously computed visible terrain window until
+      // this exact next change, unless a player/NPC edits a resource sooner.
+      let next=Infinity;
+      for(const b of berries.values()){
+        const count=berryCount(b.x,b.z,tick);
+        if(count>=3)continue;
+        const elapsed=Math.max(0,tick-b.at);
+        const when=b.at+(Math.floor(elapsed/BERRY_PERIOD)+1)*BERRY_PERIOD;
+        if(when<next)next=when;
+      }
+      return next;
+    }
     function harvest(x,z){
       const t=base(x,z),id=key(x,z);
       if(!t||!t.tree||home(x,z)||removed.has(id)||removed.size+berries.size>=EDIT_LIMIT)return false;
@@ -183,7 +197,7 @@
         const p=id.split(",").map(Number);return {x:p[0],z:p[1]};
       }),berries:Array.from(berries.values(),b=>Object.assign({},b))};
     }
-    return Object.freeze({sample,harvest,forage,windowAt,save,
+    return Object.freeze({sample,harvest,forage,windowAt,save,nextVisualChange,
       walkable:(x,z)=>{const t=base(x,z);return !!t&&t.walkable;},
       metrics:()=>({cachedChunks:cache.size,chunkLimit:CACHE_LIMIT,
         chunkBuilds,chunkHits,resourceEdits:removed.size+berries.size,revision}),
