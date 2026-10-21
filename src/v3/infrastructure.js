@@ -47,7 +47,7 @@
          t.kind!=="ground")continue;
       // Favor level, reachable land with modest spatial variation. A cautious
       // NPC tends toward a sheltered home; a curious one accepts remoteness.
-      const elevation=Math.abs(t.height-(world.sample(camp.x,camp.z,tick)?.height||0));
+      const elevation=Math.abs(t.height-((world.sample(camp.x,camp.z,tick)||{}).height||0));
       const preference=((preferences.curiosity*17+preferences.security*11+
         Math.imul(x,1327)+Math.imul(z,1999))>>>0)%37;
       const score=elevation*35+Math.abs(d-(preferences.curiosity>55?6:4))*7+
