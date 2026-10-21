@@ -5,7 +5,7 @@
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   if(root)root.GodseedV3Projects=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
-  const COST=Object.freeze({home:4,road:1,camp:4}),MAX_PROJECTS=48,MAX_CONTRIBUTORS=8;
+  const COST=Object.freeze({home:4,road:1,camp:4}),MAX_PROJECTS=128,MAX_CONTRIBUTORS=8;
   const integer=n=>Number.isSafeInteger(n)&&n>=0;
   const key=(type,site)=>type+":"+site.x+","+site.z;
   const create=(cutoverTick=0)=>({cutoverTick,entries:[]});
