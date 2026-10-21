@@ -11,15 +11,19 @@
     const queue=[{x:start.x,z:start.z,parent:-1}],seen=new Set([key(start)]);
     for(let head=0;head<queue.length&&head<maxNodes;head++){
       const p=queue[head],tile=world.sample(p.x,p.z,tick);
-      if(tile&&predicate(tile)){
+      const destination=tile&&predicate(tile);
+      if(destination){
         const path=[];let i=head;
         while(queue[i].parent!==-1){path.push({x:queue[i].x,z:queue[i].z});i=queue[i].parent;}
-        return {target:{x:p.x,z:p.z},path:path.reverse()};
+        return {target:destination===true?{x:p.x,z:p.z}:destination,
+          path:path.reverse()};
       }
       if(distance(start,p)>=radius)continue;
       for(const d of DIRS){
         const next={x:p.x+d[0],z:p.z+d[1]},id=key(next);
-        if(seen.has(id)||!world.walkable(next.x,next.z)||queue.length>=maxNodes)continue;
+        const ground=world.sample(next.x,next.z,tick);
+        if(seen.has(id)||!ground||!ground.walkable||ground.tree||
+           queue.length>=maxNodes)continue;
         seen.add(id);queue.push({x:next.x,z:next.z,parent:head});
       }
     }
@@ -33,8 +37,16 @@
       radius=Math.max(radius,32);
       maxNodes=Math.max(maxNodes,2048);
     }
-    return search(world,start,t=>kind==="wood"?t.tree:t.bush&&t.berries>0,
-      tick,radius,maxNodes);
+    // Trees occupy real tiles. Find an accessible adjacent work position
+    // and keep the resource's own coordinates as the action target.
+    return search(world,start,t=>{
+      for(const [dx,dz] of [[0,0],[1,0],[0,1],[-1,0],[0,-1]]){
+        const r=world.sample(t.x+dx,t.z+dz,tick);
+        if(r&&(kind==="wood"?r.tree:r.bush&&r.berries>0))
+          return {x:r.x,z:r.z};
+      }
+      return null;
+    },tick,radius,maxNodes);
   }
   function local(world,start,target,tick,radius=24,maxNodes=768){
     if(start.worldSettler){

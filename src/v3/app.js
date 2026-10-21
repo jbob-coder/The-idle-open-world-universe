@@ -6,6 +6,7 @@
   const View=root.GodseedV3View,Fallback=root.GodseedV3Fallback;
   if(!Sim||!View||!Fallback)throw new Error("GODSEED V3 modules missing");
   const el=id=>document.getElementById(id);
+  if(useWorld)document.body.classList.add("world-mode");
   let canvas=el("scene");
   let simulation,view=null,rendererMode="unavailable",paused=false,speed=1,last=0,acc=0,dirty=true;
   let lastPersistedTick=-1,lastShownTick=-1,lastDraw=0,status="";
@@ -253,6 +254,30 @@
   }
   function controls(){
     el("pause").addEventListener("click",togglePause);
+    // Compact observer controls stay out of the game world until requested.
+    function toggleOverlay(button,bodyClass){
+      const open=!document.body.classList.contains(bodyClass);
+      document.body.classList.toggle(bodyClass,open);
+      button.setAttribute("aria-expanded",String(open));
+      return open;
+    }
+    if(useWorld){
+      el("menuToggle").addEventListener("click",()=>{
+        const open=toggleOverlay(el("menuToggle"),"ui-menu-open");
+        if(open){
+          document.body.classList.remove("ui-inspector-open");
+          el("infoToggle").setAttribute("aria-expanded","false");
+        }
+      });
+      el("infoToggle").addEventListener("click",()=>{
+        const open=toggleOverlay(el("infoToggle"),"ui-inspector-open");
+        if(open){
+          document.body.classList.remove("ui-menu-open");
+          el("menuToggle").setAttribute("aria-expanded","false");
+        }
+      });
+      el("quickAtlas").addEventListener("click",()=>el("atlasToggle").click());
+    }
     el("step").addEventListener("click",step);
     el("speed").addEventListener("click",function(){
       speed=speed===1?4:speed===4?12:1;el("speed").textContent="Velocidad ×"+speed;
@@ -278,7 +303,7 @@
     }
     function stopFollowing(){followExplorer=false;el("followExplorer").setAttribute("aria-pressed","false");}
     if(useWorld){
-      el("worldTools").style.display="flex";
+      // The compact HUD reveals atlas and camera tools only on demand.
       atlas=root.GodseedV3Atlas.create(el("atlasMap"),(x,z)=>{
         if(view){stopFollowing();view.focus(x,z);setAtlas(false);dirty=true;}
       });
