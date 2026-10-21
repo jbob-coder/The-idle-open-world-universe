@@ -7,9 +7,9 @@
   const same=(a,b)=>a.x===b.x&&a.z===b.z;
   const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.z-b.z);
   const DIRS=[[1,0],[0,1],[-1,0],[0,-1]];
-  function search(world,start,predicate,tick,radius){
+  function search(world,start,predicate,tick,radius,maxNodes=768){
     const queue=[{x:start.x,z:start.z,parent:-1}],seen=new Set([key(start)]);
-    for(let head=0;head<queue.length&&head<768;head++){
+    for(let head=0;head<queue.length&&head<maxNodes;head++){
       const p=queue[head],tile=world.sample(p.x,p.z,tick);
       if(tile&&predicate(tile)){
         const path=[];let i=head;
@@ -19,14 +19,17 @@
       if(distance(start,p)>=radius)continue;
       for(const d of DIRS){
         const next={x:p.x+d[0],z:p.z+d[1]},id=key(next);
-        if(seen.has(id)||!world.walkable(next.x,next.z)||queue.length>=768)continue;
+        if(seen.has(id)||!world.walkable(next.x,next.z)||queue.length>=maxNodes)continue;
         seen.add(id);queue.push({x:next.x,z:next.z,parent:head});
       }
     }
     return null;
   }
-  function resource(world,start,kind,tick){
-    return search(world,start,t=>kind==="wood"?t.tree:t.bush&&t.berries>0,tick,12);
+  function resource(world,start,kind,tick,radius=12,maxNodes=768){
+    // Wilderness homesteaders can search a wider physical area without changing
+    // the existing explorer's small bounded search or global world limits.
+    return search(world,start,t=>kind==="wood"?t.tree:t.bush&&t.berries>0,
+      tick,radius,maxNodes);
   }
   function local(world,start,target,tick){return search(world,start,t=>same(t,target),tick,24);}
   function roadStep(world,start,target){
