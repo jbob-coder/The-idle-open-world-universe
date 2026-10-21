@@ -21,7 +21,7 @@ test("frontier homesteader actually harvests, eats, and builds from finite resou
   assert.ok(s.expedition.settlerFoodGathered>=3);
   assert.equal(mira.wood,s.expedition.settlerWoodGathered-4-s.expedition.roads.length);
   assert.equal(mira.food,s.expedition.settlerFoodGathered-s.expedition.settlerFoodEaten);
-  assert.equal(s.expedition.woodSpent,(s.expedition.camps.length+1)*4);
+  assert.equal(s.expedition.woodSpent,(s.expedition.camps.length+1)*4+s.expedition.roads.length);
   assert.equal(s.expedition.foodGathered-s.expedition.foodEaten,
     s.expedition.explorer.food+mira.food);
   assert.deepEqual(WorldSim.restore(a.serialize()).snapshot(),s);
