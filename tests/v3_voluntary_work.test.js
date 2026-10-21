@@ -110,3 +110,16 @@ test("trusted helper can opt to gather wood for a nearby unfinished project with
   assert.equal(Projects.chooseVoluntaryWork(jobs,helper,social,34,["home"],true),null,
     "survival always permits the volunteer to reconsider");
 });
+
+test("homeowners remember receiving an assisted home without claiming they performed every shift",()=>{
+  const owner=person("owner");
+  Agency.remember(owner.mind,10,"settler_home_completed",
+    {id:"frontier_home_1",helpedBy:"traveler"});
+  for(let i=0;i<22;i++)
+    Agency.remember(owner.mind,20+i*21,"settler_forage",{amount:1});
+  assert.ok(owner.mind.memories.some(m=>
+    m.action==="settler_home_completed"&&m.tick===10),
+    "routine survival activity must not erase the assisted home-founding event");
+  assert.ok(owner.mind.memories.length<=Agency.MAX_MEMORIES);
+  assert.equal(Agency.validate(owner.mind,500),true);
+});
