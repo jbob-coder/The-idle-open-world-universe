@@ -60,3 +60,9 @@ LIMITS: One additional explorer, a fixed route, no new simulated families or cam
 NEXT_ACTION: Extend camps into independently inhabited settlements with real migration, regional depots, and supply routes; retain the separate resource ledgers. When validation is requested, exercise chunk seam identity (including negative coordinates), eviction/resource persistence, large-world save/reload, expedition survival/camp accounting, atlas navigation in both renderers, and the existing solo/society modes. Then profile actual Android memory/frame time before increasing chunk/actor budgets.
 
 Implementation references consulted: [MDN WebGL best practices](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices), particularly batching and back-buffer budgets; [MDN Pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events) for the existing touch/mouse input path. The project uses its own generator and simulation; no external runtime content is fetched.
+
+---
+
+## Independent follow-up: uncovered contracts and acceptance gates
+
+The source-level integration and QA gap audit is available in [`V3_LARGE_WORLD_MISSING_CONTRACTS_AUDIT_2026-10-20.md`](V3_LARGE_WORLD_MISSING_CONTRACTS_AUDIT_2026-10-20.md). It preserves the original implementation's NOT_RUN statement while distinguishing later green inherited CI results from actual **Gran mundo** test coverage. It also specifies save payload ownership, generated-terrain cache behavior, bounded BFS/travel economy, the missing regression suite, emulator/hardware gates, and risk inherited from issue #59. This follow-up changes documentation only and does not certify the implementation or modify the original bot's branch.
