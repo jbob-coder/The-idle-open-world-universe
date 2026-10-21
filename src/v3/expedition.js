@@ -391,7 +391,7 @@
     // attributed to their original builder when migrating old saves.
     const paidBy=(id,campWork)=>s.projects.entries.reduce((sum,p)=>
       sum+((p.type==="camp")===campWork?
-        (p.contributors.find(member=>member.id===id)?.units||0):0),0);
+        ((p.contributors.find(member=>member.id===id)||{}).units||0):0),0);
     const travelerCivicWork=paidBy("world_taren",false);
     const settlerCampWork=paidBy("world_mira",true);
     if(s.woodSpent!==(s.camps.length+s.houses.length)*4+s.roads.length+pending||
