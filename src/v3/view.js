@@ -99,7 +99,8 @@
         if(store)box(b.x+.85,.15,b.z+1.36,.38,.42,.06,[.75,.61,.32]);
       }
       for(const c of state.citizens){
-        const col=c.id==="sim_aria"?[.40,.66,.95]:c.id==="sim_bran"?[.96,.72,.34]:[.85,.52,.70];
+        const col=c.homeId==="village_02"?[.28,.85,.73]:
+          c.id==="sim_aria"?[.40,.66,.95]:c.id==="sim_bran"?[.96,.72,.34]:[.85,.52,.70];
         box(c.x+.29,0,c.z+.29,.42,.88,.42,col);
         box(c.x+.25,.88,c.z+.25,.5,.38,.5,[.80,.62,.45]);
       }
