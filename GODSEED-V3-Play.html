@@ -38,12 +38,35 @@ button[aria-pressed="true"]{background:#6e6138}
 #bottom button{padding:7px;font-size:11px;min-height:35px}
 #worldTools{top:40px;max-width:53vw}#worldTools button{font-size:10px;padding:5px 7px;min-height:32px}
 #atlas{inset:38px 12% 82px}#panel{max-height:calc(100% - 135px)}}
+
+/* The actual world starts map-first. Diagnostics remain available on demand,
+   rather than covering the gameplay area by default on a small phone. */
+#quickbar{display:none;position:fixed;z-index:5;left:max(8px,env(safe-area-inset-left));top:49px;gap:6px;align-items:center}
+#quickbar button{padding:7px 10px;min-height:35px;background:#102220d9;border-color:#accaa083}
+body.world-mode #quickbar{display:flex}
+body.world-mode #panel,body.world-mode #bottom,body.world-mode #worldTools,body.world-mode #hint{display:none}
+body.world-mode.ui-inspector-open #panel{display:block;z-index:6}
+body.world-mode.ui-menu-open #bottom{display:flex;z-index:6}
+body.world-mode.ui-menu-open #worldTools{display:flex;z-index:6}
+body.world-mode #top{padding-bottom:6px;background:linear-gradient(#0a1616e9,#0a161600)}
+body.world-mode #top strong{font-size:12px;letter-spacing:.09em}
+body.world-mode #top #headline{font-size:11px;max-width:64%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+body.world-mode #panel{top:93px;width:min(310px,82vw);max-height:calc(100% - 115px);box-shadow:0 10px 28px #0009}
+body.world-mode #bottom{background:#0b191bdc;padding:7px;border-radius:10px;max-height:40vh;overflow:auto}
+body.world-mode #worldTools{left:max(8px,env(safe-area-inset-left));top:91px;max-width:min(470px,90vw)}
+@media(max-width:670px){body.world-mode #quickbar{top:37px}body.world-mode #panel{top:82px;max-height:calc(100% - 95px)}
+body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}}
 </style>
 </head>
 <body>
 <canvas id="scene" aria-label="Mundo 3D autónomo de GODSEED"></canvas>
 <div id="top"><strong>GODSEED · V3 PREVIEW</strong><span id="headline">Iniciando mundo sin conexión…</span></div>
 <div id="hint">Arrastra para girar la cámara · rueda o botones +/- para acercar</div>
+<div id="quickbar" role="toolbar" aria-label="Controles compactos del mundo">
+<button id="quickAtlas" type="button" aria-controls="atlas">Mapa</button>
+<button id="menuToggle" type="button" aria-expanded="false" aria-controls="bottom worldTools">Menú</button>
+<button id="infoToggle" type="button" aria-expanded="false" aria-controls="panel">Inspeccionar</button>
+</div>
 <nav id="worldTools" aria-label="Explorar el gran mundo">
 <button id="atlasToggle" type="button" aria-expanded="false" aria-controls="atlas">Atlas 1.024 × 1.024</button>
 <button id="homeCamera" type="button">Volver a la aldea</button>
@@ -664,10 +687,35 @@ button[aria-pressed="true"]{background:#6e6138}
        (c.role==="builder"&&action==="harvest")||
        (c.role==="steward"&&action==="talk"))c.ordersCompleted++;
   }
-  function walk(c,target){
-    if(c.x!==target.x)c.x+=Math.sign(target.x-c.x);
-    else if(c.z!==target.z)c.z+=Math.sign(target.z-c.z);
+  function walk(s,c,target){
+    if(distance(c,target)<=1)return true;
+    // The old direct-axis movement walked through tree trunks and houses.
+    // Use four-way shortest paths to a free adjacent work/contact tile.
+    const key=p=>p.x+","+p.z;
+    const blocked=new Set(s.forest.map(key));
+    for(const b of s.structures){
+      blocked.add(key(b));
+      blocked.add((b.x+1)+","+b.z);
+      blocked.add(b.x+","+(b.z+1));
+      blocked.add((b.x+1)+","+(b.z+1));
+    }
+    const path=[{x:c.x,z:c.z,parent:-1}],seen=new Set([key(c)]);
+    let destination=-1;
+    for(let i=0;i<path.length&&i<400;i++){
+      const p=path[i];
+      if(distance(p,target)<=1){destination=i;break;}
+      for(const [dx,dz] of [[1,0],[0,1],[-1,0],[0,-1]]){
+        const next={x:p.x+dx,z:p.z+dz,parent:i},id=key(next);
+        if(!validPos(next)||blocked.has(id)||seen.has(id))continue;
+        seen.add(id);path.push(next);
+      }
+    }
+    if(destination<0)return false; // No teleport or ghost-walking.
+    while(path[destination].parent>0)destination=path[destination].parent;
+    if(destination===0)return true;
+    c.x=path[destination].x;c.z=path[destination].z;
     c.energy=Math.max(0,c.energy-1);
+    return true;
   }
   function nearest(c,items){let best=null,score=Infinity;
     for(const item of items){
@@ -679,7 +727,7 @@ button[aria-pressed="true"]{background:#6e6138}
   function gathering(s,c){
     const tree=nearest(c,s.forest);
     if(!tree){c.goal="sin árboles";return;}
-    if(distance(c,tree)>1){walk(c,tree);c.goal="buscar madera";return;}
+    if(distance(c,tree)>1){walk(s,c,tree);c.goal="buscar madera";return;}
     const i=s.forest.findIndex(t=>same(t,tree));
     if(i<0)throw Error("tree ownership conflict");
     s.forest.splice(i,1);s.wood++;s.harvested++;c.harvested++;
@@ -701,12 +749,16 @@ button[aria-pressed="true"]{background:#6e6138}
     return tree.x>=site.x-1&&tree.x<=site.x+2&&
       tree.z>=site.z-1&&tree.z<=site.z+2;
   }
+  const emptyWorksite=()=>({siteId:null,progress:0,contributors:{}});
   function construct(s,c,site){
-    if(s.wood<site.cost||s.structures.length!==SITES.indexOf(site))
+    if(s.structures.length!==SITES.indexOf(site))
       throw Error("invalid construction attempt");
+    // Timber and effort are real, separately payable shifts, not a
+    // teleporting, instant structure triggered by crossing a resource threshold.
+    if(s.wood<1){c.goal="reunir madera para continuar la obra";return;}
     const blocking=nearest(c,s.forest.filter(t=>obstructs(t,site)));
     if(blocking){
-      if(distance(c,blocking)>1){walk(c,blocking);c.goal="despejar terreno";return;}
+      if(distance(c,blocking)>1){walk(s,c,blocking);c.goal="despejar terreno";return;}
       const index=s.forest.findIndex(t=>same(t,blocking));
       if(index<0)throw Error("building site timber conflict");
       s.forest.splice(index,1);s.wood++;s.harvested++;c.harvested++;
@@ -714,27 +766,37 @@ button[aria-pressed="true"]{background:#6e6138}
       record(s,c,"harvest",{x:blocking.x,z:blocking.z,amount:1,site:site.id});
       return;
     }
-    if(distance(c,site)>1){walk(c,site);c.goal="ir a obra";return;}
+    if(distance(c,site)>1){walk(s,c,site);c.goal="ir a obra";return;}
     if(site.id!=="home"&&s.kits<1)throw Error("construction kit missing");
-    s.wood-=site.cost;s.spentWood+=site.cost;
+    const work=s.worksite;
+    if(work.siteId!==null&&work.siteId!==site.id)
+      throw Error("conflicting settlement construction site");
+    if(work.siteId===null)work.siteId=site.id;
+    s.wood--;s.spentWood++;work.progress++;
+    work.contributors[c.id]=(work.contributors[c.id]||0)+1;
+    c.energy=Math.max(0,c.energy-3);
+    c.goal="trabajar en "+site.type+" ("+work.progress+"/"+site.cost+")";
+    record(s,c,"work",{site:site.id,progress:work.progress,woodSpent:1});
+    if(work.progress<site.cost)return;
+    if(work.progress!==site.cost)throw Error("invalid construction progress");
+    s.worksite=emptyWorksite();
     if(site.id!=="home"){s.kits--;s.kitsUsed++;}
     s.structures.push({id:site.id,type:site.type,x:site.x,z:site.z,builder:c.id,completedAt:s.tick});
-    c.built++;c.goal="construir "+site.type;
-    c.energy=Math.max(0,c.energy-3);
-    if(site.id==="home"){s.settlement.foundedAt=s.tick;}
+    c.built++;c.goal="terminó "+site.type;
+    if(site.id==="home")s.settlement.foundedAt=s.tick;
     record(s,c,"build",{site:site.id,woodSpent:site.cost,kitUsed:site.id!=="home"});
   }
   function forage(s,c){
     const bush=nearest(c,s.bushes.filter(b=>b.berries>0));
     if(!bush){c.goal="esperar bayas";return;}
-    if(distance(c,bush)>1){walk(c,bush);c.goal="buscar bayas";return;}
+    if(distance(c,bush)>1){walk(s,c,bush);c.goal="buscar bayas";return;}
     bush.berries--;s.food++;s.foodGathered++;c.energy=Math.max(0,c.energy-1);
     c.goal="recolectar alimento";record(s,c,"forage",{x:bush.x,z:bush.z,amount:1});
   }
   function social(s,c){
     const other=nearest(c,s.citizens.filter(p=>p.id!==c.id&&p.alive));
     if(!other)return false;
-    if(distance(c,other)>2){walk(c,other);c.goal="buscar compañía";return true;}
+    if(distance(c,other)>2){walk(s,c,other);c.goal="buscar compañía";return true;}
     c.relations[other.id]=(c.relations[other.id]||0)+1;
     other.relations[c.id]=(other.relations[c.id]||0)+1;
     c.conversations++;other.conversations++;
@@ -743,15 +805,15 @@ button[aria-pressed="true"]{background:#6e6138}
   }
   function plan(s){
     if(!s.axe)return {type:s.wood>=2?"axe":"wood"};
-    if(!s.structures.length)return {type:s.wood>=4?"build":"wood",site:SITES[0]};
+    if(!s.structures.length)return {type:s.wood>=1?"build":"wood",site:SITES[0]};
     if(s.citizens.length>=2&&s.structures.length===1){
       if(!s.kits)return {type:s.wood>=2?"kit":"wood"};
-      return {type:s.wood>=6?"build":"wood",site:SITES[1]};
+      return {type:s.wood>=1?"build":"wood",site:SITES[1]};
     }
     // The council must choose a leader before the third public project is approved.
     if(s.citizens.length>=3&&s.structures.length===2&&s.settlement.leaderId){
       if(!s.kits)return {type:s.wood>=2?"kit":"wood"};
-      return {type:s.wood>=4?"build":"wood",site:SITES[2]};
+      return {type:s.wood>=1?"build":"wood",site:SITES[2]};
     }
     return {type:"none"};
   }
@@ -770,11 +832,11 @@ button[aria-pressed="true"]{background:#6e6138}
     // Newcomers must travel into the inhabited settlement before undertaking work.
     if(!c.settled&&s.structures.length){
       if(distance(c,SITES[0])>2){
-        walk(c,SITES[0]);c.goal="llegar a la aldea";return;
+        walk(s,c,SITES[0]);c.goal="llegar a la aldea";return;
       }
       c.settled=true; // Milestone is persistent: do not pull a worker back from distant jobs.
     }
-    if(Frontier.beforeAction(s,c,{walk,nearest,record}))return;
+    if(Frontier.beforeAction(s,c,{walk:(person,target)=>walk(s,person,target),nearest,record}))return;
     if(s.food<Math.max(2,s.citizens.length)||c.hunger<=58){
       if(s.bushes.some(b=>b.berries>0)){forage(s,c);return;}
     }
@@ -792,7 +854,7 @@ button[aria-pressed="true"]{background:#6e6138}
     if(job.type==="axe"||job.type==="kit"){craft(s,c,job.type);return;}
     if(job.type==="build"){construct(s,c,job.site);return;}
     if(s.citizens.length>1&&s.tick%5===0&&social(s,c))return;
-    const home=SITES[0];if(distance(c,home)>1){walk(c,home);c.goal="volver a casa";}
+    const home=SITES[0];if(distance(c,home)>1){walk(s,c,home);c.goal="volver a casa";}
     else{c.energy=Math.min(20,c.energy+2);c.goal="cuidar aldea";}
   }
   function arrival(s){
@@ -868,7 +930,7 @@ button[aria-pressed="true"]{background:#6e6138}
       wood:0,harvested:0,craftedWood:0,spentWood:0,
       axe:0,axeCrafted:0,kits:0,kitsCrafted:0,kitsUsed:0,
       food:0,foodGathered:0,foodEaten:0,foodGrown:0,
-      outpost:Frontier.newState(),
+      outpost:Frontier.newState(),worksite:emptyWorksite(),
       settlement:{id:"village_01",name:"Primera Aldea",foundedAt:null,
         leaderId:null,electionTick:0,elections:0,ballots:[],orders:[],
         ordersIssued:0,policy:"none",policyTick:0,policiesSet:0,policyReason:""},events:[]});
@@ -1042,7 +1104,7 @@ button[aria-pressed="true"]{background:#6e6138}
   }
   function migrateV2(value){
     if(!validateV2(value))throw RangeError("invalid schema-2 society save");
-    const s=copy(value);s.schemaVersion=VERSION;
+    const s=copy(value);s.schemaVersion=VERSION;s.worksite=emptyWorksite();
     for(const c of s.citizens)c.homeId="village_01";
     s.outpost=Frontier.newState();
     if(!validate(s))throw RangeError("unsafe schema-2 society migration");
@@ -1051,7 +1113,36 @@ button[aria-pressed="true"]{background:#6e6138}
   function validate(s){
     if(!s||typeof s!=="object"||Array.isArray(s)||s.schemaVersion!==VERSION||
        !Frontier.validate(s))return false;
-    return validateV2(Frontier.projectV2(s));
+    const w=s.worksite;
+    if(!w||typeof w!=="object"||Array.isArray(w)||
+       !number(w.progress)||w.progress>6||!w.contributors||
+       typeof w.contributors!=="object"||Array.isArray(w.contributors))return false;
+    const active=w.siteId!==null,site=SITES[s.structures.length];
+    if(active?(!site||w.siteId!==site.id||w.progress<1||
+         w.progress>=site.cost):w.progress!==0)return false;
+    const contributions=Object.entries(w.contributors);
+    if(contributions.length>3||(!active&&contributions.length))return false;
+    let paid=0;
+    for(const [id,units] of contributions){
+      if(!s.citizens.some(c=>c.id===id)||!number(units)||units<1||
+         (active&&units>=site.cost))return false;
+      paid+=units;
+    }
+    if(paid!==w.progress)return false;
+    // The old schema-2 validator accounts for completed buildings. Present
+    // partially paid timber as held inventory in the *validation projection*
+    // only; the actual world retains every unit spent and its labor receipt.
+    const legacy=Frontier.projectV2(s);
+    legacy.wood+=w.progress;
+    legacy.spentWood-=w.progress;
+    if(legacy.spentWood<0)return false;
+    legacy.events=legacy.events.filter(e=>e.action!=="work");
+    for(const e of s.events.filter(e=>e.action==="work"))
+      if(!e.details||!SITES.some(site=>site.id===e.details.site)||
+         e.details.woodSpent!==1||!number(e.details.progress)||
+         e.details.progress<1||e.details.progress>6||
+         !s.citizens.some(c=>c.id===e.actor))return false;
+    return validateV2(legacy);
   }
   function instance(state){
     function snapshot(){return copy(state);}
@@ -1083,6 +1174,10 @@ button[aria-pressed="true"]{background:#6e6138}
     let value=JSON.parse(raw);
     if(value&&value.schemaVersion===1)value=migrateV1(value);
     if(value&&value.schemaVersion===2)value=migrateV2(value);
+    // Additive schema-3 upgrade: old saves have no active work site,
+    // and past completed structures retain their historical builder.
+    if(value&&value.schemaVersion===VERSION&&value.worksite===undefined)
+      value.worksite=emptyWorksite();
     if(!validate(value))throw RangeError("invalid society state");
     return instance(copy(value));
   }
@@ -1266,15 +1361,19 @@ button[aria-pressed="true"]{background:#6e6138}
     const queue=[{x:start.x,z:start.z,parent:-1}],seen=new Set([key(start)]);
     for(let head=0;head<queue.length&&head<maxNodes;head++){
       const p=queue[head],tile=world.sample(p.x,p.z,tick);
-      if(tile&&predicate(tile)){
+      const destination=tile&&predicate(tile);
+      if(destination){
         const path=[];let i=head;
         while(queue[i].parent!==-1){path.push({x:queue[i].x,z:queue[i].z});i=queue[i].parent;}
-        return {target:{x:p.x,z:p.z},path:path.reverse()};
+        return {target:destination===true?{x:p.x,z:p.z}:destination,
+          path:path.reverse()};
       }
       if(distance(start,p)>=radius)continue;
       for(const d of DIRS){
         const next={x:p.x+d[0],z:p.z+d[1]},id=key(next);
-        if(seen.has(id)||!world.walkable(next.x,next.z)||queue.length>=maxNodes)continue;
+        const ground=world.sample(next.x,next.z,tick);
+        if(seen.has(id)||!ground||!ground.walkable||ground.tree||
+           queue.length>=maxNodes)continue;
         seen.add(id);queue.push({x:next.x,z:next.z,parent:head});
       }
     }
@@ -1288,8 +1387,16 @@ button[aria-pressed="true"]{background:#6e6138}
       radius=Math.max(radius,32);
       maxNodes=Math.max(maxNodes,2048);
     }
-    return search(world,start,t=>kind==="wood"?t.tree:t.bush&&t.berries>0,
-      tick,radius,maxNodes);
+    // Trees occupy real tiles. Find an accessible adjacent work position
+    // and keep the resource's own coordinates as the action target.
+    return search(world,start,t=>{
+      for(const [dx,dz] of [[0,0],[1,0],[0,1],[-1,0],[0,-1]]){
+        const r=world.sample(t.x+dx,t.z+dz,tick);
+        if(r&&(kind==="wood"?r.tree:r.bush&&r.berries>0))
+          return {x:r.x,z:r.z};
+      }
+      return null;
+    },tick,radius,maxNodes);
   }
   function local(world,start,target,tick,radius=24,maxNodes=768){
     if(start.worldSettler){
@@ -1803,12 +1910,14 @@ button[aria-pressed="true"]{background:#6e6138}
       Nav.resource(world,c,kind,tick);
     if(!route){c.goal=kind==="food"?"esperar frutos silvestres":"buscar otro bosque";return false;}
     if(route.path.length){move(s,route.path[0]);c.goal=kind==="food"?"buscar provisiones":"buscar madera para campamento";return true;}
-    const accepted=kind==="wood"?world.harvest(c.x,c.z):world.forage(c.x,c.z,tick);
+    const accepted=kind==="wood"?world.harvest(route.target.x,route.target.z):
+      world.forage(route.target.x,route.target.z,tick);
     if(!accepted){c.goal="recurso agotado";return false;}
     c.energy=Math.max(0,c.energy-1);
     if(kind==="wood"){c.wood++;s.woodGathered++;c.goal="talar para refugio";}
     else{c.food++;s.foodGathered++;c.goal="recolectar provisiones";}
-    record(s,tick,kind==="wood"?"harvest":"forage",{x:c.x,z:c.z,amount:1});return true;
+    record(s,tick,kind==="wood"?"harvest":"forage",
+      {x:route.target.x,z:route.target.z,amount:1});return true;
   }
   function arrive(s,world,tick){
     const c=s.explorer;c.anchor={x:c.x,z:c.z};c.stage="supply";
@@ -1872,14 +1981,15 @@ button[aria-pressed="true"]{background:#6e6138}
         const p=route.path[0];c.x=p.x;c.z=p.z;c.energy=Math.max(0,c.energy-1);
         mark(s,c);c.goal=kind==="food"?"recolectar alimentos":"reunir madera";return;
       }
-      const done=kind==="wood"?world.harvest(c.x,c.z):world.forage(c.x,c.z,tick);
+      const done=kind==="wood"?world.harvest(route.target.x,route.target.z):
+        world.forage(route.target.x,route.target.z,tick);
       if(!done){c.goal="recurso agotado";return;}
       c.energy=Math.max(0,c.energy-1);
       if(kind==="wood"){c.wood++;s.woodGathered++;s.settlerWoodGathered++;}
       else{c.food++;s.foodGathered++;s.settlerFoodGathered++;}
       c.goal=kind==="wood"?"madera reunida":"provisiones reunidas";
       record(s,tick,kind==="wood"?"settler_harvest":"settler_forage",
-        {x:c.x,z:c.z,amount:1},c.id);
+        {x:route.target.x,z:route.target.z,amount:1},c.id);
     };
     const site=s.houses.length
       ?Infra.next(world,s.camps.filter(b=>b.id===c.homeCampId).concat(s.houses),s.roads,tick):null;
@@ -2745,6 +2855,7 @@ button[aria-pressed="true"]{background:#6e6138}
   const View=root.GodseedV3View,Fallback=root.GodseedV3Fallback;
   if(!Sim||!View||!Fallback)throw new Error("GODSEED V3 modules missing");
   const el=id=>document.getElementById(id);
+  if(useWorld)document.body.classList.add("world-mode");
   let canvas=el("scene");
   let simulation,view=null,rendererMode="unavailable",paused=false,speed=1,last=0,acc=0,dirty=true;
   let lastPersistedTick=-1,lastShownTick=-1,lastDraw=0,status="";
@@ -2992,6 +3103,30 @@ button[aria-pressed="true"]{background:#6e6138}
   }
   function controls(){
     el("pause").addEventListener("click",togglePause);
+    // Compact observer controls stay out of the game world until requested.
+    function toggleOverlay(button,bodyClass){
+      const open=!document.body.classList.contains(bodyClass);
+      document.body.classList.toggle(bodyClass,open);
+      button.setAttribute("aria-expanded",String(open));
+      return open;
+    }
+    if(useWorld){
+      el("menuToggle").addEventListener("click",()=>{
+        const open=toggleOverlay(el("menuToggle"),"ui-menu-open");
+        if(open){
+          document.body.classList.remove("ui-inspector-open");
+          el("infoToggle").setAttribute("aria-expanded","false");
+        }
+      });
+      el("infoToggle").addEventListener("click",()=>{
+        const open=toggleOverlay(el("infoToggle"),"ui-inspector-open");
+        if(open){
+          document.body.classList.remove("ui-menu-open");
+          el("menuToggle").setAttribute("aria-expanded","false");
+        }
+      });
+      el("quickAtlas").addEventListener("click",()=>el("atlasToggle").click());
+    }
     el("step").addEventListener("click",step);
     el("speed").addEventListener("click",function(){
       speed=speed===1?4:speed===4?12:1;el("speed").textContent="Velocidad ×"+speed;
@@ -3017,7 +3152,7 @@ button[aria-pressed="true"]{background:#6e6138}
     }
     function stopFollowing(){followExplorer=false;el("followExplorer").setAttribute("aria-pressed","false");}
     if(useWorld){
-      el("worldTools").style.display="flex";
+      // The compact HUD reveals atlas and camera tools only on demand.
       atlas=root.GodseedV3Atlas.create(el("atlasMap"),(x,z)=>{
         if(view){stopFollowing();view.focus(x,z);setAtlas(false);dirty=true;}
       });
