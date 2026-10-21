@@ -1,0 +1,124 @@
+{
+  "schema": "GODSEED_V3_SESSION_HANDOFF_V1",
+  "status": "OWNER_REQUESTED_RETIREMENT",
+  "official_task_handoff": false,
+  "reason_official_task_handoff_unavailable": "The acting ChatGPT session never claimed a TASK_ID or BOT_ID in authoritative docs/agents/tasks.json. Do not manufacture a SIM-007 handoff or release CORTEX-19's task. This non-governance handoff is deliberately outside docs/agents/handoffs/<TASK_ID>.json; CLI validation cannot apply.",
+  "actor": "ChatGPT V3 session (unregistered; no formal task ownership)",
+  "owner_request": "Merge what it can be merged and retire",
+  "repository": "jbob-coder/The-idle-open-world-universe",
+  "coordination_branch": "docs/godseed-agent-task-governance-v1",
+  "coordination_registry_sha_observed": "e07c68504bba8a540731a83e8ccff1a47a59110b",
+  "official_task_id": null,
+  "official_task_owner": null,
+  "registry_board_change": "NONE — no claimed or in_progress registered task was ours to release; no other agent assignments changed",
+  "merged_pr": {
+    "number": 58,
+    "url": "https://github.com/jbob-coder/The-idle-open-world-universe/pull/58",
+    "state": "merged",
+    "source_branch": "feat/godseed-v3-aria-diurnal-life-20261020",
+    "source_sha": "2e6f9a254ee9b200a8be370acf29b4f690c99bec",
+    "target_branch": "integration/godseed-v3-aria-diurnal-20261020",
+    "merge_sha": "18e7108e152a59c86f9dfbc01db916bc3247b963"
+  },
+  "preserved_branches": [
+    {
+      "branch": "feat/godseed-v3-one-living-npc-20261020",
+      "sha": "884a01272b6c899c70f9f9c01d7b50f3c9652e51",
+      "scope": "One autonomous living citizen with needs, survival, memory, personality, bounded journal, schema v1/v2 migration."
+    },
+    {
+      "branch": "feat/godseed-v3-aria-diurnal-life-20261020",
+      "sha": "2e6f9a254ee9b200a8be370acf29b4f690c99bec",
+      "scope": "Deterministic 160-tick diurnal cycle, shelter sleep, game UI day indicator, true WebGL lighting, procedural NPC poses and Canvas2D fallback."
+    },
+    {
+      "branch": "integration/godseed-v3-aria-diurnal-20261020",
+      "code_merge_sha": "18e7108e152a59c86f9dfbc01db916bc3247b963",
+      "scope": "Only PR #58; purpose-created isolated integration target; not the primary V3 rebuild, not main."
+    },
+    {
+      "branch": "rebuild/godseed-v3-autonomous-3d-20261020",
+      "observed_sha": "71454768e7232ee2cd03511085c0dfda9523f8a9",
+      "scope": "Earlier V3 baseline with separate berry ecology work. DIVERGED; no merge done."
+    }
+  ],
+  "changed_files": [
+    "GODSEED-V3-Play.html",
+    "docs/V3_ONE_LIVING_NPC.md",
+    "src/v3/app.js",
+    "src/v3/fallback.js",
+    "src/v3/sim.js",
+    "src/v3/view.js",
+    "tests/v3_browser_acceptance.py",
+    "tests/v3_sim.test.js"
+  ],
+  "evidence": [
+    {
+      "result": "PASS",
+      "scope": "12 Node deterministic tests + Chromium WebGL and Canvas2D acceptance on source head",
+      "sha": "2e6f9a254ee9b200a8be370acf29b4f690c99bec",
+      "url": "https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39520788272"
+    },
+    {
+      "result": "PASS",
+      "scope": "GODSEED offline QA on source head",
+      "sha": "2e6f9a254ee9b200a8be370acf29b4f690c99bec",
+      "url": "https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39520788210"
+    },
+    {
+      "result": "PASS",
+      "scope": "Android APK debug build and APK static inspection on code-identical earlier head; after an initial SDK download infra failure, emulator rerun passed WebGL and state lifecycle",
+      "sha": "857c225487d575a4c4977a6f64dacb8df3200193",
+      "url": "https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39520719348"
+    },
+    {
+      "result": "PASS",
+      "scope": "Merged integration commit WebGL/Chromium tests",
+      "sha": "18e7108e152a59c86f9dfbc01db916bc3247b963",
+      "url": "https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39522156756"
+    },
+    {
+      "result": "PENDING_AT_HANDOFF",
+      "scope": "Postmerge offline QA",
+      "sha": "18e7108e152a59c86f9dfbc01db916bc3247b963",
+      "url": "https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39522156706"
+    },
+    {
+      "result": "PENDING_AT_HANDOFF",
+      "scope": "Postmerge Android APK/emulator",
+      "sha": "18e7108e152a59c86f9dfbc01db916bc3247b963",
+      "url": "https://github.com/jbob-coder/The-idle-open-world-universe/actions/runs/39522156704"
+    },
+    {
+      "result": "NOT_RUN",
+      "scope": "Physical low-RAM Android 2–3GB, FPS/battery/PSS 20 min",
+      "reason": "Physical device unavailable. QA-004 remains blocked in governance registry."
+    }
+  ],
+  "save_compatibility": "Legacy v1 app save key godseed-one-small-life-v1 untouched; solo V3 key godseed-v3-prototype-v1 retains prior migrations. Day clock is computed from tick without changing schema, resources or save format. No merging of incompatible society state.",
+  "concurrent_work": "Draft PR #57 creates multiple Sims and societies based on unchanged one-NPC branch 884a; it remains open/draft. Do not merge it without independent review and reconciliation of solo/V3 society state. SIM-007 is owned by CORTEX-19 and in_review; do not modify its registry entry.",
+  "blockers": [
+    "Official task-governance handoff JSON cannot be generated validly: session has no registered TASK_ID/claim/owner; tools/godseed_handoff.py rejects unregistered tasks.",
+    "Rebuild V3 and solo V3 are diverged. Reconcile V3 food schema tests and society PR #57 before choosing a production integration baseline.",
+    "Full physical Android low-RAM performance/release signing remains unverified.",
+    "No approval to collapse the separate legacy 2D application onto experimental V3."
+  ],
+  "next_actions": [
+    "Read live main/integration/rebuild branch heads and docs/agents/tasks.json before taking ownership.",
+    "Confirm postmerge CI on 18e7108 and remediate real failures before any further promotion.",
+    "Have independent integrator review PR #58 code and test the feature with the newer rebuild and draft society PR #57; do not force-merge unrelated branches.",
+    "Create/claim a properly authorized new task in the registry only through CLI and current owner when resuming; never claim SIM-007 already assigned to CORTEX-19.",
+    "Run on a real 2–3GB Android device and record save migration, offline operation, battery, RAM and GPU evidence."
+  ],
+  "do_not_repeat": [
+    "Do not rebuild the already proven Canvas2D fallback or the solo autonomous needs/memory/night/sleep on this branch without first reviewing commits.",
+    "Do not conflate V1 2D compatibility documents with the owner's current 3D direction.",
+    "Do not fake task-state ownership, PR review, a physical-device certification or automatic background continuation."
+  ],
+  "unpublished_changes": false,
+  "deletion": false,
+  "force_push": false,
+  "legacy_main_untouched_at_last_check": "163fe24d2679c57ae73b23f001d8c64c7729983f",
+  "owner_retirement_status": "SESSION_END_ON_CERTIFICATE",
+  "artifact_disclaimer": "This record is non-canonical and does not substitute for docs/agents/handoffs/<TASK_ID>.json on the coordination branch."
+}
