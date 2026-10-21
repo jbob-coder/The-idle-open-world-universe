@@ -1416,7 +1416,8 @@ button[aria-pressed="true"]{background:#6e6138}
    "build_road","explore","reflect"]);
  const EVENTS=new Set(["settler_build","settler_build_road","settler_forage",
    "settler_harvest","settler_eat","settler_arrive","settler_death","settler_explore",
-   "expedition_arrive","discover","build_camp","eat","forage","harvest","death"]);
+   "expedition_arrive","discover","build_camp","eat","forage","harvest","death",
+   "meet","settler_meet"]);
  const MAX_MEMORIES=16;
  const positive=n=>Number.isSafeInteger(n)&&n>=0;
  const clamp=n=>Math.max(0,Math.min(100,n));
@@ -1559,6 +1560,54 @@ button[aria-pressed="true"]{background:#6e6138}
  }
  return Object.freeze({select,validTarget,validateHistory,MAX_DISCOVERIES});
 });</script>
+<script>/* GODSEED: actual-encounter NPC social ties, independent from rendering.
+ * No remote contacts or forced scripted dialogue. Finite reproducible state. */
+(function(root,factory){"use strict";const api=factory();
+ if(typeof module!=="undefined"&&module.exports)module.exports=api;
+ if(root)root.GodseedV3Social=api;
+})(typeof globalThis!=="undefined"?globalThis:this,function(){"use strict";
+ const MAX_TIES=32,MEET_RADIUS=2,COOLDOWN=60;
+ const integer=n=>Number.isSafeInteger(n)&&n>=0;
+ const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.z-b.z);
+ const create=()=>({ties:[]});
+ function advance(s,tick,record){
+   if(!s||!s.social||!s.explorer||!s.settlers||!s.settlers[0])return false;
+   const a=s.explorer,b=s.settlers[0];
+   if(!a.alive||!b.alive||dist(a,b)>MEET_RADIUS||
+      a.energy<4||b.energy<4||a.hunger<45||b.hunger<45)return false;
+   // Their own curiosity/security influences whether either person wishes to talk.
+   const am=a.mind?.preferences,bm=b.mind?.preferences;
+   const welcome=(am?.curiosity??55)+(bm?.curiosity??50)-
+     Math.floor((am?.security??50)/2)-Math.floor((bm?.security??50)/2);
+   if(welcome<35)return false;
+   let tie=s.social.ties.find(t=>t.a===a.id&&t.b===b.id);
+   if(tie&&tick-tie.lastAt<COOLDOWN)return false;
+   if(!tie){
+     if(s.social.ties.length>=MAX_TIES)return false;
+     tie={a:a.id,b:b.id,trust:20,meetings:0,firstAt:tick,lastAt:tick};
+     s.social.ties.push(tie);
+   }
+   tie.meetings++;tie.trust=Math.min(100,20+tie.meetings*3);tie.lastAt=tick;
+   record(s,tick,"meet",{with:b.id,trust:tie.trust},a.id);
+   record(s,tick,"settler_meet",{with:a.id,trust:tie.trust},b.id);
+   return true;
+ }
+ function validate(state,explorer,settlers,tick){
+   if(!state||!Array.isArray(state.ties)||state.ties.length>MAX_TIES)return false;
+   const b=settlers&&settlers[0];
+   for(const t of state.ties){
+     if(!explorer||!b||!t||t.a!==explorer.id||t.b!==b.id||
+       !integer(t.firstAt)||!integer(t.lastAt)||
+       t.firstAt<Math.max(explorer.bornAt,b.bornAt)||
+       t.lastAt>tick||t.lastAt<t.firstAt||
+       !integer(t.meetings)||t.meetings<1||
+       t.meetings>Math.floor((t.lastAt-t.firstAt)/COOLDOWN)+1||
+       t.trust!==Math.min(100,20+t.meetings*3))return false;
+   }
+   return state.ties.length<=1;
+ }
+ return Object.freeze({create,advance,validate,MAX_TIES});
+});</script>
 <script>/* Persistent autonomous wilderness explorer. All supplies are physically gathered.
  * Camps belong to the expedition ledger; village stores are never remotely debited. */
 (function(root,factory){"use strict";const api=factory();
@@ -1569,12 +1618,13 @@ button[aria-pressed="true"]{background:#6e6138}
   const Infra=typeof module!=="undefined"&&module.exports?require("./infrastructure.js"):globalThis.GodseedV3Infrastructure;
   const Agency=typeof module!=="undefined"&&module.exports?require("./agency.js"):globalThis.GodseedV3Agency;
   const Discovery=typeof module!=="undefined"&&module.exports?require("./discovery.js"):globalThis.GodseedV3Discovery;
+  const Social=typeof module!=="undefined"&&module.exports?require("./social.js"):globalThis.GodseedV3Social;
   const ROUTE=Nav.itinerary(),EVENT_LIMIT=64,CAMP_LIMIT=56;
   const copy=x=>JSON.parse(JSON.stringify(x));
   const positive=n=>Number.isSafeInteger(n)&&n>=0;
   function create(){return {explorer:null,camps:[],discoveries:[],events:[],
     knownChunks:[],woodGathered:0,woodSpent:0,foodGathered:0,foodEaten:0,
-    settlers:[],houses:[],roads:[],settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0};}
+    settlers:[],houses:[],roads:[],social:Social.create(),settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0};}
   function record(s,tick,action,details,actor="world_taren"){
     s.events.push({tick,actor,action,details});
     if(s.events.length>EVENT_LIMIT)s.events.shift();
@@ -1666,7 +1716,7 @@ button[aria-pressed="true"]{background:#6e6138}
         {x:c.x,z:c.z,amount:1},c.id);
     };
     const site=s.houses.length
-      ?Infra.next(world,s.camps.concat(s.houses),s.roads,tick):null;
+      ?Infra.next(world,s.camps.filter(b=>b.id===c.homeCampId).concat(s.houses),s.roads,tick):null;
     const decision=Agency.decide(c.mind,{hunger:c.hunger,energy:c.energy,
       food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site});
     Agency.commitChoice(c.mind,decision.action);
@@ -1755,8 +1805,10 @@ button[aria-pressed="true"]{background:#6e6138}
       previous.explorer.target=null;
       previous.explorer.mind=null;
     }
+    previous.social=Social.create();
     return previous;
   }
+  function advanceSocial(s,tick){return Social.advance(s,tick,record);}
   function advance(s,world,homeland){
     const tick=homeland.tick;
     advanceSettler(s,world,tick);
@@ -1836,7 +1888,8 @@ button[aria-pressed="true"]{background:#6e6138}
       !Array.isArray(s.roads)||s.roads.length>Infra.MAX_LOCAL_ROAD||
       !Array.isArray(s.discoveries)||s.discoveries.length>Discovery.MAX_DISCOVERIES||
       !Array.isArray(s.events)||s.events.length>EVENT_LIMIT||
-      !Array.isArray(s.knownChunks)||s.knownChunks.length>4096)return false;
+      !Array.isArray(s.knownChunks)||s.knownChunks.length>4096||
+      !Social.validate(s.social,s.explorer,s.settlers,tick))return false;
     for(const k of ["woodGathered","woodSpent","foodGathered","foodEaten",
       "settlerWoodGathered","settlerFoodGathered","settlerFoodEaten"])
       if(!positive(s[k]))return false;
@@ -1875,7 +1928,7 @@ button[aria-pressed="true"]{background:#6e6138}
         h.completedAt<m.bornAt||h.completedAt>tick)return false;
     }
     if(s.roads.length&&!s.houses.length)return false;
-    if(!Infra.validate(world,s.camps.concat(s.houses),s.roads,tick,
+    if(!Infra.validate(world,s.camps.filter(b=>m&&b.id===m.homeCampId).concat(s.houses),s.roads,tick,
       m?m.id:null,m?m.bornAt:0))return false;
     const chunks=new Set();
     for(const id of s.knownChunks){
@@ -1937,9 +1990,9 @@ button[aria-pressed="true"]{background:#6e6138}
         camp.name!=="Refugio de ruta "+(position+1))return false;
       ids.add(camp.id);previous=camp.completedAt;
     }
-    const actions=["expedition_arrive","harvest","forage","eat","discover","build_camp","death"];
+    const actions=["expedition_arrive","harvest","forage","eat","discover","build_camp","death","meet"];
     const residentActions=["settler_arrive","settler_forage","settler_harvest",
-      "settler_eat","settler_build","settler_build_road","settler_explore","settler_death"];
+      "settler_eat","settler_build","settler_build_road","settler_explore","settler_death","settler_meet"];
     previous=-1;
     for(const e of s.events){
       if(!e||!positive(e.tick)||e.tick>tick||e.tick<previous||
@@ -1950,7 +2003,7 @@ button[aria-pressed="true"]{background:#6e6138}
     }
     return true;
   }
-  return Object.freeze({create,advance,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
+  return Object.freeze({create,advance,advanceSocial,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
 });
 </script>
 <script>/* Large-world adapter: keep the existing settlement authoritative in its home
@@ -1981,7 +2034,8 @@ button[aria-pressed="true"]{background:#6e6138}
         biome:World.terrain(home.seed,c?c.x:5,c?c.z:5).biome,
         homelandCitizens:home.citizens.length,camps:expedition.camps.length,
         frontierResidents:expedition.settlers.length,frontierHomes:expedition.houses.length,
-        constructedRoads:expedition.roads.length};
+        constructedRoads:expedition.roads.length,
+        socialConnections:expedition.social.ties.length};
       return result;
     }
     function advance(n){
@@ -1989,6 +2043,7 @@ button[aria-pressed="true"]{background:#6e6138}
       for(let i=0;i<n;i++){
         home=homeland.advance(1);
         Expedition.advance(expedition,world,home);
+        Expedition.advanceSocial(expedition,home.tick);
       }
       sceneCache=null;return snapshot();
     }
@@ -2501,6 +2556,7 @@ button[aria-pressed="true"]{background:#6e6138}
         statsPair(stats,"Lugares descubiertos",state.world.discoveredRegions);
         statsPair(stats,"Campamentos de ruta",state.world.camps);
         statsPair(stats,"Caminos construidos por NPC",state.world.constructedRoads);
+        statsPair(stats,"Vínculos personales",state.world.socialConnections);
       }
       statsPair(stats,"Habitantes",state.citizens.length);
       statsPair(stats,useWorld?"Madera de la aldea":"Madera disponible",state.wood);
