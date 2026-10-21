@@ -28,8 +28,9 @@
     s.entries.push(order);return order;
   }
   function contribute(s,project,actor,tick){
-    if(!project||project.status!=="active"||
-       !actor||actor.alive!==true||actor.id===undefined||
+    if(!project||!s||!Array.isArray(s.entries)||!s.entries.includes(project)||
+       project.status!=="active"||project.progress>=project.required||
+       !actor||actor.alive!==true||typeof actor.id!=="string"||!actor.id||
        actor.x!==project.x||actor.z!==project.z||
        !integer(actor.wood)||actor.wood<1||!integer(actor.energy)||actor.energy<4||
        !integer(tick)||tick<project.lastAt)return {worked:false,completed:false};
