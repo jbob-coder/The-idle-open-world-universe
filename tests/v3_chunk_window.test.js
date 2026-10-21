@@ -80,3 +80,38 @@ test("harvested trees and replenishing berries remain authoritative after chunk 
   assert.equal(reloaded.sample(tree.x,tree.z,140).tree,false);
   assert.equal(reloaded.sample(bush.x,bush.z,140).berries,3);
 });
+
+test("camera terrain is reused between NPC ticks, and never survives resource edits",()=>{
+  const WorldSim=require("../src/v3/world_sim.js");
+  const game=WorldSim.create(14),focus={x:180,z:180},radius=16;
+  const original=game.scene(focus.x,focus.z,radius);
+  assert.equal(original.terrain.length,33*33);
+  const initial=game.metrics().terrainWindowsBuilt;
+  game.advance(100);
+  const later=game.scene(focus.x,focus.z,radius);
+  assert.ok(later.tick>original.tick);
+  assert.equal(game.metrics().terrainWindowsBuilt,initial,
+    "unchanged tiles must not be resampled just because characters move");
+  assert.ok(game.metrics().terrainWindowsReused>=1);
+  assert.deepEqual(later.terrain,original.terrain);
+  assert.equal(game.scene(focus.x+32,focus.z,radius).worldCenter.x,212);
+  assert.equal(game.metrics().terrainWindowsBuilt,initial+1,
+    "moving across new world coordinates loads another camera chunk view");
+  assert.deepEqual(WorldSim.restore(game.serialize()).snapshot(),game.snapshot());
+});
+
+test("individually timed berry regrowth invalidates a cached terrain window",()=>{
+  const world=World.create(91);
+  let patch=null;
+  for(let z=90;z<140;z++)for(let x=90;x<140;x++){
+    const t=World.terrain(91,x,z);
+    if(t.bush&&!patch)patch={x,z};
+  }
+  assert.ok(patch);
+  assert.equal(world.forage(patch.x,patch.z,137),true);
+  assert.equal(world.nextVisualChange(137),177);
+  assert.equal(world.nextVisualChange(176),177);
+  assert.equal(world.sample(patch.x,patch.z,176).berries,2);
+  assert.equal(world.sample(patch.x,patch.z,177).berries,3);
+  assert.equal(world.nextVisualChange(177),Infinity);
+});
