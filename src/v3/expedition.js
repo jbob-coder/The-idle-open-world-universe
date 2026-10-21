@@ -45,12 +45,14 @@
       Nav.resource(world,c,kind,tick);
     if(!route){c.goal=kind==="food"?"esperar frutos silvestres":"buscar otro bosque";return false;}
     if(route.path.length){move(s,route.path[0]);c.goal=kind==="food"?"buscar provisiones":"buscar madera para campamento";return true;}
-    const accepted=kind==="wood"?world.harvest(c.x,c.z):world.forage(c.x,c.z,tick);
+    const accepted=kind==="wood"?world.harvest(route.target.x,route.target.z):
+      world.forage(route.target.x,route.target.z,tick);
     if(!accepted){c.goal="recurso agotado";return false;}
     c.energy=Math.max(0,c.energy-1);
     if(kind==="wood"){c.wood++;s.woodGathered++;c.goal="talar para refugio";}
     else{c.food++;s.foodGathered++;c.goal="recolectar provisiones";}
-    record(s,tick,kind==="wood"?"harvest":"forage",{x:c.x,z:c.z,amount:1});return true;
+    record(s,tick,kind==="wood"?"harvest":"forage",
+      {x:route.target.x,z:route.target.z,amount:1});return true;
   }
   function arrive(s,world,tick){
     const c=s.explorer;c.anchor={x:c.x,z:c.z};c.stage="supply";
@@ -114,14 +116,15 @@
         const p=route.path[0];c.x=p.x;c.z=p.z;c.energy=Math.max(0,c.energy-1);
         mark(s,c);c.goal=kind==="food"?"recolectar alimentos":"reunir madera";return;
       }
-      const done=kind==="wood"?world.harvest(c.x,c.z):world.forage(c.x,c.z,tick);
+      const done=kind==="wood"?world.harvest(route.target.x,route.target.z):
+        world.forage(route.target.x,route.target.z,tick);
       if(!done){c.goal="recurso agotado";return;}
       c.energy=Math.max(0,c.energy-1);
       if(kind==="wood"){c.wood++;s.woodGathered++;s.settlerWoodGathered++;}
       else{c.food++;s.foodGathered++;s.settlerFoodGathered++;}
       c.goal=kind==="wood"?"madera reunida":"provisiones reunidas";
       record(s,tick,kind==="wood"?"settler_harvest":"settler_forage",
-        {x:c.x,z:c.z,amount:1},c.id);
+        {x:route.target.x,z:route.target.z,amount:1},c.id);
     };
     const site=s.houses.length
       ?Infra.next(world,s.camps.filter(b=>b.id===c.homeCampId).concat(s.houses),s.roads,tick):null;
