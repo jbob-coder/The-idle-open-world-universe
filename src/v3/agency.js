@@ -55,7 +55,12 @@
    const previous=mind.memories[mind.memories.length-1];
    if(previous&&previous.action===action&&tick-previous.tick<20)return;
    mind.memories.push({tick,action});
-   if(mind.memories.length>MAX_MEMORIES)mind.memories.shift();
+   if(mind.memories.length>MAX_MEMORIES){
+     // Never let routine foraging erase the founding of a home or first arrival.
+     const pinned=new Set(["settler_arrive","settler_build","settler_death"]);
+     const index=mind.memories.findIndex(m=>!pinned.has(m.action));
+     mind.memories.splice(index<0?0:index,1);
+   }
    if(action==="settler_explore")mind.explorations++;
  }
  function validate(mind,tick){
