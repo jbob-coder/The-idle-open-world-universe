@@ -22,7 +22,10 @@ import java.io.ByteArrayInputStream;
  * separate application identity preserves legacy GODSEED application data.
  */
 public final class MainActivity extends Activity {
-    private static final String GAME_URL = "file:///android_asset/index.html";
+    private static final String BASE_URL = "file:///android_asset/index.html";
+    // Launch the large living world. The old 20x20 solo prototype is still
+    // available as an explicit, isolated mode; neither save key is destroyed.
+    private static final String GAME_URL = BASE_URL + "?mode=world";
     private static final String SAVE_SCRIPT =
         "(function(){if(!window.GodseedV3Debug)return false;" +
         "window.GodseedV3Debug.pause();" +
@@ -77,7 +80,11 @@ public final class MainActivity extends Activity {
 
     private static boolean trusted(Uri uri) {
         String url = uri == null ? "" : uri.toString();
-        return GAME_URL.equals(url) || "about:blank".equals(url);
+        if ("about:blank".equals(url) || BASE_URL.equals(url) || GAME_URL.equals(url))
+            return true;
+        // Allow only bundled, known modes. Never navigate to arbitrary files
+        // or network locations when the in-game mode selector is used.
+        return url.matches("file:///android_asset/index[.]html[?]mode=(solo|society|world)(&renderer=2d)?");
     }
 
     @Override public void onCreate(Bundle state) {
@@ -109,7 +116,7 @@ public final class MainActivity extends Activity {
         web.setWebViewClient(new WebViewClient() {
             @Override public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (!GAME_URL.equals(url)) return;
+                if (!trusted(Uri.parse(url)) || !url.startsWith(BASE_URL)) return;
                 // A page-load event is not proof that inline V3 JS or the GPU
                 // renderer initialized. Probe a bounded number of times.
                 // Never report a fabricated success when WebGL is unavailable.
