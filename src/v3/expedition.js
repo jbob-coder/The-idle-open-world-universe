@@ -9,12 +9,13 @@
   const Agency=typeof module!=="undefined"&&module.exports?require("./agency.js"):globalThis.GodseedV3Agency;
   const Discovery=typeof module!=="undefined"&&module.exports?require("./discovery.js"):globalThis.GodseedV3Discovery;
   const Social=typeof module!=="undefined"&&module.exports?require("./social.js"):globalThis.GodseedV3Social;
+  const Projects=typeof module!=="undefined"&&module.exports?require("./projects.js"):globalThis.GodseedV3Projects;
   const ROUTE=Nav.itinerary(),EVENT_LIMIT=64,CAMP_LIMIT=56;
   const copy=x=>JSON.parse(JSON.stringify(x));
   const positive=n=>Number.isSafeInteger(n)&&n>=0;
   function create(){return {explorer:null,camps:[],discoveries:[],events:[],
     knownChunks:[],woodGathered:0,woodSpent:0,foodGathered:0,foodEaten:0,
-    settlers:[],houses:[],roads:[],social:Social.create(),settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0};}
+    settlers:[],houses:[],roads:[],social:Social.create(),projects:Projects.create(),settlerWoodGathered:0,settlerFoodGathered:0,settlerFoodEaten:0};}
   function record(s,tick,action,details,actor="world_taren"){
     s.events.push({tick,actor,action,details});
     if(s.events.length>EVENT_LIMIT)s.events.shift();
@@ -108,7 +109,8 @@
     const site=s.houses.length
       ?Infra.next(world,s.camps.filter(b=>b.id===c.homeCampId).concat(s.houses),s.roads,tick):null;
     const decision=Agency.decide(c.mind,{hunger:c.hunger,energy:c.energy,
-      food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site});
+      food:c.food,wood:c.wood,hasHome:s.houses.length>0,roadPending:!!site,
+      homeProject:!!Projects.find(s.projects,"home",c.homeSite||camp)});
     Agency.commitChoice(c.mind,decision.action);
     if(decision.action==="forage"){gather("food");return;}
     if(decision.action==="gather_wood"){gather("wood");return;}
@@ -122,12 +124,19 @@
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="trasladar madera al hogar";return;
       }
-      c.wood-=4;s.woodSpent+=4;c.energy=Math.max(0,c.energy-3);
-      s.houses.push({id:"frontier_home_1",type:"home",x:place.x,z:place.z,
-        campId:camp.id,builder:c.id,completedAt:tick,name:"Casa de Mira"});
-      c.goal="construir mi hogar";
-      record(s,tick,"settler_build",{id:"frontier_home_1",woodSpent:4,
-        x:place.x,z:place.z},c.id);return;
+      const task=Projects.propose(s.projects,"home",place,c.id,tick);
+      if(!task){c.goal="esperar una obra disponible";return;}
+      const step=Projects.contribute(s.projects,task,c,tick);
+      if(!step.worked){c.goal="obtener madera para la obra";return;}
+      s.woodSpent+=step.woodSpent;c.goal="construir vivienda ("+task.progress+"/"+task.required+")";
+      if(step.completed){
+        s.houses.push({id:"frontier_home_1",type:"home",x:place.x,z:place.z,
+          campId:camp.id,builder:c.id,completedAt:tick,name:"Casa de Mira"});
+        c.goal="completé mi hogar";
+        record(s,tick,"settler_build",{id:"frontier_home_1",woodSpent:task.required,
+          x:place.x,z:place.z},c.id);
+      }
+      return;
     }
     if(decision.action==="build_road"&&site){
       if(!Nav.same(c,site)){
@@ -137,11 +146,16 @@
         c.energy=Math.max(0,c.energy-1);mark(s,c);
         c.goal="transportar madera al camino";return;
       }
-      c.wood--;s.woodSpent++;
-      s.roads.push({x:site.x,z:site.z,type:"road",material:"timber",
-        builder:c.id,completedAt:tick});
-      c.energy=Math.max(0,c.energy-2);c.goal="construir camino";
-      record(s,tick,"settler_build_road",{x:site.x,z:site.z,woodSpent:1},c.id);
+      const task=Projects.propose(s.projects,"road",site,c.id,tick);
+      if(!task){c.goal="esperar una obra disponible";return;}
+      const step=Projects.contribute(s.projects,task,c,tick);
+      if(!step.worked){c.goal="buscar materiales para el camino";return;}
+      s.woodSpent+=step.woodSpent;c.goal="trabajar en camino";
+      if(step.completed){
+        s.roads.push({x:site.x,z:site.z,type:"road",material:"timber",
+          builder:c.id,completedAt:tick});
+        record(s,tick,"settler_build_road",{x:site.x,z:site.z,woodSpent:task.required},c.id);
+      }
       return;
     }
     if(decision.action==="explore"){
@@ -196,6 +210,13 @@
       previous.explorer.mind=null;
     }
     previous.social=Social.create();
+    return previous;
+  }
+  function migrateV5(state,tick){
+    const previous=copy(state);
+    // Older buildings were completed before work-order recording existed.
+    // Do not invent imaginary historical workers or timber transfers.
+    previous.projects=Projects.create(tick);
     return previous;
   }
   function advanceSocial(s,tick){return Social.advance(s,tick,record);}
@@ -283,7 +304,12 @@
     for(const k of ["woodGathered","woodSpent","foodGathered","foodEaten",
       "settlerWoodGathered","settlerFoodGathered","settlerFoodEaten"])
       if(!positive(s[k]))return false;
-    if(s.woodSpent!==(s.camps.length+s.houses.length)*4+s.roads.length||
+    const projectUnits=Projects.validate(s.projects,tick,s.houses,s.roads,
+      [s.explorer,...s.settlers].filter(Boolean));
+    if(projectUnits===false)return false;
+    const pending=s.projects.entries.filter(p=>p.status==="active")
+      .reduce((n,p)=>n+p.progress,0);
+    if(s.woodSpent!==(s.camps.length+s.houses.length)*4+s.roads.length+pending||
       s.woodGathered!==removedCount||
       s.settlerWoodGathered>s.woodGathered||
       s.settlerFoodGathered>s.foodGathered||
@@ -306,7 +332,7 @@
         if(!positive(m[k]))return false;
       if(m.energy>20||m.hunger>100||m.health>100||
         m.alive!==(m.health>0)||
-        m.wood!==s.settlerWoodGathered-s.houses.length*4-s.roads.length||
+        m.wood!==s.settlerWoodGathered-s.houses.length*4-s.roads.length-pending||
         m.food!==s.settlerFoodGathered-s.settlerFoodEaten)return false;
     }
     if(s.houses.length){
@@ -393,5 +419,5 @@
     }
     return true;
   }
-  return Object.freeze({create,advance,advanceSocial,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
+  return Object.freeze({create,advance,advanceSocial,validate,migrateLegacy,migrateV2,migrateV3,migrateV4,migrateV5,snapshot:copy,ROUTE_LENGTH:ROUTE.length});
 });
