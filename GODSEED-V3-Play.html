@@ -1479,7 +1479,7 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
          t.kind!=="ground")continue;
       // Favor level, reachable land with modest spatial variation. A cautious
       // NPC tends toward a sheltered home; a curious one accepts remoteness.
-      const elevation=Math.abs(t.height-(world.sample(camp.x,camp.z,tick)?.height||0));
+      const elevation=Math.abs(t.height-((world.sample(camp.x,camp.z,tick)||{}).height||0));
       const preference=((preferences.curiosity*17+preferences.security*11+
         Math.imul(x,1327)+Math.imul(z,1999))>>>0)%37;
       const score=elevation*35+Math.abs(d-(preferences.curiosity>55?6:4))*7+
@@ -1563,9 +1563,10 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
    // Priorities above are scores evaluated only on feasible actions, never
    // instructions of what must happen on a particular world tick.
    options.sort((a,b)=>b.utility-a.utility||ACTIONS.indexOf(a.action)-ACTIONS.indexOf(b.action));
-   return {action:options[0]?.action||"reflect",
-     reason:options[0]?.reason||"no_viable_work",
-     utility:options[0]?.utility||0,
+   const chosen=options[0];
+   return {action:chosen?chosen.action:"reflect",
+     reason:chosen?chosen.reason:"no_viable_work",
+     utility:chosen?chosen.utility:0,
      alternatives:options.slice(1,4).map(o=>({action:o.action,utility:o.utility}))};
  }
  function commitChoice(mind,action){
@@ -1685,9 +1686,11 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
    if(!a.alive||!b.alive||dist(a,b)>MEET_RADIUS||
       a.energy<4||b.energy<4||a.hunger<45||b.hunger<45)return false;
    // Their own curiosity/security influences whether either person wishes to talk.
-   const am=a.mind?.preferences,bm=b.mind?.preferences;
-   const welcome=(am?.curiosity??55)+(bm?.curiosity??50)-
-     Math.floor((am?.security??50)/2)-Math.floor((bm?.security??50)/2);
+   const am=a.mind&&a.mind.preferences,bm=b.mind&&b.mind.preferences;
+   const preference=(p,k,fallback)=>p&&p[k]!==undefined?p[k]:fallback;
+   const welcome=preference(am,"curiosity",55)+preference(bm,"curiosity",50)-
+     Math.floor(preference(am,"security",50)/2)-
+     Math.floor(preference(bm,"security",50)/2);
    if(welcome<35)return false;
    let tie=s.social.ties.find(t=>t.a===a.id&&t.b===b.id);
    if(tie&&tick-tie.lastAt<COOLDOWN)return false;
@@ -2256,7 +2259,7 @@ body.world-mode #worldTools{top:79px}body.world-mode #top strong{font-size:11px}
     // attributed to their original builder when migrating old saves.
     const paidBy=(id,campWork)=>s.projects.entries.reduce((sum,p)=>
       sum+((p.type==="camp")===campWork?
-        (p.contributors.find(member=>member.id===id)?.units||0):0),0);
+        ((p.contributors.find(member=>member.id===id)||{}).units||0):0),0);
     const travelerCivicWork=paidBy("world_taren",false);
     const settlerCampWork=paidBy("world_mira",true);
     if(s.woodSpent!==(s.camps.length+s.houses.length)*4+s.roads.length+pending||
