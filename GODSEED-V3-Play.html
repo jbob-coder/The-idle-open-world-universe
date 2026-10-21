@@ -1417,7 +1417,8 @@ button[aria-pressed="true"]{background:#6e6138}
  const EVENTS=new Set(["settler_build","settler_build_road","settler_forage",
    "settler_harvest","settler_eat","settler_arrive","settler_death","settler_explore",
    "expedition_arrive","discover","build_camp","eat","forage","harvest","death",
-   "meet","settler_meet","assist_work_home","assist_finish_home"]);
+   "meet","settler_meet","assist_work_home","assist_finish_home",
+   "settler_home_completed"]);
  const MAX_MEMORIES=16;
  const positive=n=>Number.isSafeInteger(n)&&n>=0;
  const clamp=n=>Math.max(0,Math.min(100,n));
@@ -1474,7 +1475,8 @@ button[aria-pressed="true"]{background:#6e6138}
    mind.memories.push({tick,action});
    if(mind.memories.length>MAX_MEMORIES){
      // Never let routine foraging erase the founding of a home or first arrival.
-     const pinned=new Set(["settler_arrive","settler_build","settler_death"]);
+     const pinned=new Set(["settler_arrive","settler_build",
+       "settler_home_completed","settler_death"]);
      const index=mind.memories.findIndex(m=>!pinned.has(m.action));
      mind.memories.splice(index<0?0:index,1);
    }
@@ -1829,6 +1831,9 @@ button[aria-pressed="true"]{background:#6e6138}
     record(s,tick,finisher===owner.id?"settler_build":"assist_finish_home",
       {id:"frontier_home_1",woodSpent:task.required,
         x:place.x,z:place.z,owner:owner.id},finisher);
+    if(finisher!==owner.id)
+      record(s,tick,"settler_home_completed",
+        {id:"frontier_home_1",x:place.x,z:place.z,helpedBy:finisher},owner.id);
   }
   // First inhabited wilderness camp; Mira acts on the same world clock.
   // Wilderness inventory is owned per person, never by the distant village.
@@ -2255,7 +2260,8 @@ button[aria-pressed="true"]{background:#6e6138}
     const actions=["expedition_arrive","harvest","forage","eat","discover","build_camp",
       "death","meet","assist_work_home","assist_finish_home"];
     const residentActions=["settler_arrive","settler_forage","settler_harvest",
-      "settler_eat","settler_build","settler_build_road","settler_explore","settler_death","settler_meet"];
+      "settler_eat","settler_build","settler_build_road","settler_home_completed",
+      "settler_explore","settler_death","settler_meet"];
     previous=-1;
     for(const e of s.events){
       if(!e||!positive(e.tick)||e.tick>tick||e.tick<previous||
