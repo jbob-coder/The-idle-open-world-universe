@@ -135,7 +135,7 @@ def run():
         assert state["axeCrafted"]==1 and state["kitsCrafted"]==2
         assert state["settlement"]["leaderId"] in [c["id"] for c in state["citizens"]]
         assert len(state["settlement"]["ballots"])==3
-        assert state["schemaVersion"]==2
+        assert state["schemaVersion"]==3
         assert {o["role"] for o in state["settlement"]["orders"]}=={"steward","builder","forager"}
         assert state["settlement"]["ordersIssued"]>=1
         assert state["settlement"]["policy"] in {"secure_food","reserve_wood","community"}
@@ -175,7 +175,7 @@ def run():
         }""")
         assert len(outcome["structures"])==3 and outcome["settlement"]["leaderId"]
         assert len(outcome["settlement"]["orders"])==3
-        assert outcome["schemaVersion"]==2
+        assert outcome["schemaVersion"]==3
         assert fallback.evaluate("GodseedV3Debug.save()")
         fallback.reload(wait_until="load")
         wait_for_state(fallback,"() => Boolean(window.GodseedV3Debug)",20)
@@ -199,7 +199,7 @@ def run():
         # Use the real load() entrypoint directly; verify reload after migration.
         assert legacy.evaluate("GodseedV3Debug.load()")
         old_state=legacy.evaluate("GodseedV3Debug.getState()")
-        assert old_state["schemaVersion"]==2 and old_state["tick"]==350
+        assert old_state["schemaVersion"]==3 and old_state["tick"]==350
         assert len(old_state["citizens"])==3 and len(old_state["structures"])==3
         assert old_state["settlement"]["leaderId"]=="sim_aria"
         assert old_state["settlement"]["orders"]==[]
@@ -214,6 +214,62 @@ def run():
         assert not legacy_errors, "society legacy migration errors: "+"; ".join(legacy_errors)
         print("PASS V3 authentic society schema-1 browser migration with restored leadership and policy")
         legacy.close()
+        # Second community: inspect *actual* WebGL geography, audited stock
+        # movements, and recovery from a true schema-2 saved council.
+        frontier=browser.new_page(viewport={"width":960,"height":540})
+        frontier_errors=[]
+        frontier.on("pageerror",lambda error:frontier_errors.append(str(error)))
+        frontier.route("http://**/*",lambda route:route.abort())
+        frontier.route("https://**/*",lambda route:route.abort())
+        frontier.goto(HTML.as_uri()+"?mode=society",wait_until="load")
+        wait_for_state(frontier,"() => Boolean(window.GodseedV3Debug)",20)
+        both=frontier.evaluate("""() => {
+            const d=GodseedV3Debug;d.newWorld(14);d.pause();
+            return d.fastForward(3600);
+        }""")
+        assert both["schemaVersion"]==3
+        assert len(both["structures"])==4
+        assert both["outpost"]["status"]=="established"
+        assert both["outpost"]["deliveries"]>=1
+        assert both["outpost"]["approvedAt"]>=2400
+        assert both["outpost"]["foundedAt"]>both["outpost"]["approvedAt"]
+        assert sum(c["homeId"]=="village_02" for c in both["citizens"])==1
+        assert both["wood"]+both["outpost"]["wood"]+both["outpost"]["cargoWood"]==\
+            both["harvested"]-both["craftedWood"]-both["spentWood"]
+        assert "Comunidades" in frontier.locator("#stats").inner_text()
+        assert "Puesto oriental" in frontier.locator("#stats").inner_text()
+        assert frontier.evaluate("GodseedV3Debug.hasWebGL()")
+        assert frontier.evaluate("GodseedV3Debug.save()")
+        frontier.reload(wait_until="load")
+        wait_for_state(frontier,"() => Boolean(window.GodseedV3Debug)",20)
+        assert frontier.evaluate("GodseedV3Debug.getState()")==both
+        assert not frontier_errors, "frontier errors: "+"; ".join(frontier_errors)
+        frontier.screenshot(path=str(CAPTURE/"godseed-v3-two-communities-webgl-960x540.png"))
+        frontier.close()
+        migrated=browser.new_page(viewport={"width":640,"height":360})
+        migrated_errors=[]
+        migrated.on("pageerror",lambda error:migrated_errors.append(str(error)))
+        migrated.route("http://**/*",lambda route:route.abort())
+        migrated.route("https://**/*",lambda route:route.abort())
+        migrated.goto(HTML.as_uri()+"?mode=society&renderer=2d",wait_until="load")
+        previous=(ROOT/"tests/fixtures/v3_society_schema2_seed14.json").read_text()
+        migrated.evaluate("""raw => localStorage.setItem('godseed-v3-society-v1',raw)""",previous)
+        assert migrated.evaluate("GodseedV3Debug.load()")
+        restored=migrated.evaluate("GodseedV3Debug.getState()")
+        assert restored["schemaVersion"]==3 and restored["tick"]==2500
+        assert restored["outpost"]["status"]=="unfounded"
+        new_state=migrated.evaluate("""() => GodseedV3Debug.fastForward(350)""")
+        assert new_state["outpost"]["status"]=="established"
+        assert len(new_state["structures"])==4
+        assert migrated.evaluate("GodseedV3Debug.save()")
+        migrated.reload(wait_until="load")
+        wait_for_state(migrated,"() => Boolean(window.GodseedV3Debug)",20)
+        assert migrated.evaluate("GodseedV3Debug.getState()")==new_state
+        assert migrated.evaluate("GodseedV3Debug.rendererMode()")=="canvas-2d-fallback"
+        assert not migrated_errors,"frontier fallback errors: "+"; ".join(migrated_errors)
+        migrated.screenshot(path=str(CAPTURE/"godseed-v3-two-communities-canvas-640x360.png"))
+        migrated.close()
+        print("PASS two-community WebGL and Canvas fallback, resource delivery, schema-2 save migration")
         browser.close()
 
 if __name__=="__main__":
