@@ -351,3 +351,67 @@ test("food access is geographic: couriers use local pantry and founders carry re
   const inVillage={...courier,x:5,z:5};
   assert.equal(Frontier.foodAvailable(established,inVillage),established.food);
 });
+
+
+test("houses need real paid shifts; partially built homes survive save and reload",()=>{
+  const game=Sim.create(14);
+  let partial=null;
+  for(let i=0;i<900;i++){
+    const state=game.advance(1);
+    if(state.worksite.siteId==="home"&&state.worksite.progress>0){
+      partial=state;break;
+    }
+  }
+  assert.ok(partial,"NPC must begin real house construction");
+  assert.equal(partial.structures.length,0,"a partially paid house is not a complete house");
+  assert.ok(partial.worksite.progress<4,"a home cannot appear with one shift");
+  assert.equal(Object.values(partial.worksite.contributors).reduce((a,b)=>a+b,0),
+    partial.worksite.progress,"every unit of timber has a real named worker");
+  assert.equal(Sim.validate(partial),true);
+  const restored=Sim.restore(game.serialize());
+  assert.deepEqual(restored.snapshot(),partial);
+  const nextA=game.advance(1),nextB=restored.advance(1);
+  assert.deepEqual(nextA,nextB,"partial construction resumes deterministically");
+  const later=game.advance(1100);
+  assert.equal(later.structures[0]?.id,"home");
+  assert.equal(later.worksite.siteId,null);
+  const shifts=later.events.filter(e=>e.action==="work"&&e.details.site==="home");
+  // The event buffer is bounded and may have rotated by the time the world is old.
+  assert.equal(later.spentWood>=4,true);
+  assert.equal(Sim.validate(later),true);
+  assert.deepEqual(Sim.restore(game.serialize()).snapshot(),later);
+});
+
+test("unfinished work orders reject invented timber and forged worker receipts",()=>{
+  const game=Sim.create(77);
+  let checkpoint;
+  for(let i=0;i<1000;i++){
+    const state=game.advance(1);
+    if(state.worksite.progress>0){checkpoint=state;break;}
+  }
+  assert.ok(checkpoint);
+  const errors=[
+    s=>s.worksite.progress++,
+    s=>s.worksite.contributors.sim_unknown=1,
+    s=>s.worksite.siteId="nonexistent",
+    s=>s.worksite.contributors=Object.create(null),
+    s=>s.wood++,
+    s=>s.spentWood--
+  ];
+  for(const corrupt of errors){
+    const state=JSON.parse(JSON.stringify(checkpoint));corrupt(state);
+    assert.equal(Sim.validate(state),false);
+    assert.throws(()=>Sim.restore(JSON.stringify(state)),RangeError);
+  }
+});
+
+test("schema-3 pre-worksite saves retain existing homes and resources",()=>{
+  const game=Sim.create(14);game.advance(600);
+  const previous=JSON.parse(game.serialize());
+  assert.equal(previous.worksite.siteId,null);
+  delete previous.worksite;
+  const migrated=Sim.restore(JSON.stringify(previous)).snapshot();
+  assert.deepEqual(migrated.worksite,{siteId:null,progress:0,contributors:{}});
+  const {worksite,...withoutWorksite}=migrated;
+  assert.deepEqual(withoutWorksite,previous);
+});
