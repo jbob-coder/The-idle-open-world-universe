@@ -71,3 +71,18 @@ test("new world saves conserve resources across sequential time and restore",()=
     assert.deepEqual(WorldSim.restore(g.serialize()).snapshot(),snapshot);
   }
 });
+
+test("settlers can pass beyond a depleted local grove and return home",()=>{
+  // Seed 100 has no remaining tree within Mira's original 12-tile search.
+  // A local search budget must not become a border for the open world.
+  const game=WorldSim.create(100);
+  const state=game.advance(3200);
+  const resident=state.expedition.settlers[0];
+  const home=state.expedition.houses[0];
+  assert.ok(resident&&resident.alive,"the resident survives");
+  assert.ok(home,"the resident built after travelling beyond the first grove");
+  assert.equal(home.builder,resident.id);
+  assert.equal(resident.wood,
+    state.expedition.settlerWoodGathered-state.expedition.houses.length*4);
+  assert.deepEqual(WorldSim.restore(game.serialize()).snapshot(),state);
+});
