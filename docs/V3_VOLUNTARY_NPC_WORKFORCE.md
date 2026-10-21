@@ -10,7 +10,7 @@ GODSEED is a chapterless living-world simulation. The player supplies no ordered
 - When an interested, locally connected NPC has no timber, the offer may include a materials-needed flag: Taren can forage actual wood first rather than receiving free supplies. The plan is re-evaluated each tick, so hunger or distance may interrupt it; a distant supply search may cause the NPC to abandon the opportunity. No extra save fields or mandatory orders are introduced.
 - `src/v3/expedition.js` lets Taren optionally help finish Mira's real open home project. The traveler walks to the site, pays one timber from **his own** carried inventory per contribution and consumes energy. Mira remains recorded as the home's original owner. Contributor IDs and material costs remain in the original project ledger. Legacy scripted-route saves are not opted in.
 - Save validation attributes mixed timber spending to **the actual contributing worker** rather than blindly charging all home/road wood to Mira. Existing world save schema 6 and historical buildings remain unchanged.
-- `src/v3/agency.js` admits the new cooperative events to the bounded personal memory log. The offline WebGL HTML is regenerated to match source.
+- `src/v3/agency.js` admits cooperative work events to the bounded personal memory log. When the traveler completes a house, the owner receives a separate pinned `settler_home_completed` memory without being credited for labor she did not perform. The offline WebGL HTML is regenerated to match source.
 - `tests/v3_voluntary_work.test.js` covers two contributors building a home from real inventories, no remote or unfunded volunteering, no compelled work when hungry/exhausted, and choices changing as relationships change.
 
 ## Reality and limits
