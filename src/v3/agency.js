@@ -25,12 +25,20 @@
    const seed=hash(id,x,z);
    return {preferences:{curiosity:25+(seed%65),craftsmanship:25+((seed>>>8)%65),
        security:25+((seed>>>16)%65)},
-     memories:[],lastChoice:null,choices:0,explorations:0,curiosityUrge:70};
+     memories:[],lastChoice:null,choices:0,explorations:0,curiosityUrge:70,
+     // Individual experience affects the next choice, not just a fixed trait.
+     // Zeroed on birth; old saves without this field remain valid.
+     adaptation:{forage:0,gather_wood:0,build_home:0,build_road:0,explore:0}};
  }
  function decide(mind,ctx){
    const p=mind.preferences,options=[];
    const add=(action,utility,reason,legal=true)=>{
-     if(legal)options.push({action,utility:Math.round(utility),reason});
+     if(legal){
+       const learned=mind.adaptation&&mind.adaptation[action]||0;
+       // Survival overrides negative experience: hunger cannot be "learned away".
+       const emergency=(action==="forage"&&food===0&&hunger<48);
+       options.push({action,utility:Math.round(utility+(emergency?Math.max(0,learned):learned)*3),reason});
+     }
    };
    const hunger=clamp(ctx.hunger),energy=Math.max(0,Math.min(20,ctx.energy)),
      food=ctx.food,wood=ctx.wood,house=!!ctx.hasHome,road=!!ctx.roadPending;
@@ -54,6 +62,24 @@
      reason:chosen?chosen.reason:"no_viable_work",
      utility:chosen?chosen.utility:0,
      alternatives:options.slice(1,4).map(o=>({action:o.action,utility:o.utility}))};
+ }
+ const ADAPT_ACTIONS=Object.freeze(["forage","gather_wood","build_home","build_road","explore"]);
+ function observe(mind,action,succeeded){
+   if(!ADAPT_ACTIONS.includes(action)||typeof succeeded!=="boolean")
+     throw RangeError("invalid real-world NPC feedback");
+   if(!mind.adaptation){
+     mind.adaptation={forage:0,gather_wood:0,build_home:0,build_road:0,explore:0};
+   }
+   const previous=mind.adaptation[action];
+   // Consecutive failed searches make the next search more exploratory.
+   // Successful physical work restores confidence. Saturation keeps saves small.
+   mind.adaptation[action]=Math.max(-12,Math.min(12,previous+(succeeded?2:-3)));
+   return mind.adaptation[action];
+ }
+ function searchRadius(mind,action){
+   if(!["forage","gather_wood"].includes(action))throw RangeError("invalid resource");
+   const frustration=Math.max(0,-((mind.adaptation||{})[action]||0));
+   return frustration>=9?64:frustration>=6?36:frustration>=3?24:12;
  }
  function commitChoice(mind,action){
    if(!ACTIONS.includes(action))throw RangeError("invalid NPC decision");
@@ -84,6 +110,13 @@
       mind.explorations>mind.choices||!positive(mind.curiosityUrge)||
       mind.curiosityUrge>100||
       !(mind.lastChoice===null||ACTIONS.includes(mind.lastChoice)))return false;
+   if(mind.adaptation!==undefined){
+     if(!mind.adaptation||typeof mind.adaptation!=="object"||
+        Array.isArray(mind.adaptation)||Object.keys(mind.adaptation).length!==ADAPT_ACTIONS.length)
+       return false;
+     for(const action of ADAPT_ACTIONS)if(!Number.isSafeInteger(mind.adaptation[action])||
+        mind.adaptation[action]<-12||mind.adaptation[action]>12)return false;
+   }
    for(const k of ["curiosity","craftsmanship","security"]){
      const v=mind.preferences[k];if(!positive(v)||v<25||v>89)return false;
    }
@@ -94,5 +127,5 @@
    }
    return true;
  }
- return Object.freeze({ACTIONS,create,decide,commitChoice,remember,validate,MAX_MEMORIES});
+ return Object.freeze({ACTIONS,create,decide,observe,searchRadius,commitChoice,remember,validate,MAX_MEMORIES});
 });
