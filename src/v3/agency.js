@@ -38,9 +38,9 @@
    // Saving a meal and keeping emergency reserves have independent utility.
    add("forage",food<3?160+(3-food)*6:62+(70-hunger),
      "food_security",food<3||hunger<70);
-   add("build_home",88+p.security*.65,"shelter",!house&&wood>=4);
+   add("build_home",88+p.security*.65,"shelter",!house&&wood>=(ctx.homeProject?1:4));
    add("gather_wood",81+p.craftsmanship*.55,"building_materials",
-     (!house&&wood<4)||(house&&road&&wood<1));
+     (!house&&wood<(ctx.homeProject?1:4))||(house&&road&&wood<1));
    add("build_road",70+p.craftsmanship*.55,"connect_homes",house&&road&&wood>=1);
    add("explore",21+p.curiosity*.76+mind.curiosityUrge*.45,"discover",
      energy>=9&&hunger>=68&&food>=3);
