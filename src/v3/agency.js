@@ -10,7 +10,7 @@
  const EVENTS=new Set(["settler_build","settler_build_road","settler_forage",
    "settler_harvest","settler_eat","settler_arrive","settler_death","settler_explore",
    "expedition_arrive","discover","build_camp","eat","forage","harvest","death",
-   "meet","settler_meet"]);
+   "meet","settler_meet","assist_work_home","assist_finish_home"]);
  const MAX_MEMORIES=16;
  const positive=n=>Number.isSafeInteger(n)&&n>=0;
  const clamp=n=>Math.max(0,Math.min(100,n));
