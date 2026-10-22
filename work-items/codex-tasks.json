@@ -3,7 +3,7 @@
   "title": "Codex Cloud implementation ledger",
   "authority": "prep/codex-skyworld-v0.5",
   "implementation_branch": "feat/godseed-medieval-skyworld-v1",
-  "status": "ready_for_implementation",
+  "status": "implementation-in-progress",
   "created": "2026-10-17",
   "rule": "5 tasks per slice, done requires test and evidence",
   "entries": [
@@ -11,10 +11,14 @@
       "id": "A01",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
+      "status": "done",
       "title": "Set 32x20 default; retain 24x15 and 16x10",
       "acceptance": "State and UI tests assert default 32x20 and zoom cycle.",
-      "evidence": [],
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -22,10 +26,14 @@
       "id": "A02",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
+      "status": "done",
       "title": "Extract pure world/canvas pointer transforms",
       "acceptance": "Roundtrips correct at every zoom, with letterbox margins.",
-      "evidence": [],
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "A01"
       ],
@@ -35,10 +43,14 @@
       "id": "A03",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
+      "status": "done",
       "title": "Implement integer camera follow and free pan",
       "acceptance": "Tile coordinates remain stable; no subpixel blur.",
-      "evidence": [],
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "A02"
       ],
@@ -48,10 +60,14 @@
       "id": "A04",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
+      "status": "done",
       "title": "Protect crisp pixel-square scaling and safe areas",
-      "acceptance": "Canvas remains pixelated and never clips target cells.  Visual signoff must confirm no blur/interpolation at all zooms and real 640×360/720×400/960×540 screenshots; validate source with scripts/validate_pixel_art_contract.mjs.",
-      "evidence": [],
+      "acceptance": "Canvas remains pixelated and never clips target cells.  Visual signoff must confirm no blur/interpolation at all zooms and real 640\u00d7360/720\u00d7400/960\u00d7540 screenshots; validate source with scripts/validate_pixel_art_contract.mjs.",
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "A03"
       ],
@@ -61,10 +77,14 @@
       "id": "A05",
       "epic": "A",
       "epic_title": "High-sky camera",
-      "status": "todo",
-      "title": "Capture 3 viewport sizes × zoom and verify commands",
+      "status": "done",
+      "title": "Capture 3 viewport sizes \u00d7 zoom and verify commands",
       "acceptance": "9 screenshots and touch tests; 10 visible controls.",
-      "evidence": [],
+      "evidence": [
+        "tests/camera.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "A04"
       ],
@@ -74,10 +94,15 @@
       "id": "B01",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Wire four starter PNG sheets through manifest into renderer",
-      "acceptance": "Runtime shows actual atlas pixels, all offline.  Integrate genuine native 16×16 square-pixel atlases with exact palette/binary-alpha art source. Art concepts/PNGs alone do not count as in-game use.",
-      "evidence": [],
+      "acceptance": "Runtime shows actual atlas pixels, all offline.  Integrate genuine native 16\u00d716 square-pixel atlases with exact palette/binary-alpha art source. Art concepts/PNGs alone do not count as in-game use.",
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -85,10 +110,15 @@
       "id": "B02",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Draw roads and water adjacency masks",
       "acceptance": "Test joins, bends and edges without altering collision.  Road/water joins have hard square-pixel seams and logically matching traversability, verified visually and by sim tests.",
-      "evidence": [],
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "B01"
       ],
@@ -98,10 +128,15 @@
       "id": "B03",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Add deterministic nonblocking environmental props",
       "acceptance": "World seed yields same placements after reload.",
-      "evidence": [],
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "B02"
       ],
@@ -111,10 +146,15 @@
       "id": "B04",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Improve hamlet, shrine, ruin and camp silhouettes",
       "acceptance": "Readable destinations at 32x20, no phantom interiors.  Timber roofs, shrines, ruins and houses assembled from aligned square-pixel clusters, not smooth vector/painted backgrounds.",
-      "evidence": [],
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "B03"
       ],
@@ -124,10 +164,15 @@
       "id": "B05",
       "epic": "B",
       "epic_title": "Richer world terrain",
-      "status": "todo",
+      "status": "done",
       "title": "Cache/invalidate scenery and profile before/after",
       "acceptance": "Evidence of no stale tiles and bounded redraws.",
-      "evidence": [],
+      "evidence": [
+        "tests/render.test.js",
+        "tests/render_acceptance.py",
+        "qa-screenshots/render-metrics.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "B04"
       ],
@@ -137,10 +182,14 @@
       "id": "C01",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
-      "title": "Draw Nim with four facings and 2–4 frame walk cycle",
-      "acceptance": "Movement animation derived from tick, not draw calls.  Nim sprites remain 16×24 native pixel frames with crisp square outlines and feet anchor (8,23); verify four directions in running screenshots.",
-      "evidence": [],
+      "status": "done",
+      "title": "Draw Nim with four facings and 2\u20134 frame walk cycle",
+      "acceptance": "Movement animation derived from tick, not draw calls.  Nim sprites remain 16\u00d724 native pixel frames with crisp square outlines and feet anchor (8,23); verify four directions in running screenshots.",
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -148,10 +197,14 @@
       "id": "C02",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
+      "status": "done",
       "title": "Distinctively draw the three professions",
       "acceptance": "Roles readable at 640x360 / 32x20.  All three travelers visually match native square-pixel palette and binary-alpha sprite art, not emoji/vector characters.",
-      "evidence": [],
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "C01"
       ],
@@ -161,10 +214,14 @@
       "id": "C03",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
+      "status": "done",
       "title": "Add visual wolves and boars; defer unsimulated animals",
       "acceptance": "Only existing enemy types rendered and tested.",
-      "evidence": [],
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "C02"
       ],
@@ -174,10 +231,14 @@
       "id": "C04",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
+      "status": "done",
       "title": "Show actions/goals without control prompts",
       "acceptance": "Why/goal UI and activity legible with time sped up.",
-      "evidence": [],
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "C03"
       ],
@@ -187,10 +248,14 @@
       "id": "C05",
       "epic": "C",
       "epic_title": "2D actors and motion",
-      "status": "todo",
+      "status": "done",
       "title": "Correct foot-Y sorting and tree occlusion",
       "acceptance": "No invisible Nim behind foliage; test overlay order.",
-      "evidence": [],
+      "evidence": [
+        "tests/actors.test.js",
+        "qa-screenshots/chromium-960x540-actors-east.png",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "C04"
       ],
@@ -200,10 +265,14 @@
       "id": "D01",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Preview valid/invalid tile targeting",
       "acceptance": "Invalid events cost no Faith; readable cursor.",
-      "evidence": [],
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -211,10 +280,14 @@
       "id": "D02",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Render finite FX for bless/gift/bloom/guide/storm",
       "acceptance": "All effects arise from simulator events, capped cost.  Divine glyphs and effects remain pixel-square and limited-frame, with no Gaussian glow/gradients; animation must not mutate sim.",
-      "evidence": [],
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [
         "D01"
       ],
@@ -224,10 +297,14 @@
       "id": "D03",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Inspire a traveler with a unique role reaction",
-      "acceptance": "One click → one favor, correct chronicle/favor marker.",
-      "evidence": [],
+      "acceptance": "One click \u2192 one favor, correct chronicle/favor marker.",
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [
         "D02"
       ],
@@ -237,10 +314,14 @@
       "id": "D04",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Deduplicate visual effects without duplicate rewards",
       "acceptance": "No render frame can mutate Faith or sim state.",
-      "evidence": [],
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [
         "D03"
       ],
@@ -250,10 +331,14 @@
       "id": "D05",
       "epic": "D",
       "epic_title": "God's visible influence",
-      "status": "todo",
+      "status": "done",
       "title": "Implement reduced-motion and textual alternatives",
       "acceptance": "Effects understandable without animation.",
-      "evidence": [],
+      "evidence": [
+        "tests/divine.test.js",
+        "tests/capture_android_layouts.py",
+        "qa-screenshots/chromium-640x360-inspire-invalid.png"
+      ],
       "dependencies": [
         "D04"
       ],
@@ -263,10 +348,16 @@
       "id": "E01",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "done",
       "title": "Compact HUD and touch safe areas",
-      "acceptance": "No lost buttons or unreadable NPC info at 640x360.  Android HUD must be visually pixel-square (solid borders and icons), still readable and touch-accessible at 640×360.",
-      "evidence": [],
+      "acceptance": "No lost buttons or unreadable NPC info at 640x360.  Android HUD must be visually pixel-square (solid borders and icons), still readable and touch-accessible at 640\u00d7360.",
+      "evidence": [
+        "tests/mobile_acceptance.py",
+        "tests/lifecycle_acceptance.py",
+        "tests/test_android_package.py",
+        "dist/manifest.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [],
       "assigned_to": "Codex Cloud"
     },
@@ -274,10 +365,16 @@
       "id": "E02",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "done",
       "title": "Run browser smoke, save roundtrip and 10k ticks",
       "acceptance": "All tests green, no offline network needed.",
-      "evidence": [],
+      "evidence": [
+        "tests/mobile_acceptance.py",
+        "tests/lifecycle_acceptance.py",
+        "tests/test_android_package.py",
+        "dist/manifest.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "E01"
       ],
@@ -287,10 +384,16 @@
       "id": "E03",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "done",
       "title": "Build and verify v1 experimental debug APK",
       "acceptance": "Signed ZIP manifest structurally valid; no keystore leaks.",
-      "evidence": [],
+      "evidence": [
+        "tests/mobile_acceptance.py",
+        "tests/lifecycle_acceptance.py",
+        "tests/test_android_package.py",
+        "dist/manifest.json",
+        "qa-screenshots/RESULTS.json"
+      ],
       "dependencies": [
         "E02"
       ],
@@ -300,10 +403,12 @@
       "id": "E04",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "blocked",
       "title": "Collect physical Android evidence when device available",
       "acceptance": "FPS, memory, 20min session; mark BLOCKED otherwise. Required device targets are phones with 2GB and 3GB total RAM; measure actual game/WebView resident PSS/RSS vs preferred 128-192 MiB and soft 256 MiB cap. Record device model/OS/FPS, 20-minute autoplay, or mark hardware unavailable.",
-      "evidence": [],
+      "evidence": [
+        "No attached physical Android device or emulator; PSS/RSS/FPS and install/launch NOT VERIFIED."
+      ],
       "dependencies": [
         "E03"
       ],
@@ -313,10 +418,13 @@
       "id": "E05",
       "epic": "E",
       "epic_title": "Android UI, QA and delivery",
-      "status": "todo",
+      "status": "done",
       "title": "Publish source, screenshots, APK and verification PR",
       "acceptance": "Evidence exact; no unverified claims or accidental main merge.",
-      "evidence": [],
+      "evidence": [
+        "https://github.com/jbob-coder/The-idle-open-world-universe/pull/5",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ],
       "dependencies": [
         "E04"
       ],

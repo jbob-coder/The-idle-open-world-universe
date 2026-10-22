@@ -12,9 +12,11 @@ with sync_playwright() as pw:
         context=browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,is_mobile=True,has_touch=True)
         page=context.new_page();errors=[];outgoing=[]
         page.on('pageerror',lambda e:errors.append(str(e)))
-        page.on('request',lambda r:outgoing.append(r.url) if r.url.startswith(('http://','https://')) else None)
+        page.on('request',lambda r:outgoing.append(r.url) if r.url.startswith(('http://','https://')) and r.url!='http://godseed.test/' else None)
         page.on('dialog',lambda d:d.accept())
-        page.set_content(source,wait_until='load')
+        page.route('http://godseed.test/',lambda r:r.fulfill(content_type='text/html',body=source))
+        context.set_offline(True)
+        page.goto('http://godseed.test/',wait_until='load')
         page.evaluate('()=>GodseedDebug.setSpeed(0)')
         page.locator('#androidDock').wait_for(state='visible')
         dock=page.locator('#androidDock')
@@ -56,11 +58,11 @@ with sync_playwright() as pw:
         assert page.evaluate('GodseedDebug.getState().npcs[0].mood')=='hopeful'
         assert page.evaluate('() => {const b=GodseedDebug.getState().bot;return [b.x,b.y]}')==bot_before
         page.locator('#zoomDock').click()
+        assert page.evaluate('GodseedDebug.getCamera().width')==24
+        page.locator('#zoomDock').click()
         assert page.evaluate('GodseedDebug.getCamera().width')==16
         page.locator('#zoomDock').click()
         assert page.evaluate('GodseedDebug.getCamera().width')==32
-        page.locator('#zoomDock').click()
-        assert page.evaluate('GodseedDebug.getCamera().width')==24
         page.evaluate('()=>GodseedDebug.step(50)')
         # Save export and pasted import work without Android native file APIs.
         page.locator('#export').click()
@@ -73,7 +75,9 @@ with sync_playwright() as pw:
         assert page.evaluate('GodseedDebug.getState().tick')==0
         page.locator('#import').click()
         page.locator('#saveText').fill(raw)
+        page.evaluate('()=>{window.confirm=()=>{throw Error("Native JS dialogs unavailable")}}')
         page.locator('#saveApply').click()
+        page.locator('#confirmApply').click()
         restored_tick=page.evaluate('GodseedDebug.getState().tick')
         assert saved['tick'] <= restored_tick <= saved['tick'] + 4, (saved['tick'], restored_tick)  # simulation can advance while Playwright checks
         assert not errors,errors

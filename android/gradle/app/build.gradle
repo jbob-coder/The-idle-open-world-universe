@@ -1,0 +1,16 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'io.godseed.one'
+    compileSdk 35
+    defaultConfig { applicationId 'io.godseed.one'; minSdk 26; targetSdk 28; versionCode 6; versionName '1.0-host-experimental' }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    // Preserve the existing host's target behavior during evaluation. This is not
+    // a Play Store release; keep the finding visible while enforcing other errors.
+    lint { warning 'ExpiredTargetSdkVersion' }
+    sourceSets.main.assets.srcDirs = [layout.buildDirectory.dir('generated/assets')]
+}
+tasks.register('bundleGame', Copy) { from '../../../GODSEED-Play.html'; into layout.buildDirectory.dir('generated/assets'); rename { 'index.html' } }
+tasks.named('preBuild').configure { dependsOn 'bundleGame' }
+
+dependencies { testImplementation 'org.json:json:20240303'; testImplementation 'junit:junit:4.13.2' }
+android.sourceSets.test.java.srcDirs = ['../../../tests/java']

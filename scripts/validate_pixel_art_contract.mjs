@@ -99,4 +99,4 @@ assert.equal(art.runtime.mustDisableCanvasImageSmoothing,true);
 assert.equal(art.accessibility.powerGlyphMustHaveText,true);
 console.log('PASS GODSEED strict pixel SOURCE requirements; 11 terrain IDs, source palette, RGBA alpha edges and original atlas frames.');
 for(const c of checks)console.log('PASS',c.atlas,c.size,'opaque='+c.opaque,'transparent='+c.transparent,'colors='+c.paletteColors);
-console.log('NOTE Default 32x20 camera and runtime atlas art are SPECIFIED, not proved implemented.');
+console.log('Runtime atlas/zoom evidence is checked separately by tests/render_acceptance.py and tests/capture_android_layouts.py.');

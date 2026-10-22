@@ -1,0 +1,14 @@
+{
+  "artifact": "GODSEED-v1-gradle-experimental.apk",
+  "bytes": 107111,
+  "sha256": "205a226e377b3241ef675108318fb41ac4ca042e64abeba24d63987e8e94fc0e",
+  "embeddedHtmlSha256": "08eb3623a25ea5fb80a1e10dd87f94fe102a8bddcffdecfddd11ac7de007074f",
+  "applicationId": "io.godseed.one",
+  "versionCode": 6,
+  "minSdk": 26,
+  "targetSdk": 28,
+  "permissions": [],
+  "signature": "debug; apksigner verification passed (including v2)",
+  "deviceInstallLaunchLifecycleStorage": "NOT VERIFIED",
+  "physicalAndroidRamFps": "NOT VERIFIED"
+}

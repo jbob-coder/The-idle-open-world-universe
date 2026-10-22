@@ -2,6 +2,7 @@ name: Codex preparation — pixel asset integrity
 on:
   push:
     branches:
+      - feat/godseed-medieval-skyworld-v1
       - prep/codex-skyworld-v0.5
     paths:
       - 'AGENTS.md'

@@ -1,7 +1,7 @@
 {
   "schema": "godseed.world-foundation-tasks.v1",
   "authority": "prep/codex-skyworld-v0.5",
-  "status": "planning-only-not-implemented",
+  "status": "implemented-with-physical-device-qa-unverified",
   "created": "2026-10-17",
   "designInputs": [
     "data/world-regions.v1.json",
@@ -11,170 +11,250 @@
     "docs/WORLD_PLAYTEST_MATRIX.md"
   ],
   "count": 15,
-  "priority": "F01–F05 first; W01–W05 next; W06–W10 last. This adds to A01–E05 (25) and S01–S05 (5), total 45 planned tasks.",
+  "priority": "F01\u2013F05 first; W01\u2013W05 next; W06\u2013W10 last. This adds to A01\u2013E05 (25) and S01\u2013S05 (5), total 45 planned tasks.",
   "tasks": [
     {
       "id": "F01",
       "group": "foundation",
-      "status": "todo",
+      "status": "done",
       "title": "Simulation boot, clock and offline baseline",
       "acceptance": "Ensure ticks, pause/resume, game start and speed controls work with no network; no double ticker.",
       "dependencies": [],
-      "evidence": []
+      "evidence": [
+        "tests/foundation.test.js",
+        "tests/lifecycle_acceptance.py",
+        "docs/IMPLEMENTATION_EVIDENCE.md#foundation"
+      ]
     },
     {
       "id": "F02",
       "group": "foundation",
-      "status": "todo",
+      "status": "done",
       "title": "Survival needs and renewable resources",
       "acceptance": "Multi-seed Nim obtains food/wood/stone, can rest/build camp; renewals avoid permanent depletion.",
       "dependencies": [
         "F01"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/foundation.test.js",
+        "tests/lifecycle_acceptance.py",
+        "docs/IMPLEMENTATION_EVIDENCE.md#foundation"
+      ]
     },
     {
       "id": "F03",
       "group": "foundation",
-      "status": "todo",
+      "status": "done",
       "title": "Pathfinding goal fallback and safe traversal",
       "acceptance": "BFS goals have safe reachable fallback; no repeated impossible target; deterministic results.",
       "dependencies": [
         "F02"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/foundation.test.js",
+        "tests/lifecycle_acceptance.py",
+        "docs/IMPLEMENTATION_EVIDENCE.md#foundation"
+      ]
     },
     {
       "id": "F04",
       "group": "foundation",
-      "status": "todo",
+      "status": "done",
       "title": "NPC meetings, divine event accounting",
       "acceptance": "Three NPC cap, natural encounter, one-time Inspire, valid/rejected power Faith consistency.",
       "dependencies": [
         "F03"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/foundation.test.js",
+        "tests/lifecycle_acceptance.py",
+        "docs/IMPLEMENTATION_EVIDENCE.md#foundation"
+      ]
     },
     {
       "id": "F05",
       "group": "foundation",
-      "status": "todo",
+      "status": "done",
       "title": "Save, offline UI and 10k-tick stability",
       "acceptance": "Old saves restore with no changed tile IDs; 10k ticks and browser frame lifecycle pass.",
       "dependencies": [
         "F04"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/foundation.test.js",
+        "tests/lifecycle_acceptance.py",
+        "docs/IMPLEMENTATION_EVIDENCE.md#foundation"
+      ]
     },
     {
       "id": "W01",
       "group": "world_regions",
-      "status": "todo",
+      "status": "done",
       "title": "Define deterministic region ID model",
-      "acceptance": "All 3072 map cells receive one of R00–R07; same seed gives same result; terrain IDs unchanged.",
+      "acceptance": "All 3072 map cells receive one of R00\u2013R07; same seed gives same result; terrain IDs unchanged.",
       "dependencies": [
         "F05"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     },
     {
       "id": "W02",
       "group": "world_regions",
-      "status": "todo",
+      "status": "done",
       "title": "Guarantee safe spawn, reachable starter supplies",
       "acceptance": "No enemy inside initial protection radius; berries/wood/stone reachable in seed sweeps.",
       "dependencies": [
         "W01"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     },
     {
       "id": "W03",
       "group": "world_regions",
-      "status": "todo",
+      "status": "done",
       "title": "Build and verify road and POI connectivity",
-      "acceptance": "Start reaches two hamlets, two shrines and ≥1 ruin via BFS, visual roads match traversal.",
+      "acceptance": "Start reaches two hamlets, two shrines and \u22651 ruin via BFS, visual roads match traversal.",
       "dependencies": [
         "W02"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     },
     {
       "id": "W04",
       "group": "world_regions",
-      "status": "todo",
+      "status": "done",
       "title": "Connect hamlet zones to existing NPC home roles",
       "acceptance": "Ira/Toren/Mera placements preserved; patrols and meetings bounded and observable.",
       "dependencies": [
         "W03"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     },
     {
       "id": "W05",
       "group": "world_regions",
-      "status": "todo",
+      "status": "done",
       "title": "Regional resource/danger weighting",
       "acceptance": "Forest/hills/fen identity meaningful; no unbounded spawns or inaccessible essentials.",
       "dependencies": [
         "W04"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "src/world/regions.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#regions",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     },
     {
       "id": "W06",
       "group": "world_regions",
-      "status": "todo",
+      "status": "done",
       "title": "Ruin/shrine region encounters and finite rewards",
       "acceptance": "Oathkeeper/Crownfall/Moonwell experiences have finite and save-safe discovery.",
       "dependencies": [
         "W05"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     },
     {
       "id": "W07",
       "group": "world_regions",
-      "status": "todo",
+      "status": "done",
       "title": "Region discovery, chronicle and minimap metadata",
       "acceptance": "Unknown areas stay fogged, titles reveal correctly, inspect and divine targeting coherent.",
       "dependencies": [
         "W06"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     },
     {
       "id": "W08",
       "group": "world_regions",
-      "status": "todo",
+      "status": "done",
       "title": "Region weather and activity flavor",
       "acceptance": "Distinct rain/wildlife/ambient cues do not alter world RNG on render or tank mobile FPS.",
       "dependencies": [
         "W07"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     },
     {
       "id": "W09",
       "group": "world_regions",
-      "status": "todo",
+      "status": "done",
       "title": "Save migration, seeded reconstruction and schema audit",
       "acceptance": "v1 save format preserved; pre-region saves work; 100 seed region membership tests pass.",
       "dependencies": [
         "W08"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     },
     {
       "id": "W10",
       "group": "world_regions",
-      "status": "todo",
-      "title": "Long-run QA and 2–3GB Android validation evidence",
+      "status": "done",
+      "title": "Long-run QA and 2\u20133GB Android validation evidence",
       "acceptance": "10k tick multi-seed suite, responsive 640x360 UI, Android 2/3GB RAM test or explicit block.",
       "dependencies": [
         "W09"
       ],
-      "evidence": []
+      "evidence": [
+        "tests/regions.test.js",
+        "tests/foundation.test.js",
+        "docs/IMPLEMENTATION_EVIDENCE.md#discovery",
+        "qa-screenshots/RESULTS.json",
+        "docs/IMPLEMENTATION_EVIDENCE.md"
+      ]
     }
   ]
 }

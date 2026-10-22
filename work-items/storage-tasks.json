@@ -3,43 +3,63 @@
   "authority": "prep/codex-skyworld-v0.5",
   "requirement": "core 1.0GB installed target; optional up to 5.0GB of app-managed data; combined nominal 6.0GB",
   "units": "decimal bytes",
-  "status": "todo",
+  "status": "implemented-device-qa-blocked",
   "created": "2026-10-17",
   "tasks": [
     {
       "id": "S01",
-      "status": "todo",
+      "status": "done",
       "name": "Define measured core and optional footprint",
       "acceptance": "Document accounting categories; use actual on-device APIs to distinguish APK/core, mutable user data, extra packs and OS overhead; no false 1GB installed claim.",
-      "evidence": []
+      "evidence": [
+        "android/gradle/app/src/main/java/io/godseed/one/PackBridge.java: actual APK, app-private mutable/cache/optional bytes and usable filesystem space; OS overhead excluded",
+        "docs/STORAGE_IMPLEMENTATION.md: accounting scope; no claimed on-device measurements"
+      ]
     },
     {
       "id": "S02",
-      "status": "todo",
+      "status": "done",
       "name": "Design safe offline optional pack manifest and storage host",
       "acceptance": "Pack IDs, hashes, schema, compatibility, app-private installation plus user-chosen local SAF import; core playable offline without optional packs; no generic storage permission.",
-      "evidence": []
+      "evidence": [
+        "android/gradle/app/src/main/java/io/godseed/one/PackManifest.java: bounded lore schema, SHA256, dependencies and compatibility",
+        "android/gradle/app/src/main/java/io/godseed/one/PackBridge.java: SAF selection and explicit native consent; core remains independent",
+        "content-packs/borderland-echoes.godseed.json: eight original discovery-gated lore entries"
+      ]
     },
     {
       "id": "S03",
-      "status": "todo",
+      "status": "done",
       "name": "Implement explicit quota and low-space guards",
       "acceptance": "Optional <=5e9 bytes, managed total <=6e9 bytes, free-after-write >= max(500MB, 10% currently free); account for temporary peak and failure rollback; never auto reserve full 5GB.",
-      "evidence": []
+      "evidence": [
+        "android/gradle/app/src/main/java/io/godseed/one/StoragePolicy.java: 5GB/6GB quotas, overflow checks and reserve",
+        "android/gradle/app/src/main/java/io/godseed/one/PackStore.java: staged hash verification, free-space recheck, recovery and isolated removal",
+        "tests/java/StorageChecks.java: filesystem and quota checks including mid-write free-space drop"
+      ]
     },
     {
       "id": "S04",
-      "status": "todo",
+      "status": "done",
       "name": "Add user-facing storage manager with safe remove/export",
       "acceptance": "Display actual core/optional/free values, user confirmation for installing/removing packs, prevent deletion of saves, transactional update and backup safety.",
-      "evidence": []
+      "evidence": [
+        "src/storage.js: measured accounting, explicit import/removal requests and discovery-gated lore",
+        "tests/storage_ui.py: fake-host contract; no automatic actions, numeric units, hidden lore",
+        "tests/lifecycle_acceptance.py: existing JSON save export/restore and quota-failure preservation"
+      ]
     },
     {
       "id": "S05",
-      "status": "todo",
+      "status": "blocked",
       "name": "Automated boundary tests and Android storage QA",
       "acceptance": "Offline core/optional=0, GB/GiB conversions, corrupt/oversized pack, exact quotas, disk-full mid-write, migration and real device measurements or explicit hardware blocker. Check with 2GB and 3GB TOTAL-RAM Android devices, and prove optional disk packs are lazy-loaded without proportionate process RAM growth; report separate RSS/PSS and storage bytes, or mark device QA blocked.",
-      "evidence": []
+      "evidence": [
+        "tests/java/StorageHostTest.java: manifest/hash/dependency and filesystem unit tests",
+        "tests/storage_host.py: JVM filesystem boundary tests; not an Android execution test",
+        "tests/test_gradle_package.py: compiled host and no-permission signed APK verification",
+        "BLOCKED: no attached physical 2GB/3GB Android devices; SAF/lifecycle/upgrade, RSS/PSS/FPS and installed OS footprint NOT VERIFIED"
+      ]
     }
   ]
 }

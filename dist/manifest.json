@@ -1,7 +1,7 @@
 {
-  "apk": "GODSEED-v0.2-debug.apk",
-  "size": 24646,
-  "sha256": "425a83e1b6727eca64e5e7b75684713b9b40b3bdd94fbebb3f25ff950a6a83a6",
+  "apk": "GODSEED-v1-experimental.apk",
+  "size": 45393,
+  "sha256": "69639e0e11ae3c1586e1b2f380f404d0643ce6b378f27cafeb2cc78de78105cc",
   "dex_sha1": "271f7674c3e8223b09532e4f9998927ea6ec5e46",
   "min_sdk": 26,
   "target_sdk": 28,

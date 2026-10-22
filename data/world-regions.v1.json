@@ -1,6 +1,6 @@
 {
   "schema": "godseed.world-regions.v1",
-  "status": "planning-only-not-integrated",
+  "status": "integrated-runtime",
   "world": {
     "width": 64,
     "height": 48,
@@ -22,7 +22,7 @@
     "preserveSaveKey": "godseed-one-small-life-v1",
     "preserveSaveVersion": 1
   },
-  "method": "Named region metadata/biome overlay on existing terrain, NOT a replacement for tile IDs. Proposed anchored Voronoi influence cells derived deterministically from world seed, with a reserved safe clearing and guaranteed walkable road links. Current main map generator does NOT implement this schema.",
+  "method": "Seeded Voronoi region overlay with reserved sanctuary and connected logical roads; tile IDs unchanged.",
   "seededGenerationRules": {
     "start": [
       32,
@@ -74,7 +74,7 @@
       }
     ],
     "regionMembership": "One primary region ID for each cell, determined by nearest regional anchor with seed-derived low-amplitude jitter. Reserve R00 for immediate start radius; deterministic tie breaker by region ID. Do not persist 3072 redundant region IDs when derivable from seed + static region manifest.",
-    "paths": "Guarantee safe start ↔ each hamlet; supply an accessible route to each shrine and at least one ruin. Validate with BFS against actual walkable(s,x,y); WATER remains blocked until a separate tested bridge/ford feature.",
+    "paths": "Guarantee safe start \u2194 each hamlet; supply an accessible route to each shrine and at least one ruin. Validate with BFS against actual walkable(s,x,y); WATER remains blocked until a separate tested bridge/ford feature.",
     "resources": "At least one reachable food, wood, stone source from start and replenishable food over time; do not overwrite reserved landmarks with spawned berries.",
     "spawning": "Existing cap 3 traveling NPC + 5 enemies; region-specific spawn constraints must not exceed global cap; no enemies inside safe start radius initially.",
     "compatibility": "Keep source map tiles 0..10 and world 64x48 in v1. Region overlay is derived; any stored discovery IDs need optional field migration, bounds validation and old save load test."
@@ -90,7 +90,7 @@
         24
       ],
       "difficulty": 0,
-      "status": "planned_region_overlay",
+      "status": "integrated-runtime",
       "existingEvidence": "Nim spawns at (32,24) with cleared nearby 7x7 and starter berry, forest and stone tiles",
       "features": [
         "safe spawning",
@@ -129,7 +129,7 @@
         21
       ],
       "difficulty": 1,
-      "status": "planned_region_overlay",
+      "status": "integrated-runtime",
       "existingEvidence": "Existing northwest village tile (25,21) and Toren the Squire's home anchor",
       "features": [
         "timber cottages",
@@ -166,7 +166,7 @@
         27
       ],
       "difficulty": 1,
-      "status": "planned_region_overlay",
+      "status": "integrated-runtime",
       "existingEvidence": "Existing southeast village tile (37,27) and Ira the Apothecary's home anchor",
       "features": [
         "herbal garden",
@@ -204,7 +204,7 @@
         13
       ],
       "difficulty": 2,
-      "status": "planned_region_overlay",
+      "status": "integrated-runtime",
       "existingEvidence": "Current seed-noise forest tiles support wood/berry harvesting; this named regional identity is not coded",
       "features": [
         "dense pines",
@@ -241,7 +241,7 @@
         10
       ],
       "difficulty": 3,
-      "status": "planned_region_overlay",
+      "status": "integrated-runtime",
       "existingEvidence": "Existing stone terrain and boar enemy allow mining/danger, but no region-specific highlands logic exists",
       "features": [
         "stone outcrops",
@@ -275,7 +275,7 @@
         7
       ],
       "difficulty": 3,
-      "status": "planned_region_overlay",
+      "status": "integrated-runtime",
       "existingEvidence": "Existing generic RUIN tiles, rumors and trap responses; Crownfall placement/name is a future overlay",
       "features": [
         "broken arches",
@@ -308,7 +308,7 @@
         38
       ],
       "difficulty": 2,
-      "status": "planned_region_overlay",
+      "status": "integrated-runtime",
       "existingEvidence": "Existing shrine at (20,31) and shrineVisited list; this area boundary and named grove are not implemented",
       "features": [
         "ancient trees",
@@ -343,7 +343,7 @@
         39
       ],
       "difficulty": 3,
-      "status": "planned_region_overlay",
+      "status": "integrated-runtime",
       "existingEvidence": "Current WATER cells are impassable and rain/Bloom exist; a distinct wetland region does not yet exist",
       "features": [
         "reeds",
@@ -416,8 +416,8 @@
   ],
   "phaseDefinitions": {
     "vertical_slice": "R00+R01+R02 traversable and autonomous; 3 NPCs, resources, god powers, save",
-    "region_expansion": "R03–R07 fully differentiated and linked; ruins/holy sites tested",
+    "region_expansion": "R03\u2013R07 fully differentiated and linked; ruins/holy sites tested",
     "later_world": "Chunked additional maps only after hardware profiling; do not expand world to justify 1GB disk target"
   },
-  "notes": "Anchors are design coordinates for a proposed world layout, NOT guaranteed current existing POIs except explicit evidence. Do not infer new NPCs or simulated wildlife based on planned region inhabitants. 2–3 GB target PHONE RAM; game resident 128–192MiB preferred, soft 256MiB provisional."
+  "notes": "Anchors are design coordinates for a proposed world layout, NOT guaranteed current existing POIs except explicit evidence. Do not infer new NPCs or simulated wildlife based on planned region inhabitants. 2\u20133 GB target PHONE RAM; game resident 128\u2013192MiB preferred, soft 256MiB provisional."
 }

@@ -1,3 +1,21 @@
+## Implementation checkpoint — 2026-10-22
+
+Branch: `feat/godseed-medieval-skyworld-v1`, based on prep commit `ff38045`. Existing stacked PRs remain unmerged.
+
+Implemented: F01–F05 foundation, W01–W10 connected regional gameplay and migration, A01–D05 camera/atlas/actor/divine rendering, E01–E03 compact pixel HUD and experimental packaging. The task ledgers and [implementation evidence](docs/IMPLEMENTATION_EVIDENCE.md) distinguish code, browser evidence and hardware limits.
+
+Verification: **46 Node tests pass**, including 100 generated seeds and five independent 10,000-tick runs. Offline browser smoke and mobile acceptance cover 640×360, 720×400 and 960×540; camera captures cover all three zooms. Source/policy validators pass. See `qa-screenshots/` for actual running desktop Chromium captures, not Android screenshots.
+
+APK: `dist/GODSEED-v1-experimental.apk` is SDK-free experimental WebView packaging, signed with a local debug identity and structurally checked. **Physical Android install/launch, resident RAM, FPS and 20-minute device testing are NOT VERIFIED.** Back up saves before any APK/signing change. Existing v0.1/v0.2 artifacts are preserved. Save key, version 1 and terrain IDs 0–10 remain unchanged; old maps are not regenerated.
+
+Native storage: S01–S04 implemented in the separate Gradle host, with explicit local lore import/removal, actual filesystem accounting, quota/reserve enforcement and interrupted-install recovery. Five JUnit tests (including 23 filesystem checks) and the browser bridge contract pass. See [storage implementation](docs/STORAGE_IMPLEMENTATION.md) and [Gradle build instructions](android/gradle/README.md). The two experimental APKs use different debug signing identities; export saves before switching.
+
+Remaining: E04 and S05 physical hardware QA. Across the original 45 tasks, 43 have implementation evidence and two are blocked on devices. No 1GB padding or optional space allocation exists.
+
+The dated preparation notes below describe the earlier handoff and are superseded by this checkpoint and the task ledgers.
+
+---
+
 ## Mandatory square-pixel visual style — Codex acceptance gate
 
 **ALL GODSEED game art must be authored as recognizable, hard-edged SQUARE PIXELS.** No painted/scaled photo background, blurred sprites, anti-aliasing, vector-style characters, isometric perspective or glossy modern HUD. The final higher-sky camera targets 32×20 logical tiles; native world tiles are 16×16 pixels; Nim and NPCs are 16×24 pixel frames with consistent feet anchors. Zoom uses nearest-neighbor pixel scaling and the terrain must remain readable at every level. The existing runtime has NOT yet been fully migrated to atlas-based art.

@@ -1,6 +1,6 @@
 {
   "schema": "godseed.storage-budget.v1",
-  "status": "planned-not-enforced-in-runtime",
+  "status": "enforced-in-gradle-host-device-unverified",
   "units": "decimal-bytes",
   "scope": "app-managed-persistent-storage, not RAM; OS overhead separately reported",
   "core": {
@@ -31,5 +31,5 @@
     "simulationSchemaVersion": 1,
     "preferSmallJsonBackups": true
   },
-  "notes": "User-reported intended final storage capacity. This JSON is a design contract, not an implemented disk quota, reservation, download, actual install-size measurement or consent UI."
+  "notes": "Gradle host enforces quotas for explicit local lore imports. Initial format is limited to 1 MiB per pack and 64 packs. SDK-free host and browser have no native pack support. No reservation or padding; OS overhead and device measurements remain unverified."
 }

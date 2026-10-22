@@ -1,5 +1,5 @@
 /* GODSEED deterministic simulation. UMD: browser global + CommonJS. No external services. */
-(function(root,factory){const api=factory();if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+(function(root,factory){const api=factory(typeof module!=='undefined'&&module.exports?require('./world/regions.js'):root.GodseedRegions);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.GodseedSim=api;})(typeof globalThis!=='undefined'?globalThis:this,function(Regions){
 'use strict';
 const W=64,H=48,N=W*H;const T={GRASS:0,FOREST:1,WATER:2,STONE:3,BERRY:4,RUIN:5,MEADOW:6,CAMP:7,ROAD:8,VILLAGE:9,SHRINE:10};
 const TILE_NAMES=['Grass','Forest','Water','Stone','Berry bush','Ancient ruin','Meadow','Shelter','Kingdom road','Village','Ancient shrine'];
@@ -26,6 +26,8 @@ const LORE=[
  ['The Last Cartographer','The royal mapmaker hid a path to lost knowledge.']
 ];
 function progress(b){
+ if(!['north','south','east','west'].includes(b.facing))b.facing='south';
+ if(!Number.isInteger(b.movedAt))b.movedAt=-100;
  if(!b.background)b.background=ORIGINS[0].name;
  if(!b.originStory)b.originStory='The past is mostly forgotten.';
  if(!b.skills||typeof b.skills!=='object')b.skills={};
@@ -57,7 +59,7 @@ function initPeople(s){
    }
   }
   return {id:i+1,name:p.name,role:p.role,x,y,homeX:x,homeY:y,
-   trust:22,mood:'wary',met:false,lastTalk:-1000,favorUntil:0,favorSpent:false,activity:'Patrolling',encounters:0};
+   facing:'south',movedAt:-100,trust:22,mood:'wary',met:false,lastTalk:-1000,favorUntil:0,favorSpent:false,activity:'Patrolling',encounters:0};
  });
 }
 function nearPerson(s,x,y,max=1){return (s.npcs||[]).find(p=>Math.abs(p.x-x)+Math.abs(p.y-y)<=max)||null;}
@@ -99,7 +101,7 @@ function updatePeople(s){
   const nx=p.x+dx,ny=p.y+dy;
   if(walkable(s,nx,ny)&&Math.abs(nx-p.homeX)+Math.abs(ny-p.homeY)<=9&&
      !s.npcs.some(other=>other!==p&&other.x===nx&&other.y===ny)){
-    p.x=nx;p.y=ny;
+    if(nx!==p.x||ny!==p.y){p.facing=nx>p.x?'east':nx<p.x?'west':ny>p.y?'south':'north';p.movedAt=s.tick;}p.x=nx;p.y=ny;
   }
   if(p.favorUntil<=s.tick)p.activity=p.role==='Apothecary'?'Collecting herbs':p.role==='Squire'?'Patrolling':'Studying runes';
  }
@@ -137,8 +139,8 @@ function event(s,title,detail,type='event'){
  const e={tick:s.tick,title:String(title),detail:String(detail),type};s.log.unshift(e);if(s.log.length>45)s.log.length=45;
  if(type==='milestone'){s.faith=clamp(s.faith+3,0,50);s.milestones++;}
 }
-function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
- map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
+function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,worldSeed:seed>>>0||1234567,tick:0,day:1,weather:'clear',weatherUntil:0,faith:18,milestones:0,
+ map:[],seen:new Array(N).fill(0),enemies:[],npcs:[],regions:{version:1,discovered:[]},shrinesVisited:[],nextEnemyId:1,log:[],camp:null,guide:null,marks:[],settings:{follow:true,speed:1},
  bot:{name:'Nim',x:Math.floor(W/2),y:Math.floor(H/2),level:1,xp:0,hp:24,maxHp:24,hunger:86,energy:83,attack:4,defense:1,food:2,wood:0,stone:0,tool:0,
  goal:'Awakening',thought:'Where am I?',target:null,path:[],actionDelay:0,fights:0,ruins:0,scars:0,steps:0,
  personality:{curiosity:0.68,caution:0.42,diligence:0.57},memory:[]}};
@@ -146,7 +148,7 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,d
  s.bot.personality={curiosity:origin.curiosity,caution:origin.caution,diligence:origin.diligence};
  progress(s.bot);s.bot.skills[origin.focus]=1;
  s.story={clues:[],completed:0};
- s.map=terrain(s);for(let y=s.bot.y-3;y<=s.bot.y+3;y++)for(let x=s.bot.x-3;x<=s.bot.x+3;x++)if(inside(x,y))s.map[idx(x,y)]=T.GRASS;
+ s.map=terrain(s);Regions.shape(s,T);for(let y=s.bot.y-3;y<=s.bot.y+3;y++)for(let x=s.bot.x-3;x<=s.bot.x+3;x++)if(inside(x,y))s.map[idx(x,y)]=T.GRASS;
  s.map[idx(s.bot.x+2,s.bot.y)]=T.BERRY;s.map[idx(s.bot.x-2,s.bot.y)]=T.FOREST;s.map[idx(s.bot.x,s.bot.y-2)]=T.STONE;
  for(let i=0;i<10;i++){const x=5+rint(s,W-10),y=5+rint(s,H-10);if(Math.abs(x-s.bot.x)+Math.abs(y-s.bot.y)>8 && s.map[idx(x,y)]!==T.WATER)s.map[idx(x,y)]=T.RUIN;}
  // A light medieval-fantasy world: paths, villages and shrines as logical tiles.
@@ -165,9 +167,12 @@ function create(seed=1234567){const s={version:1,seed:seed>>>0||1234567,tick:0,d
  for(const [x,y] of [[s.bot.x+10,s.bot.y-5],[s.bot.x-12,s.bot.y+7]]){
   s.map[idx(x,y)]=T.SHRINE;
  }
- s.npcs=initPeople(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
+ Regions.connect(s,T);s.npcs=initPeople(s);discover(s,s.bot.x,s.bot.y);event(s,'The Forgotten Kingdom',`Nim, a ${origin.name}, awakens in the enchanted borderlands of a fallen medieval kingdom. ${origin.past}`,'milestone');
  return s;}
-function discover(s,x,y){let count=0;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const xx=x+ox,yy=y+oy;if(!inside(xx,yy)||ox*ox+oy*oy>12)continue;const n=idx(xx,yy);if(!s.seen[n]){s.seen[n]=1;count++;}}return count;}
+function discoverRegion(s,x,y){const r=Regions.at(s,x,y);if(!r||s.regions.discovered.includes(r.id))return;
+ s.regions.discovered.push(r.id);event(s,r.name,r.minimumGameplay);remember(s,'Discovered '+r.name);
+}
+function discover(s,x,y){discoverRegion(s,x,y);let count=0;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const xx=x+ox,yy=y+oy;if(!inside(xx,yy)||ox*ox+oy*oy>12)continue;const n=idx(xx,yy);if(!s.seen[n]){s.seen[n]=1;count++;}}return count;}
 function remember(s,subject){let m=s.bot.memory;if(m[m.length-1]!==subject){m.push(subject);if(m.length>12)m.shift();}}
 function gain(s,xp,why){const b=s.bot;b.xp+=xp;let need=10+b.level*8;while(b.xp>=need&&b.level<50){b.xp-=need;b.level++;b.maxHp+=4;b.hp=Math.min(b.maxHp,b.hp+7);b.attack+=1;if(b.level%2===0)b.defense+=1;event(s,'LEVEL '+b.level,'Nim has grown stronger through '+why+'.','milestone');remember(s,'Level '+b.level+' reached');need=10+b.level*8;}}
 function walkable(s,x,y){return inside(x,y)&&s.map[idx(x,y)]!==T.WATER;}
@@ -181,11 +186,12 @@ function nearestEnemy(s){const b=s.bot;let best=null,dist=1e9;for(const e of s.e
 function setGoal(s,goal,thought,path){const b=s.bot;b.goal=goal;b.thought=thought;b.path=path||[];}
 function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(enemy.e&&enemy.dist<=1){if(b.hp< b.maxHp*.35 || b.energy<6){setGoal(s,'Escape','That beast is too dangerous!');return;}setGoal(s,'Defend','The beast is right beside me!');return;}
+ if(b.hunger<37&&b.food>0){setGoal(s,'Eat','My stomach is growling.');return;}
  if(b.hp<b.maxHp*.35){setGoal(s,'Recover','I need to recover.');return;}
  if(b.hunger<37&&b.food>0){setGoal(s,'Eat','My stomach is growling.');return;}
  if(b.energy<=28){setGoal(s,'Rest','My feet cannot go on.');return;}
  if(b.hunger<64 && b.food<=1){const p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','Find something edible.',p);return;}}
- if(!s.camp){if(b.wood>=5&&b.stone>=3){setGoal(s,'Build','I could make a shelter.');return;}
+ if(!s.camp){if(b.wood>=5&&b.stone>=3){const p=findPath(s,(x,y,t)=>t===T.GRASS||t===T.MEADOW);if(p){setGoal(s,'Build','I could make a shelter.',p);return;}}
  if(b.wood<5){let p=findPath(s,(x,y,t)=>t===T.FOREST);if(p){setGoal(s,'Gather wood','I need timber for shelter.',p);return;}}
  if(b.stone<3){let p=findPath(s,(x,y,t)=>t===T.STONE);if(p){setGoal(s,'Mine stone','Stones would make a strong hearth.',p);return;}}}
  if(s.camp&&b.tool===0){
@@ -195,6 +201,7 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(b.hunger<78&&b.food<3){let p=findPath(s,(x,y,t)=>t===T.BERRY);if(p){setGoal(s,'Forage','I should pack some food.',p);return;}}
  if(s.guide&&s.guide.ticks>0){const gx=s.guide.x,gy=s.guide.y;if(!walkable(s,gx,gy)){s.guide=null;}else{const p=findPath(s,(x,y)=>x===gx&&y===gy);if(p){setGoal(s,'Follow omen','Something calls to me from afar.',p);return;}s.guide=null;}}
  if(b.energy<45){setGoal(s,'Rest','The day has been long.');return;}
+ if(s.map[idx(b.x,b.y)]===T.RUIN){setGoal(s,'Study ruins','I have reached the ancient stones.');return;}
  if(b.hunger>55&&b.energy>55&&Array.isArray(s.shrinesVisited)){
   const route=findPath(s,(x,y,t)=>t===T.SHRINE&&!s.shrinesVisited.includes(idx(x,y)));
   if(route&&route.length){setGoal(s,'Study shrine','Ancient magic sleeps in these stones.',route);return;}
@@ -218,10 +225,14 @@ function plan(s){const b=s.bot;const enemy=nearestEnemy(s);
  if(rumor&&b.energy>45&&b.hunger>55){const path=findPath(s,(x,y)=>x===rumor.x&&y===rumor.y);if(path){setGoal(s,'Follow rumor','The '+rumor.title+' may lead to something.',path);return;}}
  }
  const p=findPath(s,(x,y,t,n)=>!s.seen[n]);if(p){setGoal(s,'Explore','What lies beyond the known paths?',p);return;}
- const q=findPath(s,(x,y,t)=>t===T.FOREST||t===T.STONE||t===T.BERRY);setGoal(s,'Wander','I will make another journey.',q||[]);
+ // Keep a chosen journey until arrival; recomputing nearest resources at every
+ // step can select the occupied tile forever once the world is explored.
+ if(b.goal==='Wander'&&b.path.length&&walkable(s,...b.path[0]))return;
+ const q=findPath(s,(x,y)=>Math.abs(x-b.x)+Math.abs(y-b.y)>=8)||findPath(s,(x,y)=>x!==b.x||y!==b.y);
+ setGoal(s,'Wander','I will revisit the paths and watch for travelers.',q||[]);
 }
-function addMark(s,x,y,kind){s.marks.push({x,y,kind,until:s.tick+10});if(s.marks.length>12)s.marks.shift();}
-function botMove(s,x,y){const b=s.bot;if(!walkable(s,x,y))return; b.x=x;b.y=y;b.steps++;let d=discover(s,x,y);
+function addMark(s,x,y,kind){s.eventSerial=(s.eventSerial||0)+1;s.marks.push({id:s.eventSerial,x,y,kind,tick:s.tick,until:s.tick+10});if(s.marks.length>12)s.marks.shift();}
+function botMove(s,x,y){const b=s.bot;if(!walkable(s,x,y))return; b.facing=x>b.x?'east':x<b.x?'west':y>b.y?'south':'north';b.movedAt=s.tick;b.x=x;b.y=y;b.steps++;let d=discover(s,x,y);
  if(d){b._discovered=(b._discovered||0)+d;if(b._discovered>=38){b._discovered-=38;gain(s,3,'exploration');s.faith=clamp(s.faith+1,0,50);improve(s,'scouting',2);}}
  if(s.guide&&x===s.guide.x&&y===s.guide.y){event(s,'Omen followed','Nim reached the place you pointed to.','milestone');s.guide=null;}
 }
@@ -248,7 +259,7 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
  const tile=s.map[idx(b.x,b.y)];
  if(b.goal==='Eat'){b.food--;improve(s,'survival',1);b.hunger=clamp(b.hunger+37,0,100);b.hp=clamp(b.hp+2,0,b.maxHp);b.thought='That was needed.';return;}
  if(b.goal==='Recover'||b.goal==='Rest'){b.energy=clamp(b.energy+(s.camp&&Math.abs(b.x-s.camp.x)+Math.abs(b.y-s.camp.y)<3?17:12),0,100);b.hp=clamp(b.hp+(s.camp?3:2),0,b.maxHp);b.hunger=clamp(b.hunger-1,0,100);return;}
- if(b.goal==='Build'){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First camp','Nim raised a canvas shelter and stone hearth at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
+ if(b.goal==='Build'&&(tile===T.GRASS||tile===T.MEADOW)){s.map[idx(b.x,b.y)]=T.CAMP;s.camp={x:b.x,y:b.y};b.wood-=5;b.stone-=3;b.energy=clamp(b.energy-8,0,100);event(s,'First camp','Nim raised a canvas shelter and stone hearth at '+b.x+', '+b.y+'.','milestone');remember(s,'Built a home');improve(s,'crafting',5);return;}
  if(b.goal==='Craft'){b.wood-=2;b.stone-=2;b.tool=1;gain(s,8,'crafting');event(s,'New invention','Nim crafted a stone hatchet.','milestone');remember(s,'Crafted a stone hatchet');improve(s,'crafting',5);return;}
 
  if(tile===T.BERRY){b.food+=2+rint(s,2);s.map[idx(b.x,b.y)]=T.GRASS;gain(s,2,'foraging');improve(s,'survival',2);b.thought='These berries will last a little while.';return;}
@@ -279,7 +290,7 @@ function botAct(s){const b=s.bot;const near=nearestEnemy(s);
     }
   }
   improve(s,'lore',5);gain(s,18,'exploring ruins');
-  event(s,'Ancient runes','Nim deciphered a monument of the lost kingdom.','milestone');remember(s,'Found ruin #'+b.ruins);return;
+  event(s,'Ancient runes','Nim deciphered a monument in '+Regions.at(s,b.x,b.y).name+'.','milestone');remember(s,'Found ruin #'+b.ruins);return;
  }
  // Deterministic recovery for fully explored or depleted worlds; movement stays bounded.
  b.energy=clamp(b.energy+5,0,100);const p=findPath(s,(x,y,t)=>t===T.FOREST||t===T.BERRY||t===T.RUIN);if(p)b.path=p;
@@ -288,8 +299,8 @@ function revive(s){const b=s.bot;if(b.hp>0)return;
  b.scars++;b.hp=Math.max(10,Math.round(b.maxHp*.65));b.hunger=65;b.energy=65;b.x=s.camp?s.camp.x:(W>>1);b.y=s.camp?s.camp.y:(H>>1);b.path=[];s.enemies=[];discover(s,b.x,b.y);remember(s,'Survived fall #'+b.scars);event(s,'Life restored','The god returns Nim from the edge of death.','milestone');
 }
 function updateEnemies(s){const b=s.bot;
- if(s.enemies.length<5&&s.tick%53===0){for(let i=0;i<18;i++){const x=clamp(b.x+rint(s,19)-9,1,W-2),y=clamp(b.y+rint(s,17)-8,1,H-2),d=Math.abs(x-b.x)+Math.abs(y-b.y);if(d>5&&d<14&&walkable(s,x,y)&&(!s.camp||Math.abs(x-s.camp.x)+Math.abs(y-s.camp.y)>3)&&!s.enemies.some(e=>e.x===x&&e.y===y)){
- const tougher=s.day>4&&rand(s)<.35;s.enemies.push({id:s.nextEnemyId++,type:tougher?'Boar':'Wolf',x,y,hp:tougher?17:11,defense:tougher?2:0,attack:tougher?4:2,cooldown:1});break;}}}
+ if(s.enemies.length<5&&s.tick%53===0){for(let i=0;i<18;i++){const x=clamp(b.x+rint(s,19)-9,1,W-2),y=clamp(b.y+rint(s,17)-8,1,H-2),d=Math.abs(x-b.x)+Math.abs(y-b.y);if(d>5&&d<14&&Math.abs(x-32)+Math.abs(y-24)>5&&walkable(s,x,y)&&(!s.camp||Math.abs(x-s.camp.x)+Math.abs(y-s.camp.y)>3)&&!s.enemies.some(e=>e.x===x&&e.y===y)){
+ const tougher=Regions.at(s,x,y).id==='R04'||(s.day>4&&rand(s)<.35);s.enemies.push({id:s.nextEnemyId++,type:tougher?'Boar':'Wolf',x,y,hp:tougher?17:11,defense:tougher?2:0,attack:tougher?4:2,cooldown:1});break;}}}
  for(const e of s.enemies){if(e.cooldown>0){e.cooldown--;continue;}const d=Math.abs(e.x-b.x)+Math.abs(e.y-b.y);
  if(d===1){
   let dmg=Math.max(1,e.attack+rint(s,3)-b.defense);
@@ -301,15 +312,25 @@ function updateEnemies(s){const b=s.bot;
   b.hp-=dmg;e.cooldown=3;addMark(s,b.x,b.y,result);
   if(s.tick%8===0)event(s,result==='evade'?'Attack evaded':result==='parry'?'Attack parried':'Under attack',result==='evade'?'Nim dodged the '+e.type+'.':result==='parry'?'Nim blocked part of a '+e.type+' attack.':'A '+e.type+' struck Nim for '+dmg+' health.',dmg>0?'danger':'event');
  }
- else if(d<6&&s.tick%3===0){let options=DIRS.map(([dx,dy])=>[e.x+dx,e.y+dy]).filter(([x,y])=>walkable(s,x,y)&&!(x===b.x&&y===b.y)&&!s.enemies.some(o=>o!==e&&o.x===x&&o.y===y));options.sort((a,c)=>(Math.abs(a[0]-b.x)+Math.abs(a[1]-b.y))-(Math.abs(c[0]-b.x)+Math.abs(c[1]-b.y)));if(options.length){e.x=options[0][0];e.y=options[0][1];}e.cooldown=1;}
+ else if(d<6&&s.tick%3===0){let options=DIRS.map(([dx,dy])=>[e.x+dx,e.y+dy]).filter(([x,y])=>walkable(s,x,y)&&Math.abs(x-32)+Math.abs(y-24)>5&&!(x===b.x&&y===b.y)&&!s.enemies.some(o=>o!==e&&o.x===x&&o.y===y));options.sort((a,c)=>(Math.abs(a[0]-b.x)+Math.abs(a[1]-b.y))-(Math.abs(c[0]-b.x)+Math.abs(c[1]-b.y)));if(options.length){e.x=options[0][0];e.y=options[0][1];e.movedAt=s.tick;}e.cooldown=1;}
  }
  revive(s);
 }
-function tick(s){s.tick++;revive(s);if(s.tick%240===0){s.day++;event(s,'Day '+s.day,'The world turns and Nim continues living.');}
+// Scan the reachable component only at ecological intervals, never each frame.
+// A depleted island must recover without rewriting water, landmarks or old saves.
+function renewResources(s){
+ const land=[],counts={[T.BERRY]:0,[T.FOREST]:0,[T.STONE]:0};
+ findPath(s,(x,y,t,n)=>{if(t in counts)counts[t]++;if(t===T.GRASS||t===T.MEADOW)land.push(n);return false;});
+ for(const t of [T.BERRY,T.FOREST,T.STONE]){
+  const floor=t===T.BERRY?6:4;
+  while(counts[t]<floor&&land.length){const n=land.shift();s.map[n]=t;counts[t]++;}
+ }
+}
+function tick(s){s.tick++;discoverRegion(s,s.bot.x,s.bot.y);revive(s);if(s.tick%240===0){s.day++;event(s,'Day '+s.day,'The world turns and Nim continues living.');}
  if(s.weatherUntil&&s.tick>=s.weatherUntil){s.weather='clear';s.weatherUntil=0;}
  if(s.tick%12===0){const b=s.bot;b.hunger=clamp(b.hunger-1,0,100);b.energy=clamp(b.energy-1,0,100);if(b.hunger===0)b.hp-=1;}
  if(s.tick%72===0)s.faith=clamp(s.faith+1,0,50);
- if(s.tick%93===0){for(let i=0;i<3;i++){let x=rint(s,W),y=rint(s,H),n=idx(x,y);if(s.map[n]===T.GRASS)s.map[n]=T.BERRY;}}
+ if(s.tick%93===0){renewResources(s);for(let i=0;i<3;i++){let x=rint(s,W),y=rint(s,H),n=idx(x,y);if(s.map[n]===T.GRASS)s.map[n]=T.BERRY;}}
  if(s.guide){s.guide.ticks--;if(s.guide.ticks<=0)s.guide=null;}
  s.marks=s.marks.filter(z=>z.until>s.tick);
  // Planning is deliberate: every movement step or completed action chooses what matters now.
@@ -318,12 +339,16 @@ function tick(s){s.tick++;revive(s);if(s.tick%240===0){s.day++;event(s,'Day '+s.
  updatePeople(s);
  return s;}
 const COST={bless:4,gift:5,bloom:6,guide:3,storm:8,inspire:5};
-function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))return {ok:false,why:'Unknown power'};
+function previewPower(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))return {ok:false,why:'Unknown power'};
  x=Math.floor(Number(x));y=Math.floor(Number(y));if(!inside(x,y))return {ok:false,why:'Choose a place on the map'};
  if(s.faith<COST[kind])return {ok:false,why:'Not enough Faith'};
- const b=s.bot;if(kind==='guide'&&!walkable(s,x,y))return {ok:false,why:'Nim cannot walk on water'};
- const citizen=kind==='inspire'&&s.seen[idx(x,y)]?nearPerson(s,x,y,1):null;
+ if(!s.seen[idx(x,y)]&&kind!=='bless'&&kind!=='gift')return {ok:false,why:'Explore this place first'};
+ if(kind==='guide'&&!walkable(s,x,y))return {ok:false,why:'Nim cannot walk on water'};
+ const citizen=kind==='inspire'&&s.seen[idx(x,y)]?(s.npcs||[]).find(p=>s.seen[idx(p.x,p.y)]&&Math.abs(p.x-x)+Math.abs(p.y-y)<=1):null;
+ if(kind==='inspire'&&citizen&&citizen.favorUntil>s.tick&&!citizen.favorSpent)return {ok:false,why:'Traveler is already answering an omen'};
  if(kind==='inspire'&&!citizen)return {ok:false,why:'Choose a revealed traveler nearby'};
+ return {ok:true,kind,cost:COST[kind],x,y};}
+function power(s,kind,x,y){const check=previewPower(s,kind,x,y);if(!check.ok)return check;x=check.x;y=check.y;const b=s.bot,citizen=kind==='inspire'?(s.npcs||[]).find(p=>s.seen[idx(p.x,p.y)]&&Math.abs(p.x-x)+Math.abs(p.y-y)<=1):null;
  s.faith-=COST[kind];if(kind==='bless'){b.hp=clamp(b.hp+12,0,b.maxHp);b.energy=clamp(b.energy+28,0,100);event(s,'Divine blessing','A warm light restores Nim.','god');addMark(s,b.x,b.y,'bless');}
  else if(kind==='gift'){b.food+=3;b.hunger=clamp(b.hunger+10,0,100);event(s,'Gift of sustenance','Three portions appear in Nim’s pack.','god');addMark(s,b.x,b.y,'gift');}
  else if(kind==='bloom'){let grows=0;for(let i=0;i<55&&grows<9;i++){let nx=x+rint(s,11)-5,ny=y+rint(s,11)-5;if(inside(nx,ny)&&s.map[idx(nx,ny)]===T.GRASS){s.map[idx(nx,ny)]=T.BERRY;grows++;}}
@@ -338,15 +363,19 @@ function power(s,kind,x,y){if(!Object.prototype.hasOwnProperty.call(COST,kind))r
  else if(kind==='storm'){let struck=0;s.enemies=s.enemies.filter(e=>{const d=Math.abs(e.x-x)+Math.abs(e.y-y);if(d<=3){struck++;return false;}return true;});event(s,'Judgment',struck?struck+' nearby hostile creatures dispersed.':'Lightning struck the empty earth.','god');addMark(s,x,y,'storm');}
  return {ok:true,kind,cost:COST[kind]};}
 function validate(s){if(!s||s.version!==1||!Array.isArray(s.map)||s.map.length!==N||!Array.isArray(s.seen)||s.seen.length!==N||!s.bot)return false;
- const b=s.bot;return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
+ const b=s.bot;
+ if(!['hp','maxHp','hunger','energy','food','wood','stone','tool','attack','defense','xp','steps','scars','ruins','fights'].every(k=>Number.isFinite(b[k])))return false;
+ if(!Number.isFinite(s.faith)||s.faith<0||s.faith>50||!Number.isInteger(s.day)||s.day<1)return false;
+ if(!Array.isArray(s.enemies)||!s.enemies.every(e=>e&&Number.isInteger(e.x)&&Number.isInteger(e.y)&&inside(e.x,e.y)&&['hp','attack','defense','cooldown','id'].every(k=>Number.isFinite(e[k]))))return false;
+ return Number.isInteger(b.x)&&Number.isInteger(b.y)&&inside(b.x,b.y)&&Number.isFinite(b.level)&&b.level>=1&&b.level<=50&&Number.isFinite(s.tick)&&s.tick>=0&&Number.isInteger(s.seed)&&s.map.every(t=>Number.isInteger(t)&&t>=0&&t<=T.SHRINE)&&s.seen.every(t=>t===0||t===1)&&Array.isArray(s.enemies)&&s.enemies.length<=10&&(!s.npcs||(Array.isArray(s.npcs)&&s.npcs.length<=3&&s.npcs.every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&inside(p.x,p.y))));}
 function serialize(s){const copy=JSON.parse(JSON.stringify(s));copy.bot.path=[];copy.marks=[];return JSON.stringify(copy);}
-function restore(raw){try{const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
+function restore(raw){try{if(typeof raw==='string'&&raw.length>1000000)return null;const s=typeof raw==='string'?JSON.parse(raw):JSON.parse(JSON.stringify(raw));if(!validate(s))return null;if(!Number.isInteger(s.worldSeed))s.worldSeed=s.seed;s.regions={version:1,discovered:[...new Set(s.regions&&Array.isArray(s.regions.discovered)?s.regions.discovered.filter(id=>Regions.data.regions.some(r=>r.id===id)):[])]};s.bot.path=[];s.bot.actionDelay=0;s.marks=[];s.settings={speed:1,follow:true};s.bot.personality=s.bot.personality||{curiosity:.6,caution:.4,diligence:.5};
  progress(s.bot);
  // Migration: v0.1/v0.2 saves had no inhabitants. Keep old save schema intact.
  s.npcs=Array.isArray(s.npcs)?s.npcs.slice(0,3):initPeople(s);
  s.npcs=s.npcs.filter(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&walkable(s,p.x,p.y)).map(p=>({
   id:clamp(Number(p.id)||1,1,3),name:String(p.name||'Traveler').slice(0,32),
-  role:String(p.role||'Wanderer').slice(0,32),x:p.x,y:p.y,
+  role:String(p.role||'Wanderer').slice(0,32),x:p.x,y:p.y,facing:['north','south','east','west'].includes(p.facing)?p.facing:'south',movedAt:Number.isInteger(p.movedAt)?p.movedAt:-100,
   homeX:inside(p.homeX,p.homeY)?p.homeX:p.x,
   homeY:inside(p.homeX,p.homeY)?p.homeY:p.y,
   trust:clamp(Number(p.trust)||0,0,100),
@@ -358,5 +387,5 @@ function restore(raw){try{const s=typeof raw==='string'?JSON.parse(raw):JSON.par
  s.story=s.story&&typeof s.story==='object'&&Array.isArray(s.story.clues)?s.story:{clues:[],completed:0};
  s.story.clues=s.story.clues.slice(0,10).filter(q=>q&&typeof q.title==='string'&&inside(q.x,q.y));
  s.story.completed=clamp(Number(s.story.completed)||0,0,10);s.bot.memory=Array.isArray(s.bot.memory)?s.bot.memory.slice(-12):[];s.log=Array.isArray(s.log)?s.log.slice(0,45):[];s.guide=null;return s;}catch(e){return null;}}
-return {W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
+return {regionAt:Regions.at,W,H,N,T,COST,TILE_NAMES,ORIGINS,SKILLS,PEOPLE,create,tick,power,previewPower,findPath,walkable,idx,inside,serialize,restore,validate,gain,plan,improve,initPeople};
 });

@@ -2,6 +2,7 @@ name: GODSEED sky view Android landscape captures
 on:
   push:
     branches:
+      - feat/godseed-medieval-skyworld-v1
       - feat/skyview-zoom-v0.4
     paths:
       - 'src/**'
