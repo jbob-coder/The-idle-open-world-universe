@@ -1,5 +1,5 @@
 # GODSEED — Android Storage & Expansion Budget
-**Status:** proposed product requirement, documented 2026-10-17. **Not implemented or measured in the current APK.**
+**Status (2026-10-22):** implemented for bounded optional lore in the separate Gradle host. See [implementation, accounting scope and tests](STORAGE_IMPLEMENTATION.md). Physical Android measurements remain NOT VERIFIED; the SDK-free APK has no native pack support.
 
 ## User requirement and interpretation
 The user specifies **1 GB minimum for the game plus at most 5 GB of extra free space available for optional game use**. Until clarified otherwise, treat these as **phone persistent storage** (disk), not RAM, graphics memory or network bandwidth. The game must never assume the phone actually has this space.
@@ -58,6 +58,6 @@ The current SDK-free APK embeds local HTML under `file:///android_asset/index.ht
 7. Gate R requires a device install/update/migration, not just ZIP and signing checks.
 
 ## Work tracking
-See `work-items/storage-tasks.json` for five additional **S01–S05** implementation tasks; they are **not done** in this documentation handoff. The original `work-items/codex-tasks.json` retains 25 A01–E05 visual/core tasks. Thus Codex has **25 existing + 5 new = 30 work items**, with storage changes implemented as a separate tested slice after architecture/code review (or earlier if packaging decisions make them prerequisite).
+See `work-items/storage-tasks.json` for five additional **S01–S05** implementation tasks; S01–S04 have implementation evidence and S05 is blocked on physical hardware. The original `work-items/codex-tasks.json` retains 25 A01–E05 visual/core tasks. Thus Codex has **25 existing + 5 new = 30 work items**, with storage changes implemented as a separate tested slice after architecture/code review (or earlier if packaging decisions make them prerequisite).
 
 **Reference:** `docs/ANDROID_HTML_APK_SPEC.md`, `docs/PERFORMANCE_BUDGET.md`, `docs/SAVE_SYSTEM.md`, `docs/HANDOFF_READINESS.md`.

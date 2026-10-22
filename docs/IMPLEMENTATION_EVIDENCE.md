@@ -46,3 +46,26 @@ Review found no Critical and two Important issues. Fixed inherited late-world Wa
 Replaced native JavaScript confirm() with accessible DOM confirmation for import/reset. Browser acceptance deliberately makes window.confirm throw; backup restore still passes at all three landscape sizes. Quota failure preserves the current world. Updated experimental APK and screenshots pass again. Native device execution still NOT VERIFIED.
 
 Published checkpoint: https://github.com/jbob-coder/The-idle-open-world-universe/pull/5 (draft, against prep branch). Conventional Gradle/AGP host now compiles separately, but storage work and device validation remain in progress.
+
+## Conventional Android and storage batch — 2026-10-22
+
+Preserved and rechecked published checkpoint `96eee6948302f08d4084b10c87b2370409cde604` and PR #5 before continuing. Added the separate Gradle 8.13 / AGP 8.9.2 host; the SDK-free builder and earlier APKs remain available. Both embed the same offline HTML and retain the save origin/key/version. The Gradle host adds native pause/resume callbacks and bounded app-private optional lore, SAF selection, explicit install/remove consent, actual byte accounting, quota/reserve checks, hash validation, staged updates and interruption recovery. Corrupt installed lore remains removable. The original eight-region sample is a separate 1,690-byte file and is not installed automatically.
+
+S01–S04 have implementation evidence; S05 and E04 remain blocked on physical Android hardware. The 45-task ledger now has 43 done and two blocked. Actual device storage, SAF execution, upgrade/lifecycle behavior, RSS/PSS/FPS and 20-minute device runs are NOT VERIFIED. The 1 GB core content target is not met or padded; the initial optional format supports at most 64 files of 1 MiB each within the larger 5 GB/6 GB policy.
+
+Verification on this workspace:
+
+- `node --test tests/*.test.js`: **46 passed, 0 failed, 0 skipped**; includes 100 seeds, five 10,000-tick simulations and three 11,000-tick late-world journeys.
+- All five manifest/pixel/world/hardware/storage validators pass. Regenerated PNG atlases exactly match committed bytes.
+- `python build.py`: standalone offline HTML, 251,799 bytes.
+- Browser smoke: 1280×800, 720×400, 390×844; zero JavaScript errors and zero external requests.
+- Mobile acceptance: 640×360, 720×400, 960×540; 10 touch controls at least 44 pixels, divine action, backup restoration and offline checks pass.
+- Lifecycle acceptance: pause, 8× time, background save, repeated resume, reload, corrupt/quota import preservation pass in Chromium.
+- Renderer acceptance: four decoded atlases, 114,688 decoded bytes; 100 unchanged draws produce zero terrain-cache rebuilds and no simulation mutation. Desktop timing was 38 ms for 100 draws versus a 5.9 ms historical baseline in this run under concurrent build load. This is a microbenchmark, not Android FPS or resident RAM.
+- `tests/capture_android_layouts.py`: 42 running Chromium screenshots, including all nine viewport/zoom combinations; those nine reviewed for hard pixel edges. Regional/actor scenes include explicitly documented QA fixtures. No screenshots are presented as physical Android captures.
+- Optional-storage UI bridge test passes with a fake native host; `tests/storage_host.py` passes 23 JVM filesystem/quota checks, including falling free space during a write and preserved sibling save.
+- Gradle `testDebugUnitTest assembleDebug lintDebug`: five JUnit tests, zero failures. Lint: zero errors, six visible warnings. The intentionally retained API 28 target is a warning for this non-Play experiment; other errors remain enforced. See STORAGE_IMPLEMENTATION.md for the warning scope.
+- SDK-free APK: 45,393 bytes; ZIP, DEX/manifest structure, exact embedded HTML and JAR-v1 debug signature pass.
+- Gradle APK: 107,111 bytes; compiled bridge classes, exact embedded HTML, API/application identity, no permissions and Android v2 debug signature pass. Exact hashes are in `dist/manifest.json` and `dist/gradle-manifest.json`.
+
+Next dependent work requires devices: install each APK with the appropriate signing identity, verify backup before switching, exercise SAF import/cancel/replace/remove and low-space recovery, then measure 2 GB/3 GB device memory and frame pacing. Modern target-SDK migration and a launcher icon remain separate release preparation; this PR remains an experimental draft and does not merge the existing chain.

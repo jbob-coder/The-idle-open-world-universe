@@ -1,4 +1,4 @@
-## Implementation checkpoint — 2026-10-18
+## Implementation checkpoint — 2026-10-22
 
 Branch: `feat/godseed-medieval-skyworld-v1`, based on prep commit `ff38045`. Existing stacked PRs remain unmerged.
 
@@ -8,7 +8,11 @@ Verification: **46 Node tests pass**, including 100 generated seeds and five ind
 
 APK: `dist/GODSEED-v1-experimental.apk` is SDK-free experimental WebView packaging, signed with a local debug identity and structurally checked. **Physical Android install/launch, resident RAM, FPS and 20-minute device testing are NOT VERIFIED.** Back up saves before any APK/signing change. Existing v0.1/v0.2 artifacts are preserved. Save key, version 1 and terrain IDs 0–10 remain unchanged; old maps are not regenerated.
 
-Remaining: E04 physical hardware QA; S01–S05 native storage management. Conventional Gradle packaging is being evaluated separately; no switch of save origin or replacement of the existing builder. No 1GB padding or optional storage allocation exists.
+Native storage: S01–S04 implemented in the separate Gradle host, with explicit local lore import/removal, actual filesystem accounting, quota/reserve enforcement and interrupted-install recovery. Five JUnit tests (including 23 filesystem checks) and the browser bridge contract pass. See [storage implementation](docs/STORAGE_IMPLEMENTATION.md) and [Gradle build instructions](android/gradle/README.md). The two experimental APKs use different debug signing identities; export saves before switching.
+
+Remaining: E04 and S05 physical hardware QA. Across the original 45 tasks, 43 have implementation evidence and two are blocked on devices. No 1GB padding or optional space allocation exists.
+
+The dated preparation notes below describe the earlier handoff and are superseded by this checkpoint and the task ledgers.
 
 ---
 

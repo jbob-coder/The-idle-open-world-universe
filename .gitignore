@@ -18,3 +18,8 @@ dist/GODSEED-unsigned.apk
 .tmp/
 *.log
 .DS_Store
+
+# Separate conventional Android experiment; preserve existing SDK-free builder.
+android/gradle/.gradle/
+android/gradle/**/build/
+android/gradle/local.properties

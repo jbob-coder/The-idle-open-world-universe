@@ -51,6 +51,7 @@ jobs:
           python tests/browser_smoke.py
           python tests/mobile_acceptance.py
           python tests/lifecycle_acceptance.py
+          python tests/storage_ui.py
           python tests/capture_android_layouts.py
       - name: Preserve v1 APK and actual browser screenshots
         if: success()
@@ -69,3 +70,36 @@ jobs:
             assets/godseed-android-landscape-960x540.png
       - name: Verify private signing key is excluded from Git
         run: '! git ls-files | grep -E "(android/debug-only/|\\.(jks|keystore|p12)$)"'
+
+  conventional-android-host:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Install compile tools
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Build offline content and compiled host; test native storage core
+        run: |
+          python build.py
+          python tests/storage_host.py
+          android/gradle/gradlew -p android/gradle --no-daemon --max-workers=2 testDebugUnitTest assembleDebug lintDebug
+          python tests/test_gradle_package.py
+      - name: Preserve separate APK and JVM test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: godseed-gradle-host-experimental
+          if-no-files-found: error
+          path: |
+            android/gradle/app/build/outputs/apk/debug/app-debug.apk
+            android/gradle/app/build/reports/tests/testDebugUnitTest/

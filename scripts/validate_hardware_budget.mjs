@@ -19,4 +19,4 @@ assert.equal(x.storageSeparate.optionalAdditionalCapBytes,store.optional.maxAddi
 assert.equal(x.storageSeparate.ramIsNotPersistentStorage,true);
 assert.equal(x.testing.requirePhysicalDeviceEvidence,true);
 console.log('PASS: 2–3 GB total device RAM target; app preferred 128–192 MiB, soft cap 256 MiB (UNVERIFIED)');
-console.log('PASS: separate 1 GB core + 5 GB optional DISK, no claim of runtime enforcement or real-device QA');
+console.log('PASS: separate 1 GB core + 5 GB optional DISK; RAM targets and physical-device performance remain UNVERIFIED');
