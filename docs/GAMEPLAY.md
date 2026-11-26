@@ -103,3 +103,38 @@ Use Credits, not dollars or generic coins. Keep clean and dirty balances distinc
 ## Approved clock and consequence warnings — 2026-11-26
 
 The clock remains paused while reading, selecting choices or checking status; Continue submits the action once, and NPCs advance independently in the same resolved fictional interval. Meaningful interruptions preserve elapsed time and partial progress. Show foreseeable material consequences inline before submission, without a second confirmation or forced compliance. See [TIME_AND_ACTIVITY.md](TIME_AND_ACTIVITY.md) for the approved rules and proposed resolution contract. Exact timing formulas and trigger criteria remain open.
+
+## Narrative combat interface — first layout proposal (2026-11-26)
+
+The owner requested a combat layout with named technique dropdowns and selectable technique levels. Proposed first layout: keep combat inside the existing vertical novel reading column, rather than switching to a separate battle dashboard. Retain the existing header, upper-left status bubble, narrative history and Continue button. Present only observed enemy information, including visible condition and approximate distance when known; do not reveal hidden stats or precise enemy HP without an established knowledge source.
+
+```text
+Day 01          Character          Location
+09:42 AM        HP 72/100 | 250 CR
+(...)
+------------------------------------------
+The creature steps toward you. Its left
+leg trembles as it shifts its weight.
+
+COMBAT OPTIONS
+( ) Move back
+( ) Defend
+( ) Use weapon
+( ) Use ability
+    Technique   [ Flame pulse       v ]
+    Level       [ Level 1           v ]
+    Mastery       Apprentice
+    Target      [ Creature          v ]
+    Risk: Higher output may strain your arm.
+( ) Attempt retreat
+
+                 Continue
+------------------------------------------
+Resolved narration is appended below.
+```
+
+All names, values, scene details and choices are illustrative, not approved powers or canon. The selected action, technique, learned numbered level and target together form one pending intent. Technique mastery tier is displayed separately from numbered technique level. Reveal contextual selectors only where needed; include non-ability actions and feasible alternatives such as communication or environmental interaction when appropriate. Retain previously learned levels within the same technique name. Do not reveal undiscovered techniques or levels. Display known prerequisites and foreseeable risks, including the possibility of partial execution or injury when appropriate; impossible actions remain impossible. Do not automatically use the highest level. No stamina or mana resource is added.
+
+Dropdown browsing, reading and changing targets do not advance time. Continue submits the selected intent once; combat uses the shared fictional clock, and NPC actions resolve independently in the actual elapsed interval. Combat initiative, action durations, simultaneous resolution, targeting details and damage formulas remain undecided; this layout does not establish fixed turns or guarantee retreat or attack success. Append resolved narrative and refresh valid actions without deleting prior history.
+
+Acceptance checks (pending implementation): mobile legibility; named dropdowns only show character-known levels; selection can change without mutation; Continue commits once; warnings respect player knowledge; unknown enemy state is not exposed; NPCs can act independently during elapsed time; prior narration and status access remain intact. No engine or runtime implementation. Layout is a proposal pending owner review.
