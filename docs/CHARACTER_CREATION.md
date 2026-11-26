@@ -142,3 +142,12 @@ Use the clean character-creation style already approved: dark background without
 Documentation only. No game code, assets, or saves modified; no runtime tests performed.
 
 
+
+## Ability acquisition reference comparison — 2026-11-26
+
+The owner directed use of both references for the ability system. This authorizes reference-based design, not automatic adoption of all mechanics or story canon.
+
+- [Hero or Villain: Genesis — official publisher description](https://www.choiceofgames.com/2019/09/new-hosted-game-hero-or-villain-genesis-by-adrao-and-tokyo-wizard-is-on-steam/): offers player selection among many powers. Use the general concept of customizable ability choices, not its prose, characters, exact power catalog, prices, or story.
+- [Living Superhuman World — canon at inspected revision](https://github.com/jbob-coder/Novel-story-rpg-game-chat-gpt/blob/019175c6463ff31807a0f7013d91299add94913c/docs/CANON.md) and [decisions](https://github.com/jbob-coder/Novel-story-rpg-game-chat-gpt/blob/019175c6463ff31807a0f7013d91299add94913c/docs/DECISIONS.md): immediate, delayed and absent human awakening are approved there. Its specific Day -30 opening, Day 0 cosmic shockwave, protagonist and events belong to that separate project. Its current narrative does not use RPG attributes, XP or ranks; do not import that exclusion into GODSEED.
+
+Proposed synthesis for GODSEED: offer meaningful player power customization while allowing unequal awakening timing among characters and the possibility of remaining unpowered. Separate selection of potential from actual possession and mastery. An unawakened character cannot use an unmanifested ability. Whether initial power selection defines an already active ability, a latent potential, or a choice at awakening remains an owner decision. The timing/origin of GODSEED's awakening phenomenon, allocation budget, ability count, and exact NPC distribution are open. No canon from another world is imported and no code is implemented.
