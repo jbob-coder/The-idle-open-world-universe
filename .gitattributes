@@ -1,2 +1,0 @@
-# Preserve the generated Windows launcher and recognize its native CRLF lines.
-android/gradle/gradlew.bat whitespace=cr-at-eol
