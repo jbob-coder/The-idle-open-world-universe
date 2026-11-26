@@ -16,6 +16,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [Local population and employment](docs/POPULATION_AND_EMPLOYMENT.md) | First B2 roster, establishments and employment lifecycle |
 | [Local life and economic baseline](docs/LOCAL_LIFE.md) | Residence anchors, work windows and budget scenarios |
 | [World time and activity resolution](docs/TIME_AND_ACTIVITY.md) | Approved pause, interruptions and foreseeable consequence warnings |
+| [NPC autonomous architecture V2](docs/NPC_ARCHITECTURE.md) | Proposed five-layer workflow, integration contracts and verification plan |
 
 ## Authority and continuity
 
