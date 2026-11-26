@@ -175,3 +175,9 @@ A character may develop multiple techniques and applications of their one superh
 Illustrative example (not a finalized power catalog): a character with one heat-manipulation ability might develop concentrated heating and controlled heat dispersal, combine those techniques, and improve or evolve them through mastery. The exact mechanics of combinations, whether combinations may involve other characters, whether the core ability itself can evolve, limits, costs, prerequisites and progression formulas remain open. Do not assume automatic evolution, guaranteed success, instant mastery or independent additional powers. Keep the superhuman profile and field mastery distinct as documented in CHARACTER_STATUS.md.
 
 Documentation only; no game code or runtime tests performed.
+
+## Spatial rifts and experience — owner direction (2026-11-26)
+
+The cosmic shockwave can also create rifts in space. These rifts provide access to places where superheroes can enter and earn experience (XP). This is a progression opportunity, distinct from fallen meteorites, which offer ability acquisition according to meteorite type. Preserve the one-superhuman-ability limit and the approved ability-specific capabilities, technique development, combinations and evolution.
+
+The preceding discussion proposed ability-specific XP and mastery as separate from general character progression. The owner explicitly established XP opportunities through rifts; the exact XP destination (general, ability-specific, or both), award conditions, thresholds, and automatic versus learned technique unlocks remain open. The contents of rifts, access eligibility (including villains, civilians and unpowered characters), entry and exit mechanics, hazards, frequency, duration, rewards and consequences also remain undecided. Do not assume monsters, mandatory combat, a dungeon structure, or guaranteed XP merely for entering. No game code or runtime tests performed.
