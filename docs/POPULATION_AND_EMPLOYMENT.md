@@ -89,3 +89,7 @@ No engine code, save data or runtime tests are included.
 ## Residence and schedule extension — 2026-11-26
 
 See [LOCAL_LIFE.md](LOCAL_LIFE.md) for all twelve household assignments, reference work windows and organization reserves. Actual attendance, public service hours, opening state and family details remain undefined. Prior NPC IDs, ages, roles and wage rates are unchanged.
+
+## Interrupted employment and warnings — 2026-11-26
+
+Leaving a shift without authorization should warn of foreseeable possible consequences before submission. The player may still leave or request permission. Supervisor decisions depend on actual policy, evidence and circumstances; no automatic punishment or forfeiture of earned wages. Preserve actual compensable work and distinguish outstanding pay from unworked future time. See [TIME_AND_ACTIVITY.md](TIME_AND_ACTIVITY.md).

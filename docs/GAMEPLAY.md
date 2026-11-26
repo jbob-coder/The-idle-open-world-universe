@@ -99,3 +99,7 @@ Documentation only. Exact time model, progression formulas, condition/resource m
 ## Currency display — 2026-11-26
 
 Use Credits, not dollars or generic coins. Keep clean and dirty balances distinct; the compact display and knowledge rules are defined in [ECONOMY.md](ECONOMY.md). The previous monetary examples are illustrative only.
+
+## Approved clock and consequence warnings — 2026-11-26
+
+The clock remains paused while reading, selecting choices or checking status; Continue submits the action once, and NPCs advance independently in the same resolved fictional interval. Meaningful interruptions preserve elapsed time and partial progress. Show foreseeable material consequences inline before submission, without a second confirmation or forced compliance. See [TIME_AND_ACTIVITY.md](TIME_AND_ACTIVITY.md) for the approved rules and proposed resolution contract. Exact timing formulas and trigger criteria remain open.

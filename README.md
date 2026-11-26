@@ -15,6 +15,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [Currency and financial knowledge](docs/ECONOMY.md) | Clean/dirty Credits and NPC evidence boundaries |
 | [Local population and employment](docs/POPULATION_AND_EMPLOYMENT.md) | First B2 roster, establishments and employment lifecycle |
 | [Local life and economic baseline](docs/LOCAL_LIFE.md) | Residence anchors, work windows and budget scenarios |
+| [World time and activity resolution](docs/TIME_AND_ACTIVITY.md) | Approved pause, interruptions and foreseeable consequence warnings |
 
 ## Authority and continuity
 
@@ -22,7 +23,7 @@ These files preserve all 19 top-level sections of the previously saved design re
 
 Current character-creation sequence: identity → background → independent field mastery → alignment. A final review before gameplay was proposed; class and superhuman ability acquisition are unresolved. Undefined is an approved alignment option alongside Hero and Villain. These clarifications supersede the earlier candidate ordering and two-option wording in the source sections. The approved left-side status bubble and left-side mastery controls remain authoritative.
 
-Current world foundation: Apartment B2, 26 distinct location anchors, 25 explicit routes, no detailed map. Individual stat variation, natural ceiling 20 and age-40 plateau are approved. Exact progression formulas, combat and superhuman rules, playable starting ages, full local population/economy and engine remain pending. First roster, residence anchors, reference work windows and budget scenarios are documented; next define shared activity/time resolution and progression. Actual service availability, counterparty funding and opening state remain pending. Do not assume an engine or import legacy game data.
+Current world foundation: Apartment B2, 26 distinct location anchors, 25 explicit routes, no detailed map. Individual stat variation, natural ceiling 20 and age-40 plateau are approved. Exact progression formulas, combat and superhuman rules, playable starting ages, full local population/economy and engine remain pending. First roster, residence anchors, reference work windows and budget scenarios are documented; the shared time/interruptions and warning contract is documented; next define activity durations, NPC scheduling and progression. Actual service availability, counterparty funding and opening state remain pending. Do not assume an engine or import legacy game data.
 
 Currency direction: Credits with clean and dirty balances; NPCs do not automatically know provenance. See [economy](docs/ECONOMY.md) for the approved knowledge rule and proposed perception interaction.
 
