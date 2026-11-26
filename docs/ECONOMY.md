@@ -68,3 +68,9 @@ See [POPULATION_AND_EMPLOYMENT.md](POPULATION_AND_EMPLOYMENT.md) for initial est
 ## Local life reference — 2026-11-26
 
 [LOCAL_LIFE.md](LOCAL_LIFE.md) defines provisional opening household/organization funds, payroll and open-economy budget scenarios. This supersedes the absence of budget references, not the need to initialize actual transactions or funding. No guaranteed revenue or infinite external payer.
+
+## Persistent assets and code-protected bank storage — owner-approved (2026-11-26)
+
+After a character dies, possessions remain in the persistent world. Inheritance depends on relationships, laws and circumstances; assets can be stolen when circumstances permit. There is no automatic account-wide transfer of personal possessions, money, level, abilities, stats or mastery. The owner explicitly permits a character to create a bank account, store assets behind a code, and use the code later to unlock the stored assets, including as a successor-access mechanism. This does not grant ownership of every estate asset or transfer personal progression.
+
+Proposed safeguards: use persistent account/storage identifiers, actual deposited asset records, and atomic access/withdrawal transactions; do not duplicate assets or reset their provenance. Preserve separate clean/dirty Credit balances and evidence-based NPC knowledge. Access should depend on the defined code-protected arrangement, not automatic universal knowledge or player ownership of the world. Theft is a possible simulated event, not guaranteed loss. Exact storage types, ownership/beneficiary rules, code setup and knowledge exception for successors, bank procedures, access failures, fees and security mechanics remain open. Do not assume a real-world banking procedure or add a real credential requirement. See [GAMEPLAY.md](GAMEPLAY.md). Documentation only; no runtime implementation or tests performed.
