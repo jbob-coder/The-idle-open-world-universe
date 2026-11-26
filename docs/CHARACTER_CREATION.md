@@ -167,3 +167,11 @@ This owner direction supersedes the earlier unresolved proposal about the source
 ## One-ability limit — owner-approved (2026-11-26)
 
 Each character is limited to one superhuman ability, regardless of whether it is acquired through natural awakening or a meteorite. A character with an existing ability cannot acquire an additional ability from another meteorite. Apply the same limit to player characters and NPCs. This supersedes the earlier open question about stacking abilities across acquisition paths. Distinguish an ability from its mastery, applications, and related techniques; the detailed definition of those boundaries remains open. Ability replacement, loss, and repeat interaction behavior are not yet decided. No game code was implemented.
+
+## Technique development, combination and evolution — owner-approved (2026-11-26)
+
+A character may develop multiple techniques and applications of their one superhuman ability through training, experimentation and experience. Techniques can be combined and can evolve. Preserve the one-ability limit for players and NPCs; learning new applications does not itself grant an unrelated second ability.
+
+Illustrative example (not a finalized power catalog): a character with one heat-manipulation ability might develop concentrated heating and controlled heat dispersal, combine those techniques, and improve or evolve them through mastery. The exact mechanics of combinations, whether combinations may involve other characters, whether the core ability itself can evolve, limits, costs, prerequisites and progression formulas remain open. Do not assume automatic evolution, guaranteed success, instant mastery or independent additional powers. Keep the superhuman profile and field mastery distinct as documented in CHARACTER_STATUS.md.
+
+Documentation only; no game code or runtime tests performed.
