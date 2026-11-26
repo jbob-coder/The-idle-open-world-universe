@@ -187,3 +187,30 @@ The owner approved the proposed biological condition system connecting localized
 - Keep the narrative-first interface, existing status access, observation limits and shared fictional clock. No mandatory anatomical dashboard or new stamina/mana resource.
 
 The previously demonstrated stat values are illustrative and not balance constants. Pending design: HP/biological-state reconciliation (including zero-HP survival and prevention of invalid actions), severity thresholds, effective-attribute composition, treatment and recovery rates, vital-function criteria, stabilization, death persistence and the player-facing consequences of death. Acceptance scenarios must include localized impairment with intact reflexes; multiple concurrent injuries; deterioration and recovery during offscreen NPC activity; HP restoration without full injury repair; zero HP with survival or incapacitation; fatal vital failure regardless of displayed HP; and preservation across save/load. Documentation only; no runtime implementation or tests performed.
+
+## Single persistent world and character succession — owner-approved (2026-11-26)
+
+The owner approved creating another playable character after a previous character dies, in the same persistent world. The game creates only one world seed; a new seed is generated only after the user deletes the game's cache/data that contains the world. Do not create a new world seed on character creation, death, normal exit, reload, or ordinary New Game navigation. No in-game reseed option is authorized. The previous character's death and actual world state persist.
+
+Technical interpretation proposed for review: the owner's term "cache" refers to deliberate deletion of authoritative local game/world data, not ordinary disposable temporary cache. Store the seed and authoritative world state durably, since operating systems can clear temporary caches automatically; exact platform and deletion behavior remain open. A missing/corrupt save is not authorization to silently generate a replacement world. Seed determines reproducible generation inputs but does not replace the saved history of actions, NPCs, economic transactions, relationships, deaths and world changes. Existing menu labels and Saved Characters behavior in INTERFACE.md require reconciliation without permitting independent world seeds.
+
+### Decision questionnaire — assistant recommendations, awaiting owner review
+
+1. Timeline after death: continue from the actual world date/time; no reset to Day 1.
+2. Active characters: one player-controlled character at a time; other living characters are autonomous. Whether voluntary character switching is supported remains a decision.
+3. Succession: create a new character with an age-appropriate background and plausible life history in the existing world. Do not recreate a deceased character as the same person.
+4. Starting location: select from plausible available origins/residences, not automatic return to the old character's location.
+5. Prior character possessions and estate: remain in the world; inheritance depends on actual relationships, legal rules and access, not account ownership.
+6. Progress and powers: no automatic transfer of level, stats, techniques, money, abilities or knowledge to a successor.
+7. Historical reputation and NPC memory: persist and refer to the previous character; a successor earns a separate reputation, with connections only where justified.
+8. Death records: keep a persistent character record and factual death event; no automatic resurrection or respawn.
+9. World clock while creating a successor or outside gameplay: paused, consistent with approved time rules; any intentional time skip requires an explicit future rule.
+10. Saving: automatically persist committed events and use recoverable checkpoints, not independent world timelines; preserve the seed and simulation random state.
+11. Save recovery: recover the last consistent checkpoint plus available committed events without granting an intentional rollback or silently generating a fresh seed. Technical backup format remains open.
+12. Seed lifecycle: stable seed stored once with world identity and generation version; no player seed selector or reroll. Derive subsystem random streams from that world seed, not new independent world seeds.
+13. Data deletion: only a deliberate deletion of authoritative game data produces a fresh world on next launch; do not expose routine cache eviction as a reset. Actual deletion controls and warnings depend on the future platform.
+14. Menu: New Game creates a character in the existing world (or initializes the world on first launch); Continue resumes a valid active character; Saved Characters shows the roster/history, never independent world saves. Voluntary switching remains open.
+15. NPC/world continuity: all surviving NPCs, settlements, rifts, institutions, resources and consequences persist; the new protagonist is not the center of the world.
+16. Knowledge boundaries: previous playthrough knowledge is not automatically character knowledge; only valid in-world learning and observations unlock information.
+
+Only the single-seed and post-death character succession rules were explicitly approved in this turn. The numbered answers are assistant recommendations for owner review, not locked decisions beyond already approved rules. No game data was deleted and no seed was generated. Documentation only; no runtime code or tests performed.
