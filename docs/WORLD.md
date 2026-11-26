@@ -95,3 +95,7 @@ All initial links are bidirectional design connections subject to actual access,
 The design data was checked for unique location IDs and coordinate triples, unique undirected route pairs, connectivity from B2, inclusion within the planning envelope, and route lengths no shorter than the corresponding 3D straight-line endpoint separation. All checks passed on these authored records. This establishes logical connectivity, not surveyed shoreline or geometric area non-overlap; no polygon boundaries or detailed map were created. All 14 anchors and 13 links are reachable within the proposed graph.
 
 Initial daily-life coverage: shelter, groceries, basic outpatient care, education, transport access, potential civilian employment, exercise and waterfront access. Actual availability and affordability are not guaranteed. Emergency hospital, larger institutions, utility network, detailed residences, road extensions, bus destinations, NPC population and economic data remain future work. No game code, assets or saves modified; no runtime tests performed.
+
+## Local population extension — 2026-11-26
+
+See [POPULATION_AND_EMPLOYMENT.md](POPULATION_AND_EMPLOYMENT.md) for the delegated first roster and organizations at existing anchors. This supersedes the earlier absence of named staff as a design reference only; current presence, access and hours remain unknown. The 14 anchors and 13 links remain unchanged.

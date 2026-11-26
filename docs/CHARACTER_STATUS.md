@@ -49,3 +49,7 @@ Documentation only; no implementation or engine tests performed.
 ## Financial status — 2026-11-26
 
 Display the character's clean and dirty Credit balances separately. NPCs cannot read private provenance or balances automatically. See [ECONOMY.md](ECONOMY.md) for evidence-based knowledge and proposed perception interaction.
+
+## Employment integration — 2026-11-26
+
+See [POPULATION_AND_EMPLOYMENT.md](POPULATION_AND_EMPLOYMENT.md) for the proposed agreement and professional development lifecycle. Track only actual employment and experience; preserve independent field mastery and the player's choice of work.
