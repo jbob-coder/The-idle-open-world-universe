@@ -85,3 +85,7 @@ Pending implementation checks:
 Next design increment: establish household/residence anchors as needed, actual staffing/shift and opening-state policy, initial resource budgets and economic flows for these organizations. Then specify time/activity resolution and progression. Do not expand geography unnecessarily or treat the initial named roster as the entire settlement.
 
 No engine code, save data or runtime tests are included.
+
+## Residence and schedule extension — 2026-11-26
+
+See [LOCAL_LIFE.md](LOCAL_LIFE.md) for all twelve household assignments, reference work windows and organization reserves. Actual attendance, public service hours, opening state and family details remain undefined. Prior NPC IDs, ages, roles and wage rates are unchanged.

@@ -64,3 +64,7 @@ The purchasing-power reference and initial example price/wage benchmarks are app
 ## Employment extension — 2026-11-26
 
 See [POPULATION_AND_EMPLOYMENT.md](POPULATION_AND_EMPLOYMENT.md) for initial establishment and role records, reference wages, employment lifecycle and funding/ledger constraints. Candidate roles are not live vacancies. Actual balances, operating budgets, prices, pay obligations and payment schedules still require initialization.
+
+## Local life reference — 2026-11-26
+
+[LOCAL_LIFE.md](LOCAL_LIFE.md) defines provisional opening household/organization funds, payroll and open-economy budget scenarios. This supersedes the absence of budget references, not the need to initialize actual transactions or funding. No guaranteed revenue or infinite external payer.

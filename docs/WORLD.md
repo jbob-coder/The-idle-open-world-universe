@@ -99,3 +99,24 @@ Initial daily-life coverage: shelter, groceries, basic outpatient care, educatio
 ## Local population extension — 2026-11-26
 
 See [POPULATION_AND_EMPLOYMENT.md](POPULATION_AND_EMPLOYMENT.md) for the delegated first roster and organizations at existing anchors. This supersedes the earlier absence of named staff as a design reference only; current presence, access and hours remain unknown. The 14 anchors and 13 links remain unchanged.
+
+## Local residence anchors — 2026-11-26
+
+Twelve minimal dwelling anchors extend the existing 14 locations. The public/approach links below are authored bidirectional walking connections; private entry requires permission. Coordinates use the existing B2 local frame. The school and harbor approach references are not permission to cross restricted interiors. No prior coordinate or route is changed. See [LOCAL_LIFE.md](LOCAL_LIFE.md) for household assignments.
+
+| ID | Location | X m | Y m | Z m | Connection | Route ID | Distance m |
+|---|---|---:|---:|---:|---|---|---:|
+| LOC-0015 | Apartment B1 | -7 | 0 | 3 | LOC-0002 | RTE-0014 | 14 |
+| LOC-0016 | Residential dwelling 01 | 138 | 42 | 0 | LOC-0005 | RTE-0015 | 50 |
+| LOC-0017 | Residential dwelling 02 | 126 | 52 | 0 | LOC-0005 | RTE-0016 | 50 |
+| LOC-0018 | Residential dwelling 03 | 160 | 82 | 0 | LOC-0005 | RTE-0017 | 100 |
+| LOC-0019 | Residential dwelling 04 | 136 | 92 | 0 | LOC-0005 | RTE-0018 | 95 |
+| LOC-0020 | Town dwelling 01 | 266 | -18 | 0 | LOC-0006 | RTE-0019 | 55 |
+| LOC-0021 | Town dwelling 02 | 276 | -28 | 0 | LOC-0006 | RTE-0020 | 55 |
+| LOC-0022 | Inland dwelling 01 | 116 | 272 | 0 | LOC-0011 | RTE-0021 | 55 |
+| LOC-0023 | Inland dwelling 02 | 176 | 272 | 0 | LOC-0011 | RTE-0022 | 55 |
+| LOC-0024 | Waterfront dwelling 01 | 466 | -158 | 0 | LOC-0013 | RTE-0023 | 60 |
+| LOC-0025 | Waterfront dwelling 02 | 456 | -148 | 0 | LOC-0013 | RTE-0024 | 70 |
+| LOC-0026 | Residential dwelling 05 | 86 | 62 | 0 | LOC-0005 | RTE-0025 | 60 |
+
+Current baseline: 26 location anchors and 25 links; every new residence connects to the previously connected network. Unique positions and feasible route lengths were checked. Geometric non-overlap is not proven; no map or footprints created.
