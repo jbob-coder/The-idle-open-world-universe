@@ -335,4 +335,20 @@ Calculate cost using the persistent allocation-eligible attribute value, excludi
 
 The owner established level 20 as the maximum general character level for a human without superhuman progression. This is distinct from the natural-human attribute ceiling of 20; reaching character level 20 does not automatically maximize any attribute. Preserve the fixed award of two stat points per level gained, the progressive allocation costs, saved unspent points and irreversible confirmed spending. Example only: if starting at level 1 with no prior earned points, reaching level 20 yields 19 level-ups and 38 stat points. At the illustrative attribute value of 8, one increase to 20 costs 27 points, leaving 11 points from that budget, assuming no other expenditures or growth.
 
-The superhuman character level cap, progression across awakening, XP handling at the human cap, and exact starting level remain open. Do not infer a superhuman limit or reset of previous development. Documentation only; no game code or runtime tests performed.
+The superhuman character level cap is defined in the delegated decision below. XP handling at the human cap and exact starting level remain open. Documentation only; no game code or runtime tests performed.
+
+### Superhuman character level cap — delegated balancing decision (2026-11-26)
+
+The owner requested calculation based on the approved human level cap and F–S power scale and delegated the decision. Adopt a maximum general character level of 160 for superhumans as the design baseline. Use the human cap of 20 as a progression-budget reference and seven power grades (F, E, D, C, B, A, S) as a measure of the intended breadth of superhuman development. The chosen extension is seven blocks of 20 levels: 20 + 7 × 20 = 160. These are planning units, not rank unlocks or required level bands. The block size is a deliberate design choice, not a measured relationship between level and power.
+
+Sensitivity comparison assuming a level-1 start, zero initial points and two points per level gained:
+
+| Extension per grade (planning units) | Superhuman cap | Total earned points at cap | Extra points above human cap |
+|---:|---:|---:|---:|
+| 10 | 90 | 178 | 140 |
+| 15 | 125 | 248 | 210 |
+| 20 | 160 | 318 | 280 |
+
+The human cap yields 38 points under the same assumptions. The selected cap gives a wider long-term specialization budget across ordinary and enhanced capabilities; it is not a promise of specific combat strength. For comparison, raising all 28 illustrative natural physical, mental and social attributes from 8 to 20 using the current natural-reference cost schedule would cost 28 × 27 = 756 points, assuming all were eligible and no other development. This is a sensitivity example, not a rule that all attributes must be purchasable or maxed. Superhuman-specific point costs and eligibility require separate calibration.
+
+On awakening through an approved acquisition path, retain the character's existing level, earned and spent points, attributes, mastery and history; unlock the higher general level cap without granting free levels or forcing the character to reach human level 20 first. Preserve the natural attribute ceiling of 20, the two-point award, permanent confirmed allocations and banked unspent points. Character level and F–S power classification remain independent: a level-160 character is not automatically S rank, and an S-ranked capability need not require level 160. Official hero rank, villain threat classification and ability mastery remain separate. No new grade, automatic awakening, or universal monster level cap is established. XP curve, pacing, cap overflow, superhuman attribute limits and conversion, and power-grade assessment require future calibration. No runtime implementation or tests performed.
