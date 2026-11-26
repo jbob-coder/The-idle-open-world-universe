@@ -189,3 +189,11 @@ Spatial rifts created by the cosmic shockwave connect the game's alternate Earth
 ## Rift completion conditions and time limits — owner-approved (2026-11-26)
 
 Rifts do not all follow the same closure or completion rules. Some have conditions that must be fulfilled. Others have a time limit; when it expires, affected occupants may be forcibly expelled from the rift or incur a penalty, depending on the rift's rules. Do not assume every timed rift expels occupants, every condition-based rift has a deadline, or every rift closes immediately upon completion. Specific conditions, penalties, destinations after forced expulsion, closure timing and whether these rules can coexist remain to be defined. Rifts can be higher level, but the owner's description of higher-level rifts is not yet complete; do not infer their special mechanics. The shared fictional clock and paused decision-reading rule remain in effect; no real-world countdown is authorized. No game code or runtime tests performed.
+
+## Rift diversity and difficulty — owner-approved (2026-11-26)
+
+Rifts vary substantially in scale, danger, environment and mission requirements. Higher-level rifts may lead to larger places, contain more dangerous creatures or other hazards, or present more complex problems. Difficulty is not exclusively combat strength or physical size.
+
+Some destinations resemble other historical eras, with settlements, inhabitants and social circumstances. A mission may require understanding the local situation, finding a solution and fulfilling completion conditions rather than defeating creatures. Multiple mission types and solutions are possible; do not force every rift into a monster-clearing dungeon or a fixed solution. Inhabitants retain independent agency and knowledge boundaries. This does not establish literal time travel to Earth's past.
+
+The owner also introduced a system that informs characters; the exact information it communicates and when remains to be clarified. Preserve existing condition-based and timed rift rules. Ranking scale, mission generation, rewards, failure consequences, accessibility and persistence remain open. No game code or runtime tests performed.
