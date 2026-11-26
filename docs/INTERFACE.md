@@ -69,4 +69,10 @@ Animation speed, timing, and implementation technology remain undecided. No sour
 
 The appearance and menu labels are approved. Detailed save management and settings are not yet approved. No code or assets changed; no engine tests run. Next design stage: character identity / New Game first panel.
 
+## Persistent-world save and load navigation — owner-approved (2026-11-26)
 
+The owner approved one persistent universe and one active player-controlled character at a time, with new characters created within the same world. The owner requires a maximum of three save slots; when all are occupied, an existing slot must be explicitly overwritten to save into it. Committed actions are automatically saved; backups are for technical recovery, not intentional rollback. Load requires two-step verification. New Game creates a character in the existing world (initializes the world only on first launch); Continue resumes the valid active character. Preserve the approved visual menu direction. Saved Characters remains a character roster/history concept, not permission for separate worlds.
+
+Proposed UI interpretation: the first Load step selects and reviews a slot, showing character, fictional date/time and validity; the second explicitly confirms loading. Make occupied-slot replacement deliberate and identify the selected slot. Cancellation makes no changes. This two-step Load safeguard is distinct from ordinary gameplay Continue, which still submits once without extra confirmation. Do not silently replace a seed or erase persistent history on load or overwrite.
+
+Open conflict to resolve: whether older slots are intended to restore older game state despite the approved prohibition on intentional rollback. Recommended default is three slots referencing one authoritative timeline with safe recovery/reconciliation, not three independent timelines. Exact slot contents, autosave rotation/overwrite policy, Load entry placement, and voluntary character switching remain open. See [GAMEPLAY.md](GAMEPLAY.md). Documentation only; no implementation or tests performed.
