@@ -22,6 +22,34 @@ Owner-approved direction, 2026-11-26.
 
 The header's center retains character name, current/max health and currency. Proposed compact display: 250 CR · 80 DCR. In the full status panel, label both balances explicitly. The values are examples, not starting funds. Final compact layout remains subject to mobile review. Physical and digital payment support was proposed but not finalized.
 
+## Purchasing power and initial economic reference — approved 2026-11-26
+
+One Credit has approximately the purchasing power of one modern US dollar as a familiar design reference, not a real-world exchange rate. This applies to the nominal unit regardless of clean or dirty provenance.
+
+### Apartment B2 coastal settlement — reference prices
+
+| Item or service | Reference price |
+|---|---:|
+| Bottled water | 1 CR |
+| Local bus ride | 2 CR |
+| Basic breakfast | 4 CR |
+| Local restaurant meal | 8 CR |
+| Modest apartment rent | 650 CR/month |
+
+### Reference wages
+
+| Work category | Reference gross hourly pay |
+|---|---:|
+| Entry-level worker | 12 CR |
+| Skilled worker | 18–25 CR |
+| Experienced specialist | 30–50 CR |
+
+These are approved balancing references, not fixed prices for every seller, a guaranteed job or a universal wage law. Actual prices and pay depend on the region, supply, demand, qualifications, contracts and economic conditions. Apartment B2's actual tenure and rent remain character-dependent; the apartment benchmark does not establish its individual rent.
+
+Illustrative monthly budget: 160 paid hours × 12 CR/hour = 1,920 CR gross; estimated living expenses 1,368 CR leave 552 CR before taxes and other unspecified deductions. The expense total is a placeholder, not an itemized or validated cost-of-living model.
+
+Clean and dirty Credits have the same nominal value; underground prices may differ due to scarcity, demand and risk, not an automatic currency multiplier. Preserve the separate provenance ledger and evidence-based NPC knowledge rules.
+
 ## Pending implementation checks
 
 - [ ] Legitimate and illicit-origin earnings maintain separate authoritative balances.
@@ -31,4 +59,4 @@ The header's center retains character name, current/max health and currency. Pro
 - [ ] Distinguish observation, suspicion and confirmed knowledge; preserve independent NPC memory and decisions.
 - [ ] Financial updates reconcile with the transaction ledger; do not duplicate currency or infer provenance from alignment.
 
-Purchasing power, prices, wages, starting balances, banking, transfers, conversion mechanics, market restrictions and numerical attribute checks remain undecided. No game code or runtime tests are included.
+The purchasing-power reference and initial example price/wage benchmarks are approved. Actual local prices and wages, itemized living expenses, starting balances, taxes, banking, transfers, conversion mechanics, market restrictions and numerical attribute checks remain undecided. No game code or runtime tests are included.
