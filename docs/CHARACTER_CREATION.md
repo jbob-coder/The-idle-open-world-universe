@@ -209,3 +209,9 @@ This decision supersedes the earlier unresolved reference to system-supplied rif
 ## Rift clearance notification — owner-approved (2026-11-26)
 
 When a rift's actual clearance conditions have been fulfilled, the system notifies the characters involved with a message stating that the rift has been cleared. Example wording: "Rift cleared." The notification confirms an achieved outcome; it does not disclose hidden objectives, conditions, difficulty, deadlines or rewards in advance. Preserve discovery-based reconnaissance and the authoritative fictional timeline. Do not issue clearance merely because a character believes the mission is finished. Exact recipients, notification presentation, reward settlement, post-clearance exit and closure behavior remain open. No game code or runtime tests performed.
+
+## Post-clearance choice and automatic closure timer — owner-approved (2026-11-26)
+
+After the system confirms that a rift has been cleared, characters have the option to return to Earth or remain inside. Characters who remain are given a countdown before the rift automatically closes. This post-clearance countdown is distinct from any time limit governing the original mission and is disclosed to the affected characters. It does not reveal hidden mission conditions before clearance.
+
+The countdown follows fictional game time, not real-world time spent reading, reviewing decisions or checking status. Preserve the approved action-duration and interruption rules. The exact countdown duration, whether it varies by rift, voluntary exit mechanics, re-entry, and what happens to occupants who remain when closure occurs are not yet established. Do not assume automatic expulsion, death, entrapment or a penalty at post-clearance closure. This decision supersedes the earlier open question about whether remaining after clearance is permitted. No game code or runtime tests performed.
