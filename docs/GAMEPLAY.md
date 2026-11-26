@@ -214,3 +214,26 @@ Technical interpretation proposed for review: the owner's term "cache" refers to
 16. Knowledge boundaries: previous playthrough knowledge is not automatically character knowledge; only valid in-world learning and observations unlock information.
 
 Only the single-seed and post-death character succession rules were explicitly approved in this turn. The numbered answers are assistant recommendations for owner review, not locked decisions beyond already approved rules. No game data was deleted and no seed was generated. Documentation only; no runtime code or tests performed.
+
+## World persistence questionnaire — all 16 decisions owner-approved (2026-11-26)
+
+The owner explicitly approved all 16 questionnaire answers above, modifying answers 5, 6 and 11. This section supersedes their pending-review status and conflicting earlier proposals.
+
+1. The timeline does not reset on death; the successor enters the current world date/time.
+2. Only one character is player-controlled at a time. Other living characters act autonomously. Whether voluntary switching is allowed remains unresolved.
+3. Each newly created character has a unique identity and personal history; a deceased character is not recreated as the same person.
+4. Starting location is plausible for the character's background, residence and circumstances.
+5. Previous possessions remain in the world. Inheritance depends on relationships, laws and circumstances. Possessions can also be stolen when circumstances permit; no guaranteed transfer or theft.
+6. Levels, abilities, mastery, attributes and money are individual; no automatic transfer. The owner permits a bank account with assets locked behind a code, which can be unlocked later using the code. This is an access mechanism for existing stored assets, not transfer of personal progression. See [ECONOMY.md](ECONOMY.md). Exact code-knowledge and access rules remain open.
+7. NPC memories and relationships persist; do not automatically attach another person's reputation to a successor.
+8. Preserve deceased-character history, accomplishments and actual circumstances of death, with knowledge boundaries.
+9. The world clock is paused during character creation, consistent with the existing pause rule.
+10. Automatically save committed actions with recovery checkpoints.
+11. No intentional rollback; backups are for technical recovery. The owner additionally requires only three save slots, explicit overwrite when all are occupied, and two-step verification for Load. See [INTERFACE.md](INTERFACE.md). The exact meaning of loading an older slot is unresolved; do not infer permission to rewind world history or create a parallel timeline.
+12. One automatically generated world seed per persistent universe; no manual selection or reroll.
+13. A new universe requires deliberate deletion of authoritative local game/world data, not ordinary temporary cache eviction.
+14. New Game creates another character in the existing universe, except first initialization.
+15. The surviving world, NPCs, institutions, economies, rifts and consequences continue independently of previous protagonists when fictional time advances.
+16. A new character does not automatically inherit player knowledge; character knowledge originates from valid in-world experiences. The code-protected bank access exception in answer 6 needs an explicit rule on how the successor may obtain or enter the code without silently inheriting all prior knowledge.
+
+Implementation recommendation (not an additional owner decision): use one canonical world history, three user-facing slots and an internal crash-safe transaction journal. Reconcile a loaded slot to the authoritative committed history, rather than restoring an earlier world state, unless the owner explicitly changes the no-rollback rule. Slot overwrites never erase world history or other characters. Preserve random state, identities, asset ownership, death records and the committed event sequence. No runtime code, data deletion, actual seed generation or tests performed.
