@@ -12,6 +12,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [Loading screen and main menu](docs/INTERFACE.md) | Loading screen and main menu |
 | [Human attributes and age development](docs/ATTRIBUTES.md) | Human attributes and age development |
 | [World geography and Apartment B2](docs/WORLD.md) | World geography and Apartment B2 |
+| [Currency and financial knowledge](docs/ECONOMY.md) | Clean/dirty Credits and NPC evidence boundaries |
 
 ## Authority and continuity
 
@@ -20,6 +21,8 @@ These files preserve all 19 top-level sections of the previously saved design re
 Current character-creation sequence: identity → background → independent field mastery → alignment. A final review before gameplay was proposed; class and superhuman ability acquisition are unresolved. Undefined is an approved alignment option alongside Hero and Villain. These clarifications supersede the earlier candidate ordering and two-option wording in the source sections. The approved left-side status bubble and left-side mastery controls remain authoritative.
 
 Current world foundation: Apartment B2, 14 distinct location anchors, 13 explicit routes, no detailed map. Individual stat variation, natural ceiling 20 and age-40 plateau are approved. Exact progression formulas, combat and superhuman rules, playable starting ages, local population, economy and engine remain pending. Next design step: establish local population and economy, then activity/time and progression mechanics as needed. Do not assume an engine or import legacy game data.
+
+Currency direction: Credits with clean and dirty balances; NPCs do not automatically know provenance. See [economy](docs/ECONOMY.md) for the approved knowledge rule and proposed perception interaction.
 
 ## Verification scope
 

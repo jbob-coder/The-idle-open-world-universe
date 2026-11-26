@@ -25,7 +25,7 @@ Present gameplay as a continuous, text-only novel within a living world. This sp
 ## Layout sketch
 ```text
 Day 01          Character name         Location
-08:42 AM        HP 100/100 | Coins 250
+08:42 AM        HP 100/100 | 250 CR
 (...)
 ------------------------------------------------
           Centered novel reading column
@@ -80,7 +80,7 @@ Owner approved the expanded novel-style action flow, separation of training prog
 - Prepare for the day: roughly 45 minutes, improved readiness, no automatic permanent stat gain.
 - Repair-shop work: roughly 150 minutes including travel, possible payment and diagnostics learning, fatigue and a potential new contact.
 - Exercise: roughly 60 minutes, endurance training progress and fatigue, not an automatic permanent endurance increase.
-- Follow-up actions must depend on actual resulting location, condition, relationships, remaining opportunities and elapsed time. Example values such as $60 pay, $250 starting money and +1 progress are placeholders only.
+- Follow-up actions must depend on actual resulting location, condition, relationships, remaining opportunities and elapsed time. Example values such as 60 CR pay, 250 CR starting money and +1 progress are placeholders only.
 
 ### Acceptance criteria (pending)
 - [ ] A routine choice resolves multiple authorized steps and appends a coherent multi-paragraph passage when warranted.
@@ -95,3 +95,7 @@ Owner approved the expanded novel-style action flow, separation of training prog
 Documentation only. Exact time model, progression formulas, condition/resource mechanics, interruption policy and activity execution architecture remain open. The two-step interactive preview is scripted; no game code or assets modified, no runtime tests performed.
 
 
+
+## Currency display — 2026-11-26
+
+Use Credits, not dollars or generic coins. Keep clean and dirty balances distinct; the compact display and knowledge rules are defined in [ECONOMY.md](ECONOMY.md). The previous monetary examples are illustrative only.

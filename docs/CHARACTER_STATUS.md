@@ -45,3 +45,7 @@ Display character level, general experience and money. Keep general, superhuman 
 
 Documentation only; no implementation or engine tests performed.
 
+
+## Financial status — 2026-11-26
+
+Display the character's clean and dirty Credit balances separately. NPCs cannot read private provenance or balances automatically. See [ECONOMY.md](ECONOMY.md) for evidence-based knowledge and proposed perception interaction.
