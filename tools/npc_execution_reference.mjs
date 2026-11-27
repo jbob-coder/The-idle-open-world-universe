@@ -10,7 +10,7 @@ export function createExecutionReference(spec){
  }
  function publishOffer(o){
   // Privileged resolver supplies event-time real feasibility and prepared phases; never cognition.
-  ensure(o&&o.world_id===world&&id(o.actor_id)&&actors.has(o.actor_id)&&id(o.opportunity_id)&&id(o.action_id)&&int(o.actor_revision)&&int(o.knowledge_revision)&&int(o.valid_until)&&typeof o.feasible==="boolean"&&(o.exclusive_target===null||id(o.exclusive_target))&&int(o.credit_cap)&&o.credit_cap<=10000&&Array.isArray(o.phases)&&o.phases.length>=1&&o.phases.length<=4,"invalid offer");
+  ensure(o&&o.world_id===world&&id(o.actor_id)&&actors.has(o.actor_id)&&id(o.opportunity_id)&&id(o.action_id)&&["action","refusal"].includes(o.kind)&&int(o.actor_revision)&&int(o.knowledge_revision)&&int(o.valid_until)&&typeof o.feasible==="boolean"&&(o.exclusive_target===null||id(o.exclusive_target))&&int(o.credit_cap)&&o.credit_cap<=10000&&Array.isArray(o.phases)&&o.phases.length>=1&&o.phases.length<=4,"invalid offer");
   const a=actors.get(o.actor_id);ensure(o.actor_revision===a.revision&&o.knowledge_revision===a.knowledge_revision&&o.valid_until>=now,"stale offer");
   const order=["preparation","movement","execution","recovery"];let prev=-1,total=0,duration=0,exec=false;
   const phases=o.phases.map(p=>{
@@ -20,7 +20,14 @@ export function createExecutionReference(spec){
   });
   ensure(exec&&now+duration<Number.MAX_SAFE_INTEGER,"invalid execution duration");
   const key=o.actor_id+":"+o.opportunity_id;ensure(!offers.has(key)||offers.get(key).actor_revision!==a.revision,"duplicate current offer");
-  offers.set(key,{world_id:world,actor_id:o.actor_id,opportunity_id:o.opportunity_id,action_id:o.action_id,actor_revision:o.actor_revision,knowledge_revision:o.knowledge_revision,valid_until:o.valid_until,feasible:o.feasible,exclusive_target:o.exclusive_target,credit_cap:o.credit_cap,phases,total,duration});
+  offers.set(key,{world_id:world,actor_id:o.actor_id,opportunity_id:o.opportunity_id,action_id:o.action_id,kind:o.kind,actor_revision:o.actor_revision,knowledge_revision:o.knowledge_revision,valid_until:o.valid_until,feasible:o.feasible,exclusive_target:o.exclusive_target,credit_cap:o.credit_cap,phases,total,duration});
+ }
+ function revokeOffer(actor_id,opportunity_id,actor_revision){
+  // Privileged invalidation when real access, target or conditions change before admission.
+  ensure(id(actor_id)&&id(opportunity_id)&&int(actor_revision),"invalid revocation");
+  const a=actors.get(actor_id),key=actor_id+":"+opportunity_id,o=offers.get(key);
+  ensure(a&&a.revision===actor_revision&&o&&o.actor_revision===actor_revision,"stale or missing offer");
+  offers.delete(key);
  }
  const state=()=>({world_id:world,now,actors:[...actors.values()].map(copy),active:[...active.values()].map(copy),outcomes:[...outcomes.values()].map(copy),events:events.map(copy)});
  function startPhase(x){
@@ -33,7 +40,7 @@ export function createExecutionReference(spec){
   ensure(d&&d.kind==="intent"&&d.world_id===world&&id(d.actor_id)&&id(d.opportunity_id)&&id(d.action_id)&&["action","refusal"].includes(d.disposition)&&id(attempt_id)&&!attempts.has(attempt_id),"invalid or duplicate intent");
   const a=actors.get(d.actor_id),o=offers.get(d.actor_id+":"+d.opportunity_id);
   ensure(a&&a.life_status==="active"&&!active.has(a.actor_id)&&d.decision_tick===now&&d.actor_revision===a.revision&&d.knowledge_revision===a.knowledge_revision,"actor busy, inactive or stale intent");
-  ensure(o&&o.action_id===d.action_id&&o.actor_revision===a.revision&&o.knowledge_revision===a.knowledge_revision&&o.valid_until>=now&&o.feasible,"unavailable offer");
+  ensure(o&&o.action_id===d.action_id&&o.kind===d.disposition&&o.actor_revision===a.revision&&o.knowledge_revision===a.knowledge_revision&&o.valid_until>=now&&o.feasible,"unavailable offer");
   ensure(a.resources>=o.total&&now+o.duration<Number.MAX_SAFE_INTEGER&&a.revision<Number.MAX_SAFE_INTEGER-1,"insufficient resource or tick range");
   ensure(o.exclusive_target===null||!targets.has(o.exclusive_target),"target reserved");
   ensure(plan===null||(id(plan.plan_id)&&int(plan.plan_revision)),"invalid plan binding");
@@ -74,5 +81,5 @@ export function createExecutionReference(spec){
   ensure(outcome==="failed"||x.phases[x.phase_index].interruptible,"phase is committed");
   return finish(x,outcome);
  }
- return Object.freeze({publishOffer,admit,advanceTo,stop,nextBoundary,state});
+ return Object.freeze({publishOffer,revokeOffer,admit,advanceTo,stop,nextBoundary,state});
 }
