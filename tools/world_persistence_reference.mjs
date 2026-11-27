@@ -39,6 +39,7 @@ export function createWorldPersistenceReference(store,createExecutor,createSched
   if(cmd.kind==="publish"){ensure(exact(cmd,["kind","offer"]),"invalid publish command");x.publishOffer(cmd.offer)}
   else if(cmd.kind==="schedule"){ensure(exact(cmd,["kind","event"]),"invalid schedule command");s.schedule(cmd.event)}
   else if(cmd.kind==="submit"){ensure(exact(cmd,["kind","submission"]),"invalid submit command");s.submit(cmd.submission)}
+  else if(cmd.kind==="observe"){ensure(exact(cmd,["kind","frame"])&&typeof s.observe==="function","unsupported observation command");s.observe(cmd.frame)}
   else if(cmd.kind==="run"){ensure(exact(cmd,["kind","budget"]),"invalid run command");const v=s.run(cmd.budget);ensure(v.status!=="fault","scheduler fault; transaction not committed")}
   else throw Error("unsupported command");
  }
