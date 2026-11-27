@@ -33,11 +33,11 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [Owner questionnaire decisions](docs/OWNER_DECISIONS.md) | Latest answers and decision precedence, including entire-world rewind and non-rewindable judgement |
 | [Narrative variation and interaction rows](docs/NARRATIVE_VARIATION.md) | Prepared choices, contextual conversations, news and repetition controls |
 | [Ability catalog requirements](docs/ABILITY_CATALOG.md) | 10,000 distinct abilities, respective skill trees and hidden conditions; catalog pending |
-| [Playable prototype and platform options](docs/PROTOTYPE_PLATFORM.md) | Functional local vertical slice and Android technology alternatives |
+| [Playable prototype and platform options](docs/PROTOTYPE_PLATFORM.md) | Functional local vertical slice and selected native Android development direction |
 
 ## Authority and continuity
 
-**Latest owner decisions (2026-11-26 questionnaire):** [OWNER_DECISIONS.md](docs/OWNER_DECISIONS.md) overrides conflicting older text, especially intentional full-world rewind, non-rewindable Divine Judgement tracking, accurate NPC memory, capped/disableable NPC creation, prepared contextual choices only, and the 10,000-ability requirement. Read it before implementation. Remaining design decisions and platform selection are open; gameplay implementation is paused for documentation review.
+**Latest owner decisions (2026-11-26 questionnaire):** [OWNER_DECISIONS.md](docs/OWNER_DECISIONS.md) overrides conflicting older text, especially intentional full-world rewind, non-rewindable Divine Judgement tracking, accurate NPC memory, capped/disableable NPC creation, prepared contextual choices only, and the 10,000-ability requirement. Read it before implementation. Follow-up delegation establishes pregame biological settings, provisional population generation budgets, passive classification and a Node.js-to-native-React-Native development direction. Remaining design choices are open; gameplay implementation is paused for documentation review.
 
 These files preserve all 19 top-level sections of the previously saved design record, grouped by subject. Within a subject, later dated owner decisions supersede older conflicting proposals. The original issue remains a historical record; future approved changes should be recorded in these version-controlled files. Preserve proposal/example/pending labels; example values are not canon. The original source is [issue #76](https://github.com/jbob-coder/The-idle-open-world-universe/issues/76).
 
