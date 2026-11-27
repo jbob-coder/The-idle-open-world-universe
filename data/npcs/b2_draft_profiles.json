@@ -1,0 +1,2168 @@
+{
+  "schema_version": "0.1-proposal",
+  "status": "draft_reference_only",
+  "activation_allowed": false,
+  "source_commit": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+  "sources": [
+    {
+      "path": "docs/POPULATION_AND_EMPLOYMENT.md",
+      "blob_sha": "a679c453ab66cc7d98ab776bac3bfc3ef125d607"
+    },
+    {
+      "path": "docs/LOCAL_LIFE.md",
+      "blob_sha": "dd53a8762380708d9e8a209249bb1f90a1f3a101"
+    },
+    {
+      "path": "docs/WORLD.md",
+      "blob_sha": "31df1d9d01f2dba2acf9fa3d344f368c22bf6070"
+    }
+  ],
+  "required_unresolved": [
+    "identity.birth_date",
+    "identity.origin",
+    "identity.world_id",
+    "definitions",
+    "biography.events",
+    "biography.education",
+    "personality.traits",
+    "biology.condition",
+    "biology.needs",
+    "capabilities.attributes",
+    "capabilities.skills",
+    "capabilities.ability",
+    "spatial.current",
+    "spatial.access",
+    "social.family",
+    "social.relationships",
+    "economic.accounts",
+    "economic.assets",
+    "economic.agreement",
+    "knowledge.packet",
+    "goals.active",
+    "execution.schedule_rng",
+    "history.receipts"
+  ],
+  "profiles": [
+    {
+      "actor_id": "NPC-0001",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Mara Ellison",
+        "age_years": 44,
+        "household_id": "HH-0001",
+        "home_id": "LOC-0015",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0001",
+          "source": "population"
+        },
+        "occupation": "Caretaker",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0003",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 18,
+          "source": "population"
+        },
+        "weekly_hours": 40,
+        "weekly_gross_cr": 720,
+        "reference_window": "08:00–17:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 650,
+        "opening_clean_cash_cr": 2600,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Maintain the building and manage family commitments",
+        "reference_consideration": "Values privacy; can decline nonurgent work"
+      },
+      "history_requirements": "Maintenance experience and family commitments; verify duties and relationships.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0002",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Tessa Marin",
+        "age_years": 36,
+        "household_id": "HH-0002",
+        "home_id": "LOC-0016",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0002",
+          "source": "population"
+        },
+        "occupation": "Store manager",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0008",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 25,
+          "source": "population"
+        },
+        "weekly_hours": 40,
+        "weekly_gross_cr": 1000,
+        "reference_window": "08:00–17:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 720,
+        "opening_clean_cash_cr": 3700,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Keep the shop solvent and stocked",
+        "reference_consideration": "Balances costs and customer needs"
+      },
+      "history_requirements": "Retail operations and management authority; do not assume ownership.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0003",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Eli Mercer",
+        "age_years": 21,
+        "household_id": "HH-0003",
+        "home_id": "LOC-0017",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0002",
+          "source": "population"
+        },
+        "occupation": "Store clerk",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0008",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 12,
+          "source": "population"
+        },
+        "weekly_hours": 30,
+        "weekly_gross_cr": 360,
+        "reference_window": "09:00–16:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 550,
+        "opening_clean_cash_cr": 1200,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Save for further education",
+        "reference_consideration": "May seek a better job or reduce hours"
+      },
+      "history_requirements": "Education and retail experience; identify intended further study.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0004",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Dr. Leena Farrow",
+        "age_years": 42,
+        "household_id": "HH-0004",
+        "home_id": "LOC-0018",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0003",
+          "source": "population"
+        },
+        "occupation": "Clinician",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0009",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 45,
+          "source": "population"
+        },
+        "weekly_hours": 35,
+        "weekly_gross_cr": 1575,
+        "reference_window": "09:00–17:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 900,
+        "opening_clean_cash_cr": 7000,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Provide reliable care within available resources",
+        "reference_consideration": "Protects confidentiality and takes time off"
+      },
+      "history_requirements": "Clinical credentials and supervised practice; verify license eligibility.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0005",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Adrian Bell",
+        "age_years": 28,
+        "household_id": "HH-0005",
+        "home_id": "LOC-0019",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0003",
+          "source": "population"
+        },
+        "occupation": "Clinic assistant",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0009",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 20,
+          "source": "population"
+        },
+        "weekly_hours": 40,
+        "weekly_gross_cr": 800,
+        "reference_window": "08:00–17:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 650,
+        "opening_clean_cash_cr": 2800,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Build healthcare experience",
+        "reference_consideration": "May pursue training or change employers"
+      },
+      "history_requirements": "Healthcare support education and supervised work limits.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0006",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Jonas Reed",
+        "age_years": 39,
+        "household_id": "HH-0006",
+        "home_id": "LOC-0020",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0004",
+          "source": "population"
+        },
+        "occupation": "Workshop lead",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0010",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 25,
+          "source": "population"
+        },
+        "weekly_hours": 40,
+        "weekly_gross_cr": 1000,
+        "reference_window": "08:00–17:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 720,
+        "opening_clean_cash_cr": 4300,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Complete quality repairs and retain customers",
+        "reference_consideration": "Rejects unsafe or unprofitable work"
+      },
+      "history_requirements": "Repair trade training and lead authority; separate ownership.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0007",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Nia Solis",
+        "age_years": 23,
+        "household_id": "HH-0007",
+        "home_id": "LOC-0021",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0004",
+          "source": "population"
+        },
+        "occupation": "Repair technician",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0010",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 18,
+          "source": "population"
+        },
+        "weekly_hours": 40,
+        "weekly_gross_cr": 720,
+        "reference_window": "08:00–17:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 600,
+        "opening_clean_cash_cr": 1800,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Develop diagnostics expertise",
+        "reference_consideration": "Wants increasingly challenging work"
+      },
+      "history_requirements": "Technical training and diagnostics practice; verify experience.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0008",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Sera Hale",
+        "age_years": 33,
+        "household_id": "HH-0008",
+        "home_id": "LOC-0022",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0005",
+          "source": "population"
+        },
+        "occupation": "Teacher",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0011",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 24,
+          "source": "population"
+        },
+        "weekly_hours": 40,
+        "weekly_gross_cr": 960,
+        "reference_window": "07:00–16:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 680,
+        "opening_clean_cash_cr": 3500,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Support students and plan lessons",
+        "reference_consideration": "Has independent obligations outside school"
+      },
+      "history_requirements": "Teacher credentials, classroom experience and assigned grade.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0009",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Owen Voss",
+        "age_years": 46,
+        "household_id": "HH-0009",
+        "home_id": "LOC-0023",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0005",
+          "source": "population"
+        },
+        "occupation": "School administrator",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0011",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 25,
+          "source": "population"
+        },
+        "weekly_hours": 40,
+        "weekly_gross_cr": 1000,
+        "reference_window": "07:00–16:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 750,
+        "opening_clean_cash_cr": 4800,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Keep school operations reliable",
+        "reference_consideration": "Must allocate limited resources"
+      },
+      "history_requirements": "Administrative qualifications and financial approval authority.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0010",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Cal Rivas",
+        "age_years": 38,
+        "household_id": "HH-0010",
+        "home_id": "LOC-0024",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0006",
+          "source": "population"
+        },
+        "occupation": "Fishing crew member",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0013",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 20,
+          "source": "population"
+        },
+        "weekly_hours": 40,
+        "weekly_gross_cr": 800,
+        "reference_window": "06:00–15:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 600,
+        "opening_clean_cash_cr": 2300,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Earn stable income despite weather uncertainty",
+        "reference_consideration": "May refuse work in unsafe conditions"
+      },
+      "history_requirements": "Fishing experience, safety training and vessel access.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0011",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Iris Dane",
+        "age_years": 31,
+        "household_id": "HH-0011",
+        "home_id": "LOC-0025",
+        "employer": {
+          "state": "known",
+          "value": "ORG-0006",
+          "source": "population"
+        },
+        "occupation": "Dock operations worker",
+        "workplace": {
+          "state": "known",
+          "value": "LOC-0013",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "known",
+          "value": 18,
+          "source": "population"
+        },
+        "weekly_hours": 40,
+        "weekly_gross_cr": 720,
+        "reference_window": "06:00–15:00, 5 weekdays",
+        "unpaid_break_hours": 1,
+        "monthly_rent_cr": 620,
+        "opening_clean_cash_cr": 2500,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Maintain safe dock operations and develop logistics skills",
+        "reference_consideration": "Coordinates work but does not control other actors"
+      },
+      "history_requirements": "Dock safety training and logistics experience.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0012",
+      "record_status": "draft",
+      "control": "npc_autonomous",
+      "reference": {
+        "name": "Noel Vega",
+        "age_years": 19,
+        "household_id": "HH-0012",
+        "home_id": "LOC-0026",
+        "employer": {
+          "state": "absent",
+          "source": "population"
+        },
+        "occupation": "Seeking work",
+        "workplace": {
+          "state": "not_applicable",
+          "source": "local_life"
+        },
+        "gross_rate_cr_per_hour": {
+          "state": "not_applicable",
+          "source": "population"
+        },
+        "weekly_hours": 0,
+        "weekly_gross_cr": 0,
+        "reference_window": "None",
+        "unpaid_break_hours": 0,
+        "monthly_rent_cr": 500,
+        "opening_clean_cash_cr": 2400,
+        "opening_dirty_cash_cr": 0,
+        "reference_goal": "Find suitable paid work and continue learning",
+        "reference_consideration": "Can compete for jobs or reject unsuitable offers"
+      },
+      "history_requirements": "School completion and previous employment status; verify age-appropriate history.",
+      "unresolved": [
+        {
+          "field": "identity.birth_date",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 calendar and opening date"
+        },
+        {
+          "field": "identity.origin",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Coherent generated or authored origin"
+        },
+        {
+          "field": "identity.world_id",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 world registration"
+        },
+        {
+          "field": "definitions",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Species/anatomy and definition versions"
+        },
+        {
+          "field": "biography.events",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Dated, source-tagged prehistory and learning"
+        },
+        {
+          "field": "biography.education",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Age-appropriate school and qualifications"
+        },
+        {
+          "field": "personality.traits",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual trait and motivation initialization"
+        },
+        {
+          "field": "biology.condition",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Life status, HP, injuries, function"
+        },
+        {
+          "field": "biology.needs",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "NPC pregame settings and initial values"
+        },
+        {
+          "field": "capabilities.attributes",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 reviewed age and attribute rules"
+        },
+        {
+          "field": "capabilities.skills",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Evidence-backed field proficiency"
+        },
+        {
+          "field": "capabilities.ability",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "03 cosmic chronology and acquisition history"
+        },
+        {
+          "field": "spatial.current",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 opening location or transit and time"
+        },
+        {
+          "field": "spatial.access",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual residence and workplace permissions"
+        },
+        {
+          "field": "social.family",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Family identities or explicitly resolved absence"
+        },
+        {
+          "field": "social.relationships",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Directed relationships and reputation evidence"
+        },
+        {
+          "field": "economic.accounts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual opening account ownership and provenance"
+        },
+        {
+          "field": "economic.assets",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Actual inventory, title, rental and liabilities"
+        },
+        {
+          "field": "economic.agreement",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Live employment or confirmed absence at opening"
+        },
+        {
+          "field": "knowledge.packet",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Individual acquired evidence and history"
+        },
+        {
+          "field": "goals.active",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Reviewed motives, objectives and plans"
+        },
+        {
+          "field": "execution.schedule_rng",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "01 time, scheduler and individual RNG"
+        },
+        {
+          "field": "history.receipts",
+          "state": "unknown",
+          "blocking": true,
+          "reason": "Generated prehistory and actual initialization receipts"
+        }
+      ]
+    }
+  ]
+}
