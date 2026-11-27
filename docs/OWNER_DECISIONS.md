@@ -94,3 +94,18 @@ The remaining questionnaire is limited to at most ten high-impact questions per 
 5. Character background: answer not supplied. Questions 6–10 also remain unanswered; no defaults inferred.
 
 Documentation-only update. No runtime code or actual save changed. Existing universe identity and successor continuity remain authoritative. Resume the remaining questionnaire at question 5.
+
+## Final questionnaire — owner answers 5–10
+
+The owner supplied the remaining answers in the same questionnaire. The previous partial-answer section is retained as history; its statement that answers 5–10 were missing is superseded here.
+
+5. Character background: all three methods available (random generation, player-selected background, or selected background with randomized details). Each method must produce coherent age-appropriate family, residence, financial and personal histories. No guaranteed wealth, employment, or power merely because a background is selected.
+6. Difficulty: natural world difficulty independent of player strength (option C). Real local conditions, threats and opportunities determine challenge. Do not secretly scale enemies, rewards, events or NPC capabilities to player level. Natural change from actual world events is allowed.
+7. Dialogue consequences: option B (no hidden relationship consequences of the kind described in the question); the owner also says some things are decided beforehand. Preserve preauthored response and consequence rules, rather than arbitrary generated relationship changes. The exact player-facing representation of those consequences (numeric delta versus qualitative preview, and which consequences are predetermined) is not specified. Do not lock numerical presentation or guarantee an NPC response until clarified. Maintain existing knowledge boundaries and contextual response selection.
+8. Narrative perspective: owner requests examples before selecting. First-person, second-person, third-person and selectable perspective remain alternatives, not approved options. See NARRATIVE_VARIATION.md for illustrative examples.
+9. Ability catalog: develop the complete 10,000 abilities and associated trees in verified batches alongside gameplay (option B). No requirement to finish every record before the first prototype. Each batch must pass catalog validation and semantic review. Final count requirement remains 10,000 distinct core abilities, not variants or levels.
+10. Distant NPC simulation: reduced detail while retaining history (option B). Interpret the owner's "for stuff in relevant just the result save" as saving outcome summaries for irrelevant/routine offscreen activity. Preserve persistent identity, actual elapsed time, commitments, acquired information, significant events, material changes, provenance, causal dependencies and relevant interaction history. Do not erase memories or skip consequential actions. A routine summary must represent actual resolved effects, not fabricate progress. Exact detail thresholds are delegated implementation design, pending verification; if the intended meaning of "in relevant" differs, the owner may correct it.
+
+### Remaining gate
+
+Narrative perspective awaits the requested comparison; the exact age-18 initial-world alignment, preselected ability versus meteorite-type acquisition, and dialogue consequence disclosure details remain open. No new runtime implementation or tests were performed. Preserve the documentation-first requirement and no automated forced-process-termination restriction.
