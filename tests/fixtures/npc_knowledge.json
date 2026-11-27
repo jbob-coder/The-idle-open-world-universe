@@ -1605,6 +1605,248 @@
         ]
       },
       "expected": "missing-evidence"
+    },
+    {
+      "name": "equivalent reordered claim keys",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "value": "12 CR received",
+                "key": "payment"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "PASS"
+    },
+    {
+      "name": "inherited property name rejected",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ],
+        "constructor": "unexpected"
+      },
+      "expected": "extra:"
+    },
+    {
+      "name": "prototype-named property rejected",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ],
+        "__proto__": "unexpected"
+      },
+      "expected": "extra:"
     }
   ]
 }
