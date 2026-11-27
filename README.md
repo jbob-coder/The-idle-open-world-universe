@@ -28,7 +28,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [World persistence V1](docs/WORLD_PERSISTENCE.md) | Atomic memory-store journal, technical recovery and 360 combined design checks |
 | [World transactions V1](docs/WORLD_TRANSACTIONS.md) | Atomic scheduler, executor, plan and observation integration; 396 combined design checks |
 | [Durable local storage V1](docs/WORLD_DURABLE_STORAGE.md) | SQLite adapter and integrated NPC recovery; 35 verified normal-exit checks; Android force-stop testing reserved for owner |
-| [World checkpoints V1](docs/WORLD_CHECKPOINTS.md) | Four subsystem restoration contracts; 431 current reference checks; compaction not enabled |
+| [World checkpoints V1](docs/WORLD_CHECKPOINTS.md) | Integrated private restoration equivalence; 458 current reference checks; compaction not enabled |
 
 ## Authority and continuity
 
