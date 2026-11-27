@@ -38,3 +38,7 @@ Selected D then A: Node.js reference prototype, platform-neutral JavaScript/Type
 ## Final questionnaire scope adjustments
 
 Owner Q6 selects natural difficulty independent of player strength. Do not use adaptive difficulty or hidden player-level scaling. Owner Q9 approves developing the 10,000-ability catalog in verified batches alongside gameplay. This resolves the earlier staged-content approval gate; maintain the full target. Owner Q10 selects reduced-detail distant NPC simulation, preserving material outcomes and important history. No unsupported performance promises or automatic NPC-memory loss. The final narrative perspective and remaining detailed rules are open.
+
+## Final questionnaire closed (2026-11-27)
+
+The owner has selected second-person narration and numeric relationship previews, permitted alternate type-specific meteorite acquisition for an unawakened character, and delegated the age-18 initial-start chronology. See [OWNER_DECISIONS.md](OWNER_DECISIONS.md) for the authoritative decisions. Prior open-question wording is historical. Proceed with detailed design/data preparation for the playable local slice before gameplay coding; no new platform dependency, engine or release version was installed or tested.
