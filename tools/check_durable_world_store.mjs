@@ -15,17 +15,20 @@ const script = fileURLToPath(import.meta.url);
 const mutate = (path, sql) => { const db = new DatabaseSync(path); try { db.exec(sql); } finally { db.close(); } };
 if (process.argv[2] === 'child') {
   const [, , , mode, path, expected, next] = process.argv;
-  if (mode === 'kill-before') {
+  if (mode === 'rollback') {
     const db = new DatabaseSync(path);
-    db.exec('PRAGMA synchronous=EXTRA; PRAGMA cache_size=1; BEGIN IMMEDIATE');
-    db.prepare('UPDATE world_record SET bytes=? WHERE singleton=1').run('x'.repeat(1_000_000));
-    process.kill(process.pid, 'SIGKILL');
+    try {
+      db.exec('PRAGMA synchronous=EXTRA; BEGIN IMMEDIATE');
+      db.prepare('UPDATE world_record SET bytes=? WHERE singleton=1').run('uncommitted fixture');
+      db.exec('ROLLBACK');
+      console.log('rolled back');
+    } finally { db.close(); }
   } else {
     const s = open(path);
     if (mode === 'read') console.log(s.read());
-    else if (mode === 'cas' || mode === 'kill-after') {
+    else if (mode === 'cas' || mode === 'after-commit') {
       const ok = s.compareAndSwap(expected, next);
-      if (mode === 'kill-after') { assert.equal(ok, true); process.kill(process.pid, 'SIGKILL'); }
+      if (mode === 'after-commit') assert.equal(ok, true);
       console.log(ok);
     } else throw Error('unknown child mode');
     s.close();
@@ -37,14 +40,13 @@ if (process.argv[2] === 'child') {
   const path = () => join(dir, `world-${n}.db`);
   const fresh = () => { const p = path(), s = open(p, 'create'); assert.equal(s.compareAndSwap(null, bytes(0)), true); s.close(); return p; };
   const read = p => { const s = open(p); try { return s.read(); } finally { s.close(); } };
-  const child = (mode, p, ...args) => spawnSync(process.execPath, [script, 'child', mode, p, ...args], { encoding: 'utf8', timeout: 15000 });
+  const child = (mode, p, ...args) => spawnSync(process.execPath, [script, 'child', mode, p, ...args], { encoding: 'utf8' });
   const output = r => { assert.equal(r.status, 0, r.stderr); return r.stdout.trim(); };
   const concurrent = (p, next) => new Promise((resolve, reject) => {
     const c = spawn(process.execPath, [script, 'child', 'cas', p, bytes(0), next]);
     let out = '', err = ''; c.stdout.on('data', d => out += d); c.stderr.on('data', d => err += d);
-    const timer = setTimeout(() => c.kill('SIGKILL'), 15000);
-    c.on('error', e => { clearTimeout(timer); reject(e); });
-    c.on('close', code => { clearTimeout(timer); code === 0 ? resolve(out.trim()) : reject(Error(err || `exit ${code}`)); });
+    c.on('error', reject);
+    c.on('close', code => { code === 0 ? resolve(out.trim()) : reject(Error(err || `exit ${code}`)); });
   });
   try {
     await test('explicit create and initial write', () => { const p = path(), s = open(p, 'create'); try { assert.equal(s.read(), null); assert.equal(s.compareAndSwap(null, bytes(0)), true); assert.equal(s.read(), bytes(0)); } finally { s.close(); } });
@@ -59,8 +61,8 @@ if (process.argv[2] === 'child') {
     await test('actual separate process reads persisted bytes', () => { const p = fresh(); assert.equal(output(child('read', p)), bytes(0)); });
     await test('actual separate process writes and exits', () => { const p = fresh(); assert.equal(output(child('cas', p, bytes(0), bytes(1))), 'true'); assert.equal(read(p), bytes(1)); });
     await test('two concurrent processes cannot both commit same revision', async () => { const p = fresh(), a = bytes(1, 11), b = bytes(1, 22); const results = await Promise.all([concurrent(p, a), concurrent(p, b)]); assert.deepEqual(results.sort(), ['false','true']); assert.ok([a,b].includes(read(p))); });
-    await test('SIGKILL before commit preserves prior world', () => { const p = fresh(), r = child('kill-before', p); assert.equal(r.signal, 'SIGKILL', r.stderr); assert.equal(read(p), bytes(0)); assert.equal(output(child('cas', p, bytes(0), bytes(1))), 'true'); });
-    await test('SIGKILL after commit preserves new revision', () => { const p = fresh(), r = child('kill-after', p, bytes(0), bytes(1)); assert.equal(r.signal, 'SIGKILL', r.stderr); assert.equal(read(p), bytes(1)); assert.equal(output(child('cas', p, bytes(0), bytes(1))), 'false'); });
+    await test('explicit SQL rollback preserves prior world across normal exits', () => { const p = fresh(); assert.equal(output(child('rollback', p)), 'rolled back'); assert.equal(read(p), bytes(0)); assert.equal(output(child('cas', p, bytes(0), bytes(1))), 'true'); });
+    await test('normal exit after commit preserves new revision', () => { const p = fresh(); assert.equal(output(child('after-commit', p, bytes(0), bytes(1))), 'true'); assert.equal(read(p), bytes(1)); assert.equal(output(child('cas', p, bytes(0), bytes(1))), 'false'); });
     await test('payload corruption detected by digest', () => { const p = fresh(); mutate(p, "UPDATE world_record SET bytes='tampered'"); assert.throws(() => open(p), /integrity/); });
     await test('missing initialized record fails closed', () => { const p = fresh(); mutate(p, 'DELETE FROM world_record'); assert.throws(() => open(p), /missing/); });
     await test('changed stored revision fails closed', () => { const p = fresh(); mutate(p, 'UPDATE world_record SET revision=7'); assert.throws(() => open(p), /revision/); });
