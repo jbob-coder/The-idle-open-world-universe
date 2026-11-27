@@ -171,8 +171,6 @@ node tools/check_integrated_world_recovery.mjs
 
 The earlier 458 JavaScript-isolate checks remain historical results and were not rerun in this increment. The 27-case integrated checkpoint checker and 35-case execution checkpoint checker were not executed as standalone Node programs here. The current 76 tests establish the tested normal-exit validation behavior, not arbitrary abrupt shutdown, Android durability, or independently restorable compacted storage. Full-journal replay remains authoritative; no runtime module, production save, seed, canonical character, database schema or journal limit was changed.
 
-## 9. Next gate
+## 9. Segmented storage extension and next gate
 
-Design a versioned durable checkpoint and bounded active journal with retained historical evidence, exact old transaction retry detection, atomic migration, and independent identity/revision authority. Prefer lossless journal segmentation and verified archival over deleting history. Define the required trust boundary before allowing direct checkpoint restoration without full command replay. Test migration and continuation in synthetic databases before enabling compaction. Do not use a larger commit limit as a substitute for this design or truncate existing history. Keep Android force-stop testing reserved for the owner.
-
-The reference remains bounded development infrastructure. Dynamic actor state, complete belief/memory services, actual domain consequences, canonical NPC initialization, production scaling and final engine/backend selection remain pending.
+See [WORLD_JOURNAL_SEGMENTS.md](WORLD_JOURNAL_SEGMENTS.md). An experimental SQLite adapter now preserves all original command rows in lossless segments and supports verified point-in-time copy migration. Current Node verification: 97/97. Existing storage and full-journal authority are unchanged; reduced replay workload and independent checkpoint trust remain pending. Next implement a separately trusted checkpoint anchor and bounded tail replay, then verify against full historical reconstruction before enabling compaction. Android force-stop testing remains owner-only.
