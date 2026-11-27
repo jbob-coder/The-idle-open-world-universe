@@ -52,12 +52,12 @@ export function createPlanningReference(spec,decide){
   // Trusted committed execution receipt; credited work must come from actual resolution.
   ensure(receipt&&receipt.committed===true&&id(receipt.event_id)&&id(receipt.attempt_id)&&receipt.world_id===definition.world_id&&receipt.actor_id===definition.actor_id&&receipt.plan_id===definition.plan_id&&tick(receipt.tick)&&receipt.tick<Number.MAX_SAFE_INTEGER&&["completed","interrupted","failed","cancelled"].includes(receipt.outcome)&&Number.isInteger(receipt.credited_units)&&receipt.credited_units>=0,"invalid outcome receipt");
   const row={event_id:receipt.event_id,attempt_id:receipt.attempt_id,tick:receipt.tick,outcome:receipt.outcome,credited_units:receipt.credited_units};
-  if(history.has(row.event_id)){ensure(JSON.stringify(history.get(row.event_id))===JSON.stringify(row),"conflicting outcome replay");return snapshot()}
+  if(history.has(row.event_id)){ensure(JSON.stringify(history.get(row.event_id).receipt)===JSON.stringify(row),"conflicting outcome replay");return snapshot()}
   ensure(pending&&pending.attempt_id===row.attempt_id&&row.tick>=pending.started_tick&&row.tick>=lastTick,"outcome does not match active attempt");
   const s=steps.get(pending.step_id),remaining=s.units-progress.get(s.id);
   ensure(row.credited_units<=remaining,"credit exceeds remaining work");
   progress.set(s.id,progress.get(s.id)+row.credited_units);
-  history.set(row.event_id,row);pending=null;lastTick=row.tick;nextReview=row.tick+1;revision++;
+  history.set(row.event_id,{receipt:row,step_id:pending.step_id,action_id:pending.action_id,opportunity_id:pending.opportunity_id,started_tick:pending.started_tick});pending=null;lastTick=row.tick;nextReview=row.tick+1;revision++;
   return snapshot();
  }
  return Object.freeze({review,admit,settle,snapshot});
