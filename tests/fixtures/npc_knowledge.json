@@ -1,0 +1,1610 @@
+{
+  "description": "Synthetic design fixtures only. Receipts are trusted test inputs, not an implemented visibility/access engine. Ticks are abstract fictional units.",
+  "receipts": [
+    {
+      "id": "r1",
+      "world_id": "fixture-world",
+      "actor_id": "A",
+      "tick": 10,
+      "channel": "direct",
+      "claims": [
+        {
+          "key": "payment",
+          "value": "12 CR received"
+        }
+      ]
+    },
+    {
+      "id": "r2",
+      "world_id": "fixture-world",
+      "actor_id": "B",
+      "tick": 12,
+      "channel": "report",
+      "claims": [
+        {
+          "key": "payment",
+          "value": "A says 12 CR received"
+        }
+      ]
+    },
+    {
+      "id": "r3",
+      "world_id": "fixture-world",
+      "actor_id": "A",
+      "tick": 15,
+      "channel": "record",
+      "claims": [
+        {
+          "key": "payment",
+          "value": "Receipt lists 10 CR"
+        }
+      ]
+    },
+    {
+      "id": "r4",
+      "world_id": "fixture-world",
+      "actor_id": "A",
+      "tick": 16,
+      "channel": "internal",
+      "claims": [
+        {
+          "key": "pain",
+          "value": "Leg pain"
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "name": "direct evidence and contradiction",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "PASS"
+    },
+    {
+      "name": "recipient has report only",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "B",
+        "as_of_tick": 20,
+        "revision": 0,
+        "observations": [
+          {
+            "id": "o2",
+            "receipt_id": "r2",
+            "acquired_tick": 12,
+            "channel": "report",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "A says 12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [],
+        "memories": []
+      },
+      "expected": "PASS"
+    },
+    {
+      "name": "hidden balance field",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ],
+        "private_balance": 99
+      },
+      "expected": "extra:"
+    },
+    {
+      "name": "other actor receipt",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "B",
+        "as_of_tick": 20,
+        "revision": 0,
+        "observations": [
+          {
+            "id": "o2",
+            "receipt_id": "r2",
+            "acquired_tick": 12,
+            "channel": "report",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "A says 12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [],
+        "memories": []
+      },
+      "expected": "receipt-scope"
+    },
+    {
+      "name": "invented receipt",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "missing",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "receipt-scope"
+    },
+    {
+      "name": "hidden provenance inserted",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              },
+              {
+                "key": "dirty",
+                "value": "true"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "projection-mismatch"
+    },
+    {
+      "name": "report upgraded to direct",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "B",
+        "as_of_tick": 20,
+        "revision": 0,
+        "observations": [
+          {
+            "id": "o2",
+            "receipt_id": "r2",
+            "acquired_tick": 12,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "A says 12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [],
+        "memories": []
+      },
+      "expected": "projection-mismatch"
+    },
+    {
+      "name": "future evidence",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 9,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "observation-time"
+    },
+    {
+      "name": "duplicate receipt",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "other",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "duplicate-receipt"
+    },
+    {
+      "name": "duplicate observation id",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o1",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "duplicate-observation"
+    },
+    {
+      "name": "foreign belief evidence",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o2"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "foreign-evidence"
+    },
+    {
+      "name": "foreign memory evidence",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o2"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "foreign-evidence"
+    },
+    {
+      "name": "same evidence both sides",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o1"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "overlap-evidence"
+    },
+    {
+      "name": "unsupported contested belief",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "contested-evidence"
+    },
+    {
+      "name": "unsupported certainty",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "supported",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "supported-evidence"
+    },
+    {
+      "name": "irrelevant evidence",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o4"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "claim-mismatch"
+    },
+    {
+      "name": "belief predates evidence",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 11
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "belief-time"
+    },
+    {
+      "name": "memory recall precedes acquisition",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 9
+          }
+        ]
+      },
+      "expected": "memory-time"
+    },
+    {
+      "name": "same packet different universe",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "other",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "receipt-scope"
+    },
+    {
+      "name": "invalid confidence",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "certain"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [
+              "o1"
+            ],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "enum:"
+    },
+    {
+      "name": "missing evidence memory",
+      "packet": {
+        "schema_version": "0.1-proposal",
+        "world_id": "fixture-world",
+        "actor_id": "A",
+        "as_of_tick": 20,
+        "revision": 2,
+        "observations": [
+          {
+            "id": "o1",
+            "receipt_id": "r1",
+            "acquired_tick": 10,
+            "channel": "direct",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "12 CR received"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o3",
+            "receipt_id": "r3",
+            "acquired_tick": 15,
+            "channel": "record",
+            "claims": [
+              {
+                "key": "payment",
+                "value": "Receipt lists 10 CR"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "id": "o4",
+            "receipt_id": "r4",
+            "acquired_tick": 16,
+            "channel": "internal",
+            "claims": [
+              {
+                "key": "pain",
+                "value": "Leg pain"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "beliefs": [
+          {
+            "id": "b1",
+            "claim_key": "payment",
+            "interpretation": "Payment amount uncertain",
+            "status": "contested",
+            "support_ids": [
+              "o1"
+            ],
+            "contradict_ids": [
+              "o3"
+            ],
+            "revision": 1,
+            "updated_tick": 15
+          }
+        ],
+        "memories": [
+          {
+            "id": "m1",
+            "observation_ids": [],
+            "summary": "Received payment",
+            "salience": "important",
+            "acquired_tick": 10,
+            "last_recalled_tick": 18
+          }
+        ]
+      },
+      "expected": "missing-evidence"
+    }
+  ]
+}
