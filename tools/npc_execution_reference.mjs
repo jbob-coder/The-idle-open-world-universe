@@ -29,6 +29,13 @@ export function createExecutionReference(spec){
   ensure(a&&a.revision===actor_revision&&o&&o.actor_revision===actor_revision,"stale or missing offer");
   offers.delete(key);
  }
+ function syncKnowledge(actor_id,expected,next){
+  const a=actors.get(actor_id);
+  ensure(a&&int(expected)&&int(next)&&a.knowledge_revision===expected&&next>=expected,"invalid knowledge revision update");
+  if(next===expected)return;
+  ensure(a.revision<Number.MAX_SAFE_INTEGER-2,"actor revision exhausted");
+  a.knowledge_revision=next;a.revision++;
+ }
  const state=()=>({world_id:world,now,actors:[...actors.values()].map(copy),active:[...active.values()].map(copy),outcomes:[...outcomes.values()].map(copy),events:events.map(copy)});
  function startPhase(x){
   const p=x.phases[x.phase_index],a=actors.get(x.actor_id);
@@ -81,5 +88,5 @@ export function createExecutionReference(spec){
   ensure(outcome==="failed"||x.phases[x.phase_index].interruptible,"phase is committed");
   return finish(x,outcome);
  }
- return Object.freeze({publishOffer,revokeOffer,admit,advanceTo,stop,nextBoundary,state});
+ return Object.freeze({publishOffer,revokeOffer,syncKnowledge,admit,advanceTo,stop,nextBoundary,state});
 }
