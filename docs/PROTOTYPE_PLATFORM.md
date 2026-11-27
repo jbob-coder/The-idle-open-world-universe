@@ -34,3 +34,7 @@ See the follow-up in [OWNER_DECISIONS.md](OWNER_DECISIONS.md) for pregame biolog
 ## Delegated platform decision
 
 Selected D then A: Node.js reference prototype, platform-neutral JavaScript/TypeScript simulation, native React Native/Expo Android UI and mobile SQLite adapter. Existing Node-specific APIs are confined to adapters and test tooling. This is a technical direction, not an installed SDK, proven mobile build, fixed release version or guaranteed performance. Preserve the existing repository and test equivalence during porting. No HTML/WebView and no automated force-stop tests.
+
+## Final questionnaire scope adjustments
+
+Owner Q6 selects natural difficulty independent of player strength. Do not use adaptive difficulty or hidden player-level scaling. Owner Q9 approves developing the 10,000-ability catalog in verified batches alongside gameplay. This resolves the earlier staged-content approval gate; maintain the full target. Owner Q10 selects reduced-detail distant NPC simulation, preserving material outcomes and important history. No unsupported performance promises or automatic NPC-memory loss. The final narrative perspective and remaining detailed rules are open.
