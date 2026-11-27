@@ -19,6 +19,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [NPC autonomous architecture V2](docs/NPC_ARCHITECTURE.md) | Proposed five-layer workflow, integration contracts and verification plan |
 | [NPC blueprint V1](docs/NPC_BLUEPRINT.md) | Actor data contract, initialization gate and verified roster reference audit |
 | [NPC observation and memory V1](docs/NPC_MEMORY.md) | Proposed knowledge boundary, machine-readable schema and synthetic reference checks |
+| [NPC perception V1](docs/NPC_PERCEPTION.md) | Scoped information-access reference, integration and 64 executed design checks |
 
 ## Authority and continuity
 
