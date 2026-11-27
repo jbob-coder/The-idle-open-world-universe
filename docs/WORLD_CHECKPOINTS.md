@@ -143,8 +143,36 @@ Verified blobs:
 - tools/world_transaction_reference.mjs: d7e8c93fe9c98bb5550ba784a3c4962dde93c0d4
 - tools/check_integrated_checkpoints.mjs: 76fa28295d3212476c4149f0b74a5988200ef5a1
 
-## 8. Next gate
+## 8. Durable integrated checkpoint verification
 
-Run the integrated private checkpoint validation in the actual Node/SQLite environment across normal process exits, including paused and pending activities, controlled commit errors, and restoration equivalence. Then design a versioned durable checkpoint/journal format with atomic migration, independently trusted identity and revision authority, exact old transaction replay detection, and retained historical evidence. Do not truncate the existing journal or replace the current commit limit as a substitute for verified compaction. Preserve owner-approved save rules and leave Android force-stop testing exclusively to the owner.
+The integrated validation gate has now been exercised on the existing SQLite backend with real Node.js module imports and normal subprocess exits. All nine runtime module copies matched the repository Git blob hashes at baseline commit 46d584febbc134b30baa544b7c6e5bbab0636923. The test fixture exports a private checkpoint in one process and verifies it in a separately opened process against the same committed record. Checkpoint comparison and staged continuation must leave the stored bytes unchanged. No persistent checkpoint installation or journal truncation is implemented.
 
-The reference remains bounded development infrastructure. Full belief/memory consolidation, dynamic actor state, actual domain consequences, canonical NPC initialization, production scaling and final engine/backend selection remain pending.
+| Suite executed in this increment | Result |
+|---|---:|
+| New durable integrated checkpoint validation | 8/8 PASS |
+| Direct perception/planner checkpoint tests | 33/33 PASS |
+| SQLite storage | 20/20 PASS |
+| Scheduler/executor normal-exit recovery | 6/6 PASS |
+| Integrated NPC normal-exit recovery | 9/9 PASS |
+| Total current Node.js checks | 76/76 PASS |
+
+Environment: Linux development container, Node.js v22.16.0, SQLite 3.49.1 (built-in experimental node:sqlite). The local source copies required four module updates; their hashes were checked before execution. An unsupported execution parameter and unavailable streaming interface prevented two attempted commands from starting; the supported non-streaming execution succeeded. No forced termination or Android force-stop testing was used. Temporary databases and checkpoint files contain synthetic fixtures only.
+
+The eight new cases cover equivalent continuation at every committed boundary (initial revision zero through revision eleven), pending plan interruption with preserved resource costs, paused partial progress, private observation history excluded from actor views, stale checkpoint rejection, altered private frame rejection, controlled precommit error, and controlled postcommit error with exact transaction retry. All comparisons use the actual existing coordinator. The saved checker matches the locally executed blob eadb6c8dca4fed8cd59cf50f36982fb3be5d3ee0.
+
+Run from repository root with Node.js 22.16+:
+```sh
+node tools/check_durable_checkpoints.mjs
+node tools/check_world_checkpoints.mjs
+node tools/check_durable_world_store.mjs
+node tools/check_durable_world_recovery.mjs
+node tools/check_integrated_world_recovery.mjs
+```
+
+The earlier 458 JavaScript-isolate checks remain historical results and were not rerun in this increment. The 27-case integrated checkpoint checker and 35-case execution checkpoint checker were not executed as standalone Node programs here. The current 76 tests establish the tested normal-exit validation behavior, not arbitrary abrupt shutdown, Android durability, or independently restorable compacted storage. Full-journal replay remains authoritative; no runtime module, production save, seed, canonical character, database schema or journal limit was changed.
+
+## 9. Next gate
+
+Design a versioned durable checkpoint and bounded active journal with retained historical evidence, exact old transaction retry detection, atomic migration, and independent identity/revision authority. Prefer lossless journal segmentation and verified archival over deleting history. Define the required trust boundary before allowing direct checkpoint restoration without full command replay. Test migration and continuation in synthetic databases before enabling compaction. Do not use a larger commit limit as a substitute for this design or truncate existing history. Keep Android force-stop testing reserved for the owner.
+
+The reference remains bounded development infrastructure. Dynamic actor state, complete belief/memory services, actual domain consequences, canonical NPC initialization, production scaling and final engine/backend selection remain pending.
