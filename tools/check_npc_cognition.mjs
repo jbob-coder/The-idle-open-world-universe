@@ -27,7 +27,7 @@ function runCognitionTests(decide,createPerception){
  const goal={id:"learn",dimension:"growth",status:"active",urgency:8};
  test("active goal influences choice",()=>assert(run(prof({goals:[goal]}),knowledge(),[opp("study",{goal_ids:["learn"]}),work]).action_id==="study"));
  test("achieved goal does not add pressure",()=>assert(run(prof({goals:[{...goal,status:"achieved"}]}),knowledge(),[opp("z-study",{goal_ids:["learn"]}),work]).action_id==="work"));
- test("duplicate goal dimension cannot inflate pressure",()=>{const p=prof({goals:[goal,{...goal,id:"learn2"}]});assert(eq(run(p,knowledge(),[opp("study",{goal_ids:["learn"]})]),run(p,knowledge(),[opp("study",{goal_ids:["learn","learn2"]})])))});
+ test("duplicate goal dimension cannot inflate pressure",()=>{const p=prof({goals:[goal,{...goal,id:"learn2"}]});const rival=opp("rival",{effects:{...dims(),resources:10,safety:10,connection:10,duty:10,rest:10}});assert(run(p,knowledge(),[opp("study",{goal_ids:["learn"]}),rival]).action_id==="rival");assert(run(p,knowledge(),[opp("study",{goal_ids:["learn","learn2"]}),rival]).action_id==="rival")});
  test("unknown evidence requirement blocks option",()=>assert(run(prof(),knowledge(),[opp("enter",{requirements:[req()]})]).kind==="wait"));
  test("direct evidence permits consideration",()=>assert(run(prof(),knowledge([obs("rift-known","yes")]),[opp("enter",{requirements:[req()]})]).kind==="intent"));
  test("report can justify a fallible decision",()=>assert(run(prof(),knowledge([obs("rift-known","yes","report")]),[opp("enter",{requirements:[req()]})]).kind==="intent"));
@@ -54,6 +54,15 @@ function runCognitionTests(decide,createPerception){
  test("duplicate observation rejected",()=>throws(()=>run(prof(),knowledge([obs("x","y"),obs("x","y")]))));
  test("no mutation of inputs",()=>{const p=prof(),k=knowledge(),o=[opp("x")],before=JSON.stringify([p,k,o]);run(p,k,o);assert(before===JSON.stringify([p,k,o]))});
  test("actor scoped perception integration",()=>{const s=createPerception("fixture");const a={actor_id:"A",world_id:"fixture",can_acquire:true,present:true,in_range:true,detected:true,path_clear:true};const b={...a,actor_id:"B",present:false};s.ingest({world_id:"fixture",tick:10,actors:[a,b],event:{id:"rift",world_id:"fixture",tick:10,committed:true,channel:"direct",observable_claims:[{key:"rift-known",value:"yes"}],private_claims:[{key:"secret-objective",value:"hidden"}]}});const x=run(prof(),s.bindActor("A").forCognition(),[opp("enter",{requirements:[req()]})]);const y=run(prof({actor_id:"B"}),s.bindActor("B").forCognition(),[opp("enter",{actor_id:"B",requirements:[req()]})]);const z=run(prof(),s.bindActor("A").forCognition(),[opp("secret",{requirements:[{key:"secret-objective",value:"hidden",channels:["direct"]}]})]);assert(x.kind==="intent"&&y.kind==="wait"&&z.kind==="wait")});
+
+ test("deferred goal does not compel action",()=>assert(run(prof({goals:[{...goal,status:"deferred"}]}),knowledge(),[opp("z-study",{goal_ids:["learn"]}),work]).action_id==="work"));
+ test("highly valued duty remains a preference, not forced compliance",()=>{const p=prof({values:{...dims(1),duty:10},needs:{...dims(),rest:10}});assert(run(p,knowledge(),[opp("duty",{effects:{...dims(),duty:4}}),rest]).action_id==="rest")});
+ test("opportunity extra private field rejected",()=>throws(()=>run(prof(),knowledge(),[opp("x",{private_world_truth:"secret"})])));
+ test("foreign world opportunity rejected",()=>throws(()=>run(prof(),knowledge(),[opp("x",{world_id:"other"})])));
+ test("future-free review remains positive at maximum supported tick",()=>{const now=Number.MAX_SAFE_INTEGER-1;assert(run(prof({now}),knowledge(),[]).review_after_tick===Number.MAX_SAFE_INTEGER)});
+ test("private metadata cannot alter decision",()=>{const a=knowledge([obs("rift-known","yes")]);const b={...a,private_world_truth:"hidden",beliefs:[{interpretation:"secret"}]};const o=[opp("enter",{requirements:[req()]})];assert(eq(run(prof(),a,o),run(prof(),b,o)))});
+ test("negative side effects can outweigh an apparent benefit",()=>assert(run(prof({needs:{...dims(),safety:10}}),knowledge(),[opp("x",{effects:{...dims(),growth:10,safety:-5}})]).kind==="wait"));
+ test("future acquisition relative to stale snapshot rejected",()=>throws(()=>run(prof(),knowledge([obs("x","y")],{as_of_tick:8}))));
  return tests;
 }
 const results=runCognitionTests(decideNpcReference,createPerceptionReference);
