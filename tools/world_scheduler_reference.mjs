@@ -9,7 +9,7 @@ export function createWorldSchedulerReference(executor,playerId,reviewNpc){
  const order=()=>queue.sort((a,b)=>a.tick-b.tick||a.sequence-b.sequence);
  function schedule(e){
   ensure(e&&id(e.id)&&!used.has(e.id)&&e.world_id===world&&tick(e.tick)&&e.tick>=clock()&&queue.length<4096&&used.size<10000,"invalid or duplicate event");
-  const row={id:e.id,world_id:world,tick:e.tick,kind:e.kind,sequence:seq++};
+  const row={id:e.id,world_id:world,tick:e.tick,kind:e.kind,sequence:seq};
   if(e.kind==="review"){
    ensure(actorIds.has(e.actor_id)&&e.actor_id!==playerId&&tick(e.interval)&&e.interval>0,"invalid NPC review");
    row.actor_id=e.actor_id;row.interval=e.interval;
@@ -20,7 +20,7 @@ export function createWorldSchedulerReference(executor,playerId,reviewNpc){
    ensure(actorIds.has(e.actor_id)&&id(e.attempt_id)&&["interrupted","cancelled","failed"].includes(e.outcome)&&typeof e.player_observed==="boolean"&&typeof e.requires_decision==="boolean","invalid interruption");
    row.actor_id=e.actor_id;row.attempt_id=e.attempt_id;row.outcome=e.outcome;row.player_observed=e.player_observed;row.requires_decision=e.requires_decision;
   }else throw Error("unknown event kind");
-  used.add(row.id);queue.push(row);order();
+  seq++;used.add(row.id);queue.push(row);order();
  }
  function submit(cmd){
   ensure(!session&&cmd&&id(cmd.submission_id)&&!submissions.has(cmd.submission_id)&&submissions.size<10000&&tick(cmd.horizon)&&cmd.horizon>clock(),"invalid, duplicate or busy submission");
@@ -67,7 +67,7 @@ export function createWorldSchedulerReference(executor,playerId,reviewNpc){
   if(e.kind==="world"){log.result="recorded";pause(e);return log}
   const active=activity(e.actor_id);log.actor_id=e.actor_id;
   if(!active||active.attempt_id!==e.attempt_id){log.result="stale";return log}
-  try{record(executor.stop(e.actor_id,e.attempt_id,e.outcome));log.result="stopped";if(e.actor_id===playerId)pause(e)}
+  try{record(executor.stop(e.actor_id,e.attempt_id,e.outcome));log.result="stopped";pause(e)}
   catch(err){log.result="rejected";log.reason=String(err)}
   return log;
  }
