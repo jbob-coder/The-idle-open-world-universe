@@ -84,3 +84,13 @@ The owner requests biological-need options before starting the game and delegate
 - Platform (delegated): choose a platform-neutral JavaScript/TypeScript simulation core, Node.js development prototype first, followed by native React Native/Expo Android UI with SQLite adapter. No HTML/WebView game medium. Verify SDK compatibility, actual device performance and native storage behavior before finalizing release dependencies; use Kotlin as fallback only if evidence warrants a change. No paid services assumed. Owner-only Android force-stop testing remains mandatory.
 
 The remaining questionnaire is limited to at most ten high-impact questions per owner request. Gameplay coding remains paused for the documentation-first gate; delegated decisions are not implemented in this update.
+
+## Final questionnaire — partial owner answers 1–4
+
+1. Playable starting age: inclusive 5–18 years. This limits character creation, not subsequent aging or the age of NPCs.
+2. First playthrough begins before the cosmic phenomenon, with the timing dependent on selected starting age. For a character starting at age 5, play begins before the phenomenon; at age 17 the phenomenon begins. Treat this as the first-character world timeline, not a phenomenon that repeats at each successor's 17th birthday. Exact starting-date/birthday alignment for intermediate ages and the treatment of an initial age-18 start remain unresolved. Do not regenerate or move a previously committed cosmic event when a successor is created.
+3. Before starting the game, the player selects the intended ability. Selection does not grant usable power. The cosmic phenomenon is a prerequisite for unlocking it. After the phenomenon, the character may be lucky and acquire the ability at age 18, or acquire a glowing meteorite by chance discovery, other acquisition, or theft within the fictional game. No guaranteed age-18 awakening, automatic possession of a meteorite, or second core ability. Whether a meteorite always unlocks the preselected ability or can confer its own type instead, and the exact awakening probability/eligibility, remain open. Preserve existing type-specific meteorite and one-core-ability rules pending reconciliation.
+4. Separate pregame biological-need settings for player and NPC simulation (option C). Preserve mandatory injury, aging and death rules, and previously approved optional-needs direction. Exact settings/defaults remain implementation design; no new stamina/mana bar.
+5. Character background: answer not supplied. Questions 6–10 also remain unanswered; no defaults inferred.
+
+Documentation-only update. No runtime code or actual save changed. Existing universe identity and successor continuity remain authoritative. Resume the remaining questionnaire at question 5.
