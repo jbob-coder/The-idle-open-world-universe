@@ -1,6 +1,6 @@
 # GODSEED — text RPG design
 
-Current design baseline: 2026-11-26. This is the new contemporary alternate-Earth, superhuman, novel-style living-world game direction. No game implementation is included. Older branches and their history are not restored or modified.
+Current design baseline: 2026-11-26. This is the new contemporary alternate-Earth, superhuman, novel-style living-world game direction. Development reference modules exist; a complete playable game and Android application do not yet exist. Older branches and their history are not restored or modified.
 
 ## Start here
 
@@ -30,8 +30,14 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [Durable local storage V1](docs/WORLD_DURABLE_STORAGE.md) | SQLite adapter and integrated NPC recovery; 35 verified normal-exit checks; Android force-stop testing reserved for owner |
 | [World checkpoints V1](docs/WORLD_CHECKPOINTS.md) | Durable integrated restoration validation; 76 current Node checks; compaction not enabled |
 | [World journal segments V1](docs/WORLD_JOURNAL_SEGMENTS.md) | Lossless append-only SQLite storage and verified copy migration; 97 current Node checks; full replay retained |
+| [Owner questionnaire decisions](docs/OWNER_DECISIONS.md) | Latest answers and decision precedence, including entire-world rewind and non-rewindable judgement |
+| [Narrative variation and interaction rows](docs/NARRATIVE_VARIATION.md) | Prepared choices, contextual conversations, news and repetition controls |
+| [Ability catalog requirements](docs/ABILITY_CATALOG.md) | 10,000 distinct abilities, respective skill trees and hidden conditions; catalog pending |
+| [Playable prototype and platform options](docs/PROTOTYPE_PLATFORM.md) | Functional local vertical slice and Android technology alternatives |
 
 ## Authority and continuity
+
+**Latest owner decisions (2026-11-26 questionnaire):** [OWNER_DECISIONS.md](docs/OWNER_DECISIONS.md) overrides conflicting older text, especially intentional full-world rewind, non-rewindable Divine Judgement tracking, accurate NPC memory, capped/disableable NPC creation, prepared contextual choices only, and the 10,000-ability requirement. Read it before implementation. Remaining design decisions and platform selection are open; gameplay implementation is paused for documentation review.
 
 These files preserve all 19 top-level sections of the previously saved design record, grouped by subject. Within a subject, later dated owner decisions supersede older conflicting proposals. The original issue remains a historical record; future approved changes should be recorded in these version-controlled files. Preserve proposal/example/pending labels; example values are not canon. The original source is [issue #76](https://github.com/jbob-coder/The-idle-open-world-universe/issues/76).
 
@@ -43,4 +49,4 @@ Currency direction: Credits with clean and dirty balances; NPCs do not automatic
 
 ## Verification scope
 
-The migration preserves the original section text verbatim, with only new file headings and cross-reference notes. No game runtime code or runtime tests are present. Development-only design checks are documented in [NPC memory V1](docs/NPC_MEMORY.md).
+Original design sections are preserved as historical records, subject to later approved decisions. Development-only reference code and tests are present; the latest verified runtime test increment is 97 Node.js checks described in [journal segmentation](docs/WORLD_JOURNAL_SEGMENTS.md). The questionnaire update is documentation only; no runtime tests were rerun. No playable game or Android runtime has been verified.
