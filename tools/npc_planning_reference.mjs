@@ -1,5 +1,5 @@
 // Development-only in-memory plan progress reference. Trusted admission and outcome inputs.
-export function createPlanningReference(spec,decide){
+export function createPlanningReference(spec,decide,checkpoint=null){
  const ensure=(v,m)=>{if(!v)throw Error(m)}, id=v=>typeof v==="string"&&/^[A-Za-z0-9_-]{1,64}$/.test(v), tick=v=>Number.isSafeInteger(v)&&v>=0, copy=v=>JSON.parse(JSON.stringify(v));
  ensure(spec&&id(spec.world_id)&&id(spec.actor_id)&&id(spec.plan_id)&&id(spec.goal_id)&&typeof decide==="function"&&Array.isArray(spec.steps)&&spec.steps.length>0&&spec.steps.length<=32,"invalid plan");
  const definition=copy(spec),steps=new Map(),options=new Map();
@@ -60,5 +60,33 @@ export function createPlanningReference(spec,decide){
   history.set(row.event_id,{receipt:row,step_id:pending.step_id,action_id:pending.action_id,opportunity_id:pending.opportunity_id,started_tick:pending.started_tick});pending=null;lastTick=row.tick;nextReview=row.tick+1;revision++;
   return snapshot();
  }
- return Object.freeze({review,admit,settle,snapshot});
+ // Privileged checkpoint contract. Reconstruct credit and used identities from ordered outcomes.
+ function exportCheckpoint(){return {format:"planning-checkpoint-v1",definition:copy(definition),state:snapshot()}}
+ if(checkpoint!==null){
+  const exact=(o,keys)=>o&&typeof o==="object"&&!Array.isArray(o)&&Object.keys(o).length===keys.length&&keys.every(k=>Object.hasOwn(o,k));
+  function same(a,b){
+   if(a===b)return true;
+   if(!a||!b||typeof a!=="object"||typeof b!=="object"||Array.isArray(a)!==Array.isArray(b))return false;
+   if(Array.isArray(a)&&(a.length!==b.length||Object.keys(a).length!==a.length||Object.keys(b).length!==b.length))return false;
+   const keys=Object.keys(a);return keys.length===Object.keys(b).length&&keys.every(k=>Object.hasOwn(b,k)&&same(a[k],b[k]));
+  }
+  ensure(exact(checkpoint,["format","definition","state"])&&checkpoint.format==="planning-checkpoint-v1"&&same(definition,checkpoint.definition),"invalid plan checkpoint definition");
+  const saved=checkpoint.state;
+  ensure(saved&&Array.isArray(saved.history)&&saved.history.length<=256,"invalid plan checkpoint history");
+  function restoreAdmission(a){
+   ensure(exact(a,["attempt_id","step_id","opportunity_id","action_id","started_tick"])&&id(a.attempt_id)&&!attemptIds.has(a.attempt_id)&&tick(a.started_tick)&&a.started_tick<Number.MAX_SAFE_INTEGER&&a.started_tick>=lastTick&&a.started_tick>=nextReview&&history.size<256,"invalid checkpoint admission");
+   const step=steps.get(a.step_id),link=options.get(a.opportunity_id);
+   ensure(step&&link&&link.step===step.id&&link.action===a.action_id&&!done(step)&&step.requires.every(r=>done(steps.get(r))),"invalid checkpoint milestone");
+   pending={attempt_id:a.attempt_id,step_id:a.step_id,opportunity_id:a.opportunity_id,action_id:a.action_id,started_tick:a.started_tick};
+   attemptIds.add(a.attempt_id);lastTick=a.started_tick;revision++;
+  }
+  for(const h of saved.history){
+   ensure(exact(h,["receipt","step_id","action_id","opportunity_id","started_tick"])&&exact(h.receipt,["event_id","attempt_id","tick","outcome","credited_units"])&&!history.has(h.receipt.event_id),"invalid checkpoint outcome");
+   restoreAdmission({attempt_id:h.receipt.attempt_id,step_id:h.step_id,opportunity_id:h.opportunity_id,action_id:h.action_id,started_tick:h.started_tick});
+   settle({...h.receipt,committed:true,world_id:definition.world_id,actor_id:definition.actor_id,plan_id:definition.plan_id});
+  }
+  if(saved.pending!==null)restoreAdmission(saved.pending);
+  ensure(same(snapshot(),saved),"plan checkpoint differs from reconstructed state");
+ }
+ return Object.freeze({review,admit,settle,snapshot,exportCheckpoint});
 }
