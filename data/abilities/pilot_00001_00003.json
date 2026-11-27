@@ -1,0 +1,249 @@
+{
+  "version": "0.1.0",
+  "status": "draft",
+  "abilities": [
+    {
+      "id": "AB-00001",
+      "name": "Contact Bias",
+      "category": "material-interface",
+      "mechanism": {
+        "primitive": "traction_bias",
+        "target": "existing_contact",
+        "operation": "directional_friction_adjustment"
+      },
+      "activation": "conscious touch on a solid interface",
+      "limits": [
+        "no force without existing contact",
+        "no adhesion to empty space",
+        "only local contact patch"
+      ],
+      "counterplay": [
+        "break contact",
+        "change surface",
+        "oppose motion outside affected direction"
+      ],
+      "manifestation": [
+        "preferred direction",
+        "contact patch size"
+      ],
+      "acquisition": {
+        "natural": true,
+        "meteoriteType": "MT-DRAFT-01"
+      },
+      "root": "AB-00001-N01",
+      "nodes": [
+        {
+          "id": "AB-00001-N01",
+          "kind": "technique",
+          "name": "Grip Bias",
+          "level": 1,
+          "masteryTier": 1,
+          "requires": [],
+          "conditions": [],
+          "effect": "alter traction along one direction during contact"
+        },
+        {
+          "id": "AB-00001-N02",
+          "kind": "technique",
+          "name": "Release Bias",
+          "level": 1,
+          "masteryTier": 2,
+          "requires": [
+            "AB-00001-N01"
+          ],
+          "conditions": [
+            "AB-00001-H01"
+          ],
+          "effect": "lower traction along one direction during contact"
+        },
+        {
+          "id": "AB-00001-N03",
+          "kind": "technique",
+          "name": "Grip Bias",
+          "level": 2,
+          "masteryTier": 2,
+          "requires": [
+            "AB-00001-N01"
+          ],
+          "conditions": [
+            "AB-00001-H01"
+          ],
+          "effect": "control a larger contact patch within personal limit"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "AB-00001-H01",
+          "event": "practice_committed",
+          "evidence": "controlled_contact_transition",
+          "minimum": 3,
+          "scope": "since_acquisition",
+          "once": true,
+          "hint": "Practice changing grip without losing control."
+        }
+      ]
+    },
+    {
+      "id": "AB-00002",
+      "name": "Echo Census",
+      "category": "information",
+      "mechanism": {
+        "primitive": "echo_measurement",
+        "target": "returned_self_emitted_sound",
+        "operation": "boundary_arrival_estimate"
+      },
+      "activation": "emit a deliberate sound and receive its return",
+      "limits": [
+        "no information without a returned signal",
+        "no mind reading",
+        "no material identification without evidence"
+      ],
+      "counterplay": [
+        "absorb sound",
+        "mask returns",
+        "move before sampling completes"
+      ],
+      "manifestation": [
+        "frequency sensitivity",
+        "angular resolution"
+      ],
+      "acquisition": {
+        "natural": true,
+        "meteoriteType": "MT-DRAFT-02"
+      },
+      "root": "AB-00002-N01",
+      "nodes": [
+        {
+          "id": "AB-00002-N01",
+          "kind": "technique",
+          "name": "Near Return",
+          "level": 1,
+          "masteryTier": 1,
+          "requires": [],
+          "conditions": [],
+          "effect": "estimate distance to one resolvable reflecting boundary"
+        },
+        {
+          "id": "AB-00002-N02",
+          "kind": "technique",
+          "name": "Separated Returns",
+          "level": 1,
+          "masteryTier": 2,
+          "requires": [
+            "AB-00002-N01"
+          ],
+          "conditions": [
+            "AB-00002-H01"
+          ],
+          "effect": "distinguish multiple resolvable returns"
+        },
+        {
+          "id": "AB-00002-N03",
+          "kind": "technique",
+          "name": "Near Return",
+          "level": 2,
+          "masteryTier": 2,
+          "requires": [
+            "AB-00002-N01"
+          ],
+          "conditions": [
+            "AB-00002-H01"
+          ],
+          "effect": "reduce measurement uncertainty within personal limit"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "AB-00002-H01",
+          "event": "practice_committed",
+          "evidence": "verified_echo_estimate",
+          "minimum": 3,
+          "scope": "since_acquisition",
+          "once": true,
+          "hint": "Compare your estimates with measured distances."
+        }
+      ]
+    },
+    {
+      "id": "AB-00003",
+      "name": "Thermal Relay",
+      "category": "energy-transfer",
+      "mechanism": {
+        "primitive": "heat_relay",
+        "target": "two_touched_nonliving_solids",
+        "operation": "bounded_heat_transfer"
+      },
+      "activation": "maintain contact with both solids",
+      "limits": [
+        "no net heat creation",
+        "no transfer after contact ends",
+        "no living tissue target in pilot"
+      ],
+      "counterplay": [
+        "separate either target",
+        "use insulation",
+        "exceed transfer-rate limit"
+      ],
+      "manifestation": [
+        "transfer rate",
+        "temperature differential tolerance"
+      ],
+      "acquisition": {
+        "natural": true,
+        "meteoriteType": "MT-DRAFT-03"
+      },
+      "root": "AB-00003-N01",
+      "nodes": [
+        {
+          "id": "AB-00003-N01",
+          "kind": "technique",
+          "name": "Equalizing Relay",
+          "level": 1,
+          "masteryTier": 1,
+          "requires": [],
+          "conditions": [],
+          "effect": "transfer heat from warmer to cooler touched solid"
+        },
+        {
+          "id": "AB-00003-N02",
+          "kind": "technique",
+          "name": "Metered Relay",
+          "level": 1,
+          "masteryTier": 2,
+          "requires": [
+            "AB-00003-N01"
+          ],
+          "conditions": [
+            "AB-00003-H01"
+          ],
+          "effect": "stop transfer at a selected observable temperature boundary"
+        },
+        {
+          "id": "AB-00003-N03",
+          "kind": "technique",
+          "name": "Equalizing Relay",
+          "level": 2,
+          "masteryTier": 2,
+          "requires": [
+            "AB-00003-N01"
+          ],
+          "conditions": [
+            "AB-00003-H01"
+          ],
+          "effect": "increase bounded transfer rate within personal limit"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "AB-00003-H01",
+          "event": "practice_committed",
+          "evidence": "verified_bounded_heat_transfer",
+          "minimum": 3,
+          "scope": "since_acquisition",
+          "once": true,
+          "hint": "Practice stopping transfer at measured temperatures."
+        }
+      ]
+    }
+  ]
+}
