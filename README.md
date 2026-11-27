@@ -21,6 +21,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [NPC observation and memory V1](docs/NPC_MEMORY.md) | Proposed knowledge boundary, machine-readable schema and synthetic reference checks |
 | [NPC perception V1](docs/NPC_PERCEPTION.md) | Scoped information-access reference, integration and 64 executed design checks |
 | [NPC cognition V1](docs/NPC_COGNITION.md) | Bounded subjective decision reference and 112 combined design checks |
+| [NPC opportunities V1](docs/NPC_OPPORTUNITIES.md) | Action catalog, scoped opportunity generation and 165 combined design checks |
 
 ## Authority and continuity
 
