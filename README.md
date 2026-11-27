@@ -49,7 +49,7 @@ Currency direction: Credits with clean and dirty balances; NPCs do not automatic
 
 ## Latest questionnaire follow-up
 
-See [OWNER_DECISIONS.md](docs/OWNER_DECISIONS.md) for final questionnaire answers: starting ages 5–18, first-character cosmic phenomenon timing, locked preselected power, separate player/NPC biological settings, all background modes, natural difficulty without player scaling, preauthored dialogue consequence rules, staged ability catalog and reduced-detail distant simulation. Narrative perspective awaits owner selection; age-18 initial alignment, meteorite type reconciliation and dialogue consequence display remain open. No gameplay code changed.
+See [OWNER_DECISIONS.md](docs/OWNER_DECISIONS.md) for final questionnaire answers: starting ages 5–18, first-character cosmic phenomenon timing, locked preselected power, separate player/NPC biological settings, all background modes, natural difficulty without player scaling, preauthored dialogue consequence rules, staged ability catalog and reduced-detail distant simulation. Final clarifications (2026-11-27): second-person narration, first-universe phenomenon at the initial character's 17th birthday (approximately one year before an age-18 start), alternate type-specific meteorite acquisition while unawakened, and numeric relationship consequence previews. The owner questionnaire is closed at the design-direction level; detailed specifications, data and implementation validation remain pending. See the latest section of [OWNER_DECISIONS.md](docs/OWNER_DECISIONS.md). No gameplay code changed.
 
 ## Verification scope
 
