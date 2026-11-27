@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "draft",
   "abilities": [
     {
@@ -40,7 +40,12 @@
           "masteryTier": 1,
           "requires": [],
           "conditions": [],
-          "effect": "alter traction along one direction during contact"
+          "effect": "alter traction along one direction during contact",
+          "parameters": {
+            "kind": "traction_bias",
+            "deltaPermille": 200,
+            "patchMm2": 1000
+          }
         },
         {
           "id": "AB-00001-N02",
@@ -54,7 +59,12 @@
           "conditions": [
             "AB-00001-H01"
           ],
-          "effect": "lower traction along one direction during contact"
+          "effect": "lower traction along one direction during contact",
+          "parameters": {
+            "kind": "traction_bias",
+            "deltaPermille": -200,
+            "patchMm2": 1000
+          }
         },
         {
           "id": "AB-00001-N03",
@@ -68,7 +78,12 @@
           "conditions": [
             "AB-00001-H01"
           ],
-          "effect": "control a larger contact patch within personal limit"
+          "effect": "control a larger contact patch within personal limit",
+          "parameters": {
+            "kind": "traction_bias",
+            "deltaPermille": 200,
+            "patchMm2": 2000
+          }
         }
       ],
       "conditions": [
@@ -121,7 +136,13 @@
           "masteryTier": 1,
           "requires": [],
           "conditions": [],
-          "effect": "estimate distance to one resolvable reflecting boundary"
+          "effect": "estimate distance to one resolvable reflecting boundary",
+          "parameters": {
+            "kind": "echo_measurement",
+            "maxRangeMm": 3000,
+            "uncertaintyMm": 300,
+            "maxReturns": 1
+          }
         },
         {
           "id": "AB-00002-N02",
@@ -135,7 +156,13 @@
           "conditions": [
             "AB-00002-H01"
           ],
-          "effect": "distinguish multiple resolvable returns"
+          "effect": "distinguish multiple resolvable returns",
+          "parameters": {
+            "kind": "echo_measurement",
+            "maxRangeMm": 3000,
+            "uncertaintyMm": 300,
+            "maxReturns": 2
+          }
         },
         {
           "id": "AB-00002-N03",
@@ -149,7 +176,13 @@
           "conditions": [
             "AB-00002-H01"
           ],
-          "effect": "reduce measurement uncertainty within personal limit"
+          "effect": "reduce measurement uncertainty within personal limit",
+          "parameters": {
+            "kind": "echo_measurement",
+            "maxRangeMm": 3000,
+            "uncertaintyMm": 150,
+            "maxReturns": 1
+          }
         }
       ],
       "conditions": [
@@ -202,7 +235,14 @@
           "masteryTier": 1,
           "requires": [],
           "conditions": [],
-          "effect": "transfer heat from warmer to cooler touched solid"
+          "effect": "transfer heat from warmer to cooler touched solid",
+          "parameters": {
+            "kind": "heat_relay",
+            "maxRateMilliJPerSecond": 1000,
+            "maxTransferMilliJ": 5000,
+            "maxDeltaMilliK": 10000,
+            "stopAtMilliK": null
+          }
         },
         {
           "id": "AB-00003-N02",
@@ -216,7 +256,14 @@
           "conditions": [
             "AB-00003-H01"
           ],
-          "effect": "stop transfer at a selected observable temperature boundary"
+          "effect": "stop transfer at a selected observable temperature boundary",
+          "parameters": {
+            "kind": "heat_relay",
+            "maxRateMilliJPerSecond": 1000,
+            "maxTransferMilliJ": 5000,
+            "maxDeltaMilliK": 10000,
+            "stopAtMilliK": 295000
+          }
         },
         {
           "id": "AB-00003-N03",
@@ -230,7 +277,14 @@
           "conditions": [
             "AB-00003-H01"
           ],
-          "effect": "increase bounded transfer rate within personal limit"
+          "effect": "increase bounded transfer rate within personal limit",
+          "parameters": {
+            "kind": "heat_relay",
+            "maxRateMilliJPerSecond": 2000,
+            "maxTransferMilliJ": 5000,
+            "maxDeltaMilliK": 10000,
+            "stopAtMilliK": null
+          }
         }
       ],
       "conditions": [
