@@ -53,3 +53,20 @@ Author date/stage-aware event families, news source profiles, report templates, 
 ## QA gates
 
 Verify eligible choices only; no hidden knowledge leakage; no repeated Continue; no identical non-routine dialogue in repeatable scenarios; meaningful response/outcome diversity under changed NPC profiles; preserved legitimate routine actions; no fabricated world events; source-linked chapter prose; date-correct news; save/rewind restores appropriate history and novelty state. Review a playable multi-day sample manually for prose quality and experience flow. No implementation, generated narrative corpus or tests completed in this document.
+
+## Final questionnaire — perspective examples and reduced-detail simulation
+
+The following passages are illustrative, not new canonical events. All describe the same moment: a rainy morning, a nearby shop, and a shopkeeper asking for help before school.
+
+First person:
+I stepped outside and found the street still wet from the morning rain. Across the road, the shopkeeper was struggling to move a crate beneath the awning. When she noticed me, she called out and asked whether I had a moment to help. I had time before school, but not much.
+
+Second person:
+You step outside and find the street still wet from the morning rain. Across the road, the shopkeeper is struggling to move a crate beneath the awning. When she notices you, she calls out and asks whether you have a moment to help. You have time before school, but not much.
+
+Third person:
+The young character stepped outside and found the street still wet from the morning rain. Across the road, the shopkeeper was struggling to move a crate beneath the awning. When she noticed the character, she called out and asked whether there was a moment to help. School would begin soon.
+
+Selectable perspective would render the same committed facts through the chosen grammatical viewpoint without changing simulation outcomes. Recommendation: second person by default, subject to owner choice, because it supports direct control while preserving a novel-like presentation. Avoid inventing the player's thoughts and intentions in any viewpoint. The prepared choices remain identical: offer help, decline politely, or continue toward school. No action is committed by reading the passage.
+
+Q7: preserve preauthored dialogue response and consequence rules; some outcomes are decided beforehand, subject to actual conditions. Exact numerical versus qualitative preview remains open. Q10: use reduced-detail simulation for distant actors, with outcome-only records for routine irrelevant detail while retaining significant events, acquired evidence and causal effects. The authoritative world state is not replaced by narration. No automatic forgetting or loss of significant history. Promote relevant activity to full resolution when it affects the local scene, commitments, relationships, economy, health, safety or knowledge access.
