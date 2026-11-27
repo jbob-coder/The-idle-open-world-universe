@@ -1,5 +1,8 @@
 // Run from repository root: node tools/check_npc_perception.mjs
 import {createPerceptionReference} from './npc_perception_reference.mjs';
+import {validate} from './check_npc_knowledge.mjs';
+import {readFileSync} from 'node:fs';
+const schema=JSON.parse(readFileSync(new URL('../schemas/npc_knowledge.schema.json',import.meta.url),'utf8'));
 function runPerceptionTests(create){
  const world="fixture-world", secret="PRIVATE_CANARY_93271";
  const claim=(key,value)=>({key,value});
@@ -46,7 +49,17 @@ function runPerceptionTests(create){
  test("all channel projections omit private metadata",()=>{const s=fresh();s.ingest(direct());s.ingest(report({},undefined,11,"r"));s.ingest(record({},undefined,12,"d"));s.ingest(internal({},undefined,13,"i"));assert(!JSON.stringify([view(s),view(s,"B"),s.exportReceipts()]).includes(secret))});
  return tests;
 }
-const results=runPerceptionTests(createPerceptionReference);
+function runIntegrationTests(create,validate,schema){
+ const svc=create("integration"),a={actor_id:"A",world_id:"integration",can_acquire:true,present:true,in_range:true,detected:true,path_clear:true},b={...a,actor_id:"B"};
+ const event=(id,tick,channel,rest)=>svc.ingest({world_id:"integration",tick,actors:[a,b],event:{id,tick,world_id:"integration",committed:true,channel,...rest}});
+ event("pay",1,"direct",{observable_claims:[{key:"payment",value:"12 CR"}]});
+ event("report",2,"report",{sender_id:"A",completed:true,deliveries:[{recipient_id:"B",completed:true,delivered_claims:[{key:"rumor",value:"A said payment occurred"}]}]});
+ event("doc",3,"record",{completed:true,grants:[{actor_id:"A",authorized:true,completed:true,projected_claims:[{key:"record",value:"10 CR"}]}]});
+ event("pain",4,"internal",{subject_id:"A",perceived_claims:[{key:"pain",value:"Leg pain"}]});
+ const receipts=svc.exportReceipts();
+ return ["A","B"].flatMap(id=>["forCognition","forNarrative"].map(method=>{const packet=svc.bindActor(id)[method](),errors=validate(packet,schema,receipts);const expected=id==="A"?["direct","record","internal"]:["direct","report"];const channels=packet.observations.map(x=>x.channel);return {name:`integration ${id} ${method}`,pass:errors.length===0&&JSON.stringify(channels)===JSON.stringify(expected),errors,channels}}));
+}
+const results=[...runPerceptionTests(createPerceptionReference),...runIntegrationTests(createPerceptionReference,validate,schema)];
 console.log(JSON.stringify(results,null,2));
 console.log(results.filter(x=>x.pass).length+'/'+results.length+' passed');
 if(results.some(x=>!x.pass))process.exitCode=1;
