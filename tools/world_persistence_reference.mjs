@@ -86,5 +86,26 @@ export function createWorldPersistenceReference(store,createExecutor,createSched
   ensure(store.compareAndSwap(raw,bytes)===true,"commit conflict");
   return {revision,transaction_revision:revision,replayed:false};
  }
- return Object.freeze({initialize,recover,commit});
+ // Privileged validation gate only: no journal mutation and no unchecked checkpoint installation.
+ function privateEnvelope(root,runtime){
+  ensure(typeof runtime.s.exportCheckpoint==="function","private checkpoint unsupported");
+  return {format:"world-private-checkpoint-v1",adapter_version:root.adapter_version,world_id:root.world_id,seed:root.seed,player_id:root.player_id,revision:root.revision,initial:clone(root.initial),runtime:runtime.s.exportCheckpoint()};
+ }
+ function exportPrivateCheckpoint(){
+  const {root,runtime}=readRoot();return clone(privateEnvelope(root,runtime));
+ }
+ function verifyCheckpointContinuation(checkpoint,commands=[]){
+  const {root,runtime}=readRoot(),saved=clone(checkpoint);
+  ensure(Array.isArray(commands)&&commands.length<=256&&Object.keys(commands).length===commands.length,"invalid verification command batch");
+  const batch=clone(commands);
+  ensure(same(saved,privateEnvelope(root,runtime)),"checkpoint does not match current committed record");
+  const x=createExecutor(clone(root.initial),clone(saved.runtime)),s=createScheduler(x,root.player_id,reviewNpc,clone(saved.runtime)),direct={x,s};
+  ensure(same(privateEnvelope(root,direct),saved)&&same(capture(direct),capture(runtime)),"initial direct restore differs");
+  for(const cmd of batch){
+   apply(runtime,clone(cmd));apply(direct,clone(cmd));
+   ensure(same(capture(runtime),capture(direct))&&same(privateEnvelope(root,runtime),privateEnvelope(root,direct)),"restored continuation differs");
+  }
+  return {world_id:root.world_id,base_revision:root.revision,verified_commands:batch.length,checkpoint:clone(capture(direct)),private_state:clone(direct.s.exportCheckpoint())};
+ }
+ return Object.freeze({initialize,recover,commit,exportPrivateCheckpoint,verifyCheckpointContinuation});
 }
