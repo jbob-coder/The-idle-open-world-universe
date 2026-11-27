@@ -4,7 +4,7 @@ const schema = JSON.parse(readFileSync(new URL("../schemas/npc_knowledge.schema.
 const {cases,receipts} = JSON.parse(readFileSync(new URL("../tests/fixtures/npc_knowledge.json", import.meta.url),"utf8"));
 function checkShape(value,s,path="$",errors=[]){
  const fail=(code)=>errors.push(code+":"+path);
- if(s.type==="object"){if(!value||typeof value!=="object"||Array.isArray(value)){fail("type");return errors}for(const k of s.required||[])if(!Object.hasOwn(value,k))errors.push("required:"+path+"."+k);for(const [k,v] of Object.entries(value)){if(s.properties[k])checkShape(v,s.properties[k],path+"."+k,errors);else if(s.additionalProperties===false)errors.push("extra:"+path+"."+k)}}
+ if(s.type==="object"){if(!value||typeof value!=="object"||Array.isArray(value)){fail("type");return errors}for(const k of s.required||[])if(!Object.hasOwn(value,k))errors.push("required:"+path+"."+k);for(const [k,v] of Object.entries(value)){if(Object.hasOwn(s.properties,k))checkShape(v,s.properties[k],path+"."+k,errors);else if(s.additionalProperties===false)errors.push("extra:"+path+"."+k)}}
  else if(s.type==="array"){if(!Array.isArray(value)){fail("type");return errors}if(s.uniqueItems&&new Set(value.map(x=>JSON.stringify(x))).size!==value.length)fail("duplicate");value.forEach((v,i)=>checkShape(v,s.items,path+"["+i+"]",errors))}
  else if(s.type==="string"){if(typeof value!=="string"){fail("type");return errors}if(s.minLength!==undefined&&[...value].length<s.minLength)fail("length");if(s.maxLength!==undefined&&[...value].length>s.maxLength)fail("length")}
  else if(s.type==="integer"){if(!Number.isSafeInteger(value)){fail("integer");return errors}if(s.minimum!==undefined&&value<s.minimum)fail("minimum")}
@@ -12,7 +12,7 @@ function checkShape(value,s,path="$",errors=[]){
 }
 function validate(packet,schema,receipts){
  const errors=checkShape(packet,schema);if(errors.length)return errors;
- const add=(c)=>errors.push(c), same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+ const add=(c)=>errors.push(c), same=(a,b)=>a.length===b.length&&a.every((v,i)=>v.key===b[i].key&&v.value===b[i].value);
  const byId=new Map(), used=new Set();
  for(const o of packet.observations){
   if(byId.has(o.id))add("duplicate-observation");byId.set(o.id,o);
