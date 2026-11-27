@@ -23,6 +23,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [NPC cognition V1](docs/NPC_COGNITION.md) | Bounded subjective decision reference and 112 combined design checks |
 | [NPC opportunities V1](docs/NPC_OPPORTUNITIES.md) | Action catalog, scoped opportunity generation and 165 combined design checks |
 | [NPC multi-step planning V1](docs/NPC_PLANNING.md) | Milestones, alternative methods, progress receipts and 216 combined design checks |
+| [NPC action execution V1](docs/NPC_EXECUTION.md) | Concurrent phases, admission, partial outcomes and 267 combined design checks |
 
 ## Authority and continuity
 
