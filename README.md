@@ -18,6 +18,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [World time and activity resolution](docs/TIME_AND_ACTIVITY.md) | Approved pause, interruptions and foreseeable consequence warnings |
 | [NPC autonomous architecture V2](docs/NPC_ARCHITECTURE.md) | Proposed five-layer workflow, integration contracts and verification plan |
 | [NPC blueprint V1](docs/NPC_BLUEPRINT.md) | Actor data contract, initialization gate and verified roster reference audit |
+| [NPC observation and memory V1](docs/NPC_MEMORY.md) | Proposed knowledge boundary, machine-readable schema and synthetic reference checks |
 
 ## Authority and continuity
 
@@ -31,4 +32,4 @@ Currency direction: Credits with clean and dirty balances; NPCs do not automatic
 
 ## Verification scope
 
-The migration preserves the original section text verbatim, with only new file headings and cross-reference notes. No runtime code or tests are present in this documentation baseline.
+The migration preserves the original section text verbatim, with only new file headings and cross-reference notes. No game runtime code or runtime tests are present. Development-only design checks are documented in [NPC memory V1](docs/NPC_MEMORY.md).
