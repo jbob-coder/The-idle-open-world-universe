@@ -1,5 +1,6 @@
 // Development-only reference checks; no engine choice. Run with Node.js: node tools/check_npc_knowledge.mjs
 import { readFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 const schema = JSON.parse(readFileSync(new URL("../schemas/npc_knowledge.schema.json", import.meta.url),"utf8"));
 const {cases,receipts} = JSON.parse(readFileSync(new URL("../tests/fixtures/npc_knowledge.json", import.meta.url),"utf8"));
 function checkShape(value,s,path="$",errors=[]){
@@ -10,7 +11,7 @@ function checkShape(value,s,path="$",errors=[]){
  else if(s.type==="integer"){if(!Number.isSafeInteger(value)){fail("integer");return errors}if(s.minimum!==undefined&&value<s.minimum)fail("minimum")}
  if(s.enum&&!s.enum.includes(value))fail("enum");return errors
 }
-function validate(packet,schema,receipts){
+export function validate(packet,schema,receipts){
  const errors=checkShape(packet,schema);if(errors.length)return errors;
  const add=(c)=>errors.push(c), same=(a,b)=>a.length===b.length&&a.every((v,i)=>v.key===b[i].key&&v.value===b[i].value);
  const byId=new Map(), used=new Set();
@@ -43,7 +44,9 @@ function validate(packet,schema,receipts){
  return errors
 }
 function runCases(cases,schema,receipts){return cases.map(c=>{const errors=validate(c.packet,schema,receipts);return {name:c.name,pass:c.expected==="PASS"?errors.length===0:errors.some(e=>e.startsWith(c.expected)),expected:c.expected,errors}})}
+if(process.argv[1] && import.meta.url===pathToFileURL(process.argv[1]).href){
 const results=runCases(cases,schema,receipts);
 console.log(JSON.stringify(results,null,2));
 console.log(results.filter(r=>r.pass).length+"/"+results.length+" passed");
 if(results.some(r=>!r.pass))process.exitCode=1;
+}
