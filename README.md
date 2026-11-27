@@ -47,6 +47,10 @@ Current world foundation: Apartment B2, 26 distinct location anchors, 25 explici
 
 Currency direction: Credits with clean and dirty balances; NPCs do not automatically know provenance. See [economy](docs/ECONOMY.md) for the approved knowledge rule and proposed perception interaction.
 
+## Latest questionnaire follow-up
+
+See [OWNER_DECISIONS.md](docs/OWNER_DECISIONS.md) for final questionnaire answers: starting ages 5–18, first-character cosmic phenomenon timing, locked preselected power, separate player/NPC biological settings, all background modes, natural difficulty without player scaling, preauthored dialogue consequence rules, staged ability catalog and reduced-detail distant simulation. Narrative perspective awaits owner selection; age-18 initial alignment, meteorite type reconciliation and dialogue consequence display remain open. No gameplay code changed.
+
 ## Verification scope
 
 Original design sections are preserved as historical records, subject to later approved decisions. Development-only reference code and tests are present; the latest verified runtime test increment is 97 Node.js checks described in [journal segmentation](docs/WORLD_JOURNAL_SEGMENTS.md). The questionnaire update is documentation only; no runtime tests were rerun. No playable game or Android runtime has been verified.
