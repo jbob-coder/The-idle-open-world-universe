@@ -34,6 +34,8 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [Narrative variation and interaction rows](docs/NARRATIVE_VARIATION.md) | Prepared choices, contextual conversations, news and repetition controls |
 | [Ability catalog requirements](docs/ABILITY_CATALOG.md) | 10,000 distinct abilities, respective skill trees and hidden conditions; catalog pending |
 | [Playable prototype and platform options](docs/PROTOTYPE_PLATFORM.md) | Functional local vertical slice and selected native Android development direction |
+| [Four-peer autonomous development charter](docs/AGENT_COORDINATION.md) | Equal-authority ownership, peer review, safe execution and integration protocol |
+| [Agent 01](docs/agents/AGENT_01.md) · [Agent 02](docs/agents/AGENT_02.md) · [Agent 03](docs/agents/AGENT_03.md) · [Agent 04](docs/agents/AGENT_04.md) | Independent activation prompts and branch-specific responsibilities |
 
 ## Authority and continuity
 
