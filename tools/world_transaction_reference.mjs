@@ -2,6 +2,7 @@
 export function createWorldTransactionReference(store,deps,adapters,version,identity=null){
  const ensure=(v,m)=>{if(!v)throw Error(m)},id=x=>typeof x==="string"&&/^[A-Za-z0-9_-]{1,40}$/.test(x),copy=x=>JSON.parse(deps.canonical(x)),same=(a,b)=>deps.canonical(a)===deps.canonical(b);
  ensure(deps&&["canonical","persistence","executor","scheduler","perception","planner","generate","decide"].every(k=>typeof deps[k]==="function")&&adapters&&typeof adapters.resolveOffer==="function"&&typeof adapters.projectOutcome==="function","invalid transaction dependencies");
+ const exact=(o,keys)=>o&&typeof o==="object"&&!Array.isArray(o)&&Object.keys(o).length===keys.length&&keys.every(k=>Object.hasOwn(o,k));
  const contexts=new WeakMap();
  function makeExecutor(initial){
   ensure(initial&&id(initial.world_id)&&Array.isArray(initial.actors)&&Array.isArray(initial.npc_configs),"invalid integrated initial state");
@@ -11,10 +12,14 @@ export function createWorldTransactionReference(store,deps,adapters,version,iden
   const index=new Map(initial.actors.map((a,i)=>[a.actor_id,i]));
   let poison=null;
   for(const cfg of initial.npc_configs){
-   ensure(cfg&&actorIds.has(cfg.actor_id)&&!configs.has(cfg.actor_id)&&Array.isArray(cfg.capabilities)&&cfg.motivation,"invalid NPC config");
-   const c=copy(cfg);configs.set(c.actor_id,c);
+   ensure(exact(cfg,["actor_id","capabilities","motivation","plan"])&&actorIds.has(cfg.actor_id)&&!configs.has(cfg.actor_id)&&Array.isArray(cfg.capabilities)&&exact(cfg.motivation,["risk_aversion","stress","needs","values","goals"]),"invalid NPC config");
+   const c=copy(cfg),a=x.state().actors.find(v=>v.actor_id===c.actor_id),k=perception.bindActor(c.actor_id).forCognition();
+   const p={...c.motivation,world_id:world,actor_id:c.actor_id,actor_revision:a.revision,now:initial.now,life_status:a.life_status};
+   const self={world_id:world,actor_id:c.actor_id,actor_revision:a.revision,as_of_tick:initial.now,capabilities:c.capabilities};
+   deps.decide(p,k,deps.generate(p,k,self));
+   configs.set(c.actor_id,c);
    if(c.plan!==null){
-    ensure(c.plan&&c.plan.world_id===world&&c.plan.actor_id===c.actor_id,"foreign plan");
+    ensure(c.plan&&c.plan.world_id===world&&c.plan.actor_id===c.actor_id&&c.motivation.goals.some(g=>g.id===c.plan.goal_id),"foreign plan or unknown goal");
     plans.set(c.actor_id,deps.planner(c.plan,deps.decide));
    }
   }
