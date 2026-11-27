@@ -27,7 +27,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [World scheduler V1](docs/WORLD_SCHEDULER.md) | Shared clock, NPC reviews, decision pauses and 313 combined design checks |
 | [World persistence V1](docs/WORLD_PERSISTENCE.md) | Atomic memory-store journal, technical recovery and 360 combined design checks |
 | [World transactions V1](docs/WORLD_TRANSACTIONS.md) | Atomic scheduler, executor, plan and observation integration; 396 combined design checks |
-| [Durable local storage V1](docs/WORLD_DURABLE_STORAGE.md) | SQLite adapter and 26 verified normal-exit recovery checks; manual Android force-stop testing reserved for owner |
+| [Durable local storage V1](docs/WORLD_DURABLE_STORAGE.md) | SQLite adapter and integrated NPC recovery; 35 verified normal-exit checks; Android force-stop testing reserved for owner |
 
 ## Authority and continuity
 
