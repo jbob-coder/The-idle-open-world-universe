@@ -73,7 +73,7 @@ The scheduler reconstructs its event queue using existing validation, restores e
 
 These are trusted private restoration contracts, not historical authenticity proofs. The executor's historical terminal events do not retain every completed attempt's original phase definition and credit rate; the validator cannot independently re-prove every past terminal credit or plan binding. Scheduler historical records do not retain every original recurrence configuration or submission body. The coordinator must bind these checkpoints to an authenticated committed record and reconcile receipt provenance, active plan identities, actor knowledge revisions and the exact world timeline. Current full-journal replay remains authoritative; no storage format, SQLite schema, save semantics, world seed, or canonical NPC was changed.
 
-## 5. Current verification
+## 5. Previous executor/scheduler verification
 
 | Suite | Executed result |
 |---|---:|
@@ -92,8 +92,59 @@ Verified blobs:
 - tools/world_scheduler_reference.mjs: 87827592c148078ccf8bed50f32b8d6ce4f2a909
 - tools/check_execution_checkpoints.mjs: 25fa1ec51e8db909e2290cbb40243486a2ae898e
 
-## 6. Next gate
+## 6. Integrated restoration gate
 
-All four component-level private checkpoint contracts are now available. Next implement coordinator-level export and restoration, retaining configuration, actor-local evidence, plan state, complete observation-frame identity/content history, and the execution/scheduler contracts. Reconcile cross-service identities and prove uninterrupted versus directly restored continuation, including partial admission, interruption, pending decisions and revision consistency. Verify the combined state in Node and normal-exit SQLite recovery before designing a new journal format. Preserve exact transaction idempotency, historical evidence, world identity and independently trusted revision authority. Do not truncate existing history or increase the current 256-command limit as a substitute for verified compaction.
+The existing transaction coordinator now exports a complete private checkpoint through the persistence reference after normal full-journal reconstruction and committed checkpoint validation. The versioned envelope retains world ID, seed, player ID, adapter version, initial configuration, committed revision and integrated runtime state. The integrated state includes all four private subsystem checkpoints and the original canonical observation frames, including frames that produced no actor-visible receipt.
 
-The reference remains bounded, static-fixture development infrastructure. Full belief/memory consolidation, domain consequences, canonical actor initialization, production scale and Android durability remain pending. No final engine or storage technology is selected. Owner-only Android force-stop testing remains in effect.
+```mermaid
+flowchart TD
+ A[Committed journal and checkpoint] --> B[Validate by existing replay]
+ B --> C[Export private integrated checkpoint]
+ C --> D[Restore executor, scheduler, plans and perception]
+ C --> E[Replay observation frames for provenance]
+ D --> F[Reconcile actor revisions and attempt identities]
+ E --> F
+ F --> G[Compare initial and continued state with journal replay]
+ G --> H{Equivalent?}
+ H -->|No| I[Reject validation; preserve original record]
+ H -->|Yes| J[Verified isolated restoration]
+ J --> K[Future durable checkpoint and journal compaction]
+```
+
+The coordinator reconstructs perception from ordered historical frames, compares the result with the direct perception checkpoint, and restores the perception service independently. It checks matching world and registered actors, event identities, observation chronology, and every actor's knowledge revision. Private frame payloads remain privileged and must never be passed into actor cognition or narrative.
+
+For each plan, restore verifies that its pending attempt matches the executor's actor, plan ID, plan revision, action, opportunity, start tick, and remaining-work credit limit. Historical plan receipts must match the corresponding terminal execution receipts, and every plan-bound active or settled attempt must have a corresponding plan entry. Scheduler receipts must exactly match the executor's terminal outcomes in integrated operation. The executor remains the only clock authority. Transient prepared NPC proposals are cleared at successful scheduler command boundaries; future reviews regenerate them from current state.
+
+New privileged operations:
+- exportPrivateCheckpoint(): verify and reconstruct the current committed record, then export a detached private checkpoint envelope.
+- verifyCheckpointContinuation(checkpoint, commands): require exact agreement with the latest committed private checkpoint, restore a separate runtime directly, compare its initial diagnostic and private state with the replayed runtime, and execute up to 256 proposed commands in both isolated runtimes. Compare both representations after every successful command. Return the base revision and staged comparison results without writing to storage.
+
+This gate is intentionally not a new save/load endpoint. An older checkpoint or one with any changed content is rejected against the authoritative current record. Verification of future commands is hypothetical and does not consume transaction IDs, advance committed time or grant real progress. Invalid commands reject the verification request; this does not prove equivalence of all possible failure paths. Trusted adapters must remain deterministic and side-effect free. Historical observation frames are reprocessed, so the reference does not yet provide bounded constant-cost restoration. No journal entries are removed. The existing world-reference-v1 payload, SQLite schema and 256-command commit limit are unchanged.
+
+## 7. Current verification
+
+| Suite | Executed result |
+|---|---:|
+| Integrated direct checkpoint restoration | 27/27 PASS |
+| Component execution/scheduler restoration | 35/35 PASS |
+| Existing integrated transactions | 36/36 PASS |
+| Existing persistence | 47/47 PASS |
+| Existing execution | 51/51 PASS |
+| Existing scheduler | 46/46 PASS |
+| Knowledge, perception, planning, opportunities and cognition | 216/216 PASS |
+| Total current reference checks | 458/458 PASS |
+
+The initial 110-case run passed before writing. All 458 cases were subsequently executed from the saved repository source function bodies and test logic at commit 8c9def45b2f0c020475da4fb865a97d22c4d241e in the development JavaScript isolate. The new suite verifies restoration at each of twelve successive command boundaries, full continuation from initialization, pending work, partial interruption, player pause/resume, original observation-frame identity, absence of information leakage in bound views, duplicate rejection, tampered checkpoints and injected component inconsistencies. The test fixture is synthetic and does not activate canonical NPCs. No real save data was modified.
+
+New standalone checker: node tools/check_integrated_checkpoints.mjs. Standalone Node imports/CLI and the 35 SQLite normal-exit checks were not executed in this increment. The earlier 33 direct perception/planner checkpoint checks were also not rerun. Do not combine these historical results with the current 458. Direct integrated restoration on durable storage, actual Android behavior and production-scale recovery remain unverified. No forced process termination was performed.
+
+Verified blobs:
+- tools/world_persistence_reference.mjs: 351280acb8b1ff6bae5deec4133ce3bb658d3894
+- tools/world_transaction_reference.mjs: d7e8c93fe9c98bb5550ba784a3c4962dde93c0d4
+- tools/check_integrated_checkpoints.mjs: 76fa28295d3212476c4149f0b74a5988200ef5a1
+
+## 8. Next gate
+
+Run the integrated private checkpoint validation in the actual Node/SQLite environment across normal process exits, including paused and pending activities, controlled commit errors, and restoration equivalence. Then design a versioned durable checkpoint/journal format with atomic migration, independently trusted identity and revision authority, exact old transaction replay detection, and retained historical evidence. Do not truncate the existing journal or replace the current commit limit as a substitute for verified compaction. Preserve owner-approved save rules and leave Android force-stop testing exclusively to the owner.
+
+The reference remains bounded development infrastructure. Full belief/memory consolidation, dynamic actor state, actual domain consequences, canonical NPC initialization, production scaling and final engine/backend selection remain pending.
