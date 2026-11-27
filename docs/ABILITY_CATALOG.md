@@ -28,3 +28,9 @@ Storage proposal: immutable definitions partitioned by ID range/category, indexe
 ## Delegated passive classification
 
 Following owner delegation, allow permanent natural trained traits and modifiers specific to an actor's existing acquired core ability. The latter cannot be independent powers; no second core ability is granted. Natural ceilings, hidden conditions, rare evidence-based unlocking and no repeat reward for the same milestone apply. Numeric rarity and modifier balance remain provisional until tested. This resolves the classification question above; actual ability records and passive implementation remain pending.
+
+## Owner-approved development cadence
+
+Final questionnaire Q9 selects verified batches alongside gameplay development. A complete catalog is still required: 10,000 distinct core abilities, each with its own skill tree and hidden conditions. A reviewed smaller catalog may support early prototypes; unimplemented entries must not be represented as usable powers. The previously proposed 100-record pilot remains an engineering starting target, not a completed batch or fixed owner-approved size.
+
+The player selects an intended ability before gameplay, locked until the cosmic phenomenon. Chance awakening at age 18 and post-phenomenon glowing meteorite acquisition are permitted. Reconcile the preselected ability with type-specific meteorites before implementing assignment; do not grant an unrelated second core ability or automatic age-18 power.
