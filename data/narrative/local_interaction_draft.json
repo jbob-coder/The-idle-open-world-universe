@@ -1,0 +1,360 @@
+{
+  "version": "narrative-fixture-v0.1",
+  "status": "draft_inactive",
+  "note": "Design records only; predicates, effects, NPC activation and calendar require peer approval. Null location/target means bind from authorized context, not universal eligibility.",
+  "rows": [
+    {
+      "id": "I-001",
+      "family": "home",
+      "location_id": "LOC-0001",
+      "target_id": null,
+      "label": "Prepare for the day",
+      "eligibility": "authorized residence; feasible supplies and steps",
+      "domain": "life",
+      "result_types": "partial or complete readiness; actual supplies/time",
+      "novelty": "routine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-002",
+      "family": "travel",
+      "location_id": "LOC-0002",
+      "target_id": null,
+      "label": "Walk to the lobby",
+      "eligibility": "known route RTE-0002; access and mobility",
+      "domain": "world",
+      "result_types": "progress, interruption or arrival",
+      "novelty": "necessary",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-003",
+      "family": "neighbor",
+      "location_id": "LOC-0003",
+      "target_id": "NPC-0001",
+      "label": "Ask about building access",
+      "eligibility": "present and willing target; relevant known issue",
+      "domain": "life",
+      "result_types": "answer, partial answer, defer or refuse",
+      "novelty": "nonroutine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-004",
+      "family": "neighbor",
+      "location_id": "LOC-0003",
+      "target_id": "NPC-0001",
+      "label": "Offer assistance",
+      "eligibility": "observed task; permission; feasible contribution",
+      "domain": "life",
+      "result_types": "accept/decline; actual contribution separate",
+      "novelty": "nonroutine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-005",
+      "family": "shop",
+      "location_id": "LOC-0008",
+      "target_id": "NPC-0002",
+      "label": "Ask which supplies are available",
+      "eligibility": "access and present willing seller",
+      "domain": "life",
+      "result_types": "observed stock information or refusal",
+      "novelty": "nonroutine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-006",
+      "family": "shop",
+      "location_id": "LOC-0008",
+      "target_id": null,
+      "label": "Buy selected available item",
+      "eligibility": "actual price, stock, funds and authorization",
+      "domain": "life",
+      "result_types": "atomic inventory/payment or rejection",
+      "novelty": "necessary",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-007",
+      "family": "school",
+      "location_id": "LOC-0011",
+      "target_id": "NPC-0008",
+      "label": "Attend available lesson",
+      "eligibility": "enrollment, age eligibility, available lesson",
+      "domain": "life",
+      "result_types": "actual learning progress, partial or complete",
+      "novelty": "necessary",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-008",
+      "family": "school",
+      "location_id": "LOC-0011",
+      "target_id": "NPC-0008",
+      "label": "Ask for clarification",
+      "eligibility": "known topic, actual contact and availability",
+      "domain": "life",
+      "result_types": "answer, partial answer or defer",
+      "novelty": "nonroutine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-009",
+      "family": "employment",
+      "location_id": "LOC-0010",
+      "target_id": "NPC-0006",
+      "label": "Ask about a vacancy",
+      "eligibility": "age/legal eligibility; actual contact",
+      "domain": "life",
+      "result_types": "information, no vacancy, defer or refusal",
+      "novelty": "nonroutine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-010",
+      "family": "employment",
+      "location_id": "LOC-0010",
+      "target_id": null,
+      "label": "Work an agreed shift",
+      "eligibility": "valid agreement, eligibility, materials and time",
+      "domain": "life",
+      "result_types": "actual work, obligation and funded settlement",
+      "novelty": "necessary",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-011",
+      "family": "health",
+      "location_id": "LOC-0009",
+      "target_id": "NPC-0004",
+      "label": "Request assessment",
+      "eligibility": "observable need or voluntary request; access",
+      "domain": "life",
+      "result_types": "assessment if admitted; no promised cure",
+      "novelty": "nonroutine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-012",
+      "family": "health",
+      "location_id": "LOC-0009",
+      "target_id": null,
+      "label": "Accept offered treatment",
+      "eligibility": "known valid offer, consent and actual resources",
+      "domain": "life",
+      "result_types": "actual treatment and recovery effects",
+      "novelty": "necessary",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-013",
+      "family": "training",
+      "location_id": "LOC-0014",
+      "target_id": null,
+      "label": "Practice a selected exercise",
+      "eligibility": "known exercise and physical feasibility",
+      "domain": "abilities",
+      "result_types": "relevant evidence, risk or interruption",
+      "novelty": "necessary",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-014",
+      "family": "community",
+      "location_id": "LOC-0013",
+      "target_id": "NPC-0011",
+      "label": "Ask about waterfront activity",
+      "eligibility": "public access and known topic; present contact",
+      "domain": "life",
+      "result_types": "scoped answer, refusal or defer",
+      "novelty": "nonroutine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-015",
+      "family": "news",
+      "location_id": null,
+      "target_id": null,
+      "label": "Read available news",
+      "eligibility": "published report accessible to actor",
+      "domain": "world",
+      "result_types": "actual acquired attributed information",
+      "novelty": "necessary",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-016",
+      "family": "repair",
+      "location_id": "LOC-0010",
+      "target_id": "NPC-0007",
+      "label": "Ask for a repair assessment",
+      "eligibility": "actual owned/authorized object; known damage",
+      "domain": "life",
+      "result_types": "assessment or refusal; no immediate repair",
+      "novelty": "nonroutine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-017",
+      "family": "conflict",
+      "location_id": null,
+      "target_id": null,
+      "label": "Attempt to withdraw",
+      "eligibility": "observed threat and physically viable option",
+      "domain": "abilities",
+      "result_types": "actual movement, contact or interruption",
+      "novelty": "necessary",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-018",
+      "family": "conflict",
+      "location_id": null,
+      "target_id": null,
+      "label": "Use a known technique",
+      "eligibility": "acquired core, learned level, valid target and context",
+      "domain": "abilities",
+      "result_types": "resolved effect, miss, partial or interruption",
+      "novelty": "necessary",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-019",
+      "family": "home",
+      "location_id": null,
+      "target_id": null,
+      "label": "Rest at authorized location",
+      "eligibility": "safe and accessible place; optional settings respected",
+      "domain": "life",
+      "result_types": "actual elapsed rest or interruption",
+      "novelty": "routine",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "I-020",
+      "family": "social",
+      "location_id": null,
+      "target_id": "NPC-0012",
+      "label": "Discuss a known shared topic",
+      "eligibility": "present actor, both topic access and contextual availability",
+      "domain": "life",
+      "result_types": "answer, new fact, decline or defer",
+      "novelty": "nonroutine",
+      "status": "draft_inactive"
+    }
+  ],
+  "voices": [
+    {
+      "actor_id": "NPC-0001",
+      "topic": "building maintenance",
+      "style_proposal": "specific, brief, privacy-respecting",
+      "response_intents": [
+        "answer",
+        "defer",
+        "refuse"
+      ],
+      "source": "docs/contracts/npc-life.md draft PR 79; no established personal speech canon"
+    },
+    {
+      "actor_id": "NPC-0002",
+      "topic": "grocery supplies",
+      "style_proposal": "practical, precise about known availability",
+      "response_intents": [
+        "answer",
+        "partial",
+        "defer",
+        "refuse"
+      ],
+      "source": "docs/LOCAL_LIFE.md; draft PR 79"
+    },
+    {
+      "actor_id": "NPC-0008",
+      "topic": "lesson clarification",
+      "style_proposal": "age-appropriate explanation, asks relevant follow-up",
+      "response_intents": [
+        "answer",
+        "partial",
+        "defer",
+        "refuse"
+      ],
+      "source": "docs/LOCAL_LIFE.md; draft PR 79"
+    },
+    {
+      "actor_id": "NPC-0006",
+      "topic": "repair work",
+      "style_proposal": "direct, distinguishes safe tasks from unsafe requests",
+      "response_intents": [
+        "answer",
+        "partial",
+        "defer",
+        "refuse"
+      ],
+      "source": "docs/LOCAL_LIFE.md; draft PR 79"
+    }
+  ],
+  "news": [
+    {
+      "id": "NEWS-F01",
+      "stage": "any",
+      "trigger": "committed public local service change",
+      "source_kind": "attributed local notice",
+      "requires": [
+        "event_id",
+        "published_tick",
+        "source_id",
+        "authorized_audience",
+        "observable_claims"
+      ],
+      "template": "{source} reports {public_claim}.",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "NEWS-F02",
+      "stage": "post_phenomenon",
+      "trigger": "committed cosmic occurrence and actual public report",
+      "source_kind": "attributed public report",
+      "requires": [
+        "event_id",
+        "published_tick",
+        "source_id",
+        "authorized_audience",
+        "observable_claims"
+      ],
+      "template": "{source} reports {public_claim}.",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "NEWS-F03",
+      "stage": "any",
+      "trigger": "verified update to previously published report",
+      "source_kind": "attributed correction",
+      "requires": [
+        "event_id",
+        "published_tick",
+        "source_id",
+        "prior_report_id",
+        "authorized_audience",
+        "observable_claims"
+      ],
+      "template": "{source} updates its earlier report: {public_claim}.",
+      "status": "draft_inactive"
+    },
+    {
+      "id": "NEWS-F04",
+      "stage": "any",
+      "trigger": "prepared attributed off-map report linked to reviewed prehistory or committed event",
+      "source_kind": "attributed distant report",
+      "requires": [
+        "event_id",
+        "published_tick",
+        "source_id",
+        "authorized_audience",
+        "observable_claims",
+        "off_map"
+      ],
+      "template": "{source} reports {public_claim} from outside the currently playable region.",
+      "status": "draft_inactive"
+    }
+  ]
+}
