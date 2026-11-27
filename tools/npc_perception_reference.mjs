@@ -1,5 +1,5 @@
 // Development reference only; not production authorization or sensory simulation.
-export function createPerceptionReference(worldId){
+export function createPerceptionReference(worldId,checkpoint=null){
   const id=v=>typeof v==="string"&&/^[A-Za-z0-9_-]{1,40}$/.test(v);
   const tick=v=>Number.isSafeInteger(v)&&v>=0;
   if(!id(worldId))throw Error("invalid world identity");
@@ -66,5 +66,24 @@ export function createPerceptionReference(worldId){
   }
   // Diagnostic export is privileged, never made available to actor capabilities.
   function exportReceipts(){return [...receipts.values()].flat().map(r=>({...r,claims:r.claims.map(c=>({...c}))}));}
-  return Object.freeze({ingest,bindActor,exportReceipts});
+  // Privileged checkpoint contract; the storage authority must authenticate its origin.
+  function exportCheckpoint(){return {format:"perception-checkpoint-v1",world_id:worldId,last_tick:lastTick,processed_event_ids:[...processed],receipts:exportReceipts()}}
+  if(checkpoint!==null){
+    const exact=(o,keys)=>o&&typeof o==="object"&&!Array.isArray(o)&&Object.keys(o).length===keys.length&&keys.every(k=>Object.hasOwn(o,k));
+    const dense=a=>Array.isArray(a)&&Object.keys(a).length===a.length&&Array.from({length:a.length},(_,i)=>Object.hasOwn(a,i)).every(Boolean);
+    const ensure=(ok,m)=>{if(!ok)throw Error(m)};
+    ensure(exact(checkpoint,["format","world_id","last_tick","processed_event_ids","receipts"])&&checkpoint.format==="perception-checkpoint-v1"&&checkpoint.world_id===worldId&&tick(checkpoint.last_tick)&&dense(checkpoint.processed_event_ids)&&dense(checkpoint.receipts),"invalid perception checkpoint");
+    for(const eventId of checkpoint.processed_event_ids){ensure(id(eventId)&&!processed.has(eventId),"invalid checkpoint event identity");processed.add(eventId)}
+    ensure(processed.size>0||(checkpoint.last_tick===0&&checkpoint.receipts.length===0),"checkpoint lacks processed events");
+    let previousActor=null;
+    for(const r of checkpoint.receipts){
+      ensure(exact(r,["id","world_id","actor_id","tick","channel","claims"])&&r.world_id===worldId&&id(r.actor_id)&&tick(r.tick)&&r.tick<=checkpoint.last_tick&&["direct","report","record","internal"].includes(r.channel),"invalid checkpoint receipt");
+      const list=receipts.get(r.actor_id)||[];
+      ensure((previousActor===r.actor_id||list.length===0)&&r.id===`r:${worldId}:${r.actor_id}:${list.length+1}`&&list.length<processed.size&&(!list.length||r.tick>=list.at(-1).tick),"invalid receipt sequence");
+      ensure(dense(r.claims)&&r.claims.every(c=>exact(c,["key","value"])),"invalid checkpoint claims");
+      list.push({id:r.id,world_id:worldId,actor_id:r.actor_id,tick:r.tick,channel:r.channel,claims:copyClaims(r.claims)});receipts.set(r.actor_id,list);previousActor=r.actor_id;
+    }
+    lastTick=checkpoint.last_tick;
+  }
+  return Object.freeze({ingest,bindActor,exportReceipts,exportCheckpoint});
 }
