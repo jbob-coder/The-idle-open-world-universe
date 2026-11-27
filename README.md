@@ -29,6 +29,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [World transactions V1](docs/WORLD_TRANSACTIONS.md) | Atomic scheduler, executor, plan and observation integration; 396 combined design checks |
 | [Durable local storage V1](docs/WORLD_DURABLE_STORAGE.md) | SQLite adapter and integrated NPC recovery; 35 verified normal-exit checks; Android force-stop testing reserved for owner |
 | [World checkpoints V1](docs/WORLD_CHECKPOINTS.md) | Durable integrated restoration validation; 76 current Node checks; compaction not enabled |
+| [World journal segments V1](docs/WORLD_JOURNAL_SEGMENTS.md) | Lossless append-only SQLite storage and verified copy migration; 97 current Node checks; full replay retained |
 
 ## Authority and continuity
 
