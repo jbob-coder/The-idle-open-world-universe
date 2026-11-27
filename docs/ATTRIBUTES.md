@@ -86,3 +86,7 @@ These are approved game-design reference ranges for ordinary healthy characters 
 Documentation only; no game code, assets or saves modified; no engine tests performed.
 
 
+
+## Latest starting-age decision
+
+Owner selected playable starting ages 5–18 inclusive. This supersedes the earlier unresolved starting-age bounds. Characters continue to age beyond 18 normally. Age-five generation needs an age-appropriate attribute baseline before activation; do not use the older child reference range without validation. See [OWNER_DECISIONS.md](OWNER_DECISIONS.md). No new numeric attribute constants or runtime tests.
