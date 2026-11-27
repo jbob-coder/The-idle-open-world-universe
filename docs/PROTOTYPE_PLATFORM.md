@@ -1,6 +1,6 @@
 # GODSEED — Playable prototype and platform options
 
-Status: Q38 owner direction, Q39 alternatives for owner review; no engine selected. Existing game direction is original text-only novel-style contemporary alternate Earth. No HTML/WebView game medium. Existing JavaScript reference code and Node SQLite are development-only, not a shipped Android app.
+Status: Q38 owner direction; Q39 platform choice delegated in follow-up. Development direction selected below; release versions and native integration not yet verified. Existing game direction is original text-only novel-style contemporary alternate Earth. No HTML/WebView game medium. Existing JavaScript reference code and Node SQLite are development-only, not a shipped Android app.
 
 ## Prototype acceptance scope (proposed)
 
@@ -19,7 +19,7 @@ A passing slice requires actual integrated local gameplay across several fiction
 
 Recommendation: D followed by A after a small native proof-of-concept, unless owner chooses Android-native Kotlin for long-term platform control. Use platform-independent state/actions/domain logic and a narrow storage/clock/UI contract. No cloud inference or paid build services required by design; actual tooling/build costs and device compatibility must be verified. Pin supported SDK/engine versions only after environment inspection. Test same scripted fixture on desktop and target Android (normal close/reopen only in automated development). Owner retains exclusive force-stop device testing. No SDK installed, no native build or port performed.
 
-Official platform references checked 2026-11-26:
+Official platform references for implementation-time verification:
 - React Native native components and APIs: https://reactnative.dev/docs/components-and-apis
 - React Native scroll performance: https://reactnative.dev/docs/scrollview
 - Expo SQLite: https://docs.expo.dev/versions/latest/sdk/sqlite/
@@ -29,4 +29,8 @@ Official platform references checked 2026-11-26:
 
 ## Next decision gate
 
-Resolve biological needs (Q8), population-cap definition and exact limit, passive classification, and platform preference. Agree on documentation completeness and staged ability creation. Then prioritize actual domain mechanics and narrative vertical slice alongside necessary save-policy architecture; defer additional storage optimization that does not block the slice. No existing runtime or save modified.
+See the follow-up in [OWNER_DECISIONS.md](OWNER_DECISIONS.md) for pregame biological options, provisional NPC generation budgets and passive classification. Agree on documentation completeness and staged ability creation. Then prioritize actual domain mechanics and narrative vertical slice alongside necessary save-policy architecture; defer additional storage optimization that does not block the slice. No existing runtime or save modified.
+
+## Delegated platform decision
+
+Selected D then A: Node.js reference prototype, platform-neutral JavaScript/TypeScript simulation, native React Native/Expo Android UI and mobile SQLite adapter. Existing Node-specific APIs are confined to adapters and test tooling. This is a technical direction, not an installed SDK, proven mobile build, fixed release version or guaranteed performance. Preserve the existing repository and test equivalence during porting. No HTML/WebView and no automated force-stop tests.
