@@ -26,6 +26,7 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 | [NPC action execution V1](docs/NPC_EXECUTION.md) | Concurrent phases, admission, partial outcomes and 267 combined design checks |
 | [World scheduler V1](docs/WORLD_SCHEDULER.md) | Shared clock, NPC reviews, decision pauses and 313 combined design checks |
 | [World persistence V1](docs/WORLD_PERSISTENCE.md) | Atomic memory-store journal, technical recovery and 360 combined design checks |
+| [World transactions V1](docs/WORLD_TRANSACTIONS.md) | Atomic scheduler, executor, plan and observation integration; 396 combined design checks |
 
 ## Authority and continuity
 
