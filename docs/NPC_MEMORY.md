@@ -104,3 +104,7 @@ Verified artifact blob SHAs: schema 3b835d1caa5fe7a90bb64a7fa8e4f7d878a6f68f; fi
 ## 8. Next milestone
 
 Define the trusted receipt-issuance contract and event/access fixtures (including absent witnesses, interrupted communication, inaccessible records, evidence provenance and explicit information transmission). Add tests proving a private world-state value cannot enter the cognition or narrative input through any route. Then design bounded decision inputs, personality, competing goals and intent generation. Establish engine/language before production runtime implementation. Retain the existing 12 NPC references; do not invent opening memories or activate them until their blueprint requirements are met.
+
+## Later owner decision — questionnaire Q6, 2026-11-26
+
+Owner rejected simulated forgetting, misremembering, misunderstanding and false-belief generation in normal memory mechanics. [OWNER_DECISIONS.md](OWNER_DECISIONS.md) supersedes earlier candidate memory behavior. Preserve exact acquired evidence, attribution, unknown/unverified status and actor information boundaries. Q34 permits news misinformation as attributed report content, not false recollection or automatic conversion into fact. Existing schema/reference functions are not changed by this documentation; future memory implementation must follow this decision.
