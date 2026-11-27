@@ -25,11 +25,14 @@ export function createAtomicMemoryStore(){
   data=next;return true;
  }});
 }
-export function createWorldPersistenceReference(store,createExecutor,createScheduler,reviewNpc,adapterVersion){
+export function createWorldPersistenceReference(store,createExecutor,createScheduler,reviewNpc,adapterVersion,expectedIdentity=null){
  const ensure=(v,m)=>{if(!v)throw Error(m)},id=v=>typeof v==="string"&&/^[A-Za-z0-9_-]{1,50}$/.test(v),int=v=>Number.isSafeInteger(v)&&v>=0;
  const canon=canonicalWorldJson,clone=v=>JSON.parse(canon(v)),same=(a,b)=>canon(a)===canon(b);
  const exact=(o,keys)=>o&&typeof o==="object"&&!Array.isArray(o)&&Object.keys(o).length===keys.length&&keys.every(k=>Object.hasOwn(o,k));
  ensure(store&&typeof store.read==="function"&&typeof store.compareAndSwap==="function"&&typeof createExecutor==="function"&&typeof createScheduler==="function"&&typeof reviewNpc==="function"&&id(adapterVersion),"invalid persistence dependencies");
+ ensure(expectedIdentity===null||(exact(expectedIdentity,["world_id","seed"])&&id(expectedIdentity.world_id)&&typeof expectedIdentity.seed==="string"&&expectedIdentity.seed.length>0&&expectedIdentity.seed.length<=128),"invalid expected identity");
+ const identity=expectedIdentity===null?null:clone(expectedIdentity);
+ const verifyIdentity=(world_id,seed)=>ensure(identity===null||(identity.world_id===world_id&&identity.seed===seed),"world identity mismatch");
  function apply(runtime,cmd){
   ensure(cmd&&typeof cmd.kind==="string","invalid command");
   const {x,s}=runtime;
@@ -42,6 +45,7 @@ export function createWorldPersistenceReference(store,createExecutor,createSched
  const capture=r=>({executor:r.x.state(),scheduler:r.s.diagnostics()});
  function build(root){
   ensure(exact(root,["format","adapter_version","world_id","seed","player_id","initial","revision","journal","checkpoint"])&&root.format==="world-reference-v1"&&root.adapter_version===adapterVersion&&id(root.world_id)&&typeof root.seed==="string"&&root.seed.length>0&&root.seed.length<=128&&id(root.player_id)&&root.initial?.world_id===root.world_id&&int(root.revision)&&Array.isArray(root.journal)&&root.revision===root.journal.length&&root.journal.length<=256,"invalid or incompatible world record");
+  verifyIdentity(root.world_id,root.seed);
   const x=createExecutor(clone(root.initial)),s=createScheduler(x,root.player_id,reviewNpc),runtime={x,s},seen=new Set();
   for(let i=0;i<root.journal.length;i++){
    const row=root.journal[i];
@@ -59,6 +63,7 @@ export function createWorldPersistenceReference(store,createExecutor,createSched
  function initialize(initial,player_id,seed){
   ensure(store.read()===null,"world already exists or storage unreadable");
   ensure(initial&&id(initial.world_id)&&id(player_id)&&typeof seed==="string"&&seed.length>0&&seed.length<=128,"invalid initial identity");
+  verifyIdentity(initial.world_id,seed);
   const initialCopy=clone(initial),x=createExecutor(initialCopy),s=createScheduler(x,player_id,reviewNpc);
   const root={format:"world-reference-v1",adapter_version:adapterVersion,world_id:initial.world_id,seed,player_id,initial:initialCopy,revision:0,journal:[],checkpoint:capture({x,s})};
   const raw=canon(root);ensure(raw.length<=16000000&&store.compareAndSwap(null,raw)===true,"initialization conflict");
