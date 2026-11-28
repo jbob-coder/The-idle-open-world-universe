@@ -12,11 +12,11 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 const storage = ['tools/check_durable_world_store.mjs','docs/completion/check_storage_boundary.mjs'];
 const baseline = ['check_npc_knowledge','check_npc_perception','check_npc_cognition','check_npc_opportunity','check_npc_planning','check_npc_execution','check_world_scheduler','check_world_persistence','check_world_transaction','check_execution_checkpoints','check_world_checkpoints','check_integrated_checkpoints','check_durable_world_store','check_durable_world_recovery','check_integrated_world_recovery','check_durable_checkpoints','check_world_journal_segments'].map(x=>`tools/${x}.mjs`);
 const modules = ['durable_world_store','npc_cognition_reference','npc_execution_reference','npc_opportunity_reference','npc_perception_reference','npc_planning_reference','world_journal_segments','world_persistence_reference','world_scheduler_reference','world_transaction_reference'].map(x=>`tools/${x}.mjs`);
-// Partial group deliberately excludes perception-only, execution and scheduler suites.
-const npc = ['check_npc_cognition','check_npc_opportunity','check_npc_planning','check_world_checkpoints'].map(x=>`tools/${x}.mjs`);
-const npcDeps = ['npc_cognition_reference','npc_perception_reference','npc_opportunity_reference','npc_planning_reference'].map(x=>`tools/${x}.mjs`);
+// Partial group deliberately excludes knowledge validation, perception-only and scheduler suites.
+const npc = ['check_npc_cognition','check_npc_opportunity','check_npc_planning','check_npc_execution','check_world_checkpoints'].map(x=>`tools/${x}.mjs`);
+const npcDeps = ['npc_cognition_reference','npc_perception_reference','npc_opportunity_reference','npc_planning_reference','npc_execution_reference'].map(x=>`tools/${x}.mjs`);
 // Counts pinned to the verified reference baseline, not a substitute for source review.
-const expectedCounts = Object.fromEntries([...npc,...storage].map((path,i)=>[path,[48,53,51,33,20,8][i]]));
+const expectedCounts = Object.fromEntries([...npc,...storage].map((path,i)=>[path,[48,53,51,51,33,20,8][i]]));
 const storageDeps = ['tools/durable_world_store.mjs','tools/world_journal_segments.mjs','tools/world_persistence_reference.mjs'];
 const hash = path => {
   const bytes = readFileSync(resolve(root,path));
