@@ -113,3 +113,6 @@ function tests(){
 const report=tests();
 console.log(JSON.stringify(report,null,2));
 if(report.some(x=>!x.pass))process.exitCode=1;
+
+// Test-only composition helpers. Import also runs the standalone diagnostic.
+export {stage,fixture,totals,tests};
