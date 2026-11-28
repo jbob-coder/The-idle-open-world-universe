@@ -8,7 +8,7 @@ function runChecks(){
  const ensure=(v,m)=>{if(!v)throw Error(m)};
  const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
  const positive=n=>Number.isSafeInteger(n)&&n>0;
- const validId=s=>typeof s==="string"&&/^[A-Za-z0-9_-]{1,40}$/.test(s);
+ const validId=s=>typeof s==="string"&&/^[A-Za-z0-9_-]{1,40}$/.test(s)&&!Object.hasOwn(Object.prototype,s)&&s!=="prototype";
  function fixture(global=128,regional=32){
   return {epoch:"E1",revision:0,enabled:true,global,regional,actors:{P:{role:"player",status:"active",region:"R",origin:"R"}},reservations:{},spent:{},receipts:{}};
  }
@@ -21,7 +21,7 @@ function runChecks(){
   function commit(c,fail=false){
    c=clone(c);const bytes=JSON.stringify(c);
    ensure(c.epoch===head.epoch&&validId(c.id),"stale epoch or identity");
-   const old=head.receipts[c.id];
+   const old=Object.hasOwn(head.receipts,c.id)?head.receipts[c.id]:null;
    if(old){ensure(old.bytes===bytes,"conflicting retry");return clone(old.result)}
    ensure(c.revision===head.revision,"stale revision");
    const s=clone(head);
@@ -30,7 +30,7 @@ function runChecks(){
     ensure(c.count<=s.global-living(s)-held(s)&&c.count<=s.regional-consumed(s,c.origin)-held(s,c.origin),"capacity unavailable");
     s.reservations[c.reservation]={origin:c.origin,method:c.method,count:c.count,status:"held"};
    }else if(c.kind==="admit"){
-    const r=s.reservations[c.reservation];
+    const r=validId(c.reservation)&&Object.hasOwn(s.reservations,c.reservation)?s.reservations[c.reservation]:null;
     ensure(r?.status==="held"&&Array.isArray(c.actors)&&c.actors.length===r.count&&new Set(c.actors.map(a=>a.id)).size===r.count,"reservation mismatch");
     // In production, validated complete profile and admission eligibility are mandatory.
     // This boolean is a synthetic assertion by the trusted fixture, NOT a public input.
@@ -40,16 +40,16 @@ function runChecks(){
     }
     r.status="consumed";s.spent[r.origin]=consumed(s,r.origin)+r.count;
    }else if(c.kind==="cancel"){
-    const r=s.reservations[c.reservation];
+    const r=validId(c.reservation)&&Object.hasOwn(s.reservations,c.reservation)?s.reservations[c.reservation]:null;
     ensure(r?.status==="held"&&c.authorized===true,"cancellation unavailable");
     r.status="cancelled";
    }else if(c.kind==="settings"){
     ensure(typeof c.enabled==="boolean"&&positive(c.global)&&positive(c.regional),"invalid settings");
     s.enabled=c.enabled;s.global=c.global;s.regional=c.regional;
    }else if(c.kind==="travel"){
-    const a=s.actors[c.actor];ensure(a?.status==="active"&&validId(c.region),"travel unavailable");a.region=c.region;
+    const a=validId(c.actor)&&Object.hasOwn(s.actors,c.actor)?s.actors[c.actor]:null;ensure(a?.status==="active"&&validId(c.region),"travel unavailable");a.region=c.region;
    }else if(c.kind==="death"){
-    const a=s.actors[c.actor];ensure(a?.role==="npc"&&a.status!=="deceased"&&c.fatal===true,"death unavailable");
+    const a=validId(c.actor)&&Object.hasOwn(s.actors,c.actor)?s.actors[c.actor]:null;ensure(a?.role==="npc"&&a.status!=="deceased"&&c.fatal===true,"death unavailable");
     a.status="deceased";a.schedule=false; // history retained, not deleted
    }else throw Error("unsupported");
    ensure(Number.isSafeInteger(s.revision+1),"overflow");s.revision++;
@@ -89,6 +89,8 @@ function runChecks(){
  test("stale epoch rejected before receipt lookup",()=>{const a=open(fixture());return rejected(a,()=>a.commit({id:"x",kind:"reserve",epoch:"E0",revision:0,reservation:"X",origin:"R",count:1,method:"birth"}))});
  test("synthetic serialized reservation preserves continuation",()=>{const a=open(fixture());res(a,"B");const b=open(clone(a.snapshot()));for(const x of [a,b])admit(x,"B",[actor("A")]);return same(a.snapshot(),b.snapshot())});
  test("full 128 global slots across four regions, no 129th",()=>{const a=open(fixture());for(let j=0;j<4;j++){const id="B"+j,region="R"+j;res(a,id,region,32,"discovery");admit(a,id,Array.from({length:32},(_,i)=>actor("A"+j+"_"+i,region)))}return living(a.snapshot())===128&&held(a.snapshot())===0&&rejected(a,()=>res(a,"extra","R5"))});
+ test("unsafe dictionary keys rejected without state change",()=>{const a=open(fixture());return rejected(a,()=>res(a,"__proto__"))&&rejected(a,()=>res(a,"B","constructor"))&&rejected(a,()=>send(a,"toString","settings",{enabled:false,global:1,regional:1}))&&!!res(a,"C")&&rejected(a,()=>admit(a,"C",[actor("__proto__")]))});
+ test("duplicate actor IDs cannot consume batch",()=>{const a=open(fixture());res(a,"B","R",2);return rejected(a,()=>admit(a,"B",[actor("A"),actor("A")]))&&held(a.snapshot())===2});
  return {checks,passed:checks.filter(x=>x.pass).length};
 }
 const result=runChecks();
