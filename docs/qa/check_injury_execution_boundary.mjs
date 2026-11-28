@@ -121,3 +121,74 @@ test2("V1 physical condition not bound to actor revision: reproduce stale offer 
 });
 test2("foreign epoch invalidates condition proof",()=>{const s=fixture(),p=preparePhysical(s,"heavy_work");let threw=false;try{guardedAdmission({...s,epoch:2},p)}catch{threw=true}ok(threw)});
 console.log(n2+"/"+n2+" condition feedback checks PASS; baseline stale physical admission reproduced");
+
+// Cycle continuation: active activity invalidation, aligned with proposed #103 D2/D4.
+// Existing V1 executor determines abstract elapsed credit; stage derives fixture
+// eligibility and publishes actual partial result. No approved wage or injury rates.
+function admitWork(x,actor,action,attempt,duration,interruptible=true,target="bench"){
+ const s=x.state(),a=s.actors.find(v=>v.actor_id===actor);
+ x.publishOffer({world_id:"W",actor_id:actor,actor_revision:a.revision,knowledge_revision:a.knowledge_revision,opportunity_id:attempt,action_id:action,kind:"action",valid_until:s.now,feasible:true,exclusive_target:target,credit_cap:100,phases:[{kind:"execution",duration,cost:0,interruptible,credit_per_tick:1}]});
+ return x.admit({kind:"intent",world_id:"W",actor_id:actor,actor_revision:a.revision,knowledge_revision:a.knowledge_revision,decision_tick:s.now,opportunity_id:attempt,action_id:action,disposition:"action"},attempt);
+}
+function concurrentFixture(action="heavy_work",duration=10,interruptible=true){
+ const s=start(),x=executor(initial,s.clock);admitWork(x,"B",action,"work1",duration,interruptible);
+ return {...s,clock:x.exportCheckpoint(),work:{action,attempt:"work1",eligible:0,settled:[],status:"active"},conditionRevision:0};
+}
+function stageConcurrent(root,c,guard=true,fault=false){
+ ok(c.world===root.world&&c.epoch===root.epoch,"scope");
+ const prior=root.ops.find(v=>v.id===c.id);
+ if(prior){ok(eq(prior.cmd,c),"divergent retry");return {next:root,receipt:copy(prior.receipt),replayed:true}}
+ ok(root.revision===c.expected&&c.kind==="concurrent_advance","stale revision or command");
+ const n=copy(root),x=executor(initial,n.clock),before=x.state();
+ const active=before.active.find(a=>a.attempt_id===n.work.attempt),eligible=active&&capable(n.health.B,n.work.action);
+ // Fixture models all work as execution, with one unit per abstract tick.
+ const terminal=x.advanceTo(c.to),after=x.state();
+ if(eligible)n.work.eligible+=c.to-before.now;
+ const contact=after.events.slice(before.events.length).find(v=>v.kind==="execution_boundary"&&v.attempt_id===n.attempt&&v.actor_id==="A");
+ if(contact&&n.contact){
+  const h=n.health.B,p=proofs.contact,id=contact.attempt_id+":contact";
+  ok(!n.damageIds.includes(id),"duplicate contact");
+  h.hp=Math.max(0,h.hp-p.hpLoss);h.function.arm=Math.max(0,h.function.arm-p.severity);
+  h.injuries.push({id,region:p.region,severity:p.severity,cause:contact.attempt_id,onset:contact.tick});
+  n.damageIds.push(id);n.conditionRevision++;
+ }
+ // Candidate boundary policy: work valid in [start,end) earns its elapsed credit.
+ // A completion exactly at end remains completed; no subsequent infeasible work.
+ // A committed/noninterruptible phase may fail for actual impossibility, not be
+ // retroactively cancelled. This policy is proposed, not established canon.
+ const remaining=x.state().active.find(a=>a.attempt_id===n.work.attempt);
+ if(guard&&remaining&&!capable(n.health.B,n.work.action)){
+  terminal.push(x.stop("B",remaining.attempt_id,remaining.phases[remaining.phase_index].interruptible?"interrupted":"failed"));
+ }
+ const workResult=terminal.find(v=>v.attempt_id===n.work.attempt&&v.actor_id==="B");
+ if(workResult){
+  ok(!n.work.settled.some(v=>v.event===workResult.event_id),"duplicate settlement");
+  if(guard)ok(workResult.credited_units===n.work.eligible,"credit exceeds eligible interval");
+  n.work.settled.push({event:workResult.event_id,credited:workResult.credited_units,eligible:n.work.eligible,tick:workResult.tick,outcome:workResult.outcome});
+  n.work.status=workResult.outcome;
+ }
+ if(terminal.some(v=>v.attempt_id===n.attempt&&v.actor_id==="A"))n.attempt=null;
+ if(fault)throw Error("late fault");
+ n.clock=x.exportCheckpoint();n.revision++;
+ const receipt={id:c.id,revision:n.revision,tick:c.to,conditionRevision:n.conditionRevision,workResult:workResult?copy(n.work.settled.at(-1)):null};
+ n.ops.push({id:c.id,cmd:copy(c),receipt:copy(receipt)});return {next:n,receipt,replayed:false};
+}
+const advanceBoth=(s,to,guard=true)=>stageConcurrent(s,cmd(s,"concurrent_advance",{to}),guard).next;
+const injuryBoundary=(s=concurrentFixture(),guard=true)=>advanceBoth(advanceBoth(s,2,guard),5,guard);
+const rejectsConcurrent=(s,c,fault=false)=>{const before=JSON.stringify(s);let threw=false;try{stageConcurrent(s,c,true,fault)}catch{threw=true}ok(threw&&JSON.stringify(s)===before,"atomic rejection")};
+let n3=0;const test3=(name,fn)=>{fn();n3++;console.log("PASS "+name)};
+test3("actual V1 without condition guard overcredits work after injury",()=>{let s=injuryBoundary(concurrentFixture(),false);ok(s.work.status==="active"&&s.work.eligible===5);s=advanceBoth(advanceBoth(s,7,false),10,false);ok(s.work.settled[0].credited===10&&s.work.settled[0].eligible===5)});
+test3("candidate stops at injury boundary with exactly five eligible units",()=>{const s=injuryBoundary();ok(s.clock.state.now===5&&s.conditionRevision===1&&s.work.status==="interrupted"&&eq(s.work.settled[0],{event:"out_work1",credited:5,eligible:5,tick:5,outcome:"interrupted"}))});
+test3("unrelated recovery phase continues independently",()=>{const s=injuryBoundary(),n=advanceBoth(s,7);ok(s.clock.state.active.some(a=>a.actor_id==="A"&&a.phases[a.phase_index].kind==="recovery")&&n.clock.state.now===7&&n.work.settled.length===1&&n.clock.state.active.length===0)});
+test3("unaffected walking does not interrupt",()=>{let s=injuryBoundary(concurrentFixture("walk"));ok(s.work.status==="active");s=advanceBoth(advanceBoth(s,7),10);ok(s.work.status==="completed"&&s.work.settled[0].credited===10&&s.work.eligible===10)});
+test3("candidate same-boundary completion retains legitimately earned work",()=>{const s=injuryBoundary(concurrentFixture("heavy_work",5));ok(s.work.status==="completed"&&s.work.settled.length===1&&s.work.settled[0].credited===5)});
+test3("actual impossibility ends noninterruptible phase as failed not cancelled",()=>{const s=injuryBoundary(concurrentFixture("heavy_work",10,false));ok(s.work.status==="failed"&&s.work.settled[0].credited===5)});
+test3("interruption frees exclusive resource",()=>{const s=advanceBoth(injuryBoundary(),7),x=executor(initial,s.clock);ok(admitWork(x,"A","light_work","replacement",2).accepted===true)});
+test3("failed combined stage leaves time injury and earned units unchanged",()=>{const s=advanceBoth(concurrentFixture(),2),c=cmd(s,"concurrent_advance",{to:5});rejectsConcurrent(s,c,true);ok(s.clock.state.now===2&&s.damageIds.length===0&&s.work.eligible===2&&s.work.settled.length===0)});
+test3("exact retry does not double settle or injure",()=>{const s=advanceBoth(concurrentFixture(),2),c=cmd(s,"concurrent_advance",{to:5}),z=stageConcurrent(s,c),v=stageConcurrent(copy(z.next),c);ok(v.replayed&&eq(v.next,z.next)&&eq(v.receipt,z.receipt)&&v.next.damageIds.length===1&&v.next.work.settled.length===1)});
+test3("divergent retry and old epoch rejected",()=>{const s=advanceBoth(concurrentFixture(),2),c=cmd(s,"concurrent_advance",{to:5}),z=stageConcurrent(s,c);rejectsConcurrent(z.next,{...c,to:4});rejectsConcurrent({...z.next,epoch:2},c)});
+test3("split elapsed interval preserves total work and condition",()=>{const s=advanceBoth(concurrentFixture(),2),a=advanceBoth(s,5),b=advanceBoth(advanceBoth(s,4),5);ok(eq(a.health,b.health)&&eq(a.work,b.work)&&eq(a.clock.state,b.clock.state))});
+test3("normal serialization preserves interruption evidence and reevaluation",()=>{const s=injuryBoundary(),t=copy(s);ok(eq(advanceBoth(s,7),advanceBoth(t,7))&&chooseLife(t,{resources:8}).action_id==="light_work"&&chooseLife(t,{rest:8}).action_id==="rest")});
+console.log(n3+"/"+n3+" active condition checks PASS; V1 over-credit reproduced");
+// No real scheduler/domain effects, authenticated proofs, DB CAS or wage settlement.
+// Preexisting work credit is not itself evidence of actual eligible labor in V2.
