@@ -1,0 +1,265 @@
+{
+  "version": "0.1-proposal",
+  "status": "review_only_inactive",
+  "decision_register": 103,
+  "decisions": [
+    "D2",
+    "D4",
+    "D6"
+  ],
+  "source_refs": {
+    "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+    "world": "97ccbce13999416c4eb757619947ef55bf31abe5",
+    "life": "b51c461d05ee2a0b4b3886147f4120f1a8d2e270",
+    "abilities": "a3caeaeac33691f4df6c2b67ac80129119609062",
+    "narrative": "04ec522a2ee541a843234f3ea1fa0c01216c42b2",
+    "receipt_candidate": "be5b5dd6fe40232454772293976a7d55e629a14d",
+    "injury_qa": "9f05d1eb35d8b200ccc19adf6b94f606c1f0f732"
+  },
+  "note": "Review-only composition; abstract reference ticks, no approved clock, injury severity, employment contract, pay rate, actual world or public API. Aggregate revisions and IDs synthetic, not V1 executor revisions. Prior two units accrued once; this boundary accrues only three, no cash payment. Worker B's authorized self projection only; no player disclosure inferred.",
+  "world_id": "W",
+  "epoch_id": "E1",
+  "command": {
+    "version": "2-candidate",
+    "world_id": "W",
+    "epoch_id": "E1",
+    "expected_revision": 12,
+    "command_id": "T2",
+    "actor_id": "A",
+    "kind": "continue_session",
+    "issued_tick": 2,
+    "payload": {
+      "session_id": "SA",
+      "prior_boundary_receipt_id": "R1"
+    }
+  },
+  "before": {
+    "world_revision": 12,
+    "now_tick": 2,
+    "subject_revisions": {
+      "B": 7,
+      "E": 3,
+      "bench": 4
+    },
+    "condition_revision": 0,
+    "worker": {
+      "arm": 10,
+      "hp": 10,
+      "activity_id": "work1",
+      "status": "active",
+      "eligible_total": 2,
+      "accrued_total": 20,
+      "paid_total": 0
+    },
+    "employer": {
+      "payable_minor": 20,
+      "cash_minor": 40
+    },
+    "bench": {
+      "reserved_by": "work1"
+    }
+  },
+  "private_stage": {
+    "boundary_receipt_id": "R2",
+    "session_id": "SA",
+    "start_tick": 2,
+    "end_tick": 5,
+    "work_fact": {
+      "fact_id": "F2",
+      "reserved_event_id": "EVW",
+      "actor_id": "B",
+      "activity_id": "work1",
+      "agreement_id": "AGREE",
+      "eligible_elapsed_ticks": 3,
+      "eligible_total_ticks": 5,
+      "authority": "coordinator_stage"
+    },
+    "contact_fact": {
+      "fact_id": "FC",
+      "reserved_event_id": "EVC",
+      "source_actor_id": "A",
+      "target_actor_id": "B",
+      "attempt_id": "op0",
+      "tick": 5,
+      "authority": "coordinator_stage"
+    },
+    "effects": [
+      {
+        "effect_id": "FXW",
+        "domain": "life",
+        "schema_version": "1-candidate",
+        "subject_id": "E",
+        "expected_subject_revision": 3,
+        "kind": "earned_obligation",
+        "payload": {
+          "worker_id": "B",
+          "agreement_id": "AGREE",
+          "staged_fact_id": "F2",
+          "earned_minor": 30,
+          "before_payable_minor": 20,
+          "after_payable_minor": 50
+        },
+        "causal_event_id": "EVW"
+      },
+      {
+        "effect_id": "FXI",
+        "domain": "life",
+        "schema_version": "1-candidate",
+        "subject_id": "B",
+        "expected_subject_revision": 7,
+        "kind": "localized_injury",
+        "payload": {
+          "staged_fact_id": "FC",
+          "region": "arm",
+          "before_function": 10,
+          "after_function": 6,
+          "before_hp": 10,
+          "after_hp": 0,
+          "before_condition_revision": 0,
+          "after_condition_revision": 1
+        },
+        "causal_event_id": "EVC"
+      },
+      {
+        "effect_id": "FXT",
+        "domain": "world",
+        "schema_version": "1-candidate",
+        "subject_id": "B",
+        "expected_subject_revision": 7,
+        "kind": "activity_interruption",
+        "payload": {
+          "activity_id": "work1",
+          "condition_effect_id": "FXI",
+          "eligible_total_ticks": 5,
+          "terminal_outcome": "interrupted"
+        },
+        "causal_event_id": "EVT"
+      },
+      {
+        "effect_id": "FXR",
+        "domain": "world",
+        "schema_version": "1-candidate",
+        "subject_id": "bench",
+        "expected_subject_revision": 4,
+        "kind": "release_reservation",
+        "payload": {
+          "activity_id": "work1",
+          "before_reserved_by": "work1",
+          "after_reserved_by": null
+        },
+        "causal_event_id": "EVT"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "EVW",
+        "world_id": "W",
+        "epoch_id": "E1",
+        "world_revision": 13,
+        "tick": 5,
+        "causal_ids": [
+          "T2"
+        ],
+        "kind": "work_accrual",
+        "effect_ids": [
+          "FXW"
+        ],
+        "outcome": "accrued",
+        "source_actor_id": "B"
+      },
+      {
+        "event_id": "EVC",
+        "world_id": "W",
+        "epoch_id": "E1",
+        "world_revision": 13,
+        "tick": 5,
+        "causal_ids": [
+          "T2"
+        ],
+        "kind": "contact",
+        "effect_ids": [
+          "FXI"
+        ],
+        "outcome": "resolved",
+        "source_actor_id": "A"
+      },
+      {
+        "event_id": "EVT",
+        "world_id": "W",
+        "epoch_id": "E1",
+        "world_revision": 13,
+        "tick": 5,
+        "causal_ids": [
+          "EVC",
+          "EVW"
+        ],
+        "kind": "activity_terminal",
+        "effect_ids": [
+          "FXT",
+          "FXR"
+        ],
+        "outcome": "interrupted",
+        "source_actor_id": "B"
+      }
+    ],
+    "new_subject_revisions": {
+      "B": 8,
+      "E": 4,
+      "bench": 5
+    }
+  },
+  "after": {
+    "world_revision": 13,
+    "now_tick": 5,
+    "subject_revisions": {
+      "B": 8,
+      "E": 4,
+      "bench": 5
+    },
+    "condition_revision": 1,
+    "worker": {
+      "arm": 6,
+      "hp": 0,
+      "activity_id": "work1",
+      "status": "interrupted",
+      "eligible_total": 5,
+      "accrued_total": 50,
+      "paid_total": 0
+    },
+    "employer": {
+      "payable_minor": 50,
+      "cash_minor": 40
+    },
+    "bench": {
+      "reserved_by": null
+    },
+    "other_activity": "continues"
+  },
+  "projection_policy": "Illustrative worker-self receipt; no global revisions, hidden causal IDs, source identity, employer balance or private stage. No projection to A or player implied. Opaque receipt handle and own observed/earned facts; public schema/auth still requires D6 review.",
+  "worker_receipt": {
+    "world_id": "W",
+    "epoch_id": "E1",
+    "actor_id": "B",
+    "receipt_id": "RB2",
+    "outcome": "interrupted",
+    "start_tick": 2,
+    "end_tick": 5,
+    "own_effects": [
+      {
+        "kind": "work_accrual",
+        "earned_minor": 30,
+        "paid_minor": 0
+      },
+      {
+        "kind": "localized_injury",
+        "region": "arm"
+      },
+      {
+        "kind": "activity_interruption",
+        "activity_id": "work1",
+        "eligible_total_ticks": 5
+      }
+    ],
+    "content_version": "fixture-v1"
+  }
+}
