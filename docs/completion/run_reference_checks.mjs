@@ -1,5 +1,5 @@
 // Development QA runner; does not activate gameplay, invoke CI or touch real saves.
-// Run from any directory: node docs/completion/run_reference_checks.mjs --storage|--npc-reference|--baseline|--self-test
+// Run from any directory: node docs/completion/run_reference_checks.mjs --storage|--npc-reference|--scheduler-reference|--baseline|--self-test
 import { spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import { readFileSync, existsSync } from 'node:fs';
@@ -16,7 +16,9 @@ const modules = ['durable_world_store','npc_cognition_reference','npc_execution_
 const npc = ['check_npc_cognition','check_npc_opportunity','check_npc_planning','check_npc_execution','check_world_checkpoints'].map(x=>`tools/${x}.mjs`);
 const npcDeps = ['npc_cognition_reference','npc_perception_reference','npc_opportunity_reference','npc_planning_reference','npc_execution_reference'].map(x=>`tools/${x}.mjs`);
 // Counts pinned to the verified reference baseline, not a substitute for source review.
-const expectedCounts = Object.fromEntries([...npc,...storage].map((path,i)=>[path,[48,53,51,51,33,20,8][i]]));
+const scheduler = ['tools/check_world_scheduler.mjs','tools/check_execution_checkpoints.mjs'];
+const schedulerDeps = ['world_scheduler_reference','npc_execution_reference','npc_opportunity_reference','npc_cognition_reference'].map(x=>`tools/${x}.mjs`);
+const expectedCounts = Object.fromEntries([...npc,...storage,...scheduler].map((path,i)=>[path,[48,53,51,51,33,20,8,46,35][i]]));
 const storageDeps = ['tools/durable_world_store.mjs','tools/world_journal_segments.mjs','tools/world_persistence_reference.mjs'];
 const hash = path => {
   const bytes = readFileSync(resolve(root,path));
@@ -58,12 +60,12 @@ async function selfTest(){
   console.log(`${cases.length}/${cases.length} runner checks passed`);
 }
 const mode=process.argv[2];
-if(process.argv.length!==3||!['--storage','--npc-reference','--baseline','--self-test'].includes(mode)){
-  console.error('Choose exactly one explicit mode: --storage, --npc-reference, --baseline or --self-test');process.exitCode=2;
+if(process.argv.length!==3||!['--storage','--npc-reference','--scheduler-reference','--baseline','--self-test'].includes(mode)){
+  console.error('Choose exactly one explicit mode: --storage, --npc-reference, --scheduler-reference, --baseline or --self-test');process.exitCode=2;
 }else if(mode==='--self-test')await selfTest();
 else{
-  const suites=mode==='--storage'?storage:mode==='--npc-reference'?npc:baseline;
-  const required=[...new Set([...suites,...(mode==='--storage'?storageDeps:mode==='--npc-reference'?npcDeps:[...modules,'schemas/npc_knowledge.schema.json','tests/fixtures/npc_knowledge.json'])])];
+  const suites=mode==='--storage'?storage:mode==='--npc-reference'?npc:mode==='--scheduler-reference'?scheduler:baseline;
+  const required=[...new Set([...suites,...(mode==='--storage'?storageDeps:mode==='--npc-reference'?npcDeps:mode==='--scheduler-reference'?schedulerDeps:[...modules,'schemas/npc_knowledge.schema.json','tests/fixtures/npc_knowledge.json'])])];
   const missing=required.filter(p=>!existsSync(resolve(root,p)));
   const [major,minor]=process.versions.node.split('.').map(Number);
   const supported=major>22||(major===22&&minor>=16);
