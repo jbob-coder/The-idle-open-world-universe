@@ -4,6 +4,8 @@ Current design baseline: 2026-11-26. This is the new contemporary alternate-Eart
 
 ## Start here
 
+**Agents: [progress-first startup](docs/AGENT_COORDINATION.md#progress-first-execution-and-targeted-reading-2026-11-27).** Read the latest owner directive, current PR/handoff and [implementation readiness #103](https://github.com/jbob-coder/The-idle-open-world-universe/issues/103); inspect the relevant code and tests, then deliver the smallest safe implementation increment. The index below is a reference map, not a mandatory full-repository reading list.
+
 | Document | Purpose |
 |---|---|
 | [Narrative gameplay](docs/GAMEPLAY.md) | Narrative gameplay |
