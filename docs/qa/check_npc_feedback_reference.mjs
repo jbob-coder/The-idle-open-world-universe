@@ -15,7 +15,7 @@ function runDiagnostic({canonical,store,persistence,executor,scheduler,perceptio
  const dims=(rest=0,growth=0)=>({safety:0,resources:0,growth,connection:0,duty:0,rest});
  const same=(a,b)=>canonical(a)===canonical(b);
  const checks=[];
- const check=(name,pass)=>{checks.push({name,pass:!!pass})};
+ const check=(name,pass,baselineOnly=false)=>{checks.push({name,pass:!!pass,baselineOnly})};
  function scenario(needs,feasible=true,budget=100){
   const db=store(),samples=new Map();
   const offer=(a,t,r,k,act,opp,duration,cost)=>({world_id:"W",actor_id:a,actor_revision:r,knowledge_revision:k,action_id:act,opportunity_id:opp,kind:"action",valid_until:t,feasible:a==="P"||feasible,exclusive_target:null,credit_cap:10,phases:[{kind:"execution",duration,cost,interruptible:true,credit_per_tick:1}]});
@@ -47,9 +47,9 @@ function runDiagnostic({canonical,store,persistence,executor,scheduler,perceptio
  }
  const a=scenario(dims(10,1)),b=scenario(dims(0,10)),c=scenario(dims(10,1),false),d=scenario(dims(10,1),true,1);
  check("all four bounded fixtures reach the same horizon",[a,b,c,d].every(x=>x.done&&x.now===11));
- check("rest fixture completes six activities",a.completed===6&&a.actor.resources===94&&a.actor.revision===12);
- check("rest pressure remains unchanged in reference",a.trace.filter(x=>x.revision>0).length===5&&a.trace.every(x=>x.rest===10&&x.action==="rest"));
- check("growth fixture selects practice",b.completed===6&&b.trace.every(x=>x.action==="practice"));
+ check("rest fixture completes six activities",a.completed===6&&a.actor.resources===94&&a.actor.revision===12,true);
+ check("rest pressure remains unchanged in reference",a.trace.filter(x=>x.revision>0).length===5&&a.trace.every(x=>x.rest===10&&x.action==="rest"),true);
+ check("growth fixture selects practice",b.completed===6&&b.trace.every(x=>x.action==="practice"),true);
  check("infeasible offers do not fabricate completed activities",c.completed===0&&c.rejected===6&&c.actor.resources===100&&c.actor.revision===0);
  check("technical work budget does not change final reference checkpoint",same(a.c,d.c));
  check("normal reconstruction retains final checkpoint",[a,b,c,d].every(x=>x.recovered));
@@ -62,12 +62,14 @@ function runDiagnostic({canonical,store,persistence,executor,scheduler,perceptio
   return decide(p,k,generate(p,k,{world_id:"W",actor_id:"A",actor_revision:0,as_of_tick:0,capabilities:["rest","practice"]})).action_id;
  };
  check("cognition changes choice when actual input changes",choice(10)==="rest"&&choice(0)==="practice");
- const feedbackGate=a.trace.some(x=>x.revision>0&&x.rest<10);
+ const feedbackGate=a.completed>0&&a.trace.some(x=>x.revision>0&&x.rest<10);
  return {checks,feedbackGate,observed:{rest:a.trace,practice:b.trace,rejected:c.rejected,completed:a.completed}};
 }
 import {createWorldTransactionReference as create} from "../../tools/world_transaction_reference.mjs";
 const result=runDiagnostic({canonical,store,persistence,executor,scheduler,perception,planner,generate,decide,create});
-for(const c of result.checks)console.log(c.pass?"PASS":"FAIL",c.name);
+const strict=process.argv.includes("--require-feedback");
+const selected=result.checks.filter(c=>!strict||!c.baselineOnly);
+for(const c of selected)console.log(c.pass?"PASS":"FAIL",c.name);
 console.log("Authoritative feedback gate:",result.feedbackGate?"PASS":"NOT MET");
 console.log(JSON.stringify(result.observed));
-if(result.checks.some(c=>!c.pass)||(process.argv.includes("--require-feedback")&&!result.feedbackGate))process.exitCode=1;
+if(selected.some(c=>!c.pass)||(strict&&!result.feedbackGate))process.exitCode=1;
