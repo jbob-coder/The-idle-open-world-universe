@@ -149,5 +149,148 @@
     "D4 actual agreement/authority, payment and terminal carry policy",
     "D6 prepared interaction and scoped rendering",
     "D8 owner and peer review"
-  ]
+  ],
+  "boundary_reconciliation": {
+    "status": "review_only_inactive",
+    "source_refs": {
+      "prior_receipt_fixture_head": "10c6d9ce3a03a52eb62051542a4fbf7cb208eea1",
+      "prior_receipt_fixture_blob": "b2df2a846772f876d4e781bc8b373809233afb21",
+      "narrative_head": "ad99898b8fbac36188f30ff8f926bac02d7d19f8",
+      "narrative_blob": "0267437201cac7ef4a68d273de7bc85d803da1c7",
+      "privacy_amendment_head": "ff3f3588bafe3202722025f72b5af023e26c5e16"
+    },
+    "note": "The prior #99 receipt example uses 10 synthetic minor units per second and totals 90; it is NOT numerically interchangeable with this M1-A proposal at 1800 minor/hour. Retain original #99 evidence unchanged. Use its relative 2s/1s/6s boundary ordering and 9m progress only; no absolute clock, private/global revision projection or actual worker activity imported. These are conditional expected values, not actual receipts or authoritative effect payloads. No automatic work or guaranteed uninterrupted movement.",
+    "boundaries": [
+      {
+        "source_command": "C1",
+        "source_boundary_receipt": "B1",
+        "elapsed_ms": 2000,
+        "player_progress_mm": 2000,
+        "arrival": null,
+        "player_outcome": "pending",
+        "worker_conditional_all_eligible": {
+          "eligible_elapsed_ms": 2000,
+          "prior_payable_minor": 0,
+          "prior_carry": 0,
+          "new_earned_minor": 1,
+          "cumulative_earned_minor": 1,
+          "carry": 0,
+          "paid_minor": 0,
+          "payable_minor": 1
+        },
+        "worker_conditional_no_work": {
+          "eligible_elapsed_ms": 0,
+          "new_earned_minor": 0,
+          "cumulative_earned_minor": 0,
+          "carry": 0,
+          "paid_minor": 0,
+          "payable_minor": 0
+        },
+        "player_projection": {
+          "render": "no_terminal_segment",
+          "private_worker_effects_visible": false
+        }
+      },
+      {
+        "source_command": "T1",
+        "source_boundary_receipt": "B2",
+        "elapsed_ms": 1000,
+        "player_progress_mm": 3000,
+        "arrival": null,
+        "player_outcome": "interrupted",
+        "worker_conditional_all_eligible": {
+          "eligible_elapsed_ms": 1000,
+          "prior_payable_minor": 1,
+          "prior_carry": 0,
+          "new_earned_minor": 0,
+          "cumulative_earned_minor": 1,
+          "carry": 1800000,
+          "paid_minor": 0,
+          "payable_minor": 1
+        },
+        "worker_conditional_no_work": {
+          "eligible_elapsed_ms": 0,
+          "new_earned_minor": 0,
+          "cumulative_earned_minor": 0,
+          "carry": 0,
+          "paid_minor": 0,
+          "payable_minor": 0
+        },
+        "player_projection": {
+          "render": "eligible_committed_segment",
+          "private_worker_effects_visible": false
+        }
+      },
+      {
+        "source_command": "C2",
+        "source_boundary_receipt": "B3",
+        "elapsed_ms": 6000,
+        "player_progress_mm": 9000,
+        "arrival": "LOC-0003",
+        "player_outcome": "completed",
+        "worker_conditional_all_eligible": {
+          "eligible_elapsed_ms": 6000,
+          "prior_payable_minor": 1,
+          "prior_carry": 1800000,
+          "new_earned_minor": 3,
+          "cumulative_earned_minor": 4,
+          "carry": 1800000,
+          "paid_minor": 0,
+          "payable_minor": 4
+        },
+        "worker_conditional_no_work": {
+          "eligible_elapsed_ms": 0,
+          "new_earned_minor": 0,
+          "cumulative_earned_minor": 0,
+          "carry": 0,
+          "paid_minor": 0,
+          "payable_minor": 0
+        },
+        "player_projection": {
+          "render": "eligible_committed_segment",
+          "private_worker_effects_visible": false
+        }
+      }
+    ],
+    "expected_final": {
+      "elapsed_ms": 9000,
+      "progress_mm": 9000,
+      "arrival": "LOC-0003",
+      "cumulative_earned_minor": 4,
+      "carry": 1800000,
+      "paid_minor": 0,
+      "payable_minor": 4,
+      "exact_entitlement_minor": "4.5",
+      "no_work_earned_minor": 0
+    },
+    "rules": [
+      "At B1 technical pending no terminal narrative segment; B2 actual observed interruption permits partial segment; B3 resumed arrival requires new confirmed action, not automatic continuation.",
+      "Use newly accrued whole units for each boundary obligation delta; never charge cumulative amount again. Fractional carry persists even when new earned amount is zero.",
+      "All worker eligible time is conditional; if NPC declines, rests or cannot work, settle actual eligible interval only. No-work alternative has zero wage effects.",
+      "Private worker evidence, money and carry never appear in unrelated player receipt; apply #99 scoped opaque choice amendment rather than exposing global revisions.",
+      "One atomic authority must validate elapsed work proof, rate and carry, actual movement and receipt effects. Discard all staged effects on failed CAS. Exact retry must not earn twice."
+    ],
+    "verification": {
+      "native_node": "v22.16.0",
+      "exact_wage_blob": "4e0726a2a7dbe1e7abb3d3173380d7e5534955ef",
+      "native_calculation_vectors": [
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1800000
+        ],
+        [
+          3,
+          4,
+          1800000
+        ]
+      ],
+      "scope": "Called exact committed arithmetic function from hash-matched local source; no actual cross-domain runtime/SQLite/Android test."
+    }
+  }
 }
