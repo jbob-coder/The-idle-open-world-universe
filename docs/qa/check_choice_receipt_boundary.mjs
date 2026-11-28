@@ -49,10 +49,11 @@ function fixture(){
  return {prepare,submit,recover,visible,diagnostic:()=>canon({state,journal:[...journal],prepared:[...prepared]}),advance:()=>{state.revision++;state.knowledgeRevision++;},fork:()=>{state.epoch="E2";state.revision=7;state.actorRevision=4;state.knowledgeRevision=2;state.tick=100;state.credit=0;prepared.clear();}};
 }
 const command=(row,commandId)=>({world:row.world,epoch:row.epoch,revision:row.revision,actor:row.actor,actorRevision:row.actorRevision,knowledgeRevision:row.knowledgeRevision,tick:row.tick,choiceId:row.choiceId,commandId});
-function presentation(epoch,actor){
+// Renderer assumes trusted authority-issued receipts, never client-created objects.
+function presentation(epoch,actor,world="fixture") {
  const segments=new Map();
  return {append(receipt){
-   if(!receipt||receipt.epoch!==epoch||receipt.actor!==actor||!["completed","interrupted","unsuccessful"].includes(receipt.outcome)||receipt.contentVersion!==1)return false;
+   if(!receipt||receipt.world!==world||receipt.epoch!==epoch||receipt.actor!==actor||!["completed","interrupted","unsuccessful"].includes(receipt.outcome)||receipt.contentVersion!==1)return false;
    const key=canon([receipt.world,receipt.epoch,receipt.id,0]);
    const segment={key,version:receipt.contentVersion,source:copy(receipt.visibleEvidence),outcome:receipt.outcome,elapsed:receipt.endTick-receipt.startTick,credit:receipt.ownCreditDelta};
    if(segments.has(key)){if(!eq(segments.get(key),segment))throw Error("divergent render receipt");return false;}
@@ -83,6 +84,7 @@ test("new epoch can use same command ID without old receipt",()=>{const {f,c}=se
 test("render dedup after retry",()=>{const {f,c}=setup(),p=presentation("E1","P"),a=f.submit(c),b=f.recover(c);return p.append(a.receipt)&&!p.append(b.receipt)&&p.view().length===1;});
 test("reconstruct missing passage from recovered receipt",()=>{const {f,c}=setup("partial");f.submit(c,{loseAck:true});const p=presentation("E1","P"),q=presentation("E1","P"),r=f.recover(c).receipt;p.append(r);q.append(r);return eq(p.view(),q.view())&&p.view()[0].credit===2;});
 test("old epoch receipt cannot enter current narrative",()=>{const {f,c}=setup(),r=f.submit(c).receipt;f.fork();const p=presentation("E2","P");return !p.append(r)&&p.view().length===0;});
+test("foreign world receipt cannot render",()=>{const {f,c}=setup(),r=f.submit(c).receipt,p=presentation("E1","P","other");return !p.append(r)&&p.view().length===0;});
 test("foreign actor receipt cannot render",()=>{const {f,c}=setup(),r=f.submit(c).receipt,p=presentation("E1","NPC");return !p.append(r)&&p.view().length===0;});
 test("rejection and uncertain acknowledgement do not render outcome",()=>{const a=setup("unavailable"),b=setup(),p=presentation("E1","P");return !p.append(a.f.submit(a.c).receipt)&&!p.append(b.f.submit(b.c,{loseAck:true}).receipt)&&p.view().length===0;});
 test("divergent same receipt cannot silently replace paragraph",()=>{const {f,c}=setup(),r=f.submit(c).receipt,p=presentation("E1","P");p.append(r);try{p.append({...r,ownCreditDelta:999});return false;}catch{return p.view()[0].credit===5;}});
