@@ -192,3 +192,58 @@ test3("normal serialization preserves interruption evidence and reevaluation",()
 console.log(n3+"/"+n3+" active condition checks PASS; V1 over-credit reproduced");
 // No real scheduler/domain effects, authenticated proofs, DB CAS or wage settlement.
 // Preexisting work credit is not itself evidence of actual eligible labor in V2.
+
+// D2/D4/D6 review packet: validate the exact neighboring candidate against the
+// executed concurrent injury fixture, not a new runtime authority.
+import {readFileSync} from 'node:fs';
+const contractCandidate=JSON.parse(readFileSync(new URL('./injury_transaction_contract_candidate.json',import.meta.url),'utf8'));
+const exactKeys=(o,keys)=>o&&typeof o==="object"&&!Array.isArray(o)&&Object.keys(o).sort().join("|")===keys.slice().sort().join("|");
+function validateInjuryContract(p){
+ const before=advanceBoth(concurrentFixture(),2),after=advanceBoth(before,5),v=p.private_stage,b=p.before,a=p.after;
+ ok(p.status==="review_only_inactive"&&p.version==="0.1-proposal"&&p.world_id==="W"&&p.epoch_id==="E1","scope");
+ ok(p.command.world_id===p.world_id&&p.command.epoch_id===p.epoch_id&&p.command.expected_revision===b.world_revision&&p.command.issued_tick===b.now_tick&&p.command.kind==="continue_session"&&exactKeys(p.command.payload,["session_id","prior_boundary_receipt_id"])&&p.command.payload.session_id===v.session_id,"command");
+ ok(v.start_tick===b.now_tick&&v.end_tick===a.now_tick&&v.end_tick===after.clock.state.now&&v.start_tick===before.clock.state.now&&a.world_revision===b.world_revision+1,"boundary");
+ ok(b.worker.eligible_total===before.work.eligible&&a.worker.eligible_total===after.work.eligible&&a.worker.status===after.work.status&&b.worker.activity_id===after.work.attempt&&a.worker.activity_id===b.worker.activity_id,"execution");
+ ok(b.condition_revision===before.conditionRevision&&a.condition_revision===after.conditionRevision&&b.worker.arm===before.health.B.function.arm&&a.worker.arm===after.health.B.function.arm&&b.worker.hp===before.health.B.hp&&a.worker.hp===after.health.B.hp,"condition");
+ ok(v.work_fact.authority==="coordinator_stage"&&v.work_fact.actor_id==="B"&&v.work_fact.activity_id===b.worker.activity_id&&v.work_fact.eligible_elapsed_ticks===a.worker.eligible_total-b.worker.eligible_total&&v.work_fact.eligible_total_ticks===after.work.settled[0].eligible,"eligible interval");
+ ok(v.contact_fact.authority==="coordinator_stage"&&v.contact_fact.source_actor_id==="A"&&v.contact_fact.target_actor_id==="B"&&v.contact_fact.attempt_id===after.health.B.injuries[0].cause&&v.contact_fact.tick===after.health.B.injuries[0].onset,"contact proof");
+ ok(v.effects.length===4&&v.events.length===3&&new Set(v.effects.map(e=>e.effect_id)).size===4&&new Set(v.events.map(e=>e.event_id)).size===3,"unique IDs");
+ const effects=Object.fromEntries(v.effects.map(e=>[e.kind,e])),events=new Map(v.events.map(e=>[e.event_id,e])),w=effects.earned_obligation,i=effects.localized_injury,t=effects.activity_interruption,r=effects.release_reservation;
+ ok(w&&i&&t&&r&&w.subject_id==="E"&&i.subject_id==="B"&&t.subject_id==="B"&&r.subject_id==="bench","effect ownership");
+ const seen=new Set([p.command.command_id]);for(const e of v.events){ok(e.world_id===p.world_id&&e.epoch_id===p.epoch_id&&e.world_revision===a.world_revision&&e.tick===v.end_tick&&e.causal_ids.length>0&&e.causal_ids.every(id=>seen.has(id))&&!seen.has(e.event_id),"event causal order");seen.add(e.event_id);ok(eq(e.effect_ids,v.effects.filter(f=>f.causal_event_id===e.event_id).map(f=>f.effect_id)),"event links")}
+ for(const f of v.effects)ok(events.has(f.causal_event_id)&&f.expected_subject_revision===b.subject_revisions[f.subject_id]&&f.schema_version==="1-candidate","pre-stage revisions");
+ ok(exactKeys(b.subject_revisions,["B","E","bench"])&&eq(v.new_subject_revisions,a.subject_revisions)&&Object.keys(b.subject_revisions).every(k=>a.subject_revisions[k]===b.subject_revisions[k]+1),"one bump per subject");
+ ok(w.causal_event_id===v.work_fact.reserved_event_id&&w.payload.staged_fact_id===v.work_fact.fact_id&&w.payload.worker_id==="B"&&w.payload.agreement_id===v.work_fact.agreement_id&&w.payload.earned_minor===10*v.work_fact.eligible_elapsed_ticks&&w.payload.before_payable_minor===b.employer.payable_minor&&w.payload.after_payable_minor===a.employer.payable_minor&&a.employer.payable_minor===b.employer.payable_minor+w.payload.earned_minor&&a.worker.accrued_total===b.worker.accrued_total+w.payload.earned_minor&&a.employer.cash_minor===b.employer.cash_minor&&a.worker.paid_total===b.worker.paid_total&&a.worker.paid_total===0,"accrual not payment");
+ ok(i.causal_event_id===v.contact_fact.reserved_event_id&&i.payload.staged_fact_id===v.contact_fact.fact_id&&i.payload.region===after.health.B.injuries[0].region&&i.payload.before_function===b.worker.arm&&i.payload.after_function===a.worker.arm&&i.payload.before_hp===b.worker.hp&&i.payload.after_hp===a.worker.hp&&i.payload.before_condition_revision===b.condition_revision&&i.payload.after_condition_revision===a.condition_revision,"injury effect");
+ ok(t.payload.condition_effect_id===i.effect_id&&t.payload.activity_id===b.worker.activity_id&&t.payload.eligible_total_ticks===after.work.settled[0].credited&&t.payload.terminal_outcome===after.work.settled[0].outcome&&events.get(t.causal_event_id).causal_ids.includes(i.causal_event_id)&&events.get(t.causal_event_id).causal_ids.includes(w.causal_event_id),"interruption linkage");
+ ok(r.causal_event_id===t.causal_event_id&&r.payload.activity_id===b.worker.activity_id&&r.payload.before_reserved_by===b.bench.reserved_by&&r.payload.after_reserved_by===null&&a.bench.reserved_by===null&&!after.clock.state.active.some(x=>x.exclusive_target==="bench")&&a.other_activity==="continues"&&after.clock.state.active.some(x=>x.actor_id==="A"),"release");
+ const receipt=p.worker_receipt;ok(exactKeys(receipt,["world_id","epoch_id","actor_id","receipt_id","outcome","start_tick","end_tick","own_effects","content_version"])&&receipt.world_id===p.world_id&&receipt.epoch_id===p.epoch_id&&receipt.actor_id==="B"&&receipt.start_tick===v.start_tick&&receipt.end_tick===v.end_tick&&receipt.outcome===a.worker.status&&receipt.receipt_id!==v.boundary_receipt_id,"scope receipt");
+ ok(eq(receipt.own_effects,[{kind:"work_accrual",earned_minor:w.payload.earned_minor,paid_minor:0},{kind:"localized_injury",region:i.payload.region},{kind:"activity_interruption",activity_id:t.payload.activity_id,eligible_total_ticks:t.payload.eligible_total_ticks}]),"receipt allowlist");
+ return true;
+}
+let n4=0;const test4=(name,fn)=>{fn();n4++;console.log("PASS "+name)};
+test4("exact candidate matches actual executor injury boundary",()=>ok(validateInjuryContract(contractCandidate)));
+const bad=[
+["duplicate credit",x=>x.private_stage.effects[0].payload.earned_minor=50],
+["fake cash payment",x=>x.after.employer.cash_minor=10],
+["fake paid wage",x=>x.after.worker.paid_total=30],
+["stale subject revision",x=>x.private_stage.effects[2].expected_subject_revision=8],
+["multiple subject bumps",x=>{x.after.subject_revisions.B=9;x.private_stage.new_subject_revisions.B=9}],
+["missing causal link",x=>x.private_stage.events[2].causal_ids=["EVW"]],
+["wrong event effect link",x=>x.private_stage.events[0].effect_ids=["FXI"]],
+["duplicate effect identity",x=>x.private_stage.effects[2].effect_id="FXI"],
+["wrong injury target",x=>x.private_stage.contact_fact.target_actor_id="A"],
+["ineligible extra interval",x=>x.private_stage.work_fact.eligible_elapsed_ticks=5],
+["reservation retained",x=>x.after.bench.reserved_by="work1"],
+["unrelated activity interrupted",x=>x.after.other_activity="interrupted"],
+["old epoch receipt",x=>x.worker_receipt.epoch_id="E0"],
+["other actor receives wage receipt",x=>x.worker_receipt.actor_id="A"],
+["private finance field leaks",x=>x.worker_receipt.employer_cash=40],
+["nested private finance leaks",x=>x.worker_receipt.own_effects[0].employer_cash=40],
+["private boundary identity reused",x=>x.worker_receipt.receipt_id="R2"],
+["false terminal completion",x=>x.worker_receipt.outcome="completed"]
+];
+for(const [name,mutate] of bad)test4(name+" rejected",()=>{const v=copy(contractCandidate);mutate(v);let threw=false;try{validateInjuryContract(v)}catch{threw=true}ok(threw)});
+console.log(n4+"/"+n4+" contract consistency checks PASS");
+// Narrow candidate checker only: not a general effect registry, authorization,
+// schema validator, financial ledger, or durable production commit.
