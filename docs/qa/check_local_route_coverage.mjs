@@ -62,17 +62,21 @@ function runChecks(world){
   return "admitted";
  }
  const open={closed:[],allowed:[...locations.keys()]},secretClosure={closed:["RTE-0010"],allowed:[...locations.keys()]};
- check("same scoped projection despite unobserved actual closure",same(prepare(actor),choices)&&admit(actor,chosen,open)==="admitted"&&admit(actor,chosen,secretClosure)==="unavailable");
+ // Trusted boundary deliberately separates the actor projection from private actual state.
+ const publicChoices=fixture=>prepare(fixture.actor);
+ const worlds=[{actor,actual:open},{actor,actual:secretClosure}];
+ check("same scoped projection despite unobserved actual closure",same(publicChoices(worlds[0]),publicChoices(worlds[1]))&&admit(actor,chosen,open)==="admitted"&&admit(actor,chosen,secretClosure)==="unavailable");
  check("old revision and old epoch rejected",admit({...actor,revision:8},chosen,open)==="stale_or_invalid"&&admit({...actor,epoch:"E2"},chosen,open)==="stale_or_invalid");
  check("altered destination and unsupported mode rejected",admit(actor,{...chosen,to:"LOC-0008"},open)==="stale_or_invalid"&&admit(actor,{...chosen,mode:"road vehicle"},open)==="stale_or_invalid");
  check("actual access revalidated without revealing private reason",admit(actor,chosen,{closed:[],allowed:[]})==="unavailable"&&JSON.stringify(actor)===original);
  // Service closure is not route closure. Source calls these school/harbor approach anchors.
  // This test models a facility service flag distinct from the public approach; no new map nodes.
- const serviceClosed=new Set(["LOC-0011","LOC-0013"]);
- const publicApproach=()=>true;
- check("school closure need not sever inland homes",serviceClosed.has("LOC-0011")&&path("LOC-0005","LOC-0022",publicApproach)?.distance===385&&path("LOC-0005","LOC-0023",publicApproach)?.distance===385);
- check("harbor closure need not sever waterfront homes",serviceClosed.has("LOC-0013")&&path("LOC-0012","LOC-0024",publicApproach)?.distance===280&&path("LOC-0012","LOC-0025",publicApproach)?.distance===290);
- check("actual connector closure does sever dependent approach paths",path("LOC-0005","LOC-0022",r=>r.id!=="RTE-0010")===null&&path("LOC-0012","LOC-0024",r=>r.id!=="RTE-0012")===null);
+ const facilityState={closedServices:new Set(["LOC-0011","LOC-0013"]),closedRoutes:new Set()};
+ const serviceAvailable=(state,id)=>!state.closedServices.has(id);
+ const publicApproach=state=>r=>!state.closedRoutes.has(r.id);
+ check("school closure need not sever inland homes",!serviceAvailable(facilityState,"LOC-0011")&&path("LOC-0005","LOC-0022",publicApproach(facilityState))?.distance===385&&path("LOC-0005","LOC-0023",publicApproach(facilityState))?.distance===385);
+ check("harbor closure need not sever waterfront homes",!serviceAvailable(facilityState,"LOC-0013")&&path("LOC-0012","LOC-0024",publicApproach(facilityState))?.distance===280&&path("LOC-0012","LOC-0025",publicApproach(facilityState))?.distance===290);
+ check("actual connector closure does sever dependent approach paths",path("LOC-0005","LOC-0022",publicApproach({...facilityState,closedRoutes:new Set(["RTE-0010"])}))===null&&path("LOC-0012","LOC-0024",publicApproach({...facilityState,closedRoutes:new Set(["RTE-0012"])}))===null);
  // Departure can use the player's actual residence, not a fixed B2 start.
  const other={...actor,location:"LOC-0022",knownAllowedDestinations:["LOC-0011","LOC-0022"]};
  check("non-B2 residence has its own authored departure",prepare(other).length===1&&prepare(other)[0].route_id==="RTE-0021"&&prepare(other)[0].to==="LOC-0011");
