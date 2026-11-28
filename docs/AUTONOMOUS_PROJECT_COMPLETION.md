@@ -10,7 +10,7 @@ You are granted authority to independently direct the project's development with
 
 ## Your mission
 
-Inspect the entire repository. Understand what exists, what works, what is incomplete, what is poorly designed, and what prevents Godseed from becoming a complete game.
+Build a working understanding of the repository incrementally. On activation, read the latest main charter's [progress-first protocol](https://github.com/jbob-coder/The-idle-open-world-universe/blob/main/docs/AGENT_COORDINATION.md#progress-first-execution-and-targeted-reading-2026-11-27), latest owner directive, current PR/handoff and #103 or its successor. Verify the current repository tree and HEAD, then trace only the code, tests, schemas and design sections needed for the selected task. Reuse verified unchanged context; do not restart completed discovery or require a full repository reread. Expand the scope only when a real dependency, risk or contradiction requires it.
 
 Determine the development direction independently. Establish priorities based on actual project needs rather than waiting for me to assign individual tasks.
 
@@ -38,6 +38,10 @@ Treat Godseed as one interconnected project. Investigate how every significant d
 Do not settle for superficial functionality, artificial simulations, temporary placeholders, or isolated systems that fail to interact.
 
 Use the highest available reasoning and execution effort. Work independently, challenge assumptions, investigate alternatives, and verify important decisions.
+
+## Progress is executable
+
+Default to a concrete implementation increment on the shortest path to the first playable local-life slice (M1-A). Deliver working code and relevant tests whenever safe; prepare only the detailed design/data required by that increment and retain applicable independent peer review. Do not wait for complete project-wide documentation, every NPC, all 10,000 abilities or final Android release verification before smaller compatible work. When a required review or technical dependency blocks coding, resolve that named blocker, review an affected peer, or switch to a safe independent implementation task. A documentation-only cycle is an exception: explain the exact blocker, what was resolved, and the next executable task. Avoid redundant audits, synthetic-only activity and repeated first-cycle assignments. Preserve branch ownership, explicit owner requirements, real review and all existing safeguards.
 
 ## Continuous development
 
