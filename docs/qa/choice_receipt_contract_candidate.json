@@ -1,0 +1,559 @@
+{
+  "version": "0.1-proposal",
+  "status": "review_only_inactive",
+  "decision_register": 103,
+  "decisions": [
+    "D2",
+    "D6"
+  ],
+  "source_refs": {
+    "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+    "world": "97ccbce13999416c4eb757619947ef55bf31abe5",
+    "life": "b51c461d05ee2a0b4b3886147f4120f1a8d2e270",
+    "narrative": "04ec522a2ee541a843234f3ea1fa0c01216c42b2"
+  },
+  "note": "Concrete review fixture, not shared schema, canon, runtime, reviewed data or authorization. IDs P, N, AGREE and amounts are synthetic. Route RTE-0002 and I-002 are existing design references, not active permission. Candidate milliseconds and minor currency unit depend on D1 and D4. No assumption of player residence, NPC presence, actual speed or wage.",
+  "dependencies": [
+    "D1 approved clock/rate units",
+    "D3 complete approved initial actor records and access",
+    "D4 approved travel/work rates, actual evidence and settlement policy",
+    "D8 owner documentation review and affected peer agreement"
+  ],
+  "contract_proposal": {
+    "command": "Exact CommandV2 top-level fields as #77. submit_choice payload only prepared choice ID; trusted table resolves definition, targets, revisions and access. No caller effect, duration or wage payload. continue_session is privileged technical operation, never a player choice.",
+    "identity": "Original player command, activity, admitted session, each technical continuation command, boundary receipt, causal event and effect have distinct identities. Canonical command bytes keyed world+epoch+command_id. Retry returns original operation result and separately current safe head; changed bytes reject. Session history query returns ordered already committed public receipts after caller's authorized cursor. No old epoch public replay. New player resume after an actual interruption uses new choice and command, may retain activity identity with new session.",
+    "stage": "Coordinator reserves event IDs and actual elapsed facts privately in isolated stage; domain handlers validate pre-stage revisions and derive typed effects from staged execution facts, not precommitted receipts. Each changed subject gets one revision bump per boundary; multi-subject validation complete before publication. Actual observations only after scoped access. Stage and journal atomically commit; failed CAS leaves clock, facts, effects, RNG and receipts unchanged.",
+    "technical_budget": "Budget exhaustion after actual committed boundary keeps session pending. No new player choice or invented completion. Technical continuation must resume same session and current revision, with a new operation ID for each new boundary; exact retry of that operation is idempotent. Physical/event boundaries must not depend on arbitrary technical budgets; fixture boundaries are synthetic pre-established events.",
+    "public_projection": "Separate actor-bound public head and receipt; no private digest, global commit sequence, private staged facts/effects, hidden event IDs or other actors' economic values. Receipt references only authorized evidence. Pending status is not terminal; no completion prose. Render only eligible committed segments using world+epoch+receipt ID+paragraph ordinal and stored content version; restore ordered missing prefix before appending later receipts. UI does not supply trusted receipt objects.",
+    "rejection": "Malformed/stale/inaccessible/technical failure rejected without new domain commit; sanitized reason only. Unknown acknowledgement is transport uncertainty, not an outcome. Actual interrupted/unsuccessful action can commit elapsed time and partial consequences. Distinguish active session pending and interrupted player-decision state.",
+    "review": "01 designated editor proposed, pending consent; 02 owns wage/condition/knowledge payload; 04 owns public view and render rules; 03 reviews same authority for ability/phase evidence. Not final registry or cross-domain approval."
+  },
+  "fixture": {
+    "clock_version": "gregorian-ms-v1-candidate",
+    "currency_unit": "synthetic_minor_unit",
+    "world_id": "W",
+    "epoch_id": "E1",
+    "initial": {
+      "world_revision": 7,
+      "now_tick": 63700000000000,
+      "actor_id": "P",
+      "actor_revision": 4,
+      "knowledge_revision": 2,
+      "location_id": "LOC-0002",
+      "route_id": "RTE-0002",
+      "route_length_mm": 9000,
+      "progress_mm": 0,
+      "worker_id": "N",
+      "worker_revision": 5,
+      "work_agreement_id": "AGREE",
+      "payable_minor": 0
+    },
+    "synthetic_rate": {
+      "movement_mm_per_second": 1000,
+      "wage_minor_per_second": 10
+    },
+    "boundaries": [
+      {
+        "prepared_choice": {
+          "choice_id": "Q1",
+          "actor_id": "P",
+          "world_id": "W",
+          "epoch_id": "E1",
+          "world_revision": 7,
+          "actor_revision": 4,
+          "knowledge_revision": 2,
+          "prepared_tick": 63700000000000,
+          "valid_until_tick": 63700000000000,
+          "public_preview": {
+            "kind": "conditional",
+            "label": "Walk to the lobby"
+          }
+        },
+        "command": {
+          "version": "2-candidate",
+          "world_id": "W",
+          "epoch_id": "E1",
+          "expected_revision": 7,
+          "command_id": "C1",
+          "actor_id": "P",
+          "kind": "submit_choice",
+          "issued_tick": 63700000000000,
+          "payload": {
+            "choice_id": "Q1"
+          }
+        },
+        "private_stage": {
+          "session_id": "S1",
+          "activity_id": "A1",
+          "boundary_receipt_id": "B1",
+          "expected_world_revision": 7,
+          "start_tick": 63700000000000,
+          "end_tick": 63700000002000,
+          "staged_work_fact": {
+            "fact_id": "F1",
+            "reserved_event_id": "EVN1",
+            "actor_id": "N",
+            "agreement_id": "AGREE",
+            "eligible_elapsed_ms": 2000,
+            "authority": "coordinator_stage"
+          },
+          "effects": [
+            {
+              "effect_id": "M1",
+              "domain": "world",
+              "schema_version": "1-candidate",
+              "subject_id": "P",
+              "expected_subject_revision": 4,
+              "kind": "travel_progress",
+              "payload": {
+                "activity_id": "A1",
+                "route_id": "RTE-0002",
+                "from_progress_mm": 0,
+                "to_progress_mm": 2000,
+                "elapsed_ms": 2000,
+                "arrival_location_id": null
+              },
+              "causal_event_id": "EVP1"
+            },
+            {
+              "effect_id": "W1",
+              "domain": "life",
+              "schema_version": "1-candidate",
+              "subject_id": "N",
+              "expected_subject_revision": 5,
+              "kind": "earned_obligation",
+              "payload": {
+                "agreement_id": "AGREE",
+                "staged_fact_id": "F1",
+                "eligible_elapsed_ms": 2000,
+                "earned_minor": 20,
+                "before_payable_minor": 0,
+                "after_payable_minor": 20
+              },
+              "causal_event_id": "EVN1"
+            }
+          ],
+          "events": [
+            {
+              "event_id": "EVP1",
+              "world_id": "W",
+              "epoch_id": "E1",
+              "world_revision": 8,
+              "tick": 63700000002000,
+              "causal_ids": [
+                "C1"
+              ],
+              "kind": "travel_boundary",
+              "effect_ids": [
+                "M1"
+              ],
+              "outcome": "pending",
+              "source_actor_id": "P"
+            },
+            {
+              "event_id": "EVN1",
+              "world_id": "W",
+              "epoch_id": "E1",
+              "world_revision": 8,
+              "tick": 63700000002000,
+              "causal_ids": [
+                "C1"
+              ],
+              "kind": "work_accrual",
+              "effect_ids": [
+                "W1"
+              ],
+              "outcome": "accrued",
+              "source_actor_id": "N"
+            }
+          ],
+          "new_subject_revisions": {
+            "P": 5,
+            "N": 6
+          }
+        },
+        "public_result": {
+          "command_id": "C1",
+          "status": "committed",
+          "public_head": {
+            "world_id": "W",
+            "epoch_id": "E1",
+            "world_revision": 8,
+            "now_tick": 63700000002000,
+            "actor_id": "P",
+            "actor_revision": 5,
+            "knowledge_revision": 2
+          },
+          "scoped_receipt": {
+            "receipt_id": "B1",
+            "command_id": "C1",
+            "session_id": "S1",
+            "world_id": "W",
+            "epoch_id": "E1",
+            "actor_id": "P",
+            "outcome": "pending",
+            "start_tick": 63700000000000,
+            "end_tick": 63700000002000,
+            "visible_event_ids": [
+              "EVP1"
+            ],
+            "own_effects": [
+              {
+                "kind": "travel_progress",
+                "route_id": "RTE-0002",
+                "progress_mm": 2000,
+                "arrival_location_id": null
+              }
+            ],
+            "observed_facts": [],
+            "remaining_activity": {
+              "activity_id": "A1",
+              "remaining_mm": 7000
+            },
+            "content_version": "fixture-v1",
+            "render_policy": "no_terminal_segment"
+          },
+          "choice_availability": "blocked_pending_session"
+        }
+      },
+      {
+        "prepared_choice": null,
+        "command": {
+          "version": "2-candidate",
+          "world_id": "W",
+          "epoch_id": "E1",
+          "expected_revision": 8,
+          "command_id": "T1",
+          "actor_id": "P",
+          "kind": "continue_session",
+          "issued_tick": 63700000002000,
+          "payload": {
+            "session_id": "S1",
+            "prior_boundary_receipt_id": "B1"
+          }
+        },
+        "private_stage": {
+          "session_id": "S1",
+          "activity_id": "A1",
+          "boundary_receipt_id": "B2",
+          "expected_world_revision": 8,
+          "start_tick": 63700000002000,
+          "end_tick": 63700000003000,
+          "staged_work_fact": {
+            "fact_id": "F2",
+            "reserved_event_id": "EVN2",
+            "actor_id": "N",
+            "agreement_id": "AGREE",
+            "eligible_elapsed_ms": 1000,
+            "authority": "coordinator_stage"
+          },
+          "effects": [
+            {
+              "effect_id": "M2",
+              "domain": "world",
+              "schema_version": "1-candidate",
+              "subject_id": "P",
+              "expected_subject_revision": 5,
+              "kind": "travel_progress",
+              "payload": {
+                "activity_id": "A1",
+                "route_id": "RTE-0002",
+                "from_progress_mm": 2000,
+                "to_progress_mm": 3000,
+                "elapsed_ms": 1000,
+                "arrival_location_id": null
+              },
+              "causal_event_id": "EVP2"
+            },
+            {
+              "effect_id": "W2",
+              "domain": "life",
+              "schema_version": "1-candidate",
+              "subject_id": "N",
+              "expected_subject_revision": 6,
+              "kind": "earned_obligation",
+              "payload": {
+                "agreement_id": "AGREE",
+                "staged_fact_id": "F2",
+                "eligible_elapsed_ms": 1000,
+                "earned_minor": 10,
+                "before_payable_minor": 20,
+                "after_payable_minor": 30
+              },
+              "causal_event_id": "EVN2"
+            }
+          ],
+          "events": [
+            {
+              "event_id": "EVP2",
+              "world_id": "W",
+              "epoch_id": "E1",
+              "world_revision": 9,
+              "tick": 63700000003000,
+              "causal_ids": [
+                "T1"
+              ],
+              "kind": "travel_boundary",
+              "effect_ids": [
+                "M2"
+              ],
+              "outcome": "interrupted",
+              "source_actor_id": "P"
+            },
+            {
+              "event_id": "EVN2",
+              "world_id": "W",
+              "epoch_id": "E1",
+              "world_revision": 9,
+              "tick": 63700000003000,
+              "causal_ids": [
+                "T1"
+              ],
+              "kind": "work_accrual",
+              "effect_ids": [
+                "W2"
+              ],
+              "outcome": "accrued",
+              "source_actor_id": "N"
+            }
+          ],
+          "new_subject_revisions": {
+            "P": 6,
+            "N": 7
+          }
+        },
+        "public_result": {
+          "command_id": "T1",
+          "status": "committed",
+          "public_head": {
+            "world_id": "W",
+            "epoch_id": "E1",
+            "world_revision": 9,
+            "now_tick": 63700000003000,
+            "actor_id": "P",
+            "actor_revision": 6,
+            "knowledge_revision": 3
+          },
+          "scoped_receipt": {
+            "receipt_id": "B2",
+            "command_id": "T1",
+            "session_id": "S1",
+            "world_id": "W",
+            "epoch_id": "E1",
+            "actor_id": "P",
+            "outcome": "interrupted",
+            "start_tick": 63700000002000,
+            "end_tick": 63700000003000,
+            "visible_event_ids": [
+              "EVP2"
+            ],
+            "own_effects": [
+              {
+                "kind": "travel_progress",
+                "route_id": "RTE-0002",
+                "progress_mm": 3000,
+                "arrival_location_id": null
+              }
+            ],
+            "observed_facts": [
+              {
+                "evidence_id": "OBS2",
+                "kind": "interruption_observed",
+                "source_visible_event_id": "EVP2"
+              }
+            ],
+            "remaining_activity": {
+              "activity_id": "A1",
+              "remaining_mm": 6000
+            },
+            "content_version": "fixture-v1",
+            "render_policy": "eligible_committed_segment"
+          },
+          "choice_availability": "refresh_required"
+        }
+      },
+      {
+        "prepared_choice": {
+          "choice_id": "Q2",
+          "actor_id": "P",
+          "world_id": "W",
+          "epoch_id": "E1",
+          "world_revision": 9,
+          "actor_revision": 6,
+          "knowledge_revision": 3,
+          "prepared_tick": 63700000003000,
+          "valid_until_tick": 63700000003000,
+          "public_preview": {
+            "kind": "conditional",
+            "label": "Resume toward the lobby"
+          }
+        },
+        "command": {
+          "version": "2-candidate",
+          "world_id": "W",
+          "epoch_id": "E1",
+          "expected_revision": 9,
+          "command_id": "C2",
+          "actor_id": "P",
+          "kind": "submit_choice",
+          "issued_tick": 63700000003000,
+          "payload": {
+            "choice_id": "Q2"
+          }
+        },
+        "private_stage": {
+          "session_id": "S2",
+          "activity_id": "A1",
+          "boundary_receipt_id": "B3",
+          "expected_world_revision": 9,
+          "start_tick": 63700000003000,
+          "end_tick": 63700000009000,
+          "staged_work_fact": {
+            "fact_id": "F3",
+            "reserved_event_id": "EVN3",
+            "actor_id": "N",
+            "agreement_id": "AGREE",
+            "eligible_elapsed_ms": 6000,
+            "authority": "coordinator_stage"
+          },
+          "effects": [
+            {
+              "effect_id": "M3",
+              "domain": "world",
+              "schema_version": "1-candidate",
+              "subject_id": "P",
+              "expected_subject_revision": 6,
+              "kind": "travel_progress",
+              "payload": {
+                "activity_id": "A1",
+                "route_id": "RTE-0002",
+                "from_progress_mm": 3000,
+                "to_progress_mm": 9000,
+                "elapsed_ms": 6000,
+                "arrival_location_id": "LOC-0003"
+              },
+              "causal_event_id": "EVP3"
+            },
+            {
+              "effect_id": "W3",
+              "domain": "life",
+              "schema_version": "1-candidate",
+              "subject_id": "N",
+              "expected_subject_revision": 7,
+              "kind": "earned_obligation",
+              "payload": {
+                "agreement_id": "AGREE",
+                "staged_fact_id": "F3",
+                "eligible_elapsed_ms": 6000,
+                "earned_minor": 60,
+                "before_payable_minor": 30,
+                "after_payable_minor": 90
+              },
+              "causal_event_id": "EVN3"
+            }
+          ],
+          "events": [
+            {
+              "event_id": "EVP3",
+              "world_id": "W",
+              "epoch_id": "E1",
+              "world_revision": 10,
+              "tick": 63700000009000,
+              "causal_ids": [
+                "C2"
+              ],
+              "kind": "travel_boundary",
+              "effect_ids": [
+                "M3"
+              ],
+              "outcome": "completed",
+              "source_actor_id": "P"
+            },
+            {
+              "event_id": "EVN3",
+              "world_id": "W",
+              "epoch_id": "E1",
+              "world_revision": 10,
+              "tick": 63700000009000,
+              "causal_ids": [
+                "C2"
+              ],
+              "kind": "work_accrual",
+              "effect_ids": [
+                "W3"
+              ],
+              "outcome": "accrued",
+              "source_actor_id": "N"
+            }
+          ],
+          "new_subject_revisions": {
+            "P": 7,
+            "N": 8
+          }
+        },
+        "public_result": {
+          "command_id": "C2",
+          "status": "committed",
+          "public_head": {
+            "world_id": "W",
+            "epoch_id": "E1",
+            "world_revision": 10,
+            "now_tick": 63700000009000,
+            "actor_id": "P",
+            "actor_revision": 7,
+            "knowledge_revision": 3
+          },
+          "scoped_receipt": {
+            "receipt_id": "B3",
+            "command_id": "C2",
+            "session_id": "S2",
+            "world_id": "W",
+            "epoch_id": "E1",
+            "actor_id": "P",
+            "outcome": "completed",
+            "start_tick": 63700000003000,
+            "end_tick": 63700000009000,
+            "visible_event_ids": [
+              "EVP3"
+            ],
+            "own_effects": [
+              {
+                "kind": "travel_progress",
+                "route_id": "RTE-0002",
+                "progress_mm": 9000,
+                "arrival_location_id": "LOC-0003"
+              }
+            ],
+            "observed_facts": [],
+            "remaining_activity": null,
+            "content_version": "fixture-v1",
+            "render_policy": "eligible_committed_segment"
+          },
+          "choice_availability": "refresh_required"
+        }
+      }
+    ],
+    "expected_final": {
+      "world_revision": 10,
+      "elapsed_ms": 9000,
+      "progress_mm": 9000,
+      "location_id": "LOC-0003",
+      "worker_earned_minor": 90,
+      "worker_cash_payment_minor": 0,
+      "worker_payable_minor": 90,
+      "terminal_render_receipt_ids": [
+        "B2",
+        "B3"
+      ]
+    }
+  },
+  "acceptance_not_run": [
+    "Actual Node world coordinator CAS and database recovery",
+    "Concurrent writers and exclusive-target arbitration",
+    "Full real NPC schedule and condition/goal feedback",
+    "Actual movement/access interruption and resume",
+    "Approved currency lot/rounding and obligation settlement",
+    "Native controller/prose/accessibility",
+    "Epoch rewind and archived receipt privacy"
+  ]
+}

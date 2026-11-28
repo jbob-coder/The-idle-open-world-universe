@@ -1,0 +1,264 @@
+{
+  "version": "0.1-review",
+  "status": "draft_inactive",
+  "scope": "M1-A only; proposed review data, no active gameplay, no canonical new actor, no approved prose schema or real receipts.",
+  "source_refs": {
+    "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+    "narrative_head": "04ec522a2ee541a843234f3ea1fa0c01216c42b2",
+    "narrative_blob": "75de31ea580fafaaf5b44f44f3a60899082d66df",
+    "travel_candidate_head": "ff3f3588bafe3202722025f72b5af023e26c5e16",
+    "travel_candidate_blob": "b2df2a846772f876d4e781bc8b373809233afb21",
+    "world_blob": "31df1d9d01f2dba2acf9fa3d344f368c22bf6070",
+    "review_issue": 103,
+    "review_comment": 7231410694
+  },
+  "rules": [
+    "Read, select, change selection and status do not commit effects. Continue only submits opaque prepared choice identity under the D2/D6 privacy amendment.",
+    "Trusted authority provides already authorized committed facts, not client input or global diagnostics. Fact names below are candidate semantic projection terms, not approved shared schema.",
+    "Technical pending boundary cannot render a terminal outcome. Actual interruption can render partial progress. Resume requires a new eligible choice after interruption. Never infer total elapsed duration from just the last boundary.",
+    "Do not imply a named NPC is present, employed, willing, related to the player, knows access details or is the player's caretaker unless explicitly established. NPC-0001 is source-role reference only. Inquiry requires actual visible contact and opportunity to ask, not a guarantee of an answer. A refusal requires an authorized observed response; absence is not a refusal.",
+    "Rest requires an actual safe permitted location and elapsed eligible rest. Do not imply sleep, improved HP, restored needs, resources or skill unless separately authorized effects establish them.",
+    "Rendering accepts only current actor/world/epoch scoped committed receipts and recognized content version; use stable receipt/paragraph identity, ordered authorized prefix and deterministic versioned text. No old-epoch append, duplicate segment or RNG use. All actual storage/auth rules remain pending.",
+    "Present choices from actual feasible authorized context, not a scripted successor list. The sample path list below specifies test intentions only. Preserve necessary travel and routine rest; nonroutine repeat suggestions require material context change; no automatic relationship gain."
+  ],
+  "rows": [
+    {
+      "source_row": "I-002",
+      "status": "draft_inactive",
+      "source_label": "Walk to the lobby",
+      "route_id": "RTE-0002",
+      "from": "LOC-0002",
+      "to": "LOC-0003",
+      "candidate_required_context": [
+        "known_route",
+        "permitted_travel",
+        "mobility_eligible"
+      ],
+      "outcomes": [
+        "travel_interrupted",
+        "travel_arrived"
+      ],
+      "technical_pending": "no_terminal_segment"
+    },
+    {
+      "source_row": "I-003",
+      "status": "draft_inactive",
+      "source_label": "Ask about building access",
+      "location": "LOC-0003",
+      "target_reference": "NPC-0001",
+      "candidate_required_context": [
+        "visible_contact",
+        "permitted_inquiry",
+        "relevant_known_issue"
+      ],
+      "outcomes": [
+        "inquiry_answer",
+        "inquiry_partial",
+        "inquiry_defer",
+        "inquiry_refusal"
+      ],
+      "clarification": "Willingness to engage is not consent to disclose or a predetermined answer. If no authorized opportunity to ask, do not show the row."
+    },
+    {
+      "source_row": "I-019",
+      "status": "draft_inactive",
+      "source_label": "Rest at authorized location",
+      "location": null,
+      "candidate_required_context": [
+        "safe_permitted_location",
+        "rest_feasible",
+        "optional_settings_respected"
+      ],
+      "outcomes": [
+        "rest_completed",
+        "rest_interrupted"
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "T-TRAVEL-STOP",
+      "row": "I-002",
+      "outcome": "travel_interrupted",
+      "required_facts": [
+        "actual_partial_travel",
+        "observed_interruption",
+        "remaining_route"
+      ],
+      "variants": [
+        "You make some progress toward the lobby before you have to stop. The rest of the route is still ahead of you.",
+        "You stop partway along the route. You have not reached the lobby, and the remaining distance is still to be covered."
+      ],
+      "forbidden_inferences": [
+        "arrival",
+        "cause_of_interruption",
+        "other_actor_activity"
+      ]
+    },
+    {
+      "id": "T-TRAVEL-ARRIVE",
+      "row": "I-002",
+      "outcome": "travel_arrived",
+      "required_facts": [
+        "actual_route_arrival_LOC-0003"
+      ],
+      "variants": [
+        "You reach the building lobby. The route from the landing is complete.",
+        "The last part of the route brings you into the lobby. Your next action depends on what is available here."
+      ],
+      "forbidden_inferences": [
+        "NPC_presence",
+        "NPC_employment",
+        "unobserved_environment",
+        "automatic_next_action"
+      ]
+    },
+    {
+      "id": "T-INQUIRY-ANSWER",
+      "row": "I-003",
+      "outcome": "inquiry_answer",
+      "required_facts": [
+        "actual_inquiry",
+        "observed_access_answer"
+      ],
+      "variants": [
+        "You ask about access to the building and receive an answer. The information you have been given is now part of what you know about the building.",
+        "You raise the question of building access. The answer gives you information to consider before you decide what to do next."
+      ],
+      "required_followup": "Display exact authorized attributed answer content separately from established world truth; no answer text generated here.",
+      "forbidden_inferences": [
+        "permission_granted",
+        "truth_of_report",
+        "private_motive"
+      ]
+    },
+    {
+      "id": "T-INQUIRY-PARTIAL",
+      "row": "I-003",
+      "outcome": "inquiry_partial",
+      "required_facts": [
+        "actual_inquiry",
+        "observed_partial_answer"
+      ],
+      "variants": [
+        "You ask about building access. The reply addresses only part of your question, leaving the rest unresolved.",
+        "Your question receives a partial answer. You have some information to work with, but you still do not have a complete answer."
+      ],
+      "required_followup": "Display actual attributed partial claim and known unresolved portion if available.",
+      "forbidden_inferences": [
+        "permission_granted",
+        "missing_claim",
+        "private_motive"
+      ]
+    },
+    {
+      "id": "T-INQUIRY-DEFER",
+      "row": "I-003",
+      "outcome": "inquiry_defer",
+      "required_facts": [
+        "actual_inquiry",
+        "observed_defer"
+      ],
+      "variants": [
+        "You ask about access to the building, but the question is left for another time. You have no new answer to act on.",
+        "The discussion does not settle the question of access. An answer has been deferred, and you can consider the options still available to you."
+      ],
+      "forbidden_inferences": [
+        "promised_future_response",
+        "automatic_followup",
+        "private_motive"
+      ]
+    },
+    {
+      "id": "T-INQUIRY-REFUSE",
+      "row": "I-003",
+      "outcome": "inquiry_refusal",
+      "required_facts": [
+        "actual_inquiry",
+        "observed_refusal"
+      ],
+      "variants": [
+        "You ask about building access. The person declines to answer, so you leave the exchange without the information you sought.",
+        "Your question is met with a refusal. You have no new answer about building access, and the decision of what to do next remains yours."
+      ],
+      "forbidden_inferences": [
+        "anger",
+        "relationship_loss",
+        "NPC_secret",
+        "guaranteed_alternate"
+      ]
+    },
+    {
+      "id": "T-REST-DONE",
+      "row": "I-019",
+      "outcome": "rest_completed",
+      "required_facts": [
+        "actual_eligible_rest",
+        "rest_interval_completed"
+      ],
+      "variants": [
+        "You spend some time resting in the place available to you. The rest interval comes to an end.",
+        "You take the opportunity to rest. When the allotted interval has passed, you can decide what to do next."
+      ],
+      "forbidden_inferences": [
+        "sleep",
+        "HP_gain",
+        "need_recovery",
+        "unobserved_NPC_work"
+      ]
+    },
+    {
+      "id": "T-REST-STOP",
+      "row": "I-019",
+      "outcome": "rest_interrupted",
+      "required_facts": [
+        "actual_eligible_rest",
+        "observed_interruption",
+        "rest_interval_incomplete"
+      ],
+      "variants": [
+        "You begin to rest, but the interval is interrupted. Only the time you have actually spent resting has passed.",
+        "Your rest ends before the intended interval is complete. You have not finished the rest you set out to take."
+      ],
+      "forbidden_inferences": [
+        "full_rest",
+        "cause_of_interruption",
+        "HP_gain",
+        "need_recovery"
+      ]
+    }
+  ],
+  "test_paths": [
+    {
+      "path_id": "M1A-WALK",
+      "same_initial_state": "M1A-FIXTURE",
+      "intents": [
+        "I-002",
+        "I-003 if actually feasible"
+      ],
+      "actual_receipt_references": [
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "note": "B1 technical pending, B2 interruption, B3 resumed arrival; inquiry is separate conditional sample, not in prior committed fixture."
+    },
+    {
+      "path_id": "M1A-REST",
+      "same_initial_state": "M1A-FIXTURE",
+      "intents": [
+        "I-019 if actual safe permission"
+      ],
+      "actual_receipt_references": [],
+      "note": "No rest receipt currently implemented; candidate alternate only. NPC independent work/rest remains private unless legitimately observed."
+    }
+  ],
+  "acceptance_not_run": [
+    "Actual trusted receipt generation and actor binding",
+    "Real independent NPC decisions and refusal",
+    "Actual eligible rest and condition changes",
+    "Persistent ordered narrative prefix and crash recovery",
+    "Full authorized disclosure and paired-world privacy",
+    "Node terminal and Android interface"
+  ]
+}
