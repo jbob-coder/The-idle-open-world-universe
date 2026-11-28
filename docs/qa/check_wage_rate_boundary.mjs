@@ -71,3 +71,6 @@ function tests(){
 const report=tests();
 console.log(JSON.stringify(report,null,2));
 if(report.some(x=>!x.pass))process.exitCode=1;
+
+// QA-only helpers for native storage composition.
+export {accrue,make,stage};
