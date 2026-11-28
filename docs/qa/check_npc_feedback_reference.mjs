@@ -1,7 +1,8 @@
 // Independent QA diagnostic for issue #90, pinned baseline f75bdd14827bd6ea8555f6ca428132e91cff97c3.
 // No production gameplay, real saves, or new canon. Review by 01/02 required.
 // Run from repository root: node docs/qa/check_npc_feedback_reference.mjs
-// --require-feedback deliberately fails on V1. Do not enable in CI before review.
+// --require-feedback and --require-replan deliberately fail on V1. Do not enable in CI before review.
+// Replan fixture: rest preferred but infeasible; practice remains individually known and feasible.
 // Fixture ticks and generic resources are synthetic, not biological rates or Credits.
 import {canonicalWorldJson as canonical,createAtomicMemoryStore as store,createWorldPersistenceReference as persistence} from "../../tools/world_persistence_reference.mjs";
 import {createExecutionReference as executor} from "../../tools/npc_execution_reference.mjs";
@@ -18,7 +19,7 @@ function runDiagnostic({canonical,store,persistence,executor,scheduler,perceptio
  const check=(name,pass,baselineOnly=false)=>{checks.push({name,pass:!!pass,baselineOnly})};
  function scenario(needs,feasible=true,budget=100){
   const db=store(),samples=new Map();
-  const offer=(a,t,r,k,act,opp,duration,cost)=>({world_id:"W",actor_id:a,actor_revision:r,knowledge_revision:k,action_id:act,opportunity_id:opp,kind:"action",valid_until:t,feasible:a==="P"||feasible,exclusive_target:null,credit_cap:10,phases:[{kind:"execution",duration,cost,interruptible:true,credit_per_tick:1}]});
+  const offer=(a,t,r,k,act,opp,duration,cost)=>({world_id:"W",actor_id:a,actor_revision:r,knowledge_revision:k,action_id:act,opportunity_id:opp,kind:"action",valid_until:t,feasible:a==="P"||(typeof feasible==="function"?feasible(act):feasible),exclusive_target:null,credit_cap:10,phases:[{kind:"execution",duration,cost,interruptible:true,credit_per_tick:1}]});
   const dependencies={canonical,persistence,executor,scheduler,perception,planner,generate,decide:(p,k,o)=>{
    const d=decide(p,k,o);
    if(p.actor_id==="A")samples.set(p.now+":"+p.actor_revision,{tick:p.now,revision:p.actor_revision,rest:p.needs.rest,growth:p.needs.growth,action:d.action_id??null});
@@ -45,15 +46,22 @@ function runDiagnostic({canonical,store,persistence,executor,scheduler,perceptio
   const outcomes=c.executor.outcomes.filter(e=>e.actor_id==="A");
   return {now:c.executor.now,done:!c.scheduler.view.submission_active,actor:c.executor.actors.find(a=>a.actor_id==="A"),completed:outcomes.filter(e=>e.outcome==="completed").length,rejected:c.scheduler.journal.filter(e=>e.actor_id==="A"&&e.result==="rejected").length,trace,c,recovered,retry};
  }
+ const practiceOnly=action=>action==="practice";
  const a=scenario(dims(10,1)),b=scenario(dims(0,10)),c=scenario(dims(10,1),false),d=scenario(dims(10,1),true,1);
- check("all four bounded fixtures reach the same horizon",[a,b,c,d].every(x=>x.done&&x.now===11));
+ const e=scenario(dims(10,1),practiceOnly),g=scenario(dims(0,10),practiceOnly),h=scenario(dims(10,1),practiceOnly,1);
+ const fixtures=[a,b,c,d,e,g,h];
+ check("all seven bounded fixtures reach the same horizon",fixtures.every(x=>x.done&&x.now===11));
  check("rest fixture completes six activities",a.completed===6&&a.actor.resources===94&&a.actor.revision===12,true);
  check("rest pressure remains unchanged in reference",a.trace.filter(x=>x.revision>0).length===5&&a.trace.every(x=>x.rest===10&&x.action==="rest"),true);
  check("growth fixture selects practice",b.completed===6&&b.trace.every(x=>x.action==="practice"),true);
- check("infeasible offers do not fabricate completed activities",c.completed===0&&c.rejected===6&&c.actor.resources===100&&c.actor.revision===0);
+ check("infeasible offers do not fabricate completed activities",c.completed===0&&c.actor.resources===100&&c.actor.revision===0);
+ check("reference retries all-infeasible preference six times",c.rejected===6,true);
+ check("reference retries unavailable rest although practice is feasible",e.completed===0&&e.rejected===6&&e.trace.every(x=>x.action==="rest")&&e.actor.resources===100,true);
+ check("same feasibility policy admits practice with growth preference",g.completed===6&&g.trace.every(x=>x.action==="practice")&&g.actor.resources===94,true);
+ check("alternative feasibility is unchanged by technical budget",same(e.c,h.c));
  check("technical work budget does not change final reference checkpoint",same(a.c,d.c));
- check("normal reconstruction retains final checkpoint",[a,b,c,d].every(x=>x.recovered));
- check("exact transaction retry changes no stored bytes",[a,b,c,d].every(x=>x.retry));
+ check("normal reconstruction retains final checkpoint",fixtures.every(x=>x.recovered));
+ check("exact transaction retry changes no stored bytes",fixtures.every(x=>x.retry));
  // Independent control: exact existing cognition with changed actor-scoped input.
  // This is NOT a life-domain reducer, nor evidence that rest changes authoritative state.
  const choice=rest=>{
@@ -63,13 +71,18 @@ function runDiagnostic({canonical,store,persistence,executor,scheduler,perceptio
  };
  check("cognition changes choice when actual input changes",choice(10)==="rest"&&choice(0)==="practice");
  const feedbackGate=a.completed>0&&a.trace.some(x=>x.revision>0&&x.rest<10);
- return {checks,feedbackGate,observed:{rest:a.trace,practice:b.trace,rejected:c.rejected,completed:a.completed}};
+ // This narrow gate proves some feasible practice completed under the fixture's policy.
+ // It is not a production requirement to force a choice after every rejection.
+ const replanGate=e.completed>0&&e.trace.some(x=>x.action==="practice");
+ return {checks,feedbackGate,replanGate,observed:{rest:a.trace,practice:b.trace,rejected:c.rejected,completed:a.completed,unavailableRest:{trace:e.trace,completed:e.completed,rejected:e.rejected},practiceOnlyControl:{completed:g.completed,rejected:g.rejected}}};
 }
 import {createWorldTransactionReference as create} from "../../tools/world_transaction_reference.mjs";
 const result=runDiagnostic({canonical,store,persistence,executor,scheduler,perception,planner,generate,decide,create});
-const strict=process.argv.includes("--require-feedback");
+const strictFeedback=process.argv.includes("--require-feedback"),strictReplan=process.argv.includes("--require-replan");
+const strict=strictFeedback||strictReplan;
 const selected=result.checks.filter(c=>!strict||!c.baselineOnly);
 for(const c of selected)console.log(c.pass?"PASS":"FAIL",c.name);
 console.log("Authoritative feedback gate:",result.feedbackGate?"PASS":"NOT MET");
+console.log("Feasible alternative replanning gate:",result.replanGate?"PASS":"NOT MET");
 console.log(JSON.stringify(result.observed));
-if(selected.some(c=>!c.pass)||(strict&&!result.feedbackGate))process.exitCode=1;
+if(selected.some(c=>!c.pass)||(strictFeedback&&!result.feedbackGate)||(strictReplan&&!result.replanGate))process.exitCode=1;
