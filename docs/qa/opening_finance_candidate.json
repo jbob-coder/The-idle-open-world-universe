@@ -1,0 +1,647 @@
+{
+  "version": "qa-opening-finance-v0.1",
+  "status": "review_only_inactive",
+  "activation_allowed": false,
+  "source": {
+    "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+    "local_life_blob": "dd53a8762380708d9e8a209249bb1f90a1f3a101",
+    "npc_head": "b51c461d05ee2a0b4b3886147f4120f1a8d2e270",
+    "npc_blob": "602b7e31e8a0e40b7234c4dcdfeb36c6536401cd",
+    "decision_register": "#103 D3/D4",
+    "related": [
+      "#96",
+      "#101"
+    ]
+  },
+  "unit": "Reference whole CR only. Proposed conversion to minor units requires currency contract review.",
+  "notes": [
+    "Accounting household reference does not establish legal ownership or family composition.",
+    "Reference account IDs and distinct lot IDs are proposed, not registered. Actual ownership, authorization and endowment provenance must be accepted before posting.",
+    "Opening funding is an explicit one-time initialization boundary source, not wage or revenue. Do not also post reserve or cash as a transfer from an invented payer.",
+    "All weekly inflow, cost and net values are projections only. No automatic source or sink, rent transfer, wage credit, stock or service promise.",
+    "Unknown actual obligations and asset balances remain null/unresolved. Do not interpret as zero or activate the profile.",
+    "Unemployed reference has no employer agreement; no automatic wage or welfare."
+  ],
+  "initialization_contract_proposal": {
+    "authority": "01 world registration/transaction with 02 reviewed ownership, provenance and domain initialization",
+    "identity": "Stable logical opening endowment key per world and reviewed account; bind canonical original payload; exact technical retry returns original receipt; conflicting retry rejected. Epoch is not a reason to mint again. Explicit new-world initialization only; recovery restores existing ledger, rewind restores snapshot rather than reposting. Any approved initial endowment missing from a snapshot is a validation failure, not a new funding trigger.",
+    "commit": "Validate complete reviewed account ownership, opening amounts, lot origin, affected domain registration and unique initialization markers in one stage. Commit accounts, provenance, initialization receipts and all domain state atomically. No public receipt exposes another actor's finances.",
+    "unresolved": [
+      "currency denomination and terminal fractional wage policy",
+      "authorized account owners and beneficiaries",
+      "actual rental agreements and payees",
+      "employment agreement acceptance and compensable evidence",
+      "stock lots and ownership, prices, suppliers and funded counterparties",
+      "actual assets/liabilities, historical obligations and prehistory",
+      "opening timestamp and epoch snapshot schema"
+    ]
+  },
+  "accounts": [
+    {
+      "candidate_id": "AC-HH-0001",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0001",
+      "reference_actor_id": "NPC-0001",
+      "reference_home_id": "LOC-0015",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 2600,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0001",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 650,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0002",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0002",
+      "reference_actor_id": "NPC-0002",
+      "reference_home_id": "LOC-0016",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 3700,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0002",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 720,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0003",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0003",
+      "reference_actor_id": "NPC-0003",
+      "reference_home_id": "LOC-0017",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 1200,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0003",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 550,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0004",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0004",
+      "reference_actor_id": "NPC-0004",
+      "reference_home_id": "LOC-0018",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 7000,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0004",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 900,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0005",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0005",
+      "reference_actor_id": "NPC-0005",
+      "reference_home_id": "LOC-0019",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 2800,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0005",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 650,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0006",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0006",
+      "reference_actor_id": "NPC-0006",
+      "reference_home_id": "LOC-0020",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 4300,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0006",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 720,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0007",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0007",
+      "reference_actor_id": "NPC-0007",
+      "reference_home_id": "LOC-0021",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 1800,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0007",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 600,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0008",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0008",
+      "reference_actor_id": "NPC-0008",
+      "reference_home_id": "LOC-0022",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 3500,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0008",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 680,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0009",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0009",
+      "reference_actor_id": "NPC-0009",
+      "reference_home_id": "LOC-0023",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 4800,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0009",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 750,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0010",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0010",
+      "reference_actor_id": "NPC-0010",
+      "reference_home_id": "LOC-0024",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 2300,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0010",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 600,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0011",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0011",
+      "reference_actor_id": "NPC-0011",
+      "reference_home_id": "LOC-0025",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 2500,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0011",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 620,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-HH-0012",
+      "scope": "household_reference",
+      "accounting_scope_id": "HH-0012",
+      "reference_actor_id": "NPC-0012",
+      "reference_home_id": "LOC-0026",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 2400,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-HH-0012",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "monthly_rent_reference_cr": 500,
+      "rent_payee": null,
+      "rental_contract_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-ORG-0001",
+      "scope": "organization_reference",
+      "accounting_scope_id": "ORG-0001",
+      "organization_reference_name": "Building management",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 3880,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-ORG-0001",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "weekly_scenario": {
+        "payroll_cr": 720,
+        "other_outflow_cr": 250,
+        "total_outflow_cr": 970,
+        "gross_inflow_cr": 1100,
+        "net_cr": 130,
+        "posted": false
+      },
+      "funding_counterparty": null,
+      "stock_status": "unresolved",
+      "supplier_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-ORG-0002",
+      "scope": "organization_reference",
+      "accounting_scope_id": "ORG-0002",
+      "organization_reference_name": "Grocery",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 18240,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-ORG-0002",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "weekly_scenario": {
+        "payroll_cr": 1360,
+        "other_outflow_cr": 3200,
+        "total_outflow_cr": 4560,
+        "gross_inflow_cr": 5100,
+        "net_cr": 540,
+        "posted": false
+      },
+      "funding_counterparty": null,
+      "stock_status": "unresolved",
+      "supplier_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-ORG-0003",
+      "scope": "organization_reference",
+      "accounting_scope_id": "ORG-0003",
+      "organization_reference_name": "Clinic",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 15500,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-ORG-0003",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "weekly_scenario": {
+        "payroll_cr": 2375,
+        "other_outflow_cr": 1500,
+        "total_outflow_cr": 3875,
+        "gross_inflow_cr": 5100,
+        "net_cr": 1225,
+        "posted": false
+      },
+      "funding_counterparty": null,
+      "stock_status": "unresolved",
+      "supplier_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-ORG-0004",
+      "scope": "organization_reference",
+      "accounting_scope_id": "ORG-0004",
+      "organization_reference_name": "Workshop",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 11680,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-ORG-0004",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "weekly_scenario": {
+        "payroll_cr": 1720,
+        "other_outflow_cr": 1200,
+        "total_outflow_cr": 2920,
+        "gross_inflow_cr": 3300,
+        "net_cr": 380,
+        "posted": false
+      },
+      "funding_counterparty": null,
+      "stock_status": "unresolved",
+      "supplier_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-ORG-0005",
+      "scope": "organization_reference",
+      "accounting_scope_id": "ORG-0005",
+      "organization_reference_name": "School",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 12640,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-ORG-0005",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "weekly_scenario": {
+        "payroll_cr": 1960,
+        "other_outflow_cr": 1200,
+        "total_outflow_cr": 3160,
+        "gross_inflow_cr": 3400,
+        "net_cr": 240,
+        "posted": false
+      },
+      "funding_counterparty": null,
+      "stock_status": "unresolved",
+      "supplier_status": "unresolved"
+    },
+    {
+      "candidate_id": "AC-ORG-0006",
+      "scope": "organization_reference",
+      "accounting_scope_id": "ORG-0006",
+      "organization_reference_name": "Harbor cooperative",
+      "owner_authority": "unresolved",
+      "clean_opening_cr": 10880,
+      "dirty_opening_cr": 0,
+      "source_lot_candidate": "LOT-ORG-0006",
+      "provenance_kind": "reference_opening_endowment",
+      "posting_status": "not_posted",
+      "weekly_scenario": {
+        "payroll_cr": 1520,
+        "other_outflow_cr": 1200,
+        "total_outflow_cr": 2720,
+        "gross_inflow_cr": 3100,
+        "net_cr": 380,
+        "posted": false
+      },
+      "funding_counterparty": null,
+      "stock_status": "unresolved",
+      "supplier_status": "unresolved"
+    }
+  ],
+  "employment_references": [
+    {
+      "actor_id": "NPC-0001",
+      "household_account_candidate": "AC-HH-0001",
+      "employer_account_candidate": "AC-ORG-0001",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0003",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 18,
+        "source": "population"
+      },
+      "weekly_hours_reference": 40,
+      "weekly_gross_reference_cr": 720,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0002",
+      "household_account_candidate": "AC-HH-0002",
+      "employer_account_candidate": "AC-ORG-0002",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0008",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 25,
+        "source": "population"
+      },
+      "weekly_hours_reference": 40,
+      "weekly_gross_reference_cr": 1000,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0003",
+      "household_account_candidate": "AC-HH-0003",
+      "employer_account_candidate": "AC-ORG-0002",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0008",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 12,
+        "source": "population"
+      },
+      "weekly_hours_reference": 30,
+      "weekly_gross_reference_cr": 360,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0004",
+      "household_account_candidate": "AC-HH-0004",
+      "employer_account_candidate": "AC-ORG-0003",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0009",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 45,
+        "source": "population"
+      },
+      "weekly_hours_reference": 35,
+      "weekly_gross_reference_cr": 1575,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0005",
+      "household_account_candidate": "AC-HH-0005",
+      "employer_account_candidate": "AC-ORG-0003",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0009",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 20,
+        "source": "population"
+      },
+      "weekly_hours_reference": 40,
+      "weekly_gross_reference_cr": 800,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0006",
+      "household_account_candidate": "AC-HH-0006",
+      "employer_account_candidate": "AC-ORG-0004",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0010",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 25,
+        "source": "population"
+      },
+      "weekly_hours_reference": 40,
+      "weekly_gross_reference_cr": 1000,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0007",
+      "household_account_candidate": "AC-HH-0007",
+      "employer_account_candidate": "AC-ORG-0004",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0010",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 18,
+        "source": "population"
+      },
+      "weekly_hours_reference": 40,
+      "weekly_gross_reference_cr": 720,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0008",
+      "household_account_candidate": "AC-HH-0008",
+      "employer_account_candidate": "AC-ORG-0005",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0011",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 24,
+        "source": "population"
+      },
+      "weekly_hours_reference": 40,
+      "weekly_gross_reference_cr": 960,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0009",
+      "household_account_candidate": "AC-HH-0009",
+      "employer_account_candidate": "AC-ORG-0005",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0011",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 25,
+        "source": "population"
+      },
+      "weekly_hours_reference": 40,
+      "weekly_gross_reference_cr": 1000,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0010",
+      "household_account_candidate": "AC-HH-0010",
+      "employer_account_candidate": "AC-ORG-0006",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0013",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 20,
+        "source": "population"
+      },
+      "weekly_hours_reference": 40,
+      "weekly_gross_reference_cr": 800,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0011",
+      "household_account_candidate": "AC-HH-0011",
+      "employer_account_candidate": "AC-ORG-0006",
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0013",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "known",
+        "value": 18,
+        "source": "population"
+      },
+      "weekly_hours_reference": 40,
+      "weekly_gross_reference_cr": 720,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    },
+    {
+      "actor_id": "NPC-0012",
+      "household_account_candidate": "AC-HH-0012",
+      "employer_account_candidate": null,
+      "workplace_reference": {
+        "state": "not_applicable",
+        "source": "local_life"
+      },
+      "rate_reference_cr_per_hour": {
+        "state": "not_applicable",
+        "source": "population"
+      },
+      "weekly_hours_reference": 0,
+      "weekly_gross_reference_cr": 0,
+      "agreement_status": "not_activated",
+      "eligible_work_proofs": [],
+      "actual_earned": null,
+      "actual_paid": null,
+      "actual_payable": null
+    }
+  ],
+  "source_totals": {
+    "household_cash_cr": 38900,
+    "organization_reserves_cr": 72820,
+    "total_reference_opening_cr": 111720,
+    "monthly_rent_cr": 7940,
+    "weekly_payroll_cr": 9655,
+    "weekly_other_outflow_cr": 8550,
+    "weekly_total_outflow_cr": 18205,
+    "weekly_gross_inflow_cr": 21100,
+    "weekly_net_cr": 2895,
+    "actual_posted_cr": 0
+  }
+}
