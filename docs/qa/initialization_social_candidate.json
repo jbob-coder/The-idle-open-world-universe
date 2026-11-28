@@ -1,0 +1,1192 @@
+{
+  "schema_version": "qa-social-initialization-candidate-v0.1",
+  "status": "proposal_only_inactive",
+  "activation_allowed": false,
+  "source": {
+    "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+    "npc_head": "b51c461d05ee2a0b4b3886147f4120f1a8d2e270",
+    "npc_blob": "602b7e31e8a0e40b7234c4dcdfeb36c6536401cd",
+    "prior_candidate_commit": "1c36daba0403abfa771730906e0b29a5ae94b106",
+    "prior_candidate_blob": "2c2ec37d5353691aed184fac4f8492c291728011",
+    "cognition_blob": "fa6fbada18f89efa10f013dccd66f49d226ae697",
+    "review": "#103 D3"
+  },
+  "rules": [
+    "No proposed value is an actual world fact or gameplay constant. Private motivation uses current V1 0..10 dimensions solely for review compatibility. Relationship values use draft #79 proposed ranges; no public exposure.",
+    "Each actor has independent preferences and goals; alternatives are examples not scripted actions. Opportunity estimates do not mutate life state. Actual effects and feedback remain subject to #90/#93.",
+    "Workplace references support possible contact, not actual acquaintance, supervision or authority. Every proposed relationship requires a reviewed shared event and separate actor evidence. No automatic symmetric knowledge or sentiment.",
+    "Family and biological conditions remain unresolved. No actor's past injury, health, exact HP, actual needs or kinship asserted. No optional settings default assigned."
+  ],
+  "profiles": [
+    {
+      "actor_id": "NPC-0001",
+      "status": "review_candidate_inactive",
+      "source_goal": "Maintain the building and manage family commitments",
+      "source_consideration": "Values privacy; can decline nonurgent work",
+      "personality_proposal": "Privacy-conscious, reliable, protective of personal time",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 6,
+          "resources": 5,
+          "growth": 3,
+          "connection": 6,
+          "duty": 9,
+          "rest": 5
+        },
+        "needs": {
+          "safety": 2,
+          "resources": 3,
+          "growth": 2,
+          "connection": 4,
+          "duty": 5,
+          "rest": 3
+        },
+        "risk_aversion": 5,
+        "stress": 2,
+        "goals": [
+          {
+            "id": "NPC-0001_primary",
+            "dimension": "duty",
+            "status": "active",
+            "urgency": 7
+          },
+          {
+            "id": "NPC-0001_secondary",
+            "dimension": "connection",
+            "status": "active",
+            "urgency": 5
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Maintain family contact outside work; request deferral when work conflicts with private commitments",
+        "alternative": "Decline nonurgent duties or rest when needed",
+        "review_trigger": "Inspect building condition; verify actual assignment and access",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0002",
+      "status": "review_candidate_inactive",
+      "source_goal": "Keep the shop solvent and stocked",
+      "source_consideration": "Balances costs and customer needs",
+      "personality_proposal": "Pragmatic, cost-aware, attentive to customers",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 5,
+          "resources": 9,
+          "growth": 4,
+          "connection": 5,
+          "duty": 8,
+          "rest": 3
+        },
+        "needs": {
+          "safety": 2,
+          "resources": 6,
+          "growth": 2,
+          "connection": 2,
+          "duty": 4,
+          "rest": 2
+        },
+        "risk_aversion": 5,
+        "stress": 3,
+        "goals": [
+          {
+            "id": "NPC-0002_primary",
+            "dimension": "resources",
+            "status": "active",
+            "urgency": 8
+          },
+          {
+            "id": "NPC-0002_secondary",
+            "dimension": "duty",
+            "status": "active",
+            "urgency": 6
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Maintain adequate stock and honor funded obligations",
+        "alternative": "Renegotiate supply orders or decline unfunded commitments",
+        "review_trigger": "Review actual inventory and funded orders",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0003",
+      "status": "review_candidate_inactive",
+      "source_goal": "Save for further education",
+      "source_consideration": "May seek a better job or reduce hours",
+      "personality_proposal": "Curious, budget-conscious, willing to change direction",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 4,
+          "resources": 7,
+          "growth": 9,
+          "connection": 4,
+          "duty": 4,
+          "rest": 4
+        },
+        "needs": {
+          "safety": 2,
+          "resources": 6,
+          "growth": 5,
+          "connection": 2,
+          "duty": 2,
+          "rest": 3
+        },
+        "risk_aversion": 3,
+        "stress": 2,
+        "goals": [
+          {
+            "id": "NPC-0003_primary",
+            "dimension": "growth",
+            "status": "active",
+            "urgency": 8
+          },
+          {
+            "id": "NPC-0003_secondary",
+            "dimension": "resources",
+            "status": "active",
+            "urgency": 6
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Explore further education while preserving living expenses",
+        "alternative": "Compare employment or reduced hours; defer study if unaffordable",
+        "review_trigger": "Seek actual course information and available work",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0004",
+      "status": "review_candidate_inactive",
+      "source_goal": "Provide reliable care within available resources",
+      "source_consideration": "Protects confidentiality and takes time off",
+      "personality_proposal": "Confidential, conscientious, attentive to recovery",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 9,
+          "resources": 4,
+          "growth": 5,
+          "connection": 6,
+          "duty": 9,
+          "rest": 6
+        },
+        "needs": {
+          "safety": 4,
+          "resources": 2,
+          "growth": 2,
+          "connection": 2,
+          "duty": 5,
+          "rest": 4
+        },
+        "risk_aversion": 7,
+        "stress": 3,
+        "goals": [
+          {
+            "id": "NPC-0004_primary",
+            "dimension": "duty",
+            "status": "active",
+            "urgency": 7
+          },
+          {
+            "id": "NPC-0004_secondary",
+            "dimension": "rest",
+            "status": "active",
+            "urgency": 5
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Provide qualified care without violating confidentiality or capacity",
+        "alternative": "Defer nonurgent care, refer or rest as permitted",
+        "review_trigger": "Review actual care requests, capacity and qualification",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0005",
+      "status": "review_candidate_inactive",
+      "source_goal": "Build healthcare experience",
+      "source_consideration": "May pursue training or change employers",
+      "personality_proposal": "Patient, curious, career-flexible",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 6,
+          "resources": 5,
+          "growth": 9,
+          "connection": 5,
+          "duty": 6,
+          "rest": 4
+        },
+        "needs": {
+          "safety": 3,
+          "resources": 4,
+          "growth": 5,
+          "connection": 2,
+          "duty": 3,
+          "rest": 3
+        },
+        "risk_aversion": 4,
+        "stress": 2,
+        "goals": [
+          {
+            "id": "NPC-0005_primary",
+            "dimension": "growth",
+            "status": "active",
+            "urgency": 8
+          },
+          {
+            "id": "NPC-0005_secondary",
+            "dimension": "resources",
+            "status": "active",
+            "urgency": 6
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Develop healthcare support competence",
+        "alternative": "Seek another role or defer training if requirements are unmet",
+        "review_trigger": "Seek authorized supervised learning or work",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0006",
+      "status": "review_candidate_inactive",
+      "source_goal": "Complete quality repairs and retain customers",
+      "source_consideration": "Rejects unsafe or unprofitable work",
+      "personality_proposal": "Quality-focused, practical, cautious about unsafe work",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 9,
+          "resources": 7,
+          "growth": 6,
+          "connection": 3,
+          "duty": 8,
+          "rest": 4
+        },
+        "needs": {
+          "safety": 4,
+          "resources": 4,
+          "growth": 3,
+          "connection": 1,
+          "duty": 4,
+          "rest": 3
+        },
+        "risk_aversion": 8,
+        "stress": 2,
+        "goals": [
+          {
+            "id": "NPC-0006_primary",
+            "dimension": "duty",
+            "status": "active",
+            "urgency": 6
+          },
+          {
+            "id": "NPC-0006_secondary",
+            "dimension": "safety",
+            "status": "active",
+            "urgency": 4
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Maintain repair quality and actual customer commitments",
+        "alternative": "Decline unsafe jobs; reschedule or seek tools",
+        "review_trigger": "Inspect work scope, resources and safety conditions",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0007",
+      "status": "review_candidate_inactive",
+      "source_goal": "Develop diagnostics expertise",
+      "source_consideration": "Wants increasingly challenging work",
+      "personality_proposal": "Inquisitive, persistent, enjoys technical challenge",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 5,
+          "resources": 4,
+          "growth": 10,
+          "connection": 3,
+          "duty": 5,
+          "rest": 4
+        },
+        "needs": {
+          "safety": 3,
+          "resources": 3,
+          "growth": 7,
+          "connection": 1,
+          "duty": 2,
+          "rest": 3
+        },
+        "risk_aversion": 4,
+        "stress": 1,
+        "goals": [
+          {
+            "id": "NPC-0007_primary",
+            "dimension": "growth",
+            "status": "active",
+            "urgency": 9
+          },
+          {
+            "id": "NPC-0007_secondary",
+            "dimension": "safety",
+            "status": "active",
+            "urgency": 7
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Develop diagnostic skills with relevant practice",
+        "alternative": "Choose simpler repair or rest rather than attempt unsafe work",
+        "review_trigger": "Seek suitable supervised diagnostic practice",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0008",
+      "status": "review_candidate_inactive",
+      "source_goal": "Support students and plan lessons",
+      "source_consideration": "Has independent obligations outside school",
+      "personality_proposal": "Patient, organized, values students and personal life",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 6,
+          "resources": 4,
+          "growth": 6,
+          "connection": 9,
+          "duty": 8,
+          "rest": 5
+        },
+        "needs": {
+          "safety": 2,
+          "resources": 3,
+          "growth": 3,
+          "connection": 5,
+          "duty": 4,
+          "rest": 3
+        },
+        "risk_aversion": 5,
+        "stress": 2,
+        "goals": [
+          {
+            "id": "NPC-0008_primary",
+            "dimension": "connection",
+            "status": "active",
+            "urgency": 7
+          },
+          {
+            "id": "NPC-0008_secondary",
+            "dimension": "duty",
+            "status": "active",
+            "urgency": 5
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Support students within actual teaching obligations",
+        "alternative": "Defer a request or protect time for personal commitments",
+        "review_trigger": "Review actual lesson and approved student needs",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0009",
+      "status": "review_candidate_inactive",
+      "source_goal": "Keep school operations reliable",
+      "source_consideration": "Must allocate limited resources",
+      "personality_proposal": "Methodical, resource-aware, values reliable operations",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 6,
+          "resources": 8,
+          "growth": 4,
+          "connection": 5,
+          "duty": 10,
+          "rest": 4
+        },
+        "needs": {
+          "safety": 3,
+          "resources": 5,
+          "growth": 1,
+          "connection": 2,
+          "duty": 6,
+          "rest": 3
+        },
+        "risk_aversion": 6,
+        "stress": 3,
+        "goals": [
+          {
+            "id": "NPC-0009_primary",
+            "dimension": "duty",
+            "status": "active",
+            "urgency": 8
+          },
+          {
+            "id": "NPC-0009_secondary",
+            "dimension": "resources",
+            "status": "active",
+            "urgency": 6
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Maintain reliable school operation within actual funds",
+        "alternative": "Defer purchases or redistribute approved resources",
+        "review_trigger": "Review funded requirements and staffing",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0010",
+      "status": "review_candidate_inactive",
+      "source_goal": "Earn stable income despite weather uncertainty",
+      "source_consideration": "May refuse work in unsafe conditions",
+      "personality_proposal": "Safety-conscious, income-oriented, responsive to weather",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 10,
+          "resources": 8,
+          "growth": 3,
+          "connection": 4,
+          "duty": 5,
+          "rest": 4
+        },
+        "needs": {
+          "safety": 6,
+          "resources": 6,
+          "growth": 1,
+          "connection": 2,
+          "duty": 2,
+          "rest": 3
+        },
+        "risk_aversion": 9,
+        "stress": 3,
+        "goals": [
+          {
+            "id": "NPC-0010_primary",
+            "dimension": "safety",
+            "status": "active",
+            "urgency": 8
+          },
+          {
+            "id": "NPC-0010_secondary",
+            "dimension": "resources",
+            "status": "active",
+            "urgency": 6
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Earn stable income without accepting unsafe work",
+        "alternative": "Wait for safe conditions or seek alternative paid work",
+        "review_trigger": "Check actual weather, vessel access and funded work",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0011",
+      "status": "review_candidate_inactive",
+      "source_goal": "Maintain safe dock operations and develop logistics skills",
+      "source_consideration": "Coordinates work but does not control other actors",
+      "personality_proposal": "Cooperative, detail-oriented, safety-aware",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 8,
+          "resources": 5,
+          "growth": 7,
+          "connection": 8,
+          "duty": 7,
+          "rest": 4
+        },
+        "needs": {
+          "safety": 4,
+          "resources": 3,
+          "growth": 4,
+          "connection": 4,
+          "duty": 3,
+          "rest": 3
+        },
+        "risk_aversion": 6,
+        "stress": 2,
+        "goals": [
+          {
+            "id": "NPC-0011_primary",
+            "dimension": "connection",
+            "status": "active",
+            "urgency": 7
+          },
+          {
+            "id": "NPC-0011_secondary",
+            "dimension": "growth",
+            "status": "active",
+            "urgency": 5
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Coordinate willing peers and learn logistics",
+        "alternative": "Work independently or decline unsafe coordination",
+        "review_trigger": "Check actual dock conditions and consent",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0012",
+      "status": "review_candidate_inactive",
+      "source_goal": "Find suitable paid work and continue learning",
+      "source_consideration": "Can compete for jobs or reject unsuitable offers",
+      "personality_proposal": "Exploratory, selective, financially pressured",
+      "private_motivation_fixture": {
+        "values": {
+          "safety": 5,
+          "resources": 10,
+          "growth": 8,
+          "connection": 5,
+          "duty": 2,
+          "rest": 4
+        },
+        "needs": {
+          "safety": 3,
+          "resources": 8,
+          "growth": 6,
+          "connection": 3,
+          "duty": 1,
+          "rest": 3
+        },
+        "risk_aversion": 4,
+        "stress": 2,
+        "goals": [
+          {
+            "id": "NPC-0012_primary",
+            "dimension": "resources",
+            "status": "active",
+            "urgency": 9
+          },
+          {
+            "id": "NPC-0012_secondary",
+            "dimension": "growth",
+            "status": "active",
+            "urgency": 7
+          }
+        ]
+      },
+      "goal_proposal": {
+        "primary": "Find suitable paid work without abandoning learning",
+        "alternative": "Decline unsuitable work or pursue affordable education",
+        "review_trigger": "Look for actual vacancies and education information",
+        "completion": "Requires actual authorized domain evidence; no scripted action or reward"
+      },
+      "condition_proposal": {
+        "life_status": "active_candidate_only",
+        "hp": "unresolved_definition_and_state",
+        "injury_history": "unknown",
+        "biological_need_settings": "unresolved_separate_npc_configuration",
+        "mandatory_biology": "retain_illness_injury_aging_death",
+        "note": "Motivation fixture values are not biological readings, actual stress, disability or validated condition."
+      },
+      "family_status": "unresolved_requires_review",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    }
+  ],
+  "relationship_proposals": [
+    {
+      "id": "SOC-P1",
+      "participants": [
+        "NPC-0002",
+        "NPC-0003"
+      ],
+      "kind": "workplace_acquaintance",
+      "organization_reference": "ORG-0002",
+      "context": "Retail cooperation and possible disagreement over hours",
+      "origin": "authored_candidate_requires_dated_shared_event_and_individual_knowledge_review",
+      "directed_fixture_values": [
+        {
+          "from": "NPC-0002",
+          "to": "NPC-0003",
+          "trust": 35,
+          "affinity": 12,
+          "respect": 45,
+          "familiarity": 55
+        },
+        {
+          "from": "NPC-0003",
+          "to": "NPC-0002",
+          "trust": 24,
+          "affinity": 15,
+          "respect": 40,
+          "familiarity": 50
+        }
+      ],
+      "activation_allowed": false
+    },
+    {
+      "id": "SOC-P2",
+      "participants": [
+        "NPC-0004",
+        "NPC-0005"
+      ],
+      "kind": "workplace_acquaintance",
+      "organization_reference": "ORG-0003",
+      "context": "Supervised support, confidentiality and learning",
+      "origin": "authored_candidate_requires_dated_shared_event_and_individual_knowledge_review",
+      "directed_fixture_values": [
+        {
+          "from": "NPC-0004",
+          "to": "NPC-0005",
+          "trust": 42,
+          "affinity": 14,
+          "respect": 48,
+          "familiarity": 55
+        },
+        {
+          "from": "NPC-0005",
+          "to": "NPC-0004",
+          "trust": 34,
+          "affinity": 19,
+          "respect": 55,
+          "familiarity": 52
+        }
+      ],
+      "activation_allowed": false
+    },
+    {
+      "id": "SOC-P3",
+      "participants": [
+        "NPC-0006",
+        "NPC-0007"
+      ],
+      "kind": "workplace_acquaintance",
+      "organization_reference": "ORG-0004",
+      "context": "Repair collaboration and diagnostic practice",
+      "origin": "authored_candidate_requires_dated_shared_event_and_individual_knowledge_review",
+      "directed_fixture_values": [
+        {
+          "from": "NPC-0006",
+          "to": "NPC-0007",
+          "trust": 32,
+          "affinity": 13,
+          "respect": 40,
+          "familiarity": 49
+        },
+        {
+          "from": "NPC-0007",
+          "to": "NPC-0006",
+          "trust": 28,
+          "affinity": 22,
+          "respect": 51,
+          "familiarity": 53
+        }
+      ],
+      "activation_allowed": false
+    },
+    {
+      "id": "SOC-P4",
+      "participants": [
+        "NPC-0008",
+        "NPC-0009"
+      ],
+      "kind": "workplace_acquaintance",
+      "organization_reference": "ORG-0005",
+      "context": "Teaching needs and operational constraints",
+      "origin": "authored_candidate_requires_dated_shared_event_and_individual_knowledge_review",
+      "directed_fixture_values": [
+        {
+          "from": "NPC-0008",
+          "to": "NPC-0009",
+          "trust": 30,
+          "affinity": 12,
+          "respect": 36,
+          "familiarity": 52
+        },
+        {
+          "from": "NPC-0009",
+          "to": "NPC-0008",
+          "trust": 38,
+          "affinity": 10,
+          "respect": 44,
+          "familiarity": 48
+        }
+      ],
+      "activation_allowed": false
+    },
+    {
+      "id": "SOC-P5",
+      "participants": [
+        "NPC-0010",
+        "NPC-0011"
+      ],
+      "kind": "workplace_acquaintance",
+      "organization_reference": "ORG-0006",
+      "context": "Harbor coordination and safety checks",
+      "origin": "authored_candidate_requires_dated_shared_event_and_individual_knowledge_review",
+      "directed_fixture_values": [
+        {
+          "from": "NPC-0010",
+          "to": "NPC-0011",
+          "trust": 34,
+          "affinity": 19,
+          "respect": 41,
+          "familiarity": 51
+        },
+        {
+          "from": "NPC-0011",
+          "to": "NPC-0010",
+          "trust": 37,
+          "affinity": 21,
+          "respect": 42,
+          "familiarity": 50
+        }
+      ],
+      "activation_allowed": false
+    },
+    {
+      "id": "SOC-P6",
+      "participants": [
+        "NPC-0003",
+        "NPC-0012"
+      ],
+      "kind": "optional_community_acquaintance",
+      "organization_reference": null,
+      "context": "Possible recreation-area meeting; candidate event 2025-10-01, both adults",
+      "origin": "authored_candidate_requires_dated_shared_event_and_individual_knowledge_review",
+      "directed_fixture_values": [
+        {
+          "from": "NPC-0003",
+          "to": "NPC-0012",
+          "trust": 12,
+          "affinity": 16,
+          "respect": 10,
+          "familiarity": 20
+        },
+        {
+          "from": "NPC-0012",
+          "to": "NPC-0003",
+          "trust": 17,
+          "affinity": 12,
+          "respect": 15,
+          "familiarity": 19
+        }
+      ],
+      "activation_allowed": false
+    }
+  ],
+  "optional_family_scenario": {
+    "status": "unresolved_noncanonical_alternative",
+    "participants": [
+      "NPC-0001",
+      "NPC-0010"
+    ],
+    "proposal": "Mara and Cal could be adult siblings living in separate reference residences; different surnames and family history require authored explanation and review, and neither household is automatically financially responsible for the other.",
+    "reason": "Mara's existing reference mentions family commitments; candidate connects that thread without adding an NPC or overwriting housing. Reject or replace freely during review.",
+    "required": [
+      "Confirm kinship history and individual awareness",
+      "Confirm no forced shared household, money or duty",
+      "Review other relatives separately; unknown is not absence"
+    ],
+    "child_start": "Separate age-5 scenario still needs actual authorized guardian and suitable residence; no existing NPC is assigned guardianship and no B2 assignment is inferred."
+  },
+  "unchanged_blocking_instances": 276
+}
