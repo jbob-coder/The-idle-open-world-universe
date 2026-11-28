@@ -22,7 +22,7 @@ function confirm(s,u,id){
 }
 function scoped(s,row){
  must(row.epoch===s.epoch,"foreign receipt epoch");
- return {epoch:row.epoch,commandId:row.id,status:row.status,start:row.start,end:row.end,contentVersion:"fixture-text-v1",
+ return {epoch:row.epoch,commandId:row.id,status:row.status,start:row.start,end:row.end,contentVersion:row.contentVersion,
   facts:row.status==="processing"?[]:[{kind:row.outcome,elapsed:row.end-row.start}]};
 }
 function begin(previous,c){
@@ -30,7 +30,7 @@ function begin(previous,c){
  const old=previous.commands.find(x=>x.id===c.commandId);
  if(old){must(old.bytes===canon(c),"id conflict");return {state:previous,receipt:scoped(previous,old),replayed:true}}
  must(!previous.active&&c.expectedRevision===previous.revision&&c.issuedTick===previous.now&&prepared(previous).some(x=>x.id===c.payload.choiceId),"stale choice");
- const s=clone(previous),row={id:c.commandId,epoch:s.epoch,bytes:canon(c),status:"processing",start:s.now,end:s.now,outcome:null,steps:[]};
+ const s=clone(previous),row={id:c.commandId,epoch:s.epoch,bytes:canon(c),status:"processing",start:s.now,end:s.now,outcome:null,steps:[],contentVersion:"fixture-text-v1"};
  s.commands.push(row);s.active=row.id;s.revision++;
  return {state:s,receipt:scoped(s,row),replayed:false};
 }
@@ -65,9 +65,10 @@ function ingest(s,u,r){
  const row=s.commands.find(x=>x.id===r.commandId);
  must(row&&r.epoch===s.epoch&&equal(scoped(s,row),r),"foreign or unverified receipt");
  if(r.status==="processing")return u;
- const segment=render(r),prior=u.segments.find(x=>x.id===segment.id);
- if(prior)must(equal(prior,segment),"segment conflict");
- const segments=prior?u.segments:[...u.segments,segment];
+ const terminal=s.commands.filter(x=>x.status==="terminal");
+ const segments=terminal.map(x=>render(scoped(s,x)));
+ for(const cached of u.segments){const verified=segments.find(x=>x.id===cached.id);must(verified&&equal(verified,cached),"segment conflict")}
+ // Rebuild missing earlier segments in authoritative order, not delivery order.
  const matches=u.pending?.commandId===r.commandId;
  return {...u,segments,selection:matches?null:u.selection,pending:matches?null:u.pending};
 }
@@ -149,4 +150,22 @@ test("old epoch command or receipt cannot affect current timeline",()=>{
  rejects(newEpoch,()=>recover(newEpoch,u.pending),"stale epoch");
  rejects(newEpoch,()=>ingest(newEpoch,u,b.receipt),"unverified receipt");
 });
-console.log(JSON.stringify({passed,total:18,scope:"synthetic protocol oracle",runtime_verified:false}));
+test("later receipt arriving first restores missing prefix in commit order",()=>{
+ const s=initial(),u=ready(s),a=begin(s,u.pending),b=step(a.state,"c1",1,5,"completed");
+ const v=confirm(b.state,select(b.state,ui(),prepared(b.state)[1].id),"c2"),c=begin(b.state,v.pending),d=step(c.state,"c2",1,2,"refused");
+ const rendered=ingest(d.state,v,d.receipt),late=ingest(d.state,rendered,b.receipt);
+ must(rendered.segments.map(x=>x.id).join(",")==="E1/c1/1,E1/c2/1"&&equal(rendered,late),"delivery reordered transcript");
+});
+test("altered cached segment rejected rather than silently accepted",()=>{
+ const s=initial(),u=ready(s),a=begin(s,u.pending),b=step(a.state,"c1",1,5,"completed"),v=ingest(b.state,u,b.receipt);
+ const corrupt=clone(v);corrupt.segments[0].text="Uncommitted outcome.";
+ rejects(b.state,()=>ingest(b.state,corrupt,b.receipt),"segment conflict");
+});
+test("unsupported stored content version fails closed without rewriting prose",()=>{
+ const s=initial(),u=ready(s),a=begin(s,u.pending),b=step(a.state,"c1",1,5,"completed"),other=clone(b.state);
+ other.commands[0].contentVersion="future-unsupported";
+ const r=recover(other,u.pending);
+ must(r.contentVersion==="future-unsupported","stored version lost");
+ rejects(other,()=>ingest(other,u,r),"not a renderable receipt");
+});
+console.log(JSON.stringify({passed,total:21,scope:"synthetic protocol oracle",runtime_verified:false}));
