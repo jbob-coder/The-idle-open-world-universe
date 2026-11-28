@@ -1,0 +1,435 @@
+{
+  "version": "qa-m1a-initialization-v0.1",
+  "status": "review_only_inactive",
+  "activation_allowed": false,
+  "scope": "Synthetic isolated engineering fixture, not a canonical world or full NPC roster. All values are proposed for review. No active actors or receipts. Does not authorize implementation.",
+  "source_pins": {
+    "manifest": {
+      "commit": "19bb4c67688ad31ac780c7021ceefcef68e2e98f",
+      "path": "docs/qa/initialization_manifest.json",
+      "blob": "829f5129f48e18417bf11ff94240ead882a3074e"
+    },
+    "finance": {
+      "commit": "b1f7aa2ba736b1b8139eef95c28878d420204f29",
+      "path": "docs/qa/m1a_finance_review.json",
+      "blob": "6e80b3ef0bb1f711ff50b4ecdae181ade0eecc95"
+    },
+    "narrative": {
+      "commit": "ad99898b8fbac36188f30ff8f926bac02d7d19f8",
+      "path": "docs/qa/m1a_narrative_review.json",
+      "blob": "0267437201cac7ef4a68d273de7bc85d803da1c7"
+    },
+    "world": {
+      "commit": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+      "path": "docs/WORLD.md",
+      "blob": "31df1d9d01f2dba2acf9fa3d344f368c22bf6070"
+    },
+    "cognition": {
+      "commit": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+      "path": "tools/npc_cognition_reference.mjs",
+      "blob": "fa6fbada18f89efa10f013dccd66f49d226ae697"
+    },
+    "opportunity": {
+      "commit": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+      "path": "tools/npc_opportunity_reference.mjs",
+      "blob": "2bb3402fe3f589d53604fd5d99c5c8657ef11ddf"
+    },
+    "rng": {
+      "commit": "f647a48016da7ce5932b3f2b9aa124f858947df0",
+      "path": "docs/qa/check_rng_stream_candidate.mjs",
+      "blob": "b7ad08e6307b95fa2c94960751d3462a67d817fa"
+    },
+    "privacy": {
+      "commit": "ff3f3588bafe3202722025f72b5af023e26c5e16",
+      "path": "docs/qa/choice_revision_privacy_amendment.md",
+      "blob": "477f20b73e28883458946f974d7b8543d7d3ec7f"
+    }
+  },
+  "decision_register": "#103 D1/D2/D3/D4/D6/D8",
+  "world": {
+    "id": "M1A-QA",
+    "epoch": "E1",
+    "private_revision": 0,
+    "calendar_candidate": "gregorian-ms-v1",
+    "opening_civil": {
+      "year": 2026,
+      "month": 9,
+      "day": 7,
+      "hour": 8,
+      "minute": 5,
+      "second": 0,
+      "millisecond": 0
+    },
+    "opening_tick": 63924365100000,
+    "first_actor": "FIX-P",
+    "first_birth_civil": {
+      "year": 2010,
+      "month": 9,
+      "day": 7,
+      "hour": 8,
+      "minute": 5,
+      "second": 0,
+      "millisecond": 0
+    },
+    "cosmic_tick": 63955901100000,
+    "cosmic_status": "pending_future",
+    "first_age18_tick": 63987523500000,
+    "first_age18_status": "pending_future",
+    "seed_candidate": "m1a-review-seed-v1",
+    "generation_version_candidate": "g1",
+    "streams": [
+      {
+        "domain": "npc",
+        "origin": "FIX-W",
+        "next_index": 0
+      },
+      {
+        "domain": "npc",
+        "origin": "FIX-P",
+        "next_index": 0
+      },
+      {
+        "domain": "awakening",
+        "origin": "FIX-P",
+        "next_index": 0
+      }
+    ],
+    "notes": "No RNG draws needed to begin this deterministic fixture. Actual world seed/stream contract and older-at-phenomenon policy remain separate review requirements. Civil example is independent of full-roster 05:00."
+  },
+  "configuration": {
+    "player": {
+      "hunger": false,
+      "thirst": false,
+      "sleep": false,
+      "fatigue": false,
+      "hygiene": false,
+      "mental_health": false
+    },
+    "npc": {
+      "hunger": false,
+      "thirst": false,
+      "sleep": false,
+      "fatigue": false,
+      "hygiene": false,
+      "mental_health": false
+    },
+    "mandatory": [
+      "illness",
+      "injury",
+      "aging",
+      "death"
+    ],
+    "note": "All optional needs off in this bounded fixture to avoid inventing rates. Not a default for real game. Preferences for rest remain possible; no mandatory biology disabled."
+  },
+  "actors": [
+    {
+      "id": "FIX-P",
+      "role": "player",
+      "age": 16,
+      "birth_civil": {
+        "year": 2010,
+        "month": 9,
+        "day": 7,
+        "hour": 8,
+        "minute": 5,
+        "second": 0,
+        "millisecond": 0
+      },
+      "location": "LOC-0002",
+      "home": "LOC-0015",
+      "control": "player",
+      "origin": "synthetic_local_fixture",
+      "history": "Fixture child in a reviewed supported household; no canonical identity or real school qualification.",
+      "guardian": "FIX-W",
+      "education": "fixture secondary-school pupil, no enrolled lesson activated",
+      "employment": null,
+      "ability": {
+        "intended": null,
+        "acquired": null,
+        "reason": "pre_phenomenon_fixture_not_final_creation_flow"
+      },
+      "condition": {
+        "status": "active_candidate",
+        "hp": 10,
+        "max_hp": 10,
+        "injuries": [],
+        "illnesses": [],
+        "mobility": "walking_eligible",
+        "condition_version": "fixture-only-10-point"
+      },
+      "activity": null,
+      "own_finance": "outside_fixture_no_purchase",
+      "knowledge": [
+        "E-P-HOME",
+        "E-P-ROUTE",
+        "E-P-REST",
+        "E-P-CARE"
+      ],
+      "initial_goals": [
+        "choose_walk_or_rest"
+      ],
+      "rng_origin": "FIX-P"
+    },
+    {
+      "id": "FIX-W",
+      "role": "npc",
+      "age": 44,
+      "birth_civil": {
+        "year": 1982,
+        "month": 2,
+        "day": 14,
+        "hour": 12,
+        "minute": 0,
+        "second": 0,
+        "millisecond": 0
+      },
+      "location": "LOC-0003",
+      "home": "LOC-0015",
+      "control": "autonomous",
+      "origin": "synthetic_local_fixture",
+      "source_role": "NPC-0001 caretaker reference, not actual actor identity",
+      "history": "Synthetic adult with authorized basic maintenance experience, not a credential grant.",
+      "guardian_for": "FIX-P",
+      "education": "fixture basic maintenance competence only",
+      "employment": "FIX-AGREEMENT",
+      "ability": {
+        "intended": null,
+        "acquired": null,
+        "reason": "pre_phenomenon"
+      },
+      "condition": {
+        "status": "active_candidate",
+        "hp": 10,
+        "max_hp": 10,
+        "injuries": [],
+        "illnesses": [],
+        "mobility": "walking_eligible",
+        "condition_version": "fixture-only-10-point"
+      },
+      "activity": null,
+      "own_finance": "FIX-WORKER",
+      "knowledge": [
+        "E-W-HOME",
+        "E-W-WORK",
+        "E-W-REST",
+        "E-W-CARE"
+      ],
+      "initial_goals": [
+        "G-W-DUTY",
+        "G-W-REST"
+      ],
+      "rng_origin": "FIX-W"
+    }
+  ],
+  "care_and_access": {
+    "status": "explicit_synthetic_proposal_requires_review",
+    "household": "FIX-HH",
+    "home": "LOC-0015",
+    "members": [
+      "FIX-P",
+      "FIX-W"
+    ],
+    "guardian": "FIX-W",
+    "dependent": "FIX-P",
+    "basis": "Proposed authorized non-parent care arrangement and shared tenancy; consent, legal authority, age suitability and tenancy must be accepted for fixture. Not a real NPC family relationship. No B2 occupancy. Guardian is not forced to answer questions or stop work.",
+    "permissions": [
+      {
+        "actor": "FIX-P",
+        "locations": [
+          "LOC-0015",
+          "LOC-0002",
+          "LOC-0003"
+        ],
+        "routes": [
+          "RTE-0014",
+          "RTE-0002"
+        ],
+        "rest_at": [
+          "LOC-0002"
+        ],
+        "note": "Synthetic safe permitted landing rest only for this test; no new room, furniture or general access rule."
+      },
+      {
+        "actor": "FIX-W",
+        "locations": [
+          "LOC-0015",
+          "LOC-0002",
+          "LOC-0003"
+        ],
+        "routes": [
+          "RTE-0014",
+          "RTE-0002"
+        ],
+        "rest_at": [
+          "LOC-0003"
+        ],
+        "work_at": [
+          "LOC-0003"
+        ]
+      }
+    ],
+    "school_status": "No school activity tested; fixture care and school context must be accepted, no truancy or adult job inferred."
+  },
+  "evidence_proposals": [
+    {
+      "id": "E-P-HOME",
+      "recipient": "FIX-P",
+      "claim": "own proposed home LOC-0015",
+      "source": "reviewed household record"
+    },
+    {
+      "id": "E-P-ROUTE",
+      "recipient": "FIX-P",
+      "claim": "known authorized RTE-0002 to lobby",
+      "source": "fixture direct route observation and access grant"
+    },
+    {
+      "id": "E-P-REST",
+      "recipient": "FIX-P",
+      "claim": "permitted safe rest at LOC-0002",
+      "source": "fixture reviewed access record"
+    },
+    {
+      "id": "E-P-CARE",
+      "recipient": "FIX-P",
+      "claim": "own care arrangement",
+      "source": "reviewed personal care record"
+    },
+    {
+      "id": "E-W-HOME",
+      "recipient": "FIX-W",
+      "claim": "own proposed home LOC-0015",
+      "source": "reviewed household record"
+    },
+    {
+      "id": "E-W-WORK",
+      "recipient": "FIX-W",
+      "claim": "known maintenance offer at LOC-0003 under FIX-AGREEMENT",
+      "source": "fixture authorized work offer and actual availability check"
+    },
+    {
+      "id": "E-W-REST",
+      "recipient": "FIX-W",
+      "claim": "permitted rest at LOC-0003",
+      "source": "fixture access record"
+    },
+    {
+      "id": "E-W-CARE",
+      "recipient": "FIX-W",
+      "claim": "own care responsibility",
+      "source": "reviewed personal care record"
+    }
+  ],
+  "worker_decision": {
+    "fixture_only": true,
+    "capabilities": [
+      "work",
+      "rest"
+    ],
+    "goals": [
+      {
+        "id": "G-W-DUTY",
+        "dimension": "duty",
+        "status": "active",
+        "urgency": 5
+      },
+      {
+        "id": "G-W-REST",
+        "dimension": "rest",
+        "status": "active",
+        "urgency": 3
+      }
+    ],
+    "values": {
+      "safety": 3,
+      "resources": 7,
+      "growth": 2,
+      "connection": 4,
+      "duty": 8,
+      "rest": 4
+    },
+    "work_preference_pressure": {
+      "safety": 1,
+      "resources": 6,
+      "growth": 1,
+      "connection": 1,
+      "duty": 4,
+      "rest": 1
+    },
+    "rest_preference_pressure": {
+      "safety": 1,
+      "resources": 0,
+      "growth": 1,
+      "connection": 1,
+      "duty": 0,
+      "rest": 10
+    },
+    "rest_control_values": {
+      "safety": 3,
+      "resources": 2,
+      "growth": 2,
+      "connection": 4,
+      "duty": 2,
+      "rest": 10
+    },
+    "risk_aversion": 3,
+    "stress": 1,
+    "review_at": 63924365100000,
+    "initial_activity": null,
+    "note": "Synthetic subjective pressures, not physiological need readings; rest preference is allowed with optional decay off. Rest control uses a separate initial profile, not a player command forcing an NPC decision. Eligibility requires real authority."
+  },
+  "finance_reference": {
+    "accounts": [
+      "FIX-EMPLOYER",
+      "FIX-WORKER"
+    ],
+    "agreement": "FIX-AGREEMENT",
+    "source": "finance",
+    "no_payment_on_opening": true,
+    "no_actual_work_on_opening": true,
+    "rate_minor_per_hour": 1800,
+    "denominator": 3600000
+  },
+  "path_expectations": {
+    "same_initial_world": "M1A-QA",
+    "walk": {
+      "row": "I-002",
+      "from": "LOC-0002",
+      "to": "LOC-0003",
+      "route": "RTE-0002",
+      "elapsed_ms": 9000,
+      "conditional_worker_earned_minor": 4,
+      "carry": 1800000
+    },
+    "rest": {
+      "row": "I-019",
+      "location": "LOC-0002",
+      "elapsed_ms": 60000,
+      "conditional_worker_earned_minor": 30,
+      "carry": 0
+    },
+    "inquiry": {
+      "row": "I-003",
+      "location": "LOC-0003",
+      "target": "FIX-W",
+      "source_target_reference": "NPC-0001",
+      "offer_only_if_actual_visible_contact_and_eligible_inquiry": true,
+      "respond_autonomously": true
+    },
+    "no_work_earned_minor": 0,
+    "no_automatic_payment": true,
+    "narrative_rules": "Use #99 current scoped receipt amendment, no global revision or private work facts. No real outcome from this data."
+  },
+  "review_required": [
+    "01: actual calendar/seed, atomic registration, access, scheduler, persistence and opaque scoped bindings",
+    "02: explicit fixture care/tenure and synthetic baseline condition/competence, work/rest eligibility and evidence",
+    "03: compatible human definition, prephenomenon inactive powers, no HP or progression rule inferred",
+    "04: source row binding to synthetic actor (not actual NPC-0001), scoped visibility and conditional rest/inquiry",
+    "Owner: explicit M1-A documentation review and implementation permission after affected peer acceptance"
+  ],
+  "full_roster_unchanged": {
+    "actors": 12,
+    "unresolved_instances": 276,
+    "formally_resolved": 0
+  }
+}

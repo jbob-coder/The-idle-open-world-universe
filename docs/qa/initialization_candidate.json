@@ -1,0 +1,1350 @@
+{
+  "schema_version": "qa-initialization-candidate-v0.1",
+  "status": "proposal_only_inactive",
+  "activation_allowed": false,
+  "source": {
+    "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+    "npc_head": "b51c461d05ee2a0b4b3886147f4120f1a8d2e270",
+    "npc_blob": "602b7e31e8a0e40b7234c4dcdfeb36c6536401cd",
+    "review_register": "#103 D3",
+    "related": "#101 initialization review"
+  },
+  "design_notes": [
+    "All new birth dates, time of day, coarse origins and life-history milestones are authored proposals, not established facts. 01/02 must review and adopt them in domain-owned data. No region IDs or canonical date are assigned.",
+    "Shared opening example is 05:00 Monday before reference weekday shifts. Starting at home is a candidate scenario, not a mandatory NPC schedule. Original household references and financial values retained. One-person accounting household does not imply no relatives.",
+    "Calendar year after birthday gives a bounded event interval, not an exact committed event. No training, credential, money or power is automatically granted.",
+    "No actor admitted, no new world created, no actual RNG or seed selected. Age variants below are separate proposed new-world test fixtures, never reseeding an existing world."
+  ],
+  "opening_civil_proposal": {
+    "year": 2026,
+    "month": 9,
+    "day": 7,
+    "hour": 5,
+    "minute": 0,
+    "second": 0
+  },
+  "opening_variants": [
+    {
+      "age": 5,
+      "first_birth_civil_proposal": {
+        "year": 2021,
+        "month": 9,
+        "day": 7,
+        "hour": 5,
+        "minute": 0,
+        "second": 0
+      },
+      "cosmic_civil_proposal": {
+        "year": 2038,
+        "month": 9,
+        "day": 7,
+        "hour": 5,
+        "minute": 0,
+        "second": 0
+      },
+      "prehistory_required": false,
+      "age18_milestone_at_opening": false,
+      "care_and_household_status": "unresolved_requires_review",
+      "ability_status": "not_granted"
+    },
+    {
+      "age": 16,
+      "first_birth_civil_proposal": {
+        "year": 2010,
+        "month": 9,
+        "day": 7,
+        "hour": 5,
+        "minute": 0,
+        "second": 0
+      },
+      "cosmic_civil_proposal": {
+        "year": 2027,
+        "month": 9,
+        "day": 7,
+        "hour": 5,
+        "minute": 0,
+        "second": 0
+      },
+      "prehistory_required": false,
+      "age18_milestone_at_opening": false,
+      "care_and_household_status": "unresolved_requires_review",
+      "ability_status": "not_granted"
+    },
+    {
+      "age": 18,
+      "first_birth_civil_proposal": {
+        "year": 2008,
+        "month": 9,
+        "day": 7,
+        "hour": 5,
+        "minute": 0,
+        "second": 0
+      },
+      "cosmic_civil_proposal": {
+        "year": 2025,
+        "month": 9,
+        "day": 7,
+        "hour": 5,
+        "minute": 0,
+        "second": 0
+      },
+      "prehistory_required": true,
+      "age18_milestone_at_opening": true,
+      "care_and_household_status": "unresolved_requires_review",
+      "ability_status": "not_granted"
+    }
+  ],
+  "profiles": [
+    {
+      "actor_id": "NPC-0001",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Mara Ellison",
+      "reference_age_years": 44,
+      "birth_civil_proposal": {
+        "year": 1982,
+        "month": 2,
+        "day": 14,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "local_bay",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0015",
+      "household_reference": "HH-0001",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0015",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 2600,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 650,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Caretaker",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0001",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0003",
+        "source": "local_life"
+      },
+      "education_field_proposal": "maintenance",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0001-ED",
+          "proposed_year": 2000,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0001-TR",
+          "proposed_year": 2002,
+          "minimum_age_at_event": 20,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "maintenance apprenticeship",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0001-EX",
+          "proposed_year": 2006,
+          "minimum_age_at_event": 24,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "building maintenance experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Maintenance experience and family commitments; verify duties and relationships.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0002",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Tessa Marin",
+      "reference_age_years": 36,
+      "birth_civil_proposal": {
+        "year": 1990,
+        "month": 4,
+        "day": 9,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "elsewhere_on_island",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0016",
+      "household_reference": "HH-0002",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0016",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 3700,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 720,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Store manager",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0002",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0008",
+        "source": "local_life"
+      },
+      "education_field_proposal": "retail",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0002-ED",
+          "proposed_year": 2008,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0002-TR",
+          "proposed_year": 2009,
+          "minimum_age_at_event": 19,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "retail operations training",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0002-EX",
+          "proposed_year": 2017,
+          "minimum_age_at_event": 27,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "store supervision experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Retail operations and management authority; do not assume ownership.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0003",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Eli Mercer",
+      "reference_age_years": 21,
+      "birth_civil_proposal": {
+        "year": 2005,
+        "month": 6,
+        "day": 12,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "local_bay",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0017",
+      "household_reference": "HH-0003",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0017",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 1200,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 550,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Store clerk",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0002",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0008",
+        "source": "local_life"
+      },
+      "education_field_proposal": "retail",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0003-ED",
+          "proposed_year": 2023,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0003-TR",
+          "proposed_year": 2024,
+          "minimum_age_at_event": 19,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "retail induction",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0003-EX",
+          "proposed_year": 2025,
+          "minimum_age_at_event": 20,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "retail work experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Education and retail experience; identify intended further study.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0004",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Dr. Leena Farrow",
+      "reference_age_years": 42,
+      "birth_civil_proposal": {
+        "year": 1984,
+        "month": 1,
+        "day": 23,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "elsewhere_on_island",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0018",
+      "household_reference": "HH-0004",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0018",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 7000,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 900,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Clinician",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0003",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0009",
+        "source": "local_life"
+      },
+      "education_field_proposal": "clinical",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0004-ED",
+          "proposed_year": 2002,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0004-TR",
+          "proposed_year": 2009,
+          "minimum_age_at_event": 25,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "clinical education and supervised training",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0004-EX",
+          "proposed_year": 2014,
+          "minimum_age_at_event": 30,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "clinical practice experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Clinical credentials and supervised practice; verify license eligibility.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0005",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Adrian Bell",
+      "reference_age_years": 28,
+      "birth_civil_proposal": {
+        "year": 1998,
+        "month": 7,
+        "day": 3,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "local_bay",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0019",
+      "household_reference": "HH-0005",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0019",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 2800,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 650,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Clinic assistant",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0003",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0009",
+        "source": "local_life"
+      },
+      "education_field_proposal": "healthcare_support",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0005-ED",
+          "proposed_year": 2016,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0005-TR",
+          "proposed_year": 2018,
+          "minimum_age_at_event": 20,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "healthcare support training",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0005-EX",
+          "proposed_year": 2020,
+          "minimum_age_at_event": 22,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "supervised support experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Healthcare support education and supervised work limits.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0006",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Jonas Reed",
+      "reference_age_years": 39,
+      "birth_civil_proposal": {
+        "year": 1987,
+        "month": 3,
+        "day": 17,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "elsewhere_on_island",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0020",
+      "household_reference": "HH-0006",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0020",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 4300,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 720,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Workshop lead",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0004",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0010",
+        "source": "local_life"
+      },
+      "education_field_proposal": "repair_trade",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0006-ED",
+          "proposed_year": 2005,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0006-TR",
+          "proposed_year": 2007,
+          "minimum_age_at_event": 20,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "trade training",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0006-EX",
+          "proposed_year": 2016,
+          "minimum_age_at_event": 29,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "repair supervision experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Repair trade training and lead authority; separate ownership.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0007",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Nia Solis",
+      "reference_age_years": 23,
+      "birth_civil_proposal": {
+        "year": 2003,
+        "month": 8,
+        "day": 21,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "local_bay",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0021",
+      "household_reference": "HH-0007",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0021",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 1800,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 600,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Repair technician",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0004",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0010",
+        "source": "local_life"
+      },
+      "education_field_proposal": "repair_trade",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0007-ED",
+          "proposed_year": 2021,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0007-TR",
+          "proposed_year": 2023,
+          "minimum_age_at_event": 20,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "technical training",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0007-EX",
+          "proposed_year": 2025,
+          "minimum_age_at_event": 22,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "diagnostics practice",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Technical training and diagnostics practice; verify experience.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0008",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Sera Hale",
+      "reference_age_years": 33,
+      "birth_civil_proposal": {
+        "year": 1993,
+        "month": 5,
+        "day": 8,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "elsewhere_on_island",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0022",
+      "household_reference": "HH-0008",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0022",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 3500,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 680,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Teacher",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0005",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0011",
+        "source": "local_life"
+      },
+      "education_field_proposal": "education",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0008-ED",
+          "proposed_year": 2011,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0008-TR",
+          "proposed_year": 2016,
+          "minimum_age_at_event": 23,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "teacher preparation",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0008-EX",
+          "proposed_year": 2018,
+          "minimum_age_at_event": 25,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "classroom experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Teacher credentials, classroom experience and assigned grade.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0009",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Owen Voss",
+      "reference_age_years": 46,
+      "birth_civil_proposal": {
+        "year": 1980,
+        "month": 2,
+        "day": 26,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "local_bay",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0023",
+      "household_reference": "HH-0009",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0023",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 4800,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 750,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "School administrator",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0005",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0011",
+        "source": "local_life"
+      },
+      "education_field_proposal": "administration",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0009-ED",
+          "proposed_year": 1998,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0009-TR",
+          "proposed_year": 2002,
+          "minimum_age_at_event": 22,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "administrative training",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0009-EX",
+          "proposed_year": 2010,
+          "minimum_age_at_event": 30,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "school administration experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Administrative qualifications and financial approval authority.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0010",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Cal Rivas",
+      "reference_age_years": 38,
+      "birth_civil_proposal": {
+        "year": 1988,
+        "month": 6,
+        "day": 4,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "local_bay",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0024",
+      "household_reference": "HH-0010",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0024",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 2300,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 600,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Fishing crew member",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0006",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0013",
+        "source": "local_life"
+      },
+      "education_field_proposal": "fishing",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0010-ED",
+          "proposed_year": 2006,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0010-TR",
+          "proposed_year": 2008,
+          "minimum_age_at_event": 20,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "crew safety training",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0010-EX",
+          "proposed_year": 2010,
+          "minimum_age_at_event": 22,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "fishing crew experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Fishing experience, safety training and vessel access.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0011",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Iris Dane",
+      "reference_age_years": 31,
+      "birth_civil_proposal": {
+        "year": 1995,
+        "month": 4,
+        "day": 27,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "elsewhere_on_island",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0025",
+      "household_reference": "HH-0011",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0025",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 2500,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 620,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Dock operations worker",
+      "employer_reference": {
+        "state": "known",
+        "value": "ORG-0006",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "known",
+        "value": "LOC-0013",
+        "source": "local_life"
+      },
+      "education_field_proposal": "dock_operations",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0011-ED",
+          "proposed_year": 2013,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0011-TR",
+          "proposed_year": 2015,
+          "minimum_age_at_event": 20,
+          "precision": "calendar_year_after_birthday",
+          "kind": "training",
+          "description": "dock safety training",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        },
+        {
+          "proposal_id": "NPC-0011-EX",
+          "proposed_year": 2018,
+          "minimum_age_at_event": 23,
+          "precision": "calendar_year_after_birthday",
+          "kind": "experience",
+          "description": "dock logistics experience",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "Dock safety training and logistics experience.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0012",
+      "record_status": "review_candidate_inactive",
+      "reference_name": "Noel Vega",
+      "reference_age_years": 19,
+      "birth_civil_proposal": {
+        "year": 2007,
+        "month": 8,
+        "day": 11,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "origin_region_proposal": "local_bay",
+      "origin_note": "Unmapped origin scope only; no birthplace coordinates or location identity established",
+      "initial_location_proposal": "LOC-0026",
+      "household_reference": "HH-0012",
+      "residence_access_proposal": {
+        "kind": "resident_permission",
+        "reference_home": "LOC-0026",
+        "proof_status": "requires_reviewed_tenure_and_authorization"
+      },
+      "opening_financial_reference": {
+        "clean_cr": 2400,
+        "dirty_cr": 0,
+        "monthly_rent_cr": 500,
+        "posting_status": "not_posted"
+      },
+      "occupation_reference": "Seeking work",
+      "employer_reference": {
+        "state": "absent",
+        "source": "population"
+      },
+      "workplace_reference": {
+        "state": "not_applicable",
+        "source": "local_life"
+      },
+      "education_field_proposal": "general_education",
+      "biography_event_proposals": [
+        {
+          "proposal_id": "NPC-0012-ED",
+          "proposed_year": 2025,
+          "minimum_age_at_event": 18,
+          "precision": "calendar_year_after_birthday",
+          "kind": "education",
+          "description": "Candidate completion of general secondary education",
+          "provenance": "authored_candidate_not_committed",
+          "credential_granted": false
+        }
+      ],
+      "history_requirements_from_source": "School completion and previous employment status; verify age-appropriate history.",
+      "review_required": [
+        "Confirm origin scope and exact birth instant",
+        "Confirm proposed education and experience with dated evidence; no automatic qualification or license",
+        "Confirm actual initial location, tenure, permissions and household composition",
+        "Confirm economic accounts, funding and agreements; no repeated endowment",
+        "Confirm family, biology, capabilities, private knowledge, goals, schedule and all remaining source blockers"
+      ],
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    }
+  ],
+  "unchanged_blocking_instances": 276
+}

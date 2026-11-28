@@ -1,0 +1,2772 @@
+{
+  "version": "qa-initialization-manifest-v0.1",
+  "status": "review_only_inactive",
+  "activation_allowed": false,
+  "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+  "decision_register": "#103 D3",
+  "source_pins": {
+    "roster": {
+      "commit": "b51c461d05ee2a0b4b3886147f4120f1a8d2e270",
+      "path": "data/npcs/b2_draft_profiles.json",
+      "blob": "602b7e31e8a0e40b7234c4dcdfeb36c6536401cd"
+    },
+    "chronology": {
+      "commit": "04a010fea23489a50d5cebae994eae5281557354",
+      "path": "docs/qa/initialization_candidate.json",
+      "blob": "2c2ec37d5353691aed184fac4f8492c291728011"
+    },
+    "social": {
+      "commit": "04a010fea23489a50d5cebae994eae5281557354",
+      "path": "docs/qa/initialization_social_candidate.json",
+      "blob": "e7651e29f94da0e7df99ce431a77e3a30c913c23"
+    },
+    "knowledge": {
+      "commit": "04a010fea23489a50d5cebae994eae5281557354",
+      "path": "docs/qa/initialization_knowledge_candidate.json",
+      "blob": "f31af68b6250d4a6ff0ef5634dba00f115ba66dc"
+    },
+    "condition": {
+      "commit": "04a010fea23489a50d5cebae994eae5281557354",
+      "path": "docs/qa/initialization_condition_candidate.json",
+      "blob": "177105ac47ce13064756b4074b140e2769a184ab"
+    },
+    "finance": {
+      "commit": "9cf5446ea215941f3430e4009ad5c3ed4f2b0487",
+      "path": "docs/qa/opening_finance_candidate.json",
+      "blob": "7a995de7f081c19fd5b179307077e82852f89335"
+    },
+    "m1aFinance": {
+      "commit": "9cf5446ea215941f3430e4009ad5c3ed4f2b0487",
+      "path": "docs/qa/m1a_finance_review.json",
+      "blob": "d80394d58109eeaee7159b6d1563125c46438666"
+    },
+    "receiptFixture": {
+      "commit": "ff3f3588bafe3202722025f72b5af023e26c5e16",
+      "path": "docs/qa/choice_receipt_contract_candidate.json",
+      "blob": "b2df2a846772f876d4e781bc8b373809233afb21"
+    }
+  },
+  "scope": "Review index, not a runtime schema or authorized data import. Source records remain separate and are linked by stable reference IDs. Every original blocker remains unresolved until the responsible domain adopts reviewed evidence.",
+  "rules": [
+    "No unknown becomes zero, empty, absent, healthy, credentialed, paid or accessible. No candidate may be activated from this manifest.",
+    "Never combine full-roster endowment references with M1-A synthetic accounts. Never copy private candidate values into public narrative.",
+    "Review material means a proposal exists, not proof, completeness, approval or percentage of game completion. Preserve all 12 full-slice NPCs.",
+    "Source pins must be reverified before adoption; changed data requires explicit reconciliation. No peer-owned file modified."
+  ],
+  "profiles": [
+    {
+      "actor_id": "NPC-0001",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0001",
+        "chronology": "NPC-0001",
+        "social": "NPC-0001",
+        "knowledge": "NPC-0001",
+        "condition": "NPC-0001",
+        "household_account_candidate": "AC-HH-0001",
+        "employment_reference": "NPC-0001",
+        "relationship_proposal_ids": []
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "no_pair_proposed",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0002",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0002",
+        "chronology": "NPC-0002",
+        "social": "NPC-0002",
+        "knowledge": "NPC-0002",
+        "condition": "NPC-0002",
+        "household_account_candidate": "AC-HH-0002",
+        "employment_reference": "NPC-0002",
+        "relationship_proposal_ids": [
+          "SOC-P1"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0003",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0003",
+        "chronology": "NPC-0003",
+        "social": "NPC-0003",
+        "knowledge": "NPC-0003",
+        "condition": "NPC-0003",
+        "household_account_candidate": "AC-HH-0003",
+        "employment_reference": "NPC-0003",
+        "relationship_proposal_ids": [
+          "SOC-P1",
+          "SOC-P6"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0004",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0004",
+        "chronology": "NPC-0004",
+        "social": "NPC-0004",
+        "knowledge": "NPC-0004",
+        "condition": "NPC-0004",
+        "household_account_candidate": "AC-HH-0004",
+        "employment_reference": "NPC-0004",
+        "relationship_proposal_ids": [
+          "SOC-P2"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0005",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0005",
+        "chronology": "NPC-0005",
+        "social": "NPC-0005",
+        "knowledge": "NPC-0005",
+        "condition": "NPC-0005",
+        "household_account_candidate": "AC-HH-0005",
+        "employment_reference": "NPC-0005",
+        "relationship_proposal_ids": [
+          "SOC-P2"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0006",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0006",
+        "chronology": "NPC-0006",
+        "social": "NPC-0006",
+        "knowledge": "NPC-0006",
+        "condition": "NPC-0006",
+        "household_account_candidate": "AC-HH-0006",
+        "employment_reference": "NPC-0006",
+        "relationship_proposal_ids": [
+          "SOC-P3"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0007",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0007",
+        "chronology": "NPC-0007",
+        "social": "NPC-0007",
+        "knowledge": "NPC-0007",
+        "condition": "NPC-0007",
+        "household_account_candidate": "AC-HH-0007",
+        "employment_reference": "NPC-0007",
+        "relationship_proposal_ids": [
+          "SOC-P3"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0008",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0008",
+        "chronology": "NPC-0008",
+        "social": "NPC-0008",
+        "knowledge": "NPC-0008",
+        "condition": "NPC-0008",
+        "household_account_candidate": "AC-HH-0008",
+        "employment_reference": "NPC-0008",
+        "relationship_proposal_ids": [
+          "SOC-P4"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0009",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0009",
+        "chronology": "NPC-0009",
+        "social": "NPC-0009",
+        "knowledge": "NPC-0009",
+        "condition": "NPC-0009",
+        "household_account_candidate": "AC-HH-0009",
+        "employment_reference": "NPC-0009",
+        "relationship_proposal_ids": [
+          "SOC-P4"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0010",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0010",
+        "chronology": "NPC-0010",
+        "social": "NPC-0010",
+        "knowledge": "NPC-0010",
+        "condition": "NPC-0010",
+        "household_account_candidate": "AC-HH-0010",
+        "employment_reference": "NPC-0010",
+        "relationship_proposal_ids": [
+          "SOC-P5"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0011",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0011",
+        "chronology": "NPC-0011",
+        "social": "NPC-0011",
+        "knowledge": "NPC-0011",
+        "condition": "NPC-0011",
+        "household_account_candidate": "AC-HH-0011",
+        "employment_reference": "NPC-0011",
+        "relationship_proposal_ids": [
+          "SOC-P5"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    },
+    {
+      "actor_id": "NPC-0012",
+      "status": "inactive_review_only",
+      "references": {
+        "roster": "NPC-0012",
+        "chronology": "NPC-0012",
+        "social": "NPC-0012",
+        "knowledge": "NPC-0012",
+        "condition": "NPC-0012",
+        "household_account_candidate": "AC-HH-0012",
+        "employment_reference": "NPC-0012",
+        "relationship_proposal_ids": [
+          "SOC-P6"
+        ]
+      },
+      "blockers": [
+        {
+          "field": "identity.birth_date",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "birth_civil_proposal",
+          "reviewers": "01/02",
+          "required": "Accept civil chronology and exact dates with calendar version."
+        },
+        {
+          "field": "identity.origin",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "origin_region_proposal",
+          "reviewers": "01/02",
+          "required": "Resolve actual origin identity and history; coarse scope is not a registry ID."
+        },
+        {
+          "field": "identity.world_id",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01",
+          "required": "Allocate immutable world identity and seed only at authorized initialization."
+        },
+        {
+          "field": "definitions",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Agree versioned species, condition, action, skill and ability definitions."
+        },
+        {
+          "field": "biography.events",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "biography_event_proposals",
+          "reviewers": "02",
+          "required": "Accept bounded history, exact participant roles, evidence and event identities."
+        },
+        {
+          "field": "biography.education",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "education_field_proposal",
+          "reviewers": "02/03",
+          "required": "Review qualifications, institutions, prerequisite evidence and progression."
+        },
+        {
+          "field": "personality.traits",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "personality_proposal",
+          "reviewers": "02",
+          "required": "Approve private trait/decision representation and initial motivation provenance."
+        },
+        {
+          "field": "biology.condition",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Resolve actual HP, conditions, injury history and mandatory biology; null is not health."
+        },
+        {
+          "field": "biology.needs",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Review optional configuration, actual initial readings and transition rules; defaults alone insufficient."
+        },
+        {
+          "field": "capabilities.attributes",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "condition",
+          "selector": "natural_attribute_proposal",
+          "reviewers": "02/03",
+          "required": "Approve individual values and complete definition/derived capability records."
+        },
+        {
+          "field": "capabilities.skills",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02/03",
+          "required": "Specify learned skills, mastery values and validated evidence; field name alone insufficient."
+        },
+        {
+          "field": "capabilities.ability",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "03/01",
+          "required": "Resolve scenario-specific pre/post-phenomenon status, eligibility and acquisition evidence."
+        },
+        {
+          "field": "spatial.current",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "initial_location_proposal",
+          "reviewers": "01/02",
+          "required": "Validate actual location at reviewed opening instant."
+        },
+        {
+          "field": "spatial.access",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "chronology",
+          "selector": "residence_access_proposal",
+          "reviewers": "01/02",
+          "required": "Review actual tenure, permissions, route and service authority; familiarity does not grant access."
+        },
+        {
+          "field": "social.family",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Resolve family/care and household membership with coherent history and independent consent."
+        },
+        {
+          "field": "social.relationships",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "relationship_proposals",
+          "reviewers": "02",
+          "required": "Review each proposed directed pair with actual history, independent knowledge and unlisted relationships."
+        },
+        {
+          "field": "economic.accounts",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "accounts",
+          "reviewers": "02/01",
+          "required": "Confirm account ownership, lot provenance and atomic one-time posting."
+        },
+        {
+          "field": "economic.assets",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "02",
+          "required": "Specify actual assets, stock, rights, obligations and provenance; no implied inventory."
+        },
+        {
+          "field": "economic.agreement",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "finance",
+          "selector": "employment_references",
+          "reviewers": "02/01",
+          "required": "Approve agreement/confirmed absence, authority, pay and rental records, eligibility."
+        },
+        {
+          "field": "knowledge.packet",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "knowledge",
+          "selector": "candidate_record",
+          "reviewers": "02/01",
+          "required": "Issue authentic actor-scoped evidence from reviewed history/access; no imported omniscience."
+        },
+        {
+          "field": "goals.active",
+          "status": "unresolved",
+          "review_material": "candidate_reference_available",
+          "source": "social",
+          "selector": "goal_proposal",
+          "reviewers": "02",
+          "required": "Review actual initial goal state, alternatives and causal feedback rules."
+        },
+        {
+          "field": "execution.schedule_rng",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02",
+          "required": "Review actual activity, independent review scheduling, stable random stream and counters."
+        },
+        {
+          "field": "history.receipts",
+          "status": "unresolved",
+          "review_material": "missing_complete_record",
+          "source": null,
+          "selector": null,
+          "reviewers": "01/02/03",
+          "required": "Stage authenticated initialization/prehistory receipts, verify scope, replay and atomic publication."
+        }
+      ]
+    }
+  ],
+  "review_counts": {
+    "actors": 12,
+    "blocker_fields": 23,
+    "unresolved_instances": 276,
+    "instances_with_candidate_reference": 155,
+    "instances_without_complete_candidate_reference": 121,
+    "formally_resolved": 0
+  },
+  "separate_fixture_fences": {
+    "full_roster": "Four #101 candidate packs plus #96 opening finance reference (whole CR). No live balances, agreements or accounts.",
+    "m1a": "Separate noncanonical age-16 fixture and adult worker role; #96 M1-A finance uses 1800 minor/hour, denominator 3600000, 100 minor employer endowment. Do not substitute roster accounts or actual NPC-0001 identity.",
+    "receipt_fixture": "Earlier #99 contract example uses 10 minor/second, 90 minor at 9 seconds. It is a distinct synthetic receipt-shape example, not M1-A wage authority. M1-A 9 seconds conditionally earns 4 minor with carry 1800000; 60 seconds conditionally earns 30. Neither fixture constitutes an actual work receipt.",
+    "clock": "#101 civil opening example 05:00 precedes reference caretaker 08:00 shift. #96 M1-A uses unspecified reviewed weekday instant within eligible work window. Do not reuse the full-roster opening instant to claim compensable work; explicitly specify a separate reviewed fixture instant.",
+    "next": "Agree D1/D2/D3/D4/D6 and D8. Use M1-A as bounded engineering milestone after review; full roster and complete slice remain required."
+  }
+}

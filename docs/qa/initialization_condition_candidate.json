@@ -1,0 +1,1399 @@
+{
+  "schema_version": "qa-condition-initialization-candidate-v0.1",
+  "status": "proposal_only_inactive",
+  "activation_allowed": false,
+  "source": {
+    "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+    "npc_head": "b51c461d05ee2a0b4b3886147f4120f1a8d2e270",
+    "npc_blob": "602b7e31e8a0e40b7234c4dcdfeb36c6536401cd",
+    "attributes_blob": "b21664fe4a1324dffb48cd9f761da62aa9975fbe",
+    "local_life_blob": "dd53a8762380708d9e8a209249bb1f90a1f3a101",
+    "chronology_blob": "2c2ec37d5353691aed184fac4f8492c291728011",
+    "knowledge_blob": "f31af68b6250d4a6ff0ef5634dba00f115ba66dc",
+    "social_blob": "e7651e29f94da0e7df99ce431a77e3a30c913c23",
+    "review": "#103 D3"
+  },
+  "configuration_proposal": {
+    "options": [
+      "hunger",
+      "thirst",
+      "sleep",
+      "fatigue",
+      "hygiene",
+      "mental_health"
+    ],
+    "player": {
+      "selection": "unresolved_pregame",
+      "suggested_default": {
+        "hunger": true,
+        "thirst": true,
+        "sleep": true,
+        "fatigue": true,
+        "hygiene": true,
+        "mental_health": true
+      }
+    },
+    "npc": {
+      "selection": "unresolved_pregame",
+      "suggested_default": {
+        "hunger": true,
+        "thirst": true,
+        "sleep": true,
+        "fatigue": true,
+        "hygiene": true,
+        "mental_health": true
+      }
+    },
+    "semantics": "Each group may be independently configured before world initialization; disabled optional system suppresses its own decay and related need-driven effects, not permitted actions or mandatory illness/injury/aging/death. Defaults are suggestions for review, not approved. No stamina or mana."
+  },
+  "attribute_rules": [
+    "28 natural physical, mental and social attributes from approved reference table; scores are draft examples only. Combat and superhuman definitions/values remain unresolved with 03.",
+    "Age 40+ candidates use adult attained-value examples, not a new 40+ reference band or automatic decline. No formula for age-five initialization is established.",
+    "Keep natural attributes, derived effective performance, learned skills and acquired powers separate. Do not grant qualifications from scores."
+  ],
+  "profiles": [
+    {
+      "actor_id": "NPC-0001",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 44,
+      "natural_attribute_proposal": {
+        "strength": 10,
+        "agility": 8,
+        "endurance": 9,
+        "movement_speed": 8,
+        "durability": 9,
+        "dexterity": 10,
+        "flexibility": 6,
+        "coordination": 10,
+        "balance": 9,
+        "recovery": 7,
+        "intelligence": 8,
+        "perception": 9,
+        "willpower": 10,
+        "awareness": 10,
+        "composure": 9,
+        "memory": 9,
+        "concentration": 9,
+        "reasoning": 9,
+        "creativity": 8,
+        "adaptability": 9,
+        "charisma": 7,
+        "persuasion": 7,
+        "empathy": 8,
+        "leadership": 8,
+        "deception": 5,
+        "intimidation": 6,
+        "negotiation": 8,
+        "social_awareness": 9
+      },
+      "development_stage": "retain_individual_attained_values_plateau_candidate",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "maintenance",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "08:00",
+          "end_civil": "17:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 40,
+          "workplace": "LOC-0003",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0002",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 36,
+      "natural_attribute_proposal": {
+        "strength": 7,
+        "agility": 8,
+        "endurance": 8,
+        "movement_speed": 8,
+        "durability": 7,
+        "dexterity": 8,
+        "flexibility": 7,
+        "coordination": 8,
+        "balance": 8,
+        "recovery": 8,
+        "intelligence": 10,
+        "perception": 9,
+        "willpower": 9,
+        "awareness": 9,
+        "composure": 10,
+        "memory": 10,
+        "concentration": 10,
+        "reasoning": 11,
+        "creativity": 9,
+        "adaptability": 10,
+        "charisma": 10,
+        "persuasion": 10,
+        "empathy": 8,
+        "leadership": 10,
+        "deception": 8,
+        "intimidation": 5,
+        "negotiation": 11,
+        "social_awareness": 10
+      },
+      "development_stage": "adulthood",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "retail",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "08:00",
+          "end_civil": "17:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 40,
+          "workplace": "LOC-0008",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0003",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 21,
+      "natural_attribute_proposal": {
+        "strength": 7,
+        "agility": 9,
+        "endurance": 8,
+        "movement_speed": 9,
+        "durability": 7,
+        "dexterity": 9,
+        "flexibility": 9,
+        "coordination": 8,
+        "balance": 9,
+        "recovery": 10,
+        "intelligence": 9,
+        "perception": 8,
+        "willpower": 8,
+        "awareness": 8,
+        "composure": 7,
+        "memory": 9,
+        "concentration": 8,
+        "reasoning": 9,
+        "creativity": 10,
+        "adaptability": 10,
+        "charisma": 8,
+        "persuasion": 7,
+        "empathy": 8,
+        "leadership": 5,
+        "deception": 5,
+        "intimidation": 4,
+        "negotiation": 7,
+        "social_awareness": 8
+      },
+      "development_stage": "early_adulthood",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "retail",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "09:00",
+          "end_civil": "16:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 30,
+          "workplace": "LOC-0008",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0004",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 42,
+      "natural_attribute_proposal": {
+        "strength": 7,
+        "agility": 7,
+        "endurance": 8,
+        "movement_speed": 7,
+        "durability": 7,
+        "dexterity": 10,
+        "flexibility": 6,
+        "coordination": 9,
+        "balance": 8,
+        "recovery": 7,
+        "intelligence": 11,
+        "perception": 11,
+        "willpower": 10,
+        "awareness": 10,
+        "composure": 11,
+        "memory": 11,
+        "concentration": 11,
+        "reasoning": 12,
+        "creativity": 8,
+        "adaptability": 9,
+        "charisma": 8,
+        "persuasion": 8,
+        "empathy": 11,
+        "leadership": 8,
+        "deception": 5,
+        "intimidation": 4,
+        "negotiation": 8,
+        "social_awareness": 11
+      },
+      "development_stage": "retain_individual_attained_values_plateau_candidate",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "clinical",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "09:00",
+          "end_civil": "17:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 35,
+          "workplace": "LOC-0009",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0005",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 28,
+      "natural_attribute_proposal": {
+        "strength": 8,
+        "agility": 8,
+        "endurance": 9,
+        "movement_speed": 8,
+        "durability": 8,
+        "dexterity": 9,
+        "flexibility": 8,
+        "coordination": 9,
+        "balance": 8,
+        "recovery": 9,
+        "intelligence": 9,
+        "perception": 9,
+        "willpower": 9,
+        "awareness": 8,
+        "composure": 8,
+        "memory": 10,
+        "concentration": 9,
+        "reasoning": 9,
+        "creativity": 9,
+        "adaptability": 10,
+        "charisma": 8,
+        "persuasion": 8,
+        "empathy": 10,
+        "leadership": 6,
+        "deception": 5,
+        "intimidation": 5,
+        "negotiation": 7,
+        "social_awareness": 9
+      },
+      "development_stage": "adulthood",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "healthcare_support",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "08:00",
+          "end_civil": "17:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 40,
+          "workplace": "LOC-0009",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0006",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 39,
+      "natural_attribute_proposal": {
+        "strength": 11,
+        "agility": 7,
+        "endurance": 10,
+        "movement_speed": 7,
+        "durability": 9,
+        "dexterity": 11,
+        "flexibility": 5,
+        "coordination": 10,
+        "balance": 8,
+        "recovery": 7,
+        "intelligence": 10,
+        "perception": 10,
+        "willpower": 10,
+        "awareness": 9,
+        "composure": 10,
+        "memory": 9,
+        "concentration": 11,
+        "reasoning": 11,
+        "creativity": 9,
+        "adaptability": 8,
+        "charisma": 8,
+        "persuasion": 8,
+        "empathy": 7,
+        "leadership": 10,
+        "deception": 6,
+        "intimidation": 8,
+        "negotiation": 9,
+        "social_awareness": 9
+      },
+      "development_stage": "adulthood",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "repair_trade",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "08:00",
+          "end_civil": "17:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 40,
+          "workplace": "LOC-0010",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0007",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 23,
+      "natural_attribute_proposal": {
+        "strength": 8,
+        "agility": 9,
+        "endurance": 8,
+        "movement_speed": 9,
+        "durability": 8,
+        "dexterity": 11,
+        "flexibility": 8,
+        "coordination": 10,
+        "balance": 9,
+        "recovery": 9,
+        "intelligence": 11,
+        "perception": 10,
+        "willpower": 9,
+        "awareness": 9,
+        "composure": 8,
+        "memory": 10,
+        "concentration": 11,
+        "reasoning": 10,
+        "creativity": 11,
+        "adaptability": 10,
+        "charisma": 7,
+        "persuasion": 6,
+        "empathy": 7,
+        "leadership": 5,
+        "deception": 5,
+        "intimidation": 4,
+        "negotiation": 6,
+        "social_awareness": 8
+      },
+      "development_stage": "early_adulthood",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "repair_trade",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "08:00",
+          "end_civil": "17:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 40,
+          "workplace": "LOC-0010",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0008",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 33,
+      "natural_attribute_proposal": {
+        "strength": 7,
+        "agility": 8,
+        "endurance": 8,
+        "movement_speed": 8,
+        "durability": 7,
+        "dexterity": 8,
+        "flexibility": 7,
+        "coordination": 8,
+        "balance": 8,
+        "recovery": 8,
+        "intelligence": 10,
+        "perception": 9,
+        "willpower": 10,
+        "awareness": 9,
+        "composure": 10,
+        "memory": 11,
+        "concentration": 10,
+        "reasoning": 10,
+        "creativity": 10,
+        "adaptability": 9,
+        "charisma": 10,
+        "persuasion": 9,
+        "empathy": 11,
+        "leadership": 9,
+        "deception": 6,
+        "intimidation": 4,
+        "negotiation": 8,
+        "social_awareness": 11
+      },
+      "development_stage": "adulthood",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "education",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "07:00",
+          "end_civil": "16:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 40,
+          "workplace": "LOC-0011",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0009",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 46,
+      "natural_attribute_proposal": {
+        "strength": 8,
+        "agility": 7,
+        "endurance": 8,
+        "movement_speed": 7,
+        "durability": 8,
+        "dexterity": 8,
+        "flexibility": 6,
+        "coordination": 8,
+        "balance": 8,
+        "recovery": 7,
+        "intelligence": 10,
+        "perception": 9,
+        "willpower": 11,
+        "awareness": 9,
+        "composure": 11,
+        "memory": 10,
+        "concentration": 10,
+        "reasoning": 11,
+        "creativity": 8,
+        "adaptability": 9,
+        "charisma": 8,
+        "persuasion": 10,
+        "empathy": 8,
+        "leadership": 11,
+        "deception": 7,
+        "intimidation": 6,
+        "negotiation": 11,
+        "social_awareness": 10
+      },
+      "development_stage": "retain_individual_attained_values_plateau_candidate",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "administration",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "07:00",
+          "end_civil": "16:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 40,
+          "workplace": "LOC-0011",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0010",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 38,
+      "natural_attribute_proposal": {
+        "strength": 11,
+        "agility": 8,
+        "endurance": 11,
+        "movement_speed": 8,
+        "durability": 10,
+        "dexterity": 9,
+        "flexibility": 6,
+        "coordination": 10,
+        "balance": 10,
+        "recovery": 8,
+        "intelligence": 8,
+        "perception": 11,
+        "willpower": 9,
+        "awareness": 11,
+        "composure": 9,
+        "memory": 8,
+        "concentration": 9,
+        "reasoning": 9,
+        "creativity": 7,
+        "adaptability": 9,
+        "charisma": 7,
+        "persuasion": 7,
+        "empathy": 7,
+        "leadership": 7,
+        "deception": 5,
+        "intimidation": 7,
+        "negotiation": 8,
+        "social_awareness": 8
+      },
+      "development_stage": "adulthood",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "fishing",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "06:00",
+          "end_civil": "15:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 40,
+          "workplace": "LOC-0013",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0011",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 31,
+      "natural_attribute_proposal": {
+        "strength": 10,
+        "agility": 9,
+        "endurance": 10,
+        "movement_speed": 9,
+        "durability": 9,
+        "dexterity": 10,
+        "flexibility": 7,
+        "coordination": 10,
+        "balance": 9,
+        "recovery": 8,
+        "intelligence": 9,
+        "perception": 10,
+        "willpower": 9,
+        "awareness": 10,
+        "composure": 9,
+        "memory": 9,
+        "concentration": 10,
+        "reasoning": 10,
+        "creativity": 8,
+        "adaptability": 9,
+        "charisma": 9,
+        "persuasion": 8,
+        "empathy": 8,
+        "leadership": 9,
+        "deception": 6,
+        "intimidation": 6,
+        "negotiation": 8,
+        "social_awareness": 10
+      },
+      "development_stage": "adulthood",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "dock_operations",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": {
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_civil": "06:00",
+          "end_civil": "15:00",
+          "unpaid_break_hours": 1,
+          "weekly_paid_hours": 40,
+          "workplace": "LOC-0013",
+          "agreement_status": "unresolved_reference_only"
+        },
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0012",
+      "status": "review_candidate_inactive",
+      "reference_age_years": 19,
+      "natural_attribute_proposal": {
+        "strength": 6,
+        "agility": 9,
+        "endurance": 7,
+        "movement_speed": 9,
+        "durability": 7,
+        "dexterity": 8,
+        "flexibility": 8,
+        "coordination": 8,
+        "balance": 8,
+        "recovery": 10,
+        "intelligence": 8,
+        "perception": 8,
+        "willpower": 7,
+        "awareness": 8,
+        "composure": 6,
+        "memory": 8,
+        "concentration": 7,
+        "reasoning": 8,
+        "creativity": 10,
+        "adaptability": 10,
+        "charisma": 7,
+        "persuasion": 6,
+        "empathy": 8,
+        "leadership": 4,
+        "deception": 5,
+        "intimidation": 4,
+        "negotiation": 6,
+        "social_awareness": 8
+      },
+      "development_stage": "early_adulthood",
+      "attribute_origin": "manually_authored_variation_for_review_not_measured_or_derived_from_job_title",
+      "condition": {
+        "life_status": "active_candidate_only",
+        "current_hp": null,
+        "max_hp": null,
+        "injury_records": {
+          "state": "unknown"
+        },
+        "illness_records": {
+          "state": "unknown"
+        },
+        "optional_need_readings": {
+          "state": "unknown"
+        },
+        "mandatory_biology": "illness_injury_aging_death_remain_enabled",
+        "effective_performance": "unresolved_definition_and_condition",
+        "ability_profile": "unresolved_by_03"
+      },
+      "field_mastery_candidate": {
+        "area": "general_education",
+        "levels": "unresolved",
+        "credential_granted": false
+      },
+      "activity_review": {
+        "initial_review": "at_committed_opening_after_all_domain_registration",
+        "subsequent_review_triggers": [
+          "activity_completion",
+          "observable_material_change",
+          "known_commitment_boundary",
+          "need_threshold_if_enabled",
+          "review_due"
+        ],
+        "periodic_fallback_interval": "unresolved_shared_clock_and_budget",
+        "active_activity": "not_assigned",
+        "reference_commitment": null,
+        "departure": "derive_from_actual_route_access_and_mobility_at_decision",
+        "alternatives": "may_wait_rest_decline_reschedule_or_choose_another_feasible_goal"
+      },
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    }
+  ],
+  "unchanged_blocking_instances": 276
+}
