@@ -1,0 +1,365 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GODSEED inactive pilot catalog v0.2 (not activation schema)",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "0.2.0"
+    },
+    "status": {
+      "const": "draft"
+    },
+    "abilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^AB-(?:0000[1-9]|000[1-9][0-9]|00[1-9][0-9]{2}|0[1-9][0-9]{3}|10000)$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "category": {
+            "enum": [
+              "material-interface",
+              "information",
+              "energy-transfer"
+            ]
+          },
+          "mechanism": {
+            "type": "object",
+            "properties": {
+              "primitive": {
+                "enum": [
+                  "traction_bias",
+                  "echo_measurement",
+                  "heat_relay"
+                ]
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "operation": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              }
+            },
+            "required": [
+              "primitive",
+              "target",
+              "operation"
+            ],
+            "additionalProperties": false
+          },
+          "activation": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "limits": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "minItems": 1,
+            "maxItems": 256,
+            "uniqueItems": true
+          },
+          "counterplay": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "minItems": 1,
+            "maxItems": 256,
+            "uniqueItems": true
+          },
+          "manifestation": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "minItems": 1,
+            "maxItems": 256,
+            "uniqueItems": true
+          },
+          "acquisition": {
+            "type": "object",
+            "properties": {
+              "natural": {
+                "type": "boolean"
+              },
+              "meteoriteType": {
+                "type": "string",
+                "pattern": "^MT-DRAFT-[0-9]{2,4}$"
+              }
+            },
+            "required": [
+              "natural",
+              "meteoriteType"
+            ],
+            "additionalProperties": false
+          },
+          "root": {
+            "type": "string",
+            "pattern": "^AB-[0-9]{5}-N[0-9]{2,4}$"
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^AB-[0-9]{5}-N[0-9]{2,4}$"
+                },
+                "kind": {
+                  "const": "technique"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "level": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10000
+                },
+                "masteryTier": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 7
+                },
+                "requires": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^AB-[0-9]{5}-N[0-9]{2,4}$"
+                  },
+                  "minItems": 0,
+                  "maxItems": 256,
+                  "uniqueItems": true
+                },
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^AB-[0-9]{5}-H[0-9]{2,4}$"
+                  },
+                  "minItems": 0,
+                  "maxItems": 256,
+                  "uniqueItems": true
+                },
+                "effect": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "parameters": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "const": "traction_bias"
+                        },
+                        "deltaPermille": {
+                          "type": "integer",
+                          "minimum": -1000,
+                          "maximum": 1000
+                        },
+                        "patchMm2": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000000
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "deltaPermille",
+                        "patchMm2"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "const": "echo_measurement"
+                        },
+                        "maxRangeMm": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000000
+                        },
+                        "uncertaintyMm": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000000
+                        },
+                        "maxReturns": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "maxRangeMm",
+                        "uncertaintyMm",
+                        "maxReturns"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "const": "heat_relay"
+                        },
+                        "maxRateMilliJPerSecond": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000000000
+                        },
+                        "maxTransferMilliJ": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000000000
+                        },
+                        "maxDeltaMilliK": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000000
+                        },
+                        "stopAtMilliK": {
+                          "oneOf": [
+                            {
+                              "type": "null"
+                            },
+                            {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 1000000
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "maxRateMilliJPerSecond",
+                        "maxTransferMilliJ",
+                        "maxDeltaMilliK",
+                        "stopAtMilliK"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "kind",
+                "name",
+                "level",
+                "masteryTier",
+                "requires",
+                "conditions",
+                "effect",
+                "parameters"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 256,
+            "uniqueItems": true
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^AB-[0-9]{5}-H[0-9]{2,4}$"
+                },
+                "event": {
+                  "const": "practice_committed"
+                },
+                "evidence": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]*$"
+                },
+                "minimum": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000000
+                },
+                "scope": {
+                  "const": "since_acquisition"
+                },
+                "once": {
+                  "const": true
+                },
+                "hint": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              },
+              "required": [
+                "id",
+                "event",
+                "evidence",
+                "minimum",
+                "scope",
+                "once",
+                "hint"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 256,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "category",
+          "mechanism",
+          "activation",
+          "limits",
+          "counterplay",
+          "manifestation",
+          "acquisition",
+          "root",
+          "nodes",
+          "conditions"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 10000,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "version",
+    "status",
+    "abilities"
+  ],
+  "additionalProperties": false
+}
