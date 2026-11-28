@@ -1,0 +1,8 @@
+diff --git a/tools/npc_execution_reference.mjs b/tools/npc_execution_reference.mjs
+--- a/tools/npc_execution_reference.mjs
++++ b/tools/npc_execution_reference.mjs
+@@ -26,3 +26,3 @@
+   const normalized=normalizeOffer(o),key=o.actor_id+":"+o.opportunity_id;
+-  ensure(!offers.has(key)||offers.get(key).actor_revision!==actors.get(o.actor_id).revision,"duplicate current offer");
++  ensure(!offers.has(key)||offers.get(key).actor_revision!==actors.get(o.actor_id).revision||offers.get(key).valid_until<now,"duplicate current offer");
+   offers.set(key,normalized);
