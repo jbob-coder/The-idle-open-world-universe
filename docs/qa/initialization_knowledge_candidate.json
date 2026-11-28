@@ -1,0 +1,1103 @@
+{
+  "schema_version": "qa-knowledge-initialization-candidate-v0.1",
+  "status": "proposal_only_inactive",
+  "activation_allowed": false,
+  "source": {
+    "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+    "npc_head": "b51c461d05ee2a0b4b3886147f4120f1a8d2e270",
+    "npc_blob": "602b7e31e8a0e40b7234c4dcdfeb36c6536401cd",
+    "world_blob": "31df1d9d01f2dba2acf9fa3d344f368c22bf6070",
+    "initialization_blob": "2c2ec37d5353691aed184fac4f8492c291728011",
+    "social_blob": "e7651e29f94da0e7df99ce431a77e3a30c913c23",
+    "perception_blob": "4c88ddae030ef307f0a63c186756c13770762595",
+    "opportunity_blob": "2bb3402fe3f589d53604fd5d99c5c8657ef11ddf",
+    "review": "#103 D3"
+  },
+  "rules": [
+    "Candidate claims are proposed private acquisition inputs, not actual evidence or receipts. No knowledge packet is initialized.",
+    "Stable familiarity identifies a possible route in prior history; it is not proof of present access, an open route, employment, or current service. No opp:* claim in historical records.",
+    "Only an actor's own reviewed records and individually authorized observations can be projected. No global location catalog, shared private ledger, other actor home, hidden motives or unverified kinship. Receipt provenance requires reviewed #83/#95 fix.",
+    "Commute route is an authored graph calculation, not a recorded prior journey or guaranteed workplace attendance. All current access and schedules remain unresolved. A home-only path is a proposal, not automatic access.",
+    "Actual domain initialization must atomically bind actor, world, epoch, revision and evidence; no synthetic receipt may enter actual world data. Preserve exact acquired evidence without simulated forgetting."
+  ],
+  "profiles": [
+    {
+      "actor_id": "NPC-0001",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0001-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0001",
+        "claims": [
+          {
+            "key": "self:NPC-0001:home_reference",
+            "value": "LOC-0015"
+          },
+          {
+            "key": "self:NPC-0001:occupation_reference",
+            "value": "Caretaker"
+          },
+          {
+            "key": "self:NPC-0001:workplace_reference",
+            "value": "LOC-0003"
+          },
+          {
+            "key": "familiar_route:RTE-0014",
+            "value": "LOC-0015|LOC-0002"
+          },
+          {
+            "key": "familiar_route:RTE-0002",
+            "value": "LOC-0002|LOC-0003"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0015",
+          "LOC-0002",
+          "LOC-0003"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0014",
+            "from": "LOC-0015",
+            "to": "LOC-0002",
+            "distance_m": 14
+          },
+          {
+            "route_id": "RTE-0002",
+            "from": "LOC-0002",
+            "to": "LOC-0003",
+            "distance_m": 9
+          }
+        ],
+        "commute_distance_m": 23,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0002",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0002-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0002",
+        "claims": [
+          {
+            "key": "self:NPC-0002:home_reference",
+            "value": "LOC-0016"
+          },
+          {
+            "key": "self:NPC-0002:occupation_reference",
+            "value": "Store manager"
+          },
+          {
+            "key": "self:NPC-0002:workplace_reference",
+            "value": "LOC-0008"
+          },
+          {
+            "key": "familiar_route:RTE-0015",
+            "value": "LOC-0016|LOC-0005"
+          },
+          {
+            "key": "familiar_route:RTE-0005",
+            "value": "LOC-0005|LOC-0006"
+          },
+          {
+            "key": "familiar_route:RTE-0007",
+            "value": "LOC-0006|LOC-0008"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0016",
+          "LOC-0005",
+          "LOC-0006",
+          "LOC-0008"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0015",
+            "from": "LOC-0016",
+            "to": "LOC-0005",
+            "distance_m": 50
+          },
+          {
+            "route_id": "RTE-0005",
+            "from": "LOC-0005",
+            "to": "LOC-0006",
+            "distance_m": 200
+          },
+          {
+            "route_id": "RTE-0007",
+            "from": "LOC-0006",
+            "to": "LOC-0008",
+            "distance_m": 30
+          }
+        ],
+        "commute_distance_m": 280,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0003",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0003-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0003",
+        "claims": [
+          {
+            "key": "self:NPC-0003:home_reference",
+            "value": "LOC-0017"
+          },
+          {
+            "key": "self:NPC-0003:occupation_reference",
+            "value": "Store clerk"
+          },
+          {
+            "key": "self:NPC-0003:workplace_reference",
+            "value": "LOC-0008"
+          },
+          {
+            "key": "familiar_route:RTE-0016",
+            "value": "LOC-0017|LOC-0005"
+          },
+          {
+            "key": "familiar_route:RTE-0005",
+            "value": "LOC-0005|LOC-0006"
+          },
+          {
+            "key": "familiar_route:RTE-0007",
+            "value": "LOC-0006|LOC-0008"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0017",
+          "LOC-0005",
+          "LOC-0006",
+          "LOC-0008"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0016",
+            "from": "LOC-0017",
+            "to": "LOC-0005",
+            "distance_m": 50
+          },
+          {
+            "route_id": "RTE-0005",
+            "from": "LOC-0005",
+            "to": "LOC-0006",
+            "distance_m": 200
+          },
+          {
+            "route_id": "RTE-0007",
+            "from": "LOC-0006",
+            "to": "LOC-0008",
+            "distance_m": 30
+          }
+        ],
+        "commute_distance_m": 280,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0004",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0004-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0004",
+        "claims": [
+          {
+            "key": "self:NPC-0004:home_reference",
+            "value": "LOC-0018"
+          },
+          {
+            "key": "self:NPC-0004:occupation_reference",
+            "value": "Clinician"
+          },
+          {
+            "key": "self:NPC-0004:workplace_reference",
+            "value": "LOC-0009"
+          },
+          {
+            "key": "familiar_route:RTE-0017",
+            "value": "LOC-0018|LOC-0005"
+          },
+          {
+            "key": "familiar_route:RTE-0005",
+            "value": "LOC-0005|LOC-0006"
+          },
+          {
+            "key": "familiar_route:RTE-0008",
+            "value": "LOC-0006|LOC-0009"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0018",
+          "LOC-0005",
+          "LOC-0006",
+          "LOC-0009"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0017",
+            "from": "LOC-0018",
+            "to": "LOC-0005",
+            "distance_m": 100
+          },
+          {
+            "route_id": "RTE-0005",
+            "from": "LOC-0005",
+            "to": "LOC-0006",
+            "distance_m": 200
+          },
+          {
+            "route_id": "RTE-0008",
+            "from": "LOC-0006",
+            "to": "LOC-0009",
+            "distance_m": 80
+          }
+        ],
+        "commute_distance_m": 380,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0005",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0005-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0005",
+        "claims": [
+          {
+            "key": "self:NPC-0005:home_reference",
+            "value": "LOC-0019"
+          },
+          {
+            "key": "self:NPC-0005:occupation_reference",
+            "value": "Clinic assistant"
+          },
+          {
+            "key": "self:NPC-0005:workplace_reference",
+            "value": "LOC-0009"
+          },
+          {
+            "key": "familiar_route:RTE-0018",
+            "value": "LOC-0019|LOC-0005"
+          },
+          {
+            "key": "familiar_route:RTE-0005",
+            "value": "LOC-0005|LOC-0006"
+          },
+          {
+            "key": "familiar_route:RTE-0008",
+            "value": "LOC-0006|LOC-0009"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0019",
+          "LOC-0005",
+          "LOC-0006",
+          "LOC-0009"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0018",
+            "from": "LOC-0019",
+            "to": "LOC-0005",
+            "distance_m": 95
+          },
+          {
+            "route_id": "RTE-0005",
+            "from": "LOC-0005",
+            "to": "LOC-0006",
+            "distance_m": 200
+          },
+          {
+            "route_id": "RTE-0008",
+            "from": "LOC-0006",
+            "to": "LOC-0009",
+            "distance_m": 80
+          }
+        ],
+        "commute_distance_m": 375,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0006",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0006-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0006",
+        "claims": [
+          {
+            "key": "self:NPC-0006:home_reference",
+            "value": "LOC-0020"
+          },
+          {
+            "key": "self:NPC-0006:occupation_reference",
+            "value": "Workshop lead"
+          },
+          {
+            "key": "self:NPC-0006:workplace_reference",
+            "value": "LOC-0010"
+          },
+          {
+            "key": "familiar_route:RTE-0019",
+            "value": "LOC-0020|LOC-0006"
+          },
+          {
+            "key": "familiar_route:RTE-0009",
+            "value": "LOC-0006|LOC-0010"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0020",
+          "LOC-0006",
+          "LOC-0010"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0019",
+            "from": "LOC-0020",
+            "to": "LOC-0006",
+            "distance_m": 55
+          },
+          {
+            "route_id": "RTE-0009",
+            "from": "LOC-0006",
+            "to": "LOC-0010",
+            "distance_m": 60
+          }
+        ],
+        "commute_distance_m": 115,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0007",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0007-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0007",
+        "claims": [
+          {
+            "key": "self:NPC-0007:home_reference",
+            "value": "LOC-0021"
+          },
+          {
+            "key": "self:NPC-0007:occupation_reference",
+            "value": "Repair technician"
+          },
+          {
+            "key": "self:NPC-0007:workplace_reference",
+            "value": "LOC-0010"
+          },
+          {
+            "key": "familiar_route:RTE-0020",
+            "value": "LOC-0021|LOC-0006"
+          },
+          {
+            "key": "familiar_route:RTE-0009",
+            "value": "LOC-0006|LOC-0010"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0021",
+          "LOC-0006",
+          "LOC-0010"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0020",
+            "from": "LOC-0021",
+            "to": "LOC-0006",
+            "distance_m": 55
+          },
+          {
+            "route_id": "RTE-0009",
+            "from": "LOC-0006",
+            "to": "LOC-0010",
+            "distance_m": 60
+          }
+        ],
+        "commute_distance_m": 115,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0008",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0008-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0008",
+        "claims": [
+          {
+            "key": "self:NPC-0008:home_reference",
+            "value": "LOC-0022"
+          },
+          {
+            "key": "self:NPC-0008:occupation_reference",
+            "value": "Teacher"
+          },
+          {
+            "key": "self:NPC-0008:workplace_reference",
+            "value": "LOC-0011"
+          },
+          {
+            "key": "familiar_route:RTE-0021",
+            "value": "LOC-0022|LOC-0011"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0022",
+          "LOC-0011"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0021",
+            "from": "LOC-0022",
+            "to": "LOC-0011",
+            "distance_m": 55
+          }
+        ],
+        "commute_distance_m": 55,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0009",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0009-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0009",
+        "claims": [
+          {
+            "key": "self:NPC-0009:home_reference",
+            "value": "LOC-0023"
+          },
+          {
+            "key": "self:NPC-0009:occupation_reference",
+            "value": "School administrator"
+          },
+          {
+            "key": "self:NPC-0009:workplace_reference",
+            "value": "LOC-0011"
+          },
+          {
+            "key": "familiar_route:RTE-0022",
+            "value": "LOC-0023|LOC-0011"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0023",
+          "LOC-0011"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0022",
+            "from": "LOC-0023",
+            "to": "LOC-0011",
+            "distance_m": 55
+          }
+        ],
+        "commute_distance_m": 55,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0010",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0010-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0010",
+        "claims": [
+          {
+            "key": "self:NPC-0010:home_reference",
+            "value": "LOC-0024"
+          },
+          {
+            "key": "self:NPC-0010:occupation_reference",
+            "value": "Fishing crew member"
+          },
+          {
+            "key": "self:NPC-0010:workplace_reference",
+            "value": "LOC-0013"
+          },
+          {
+            "key": "familiar_route:RTE-0023",
+            "value": "LOC-0024|LOC-0013"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0024",
+          "LOC-0013"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0023",
+            "from": "LOC-0024",
+            "to": "LOC-0013",
+            "distance_m": 60
+          }
+        ],
+        "commute_distance_m": 60,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0011",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0011-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0011",
+        "claims": [
+          {
+            "key": "self:NPC-0011:home_reference",
+            "value": "LOC-0025"
+          },
+          {
+            "key": "self:NPC-0011:occupation_reference",
+            "value": "Dock operations worker"
+          },
+          {
+            "key": "self:NPC-0011:workplace_reference",
+            "value": "LOC-0013"
+          },
+          {
+            "key": "familiar_route:RTE-0024",
+            "value": "LOC-0025|LOC-0013"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0025",
+          "LOC-0013"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0024",
+            "from": "LOC-0025",
+            "to": "LOC-0013",
+            "distance_m": 70
+          }
+        ],
+        "commute_distance_m": 70,
+        "scope": "proposed_home_to_workplace_approach",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    },
+    {
+      "actor_id": "NPC-0012",
+      "status": "proposal_only_inactive",
+      "candidate_record": {
+        "proposal_id": "NPC-0012-SELF",
+        "basis": "Hypothetical legitimate access to own reviewed household and work record, plus authored familiarity evidence; never issue from source design table alone.",
+        "channel": "record",
+        "subject_id": "NPC-0012",
+        "claims": [
+          {
+            "key": "self:NPC-0012:home_reference",
+            "value": "LOC-0026"
+          },
+          {
+            "key": "self:NPC-0012:occupation_reference",
+            "value": "Seeking work"
+          },
+          {
+            "key": "familiar_route:RTE-0025",
+            "value": "LOC-0026|LOC-0005"
+          }
+        ],
+        "required_evidence": [
+          "Reviewed personal record and actual authorized acquisition",
+          "Individual prior journey or accessible map record for each familiar leg",
+          "Separate actual route permissions, closure and current location",
+          "No family, private third-party fact, active vacancy or service status inferred"
+        ]
+      },
+      "candidate_familiarity": {
+        "location_ids": [
+          "LOC-0026",
+          "LOC-0005"
+        ],
+        "legs": [
+          {
+            "route_id": "RTE-0025",
+            "from": "LOC-0026",
+            "to": "LOC-0005",
+            "distance_m": 60
+          }
+        ],
+        "commute_distance_m": null,
+        "scope": "proposed_own_home_exit_only",
+        "current_access": "unresolved",
+        "live_availability": "unknown"
+      },
+      "opening_activity": "unresolved",
+      "family_knowledge": "unresolved",
+      "private_evidence": "not_issued",
+      "source_blockers_unchanged": [
+        "identity.birth_date",
+        "identity.origin",
+        "identity.world_id",
+        "definitions",
+        "biography.events",
+        "biography.education",
+        "personality.traits",
+        "biology.condition",
+        "biology.needs",
+        "capabilities.attributes",
+        "capabilities.skills",
+        "capabilities.ability",
+        "spatial.current",
+        "spatial.access",
+        "social.family",
+        "social.relationships",
+        "economic.accounts",
+        "economic.assets",
+        "economic.agreement",
+        "knowledge.packet",
+        "goals.active",
+        "execution.schedule_rng",
+        "history.receipts"
+      ]
+    }
+  ],
+  "unchanged_blocking_instances": 276
+}
