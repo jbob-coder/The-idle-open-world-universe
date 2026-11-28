@@ -74,3 +74,50 @@ console.log(count+"/"+count+" PASS");
 // No actual geometry, actor reaction, medical rates, fatal condition, real target
 // lifecycle synchronization, authoritative proof generation, scheduler, or database.
 // Separate staged fixture health is not a proposed second authoritative store.
+
+// Cycle continuation: connect the actual injury fixture to existing cognition and
+// expose the V1 physical-condition revision boundary. All thresholds are synthetic.
+import {decideNpcReference as decide} from '../../tools/npc_cognition_reference.mjs';
+const dims=(o={})=>({safety:0,resources:0,growth:0,connection:0,duty:0,rest:0,...o});
+const rules={heavy_work:{arm:8,leg:8},light_work:{arm:3,leg:3},walk:{leg:5},practice:{arm:8},rest:{}};
+function capable(h,action){
+ return h.life==="active"&&Object.hasOwn(rules,action)&&Object.entries(rules[action]).every(([part,minimum])=>h.function[part]>=minimum);
+}
+function chooseLife(s,needs,known=["heavy_work","light_work","walk","practice","rest"]){
+ const h=s.health.B,rev=s.clock.state.actors.find(a=>a.actor_id==="B").revision,now=s.clock.state.now;
+ const profile={world_id:"W",actor_id:"B",actor_revision:rev,now,life_status:h.life,risk_aversion:0,stress:0,needs:dims(needs),values:dims(),goals:[]};
+ const knowledge={schema_version:"0.1-proposal",world_id:"W",actor_id:"B",as_of_tick:now,revision:0,observations:known.map((key,i)=>({id:"o"+i,acquired_tick:now,channel:"direct",claims:[{key,value:"available"}]}))};
+ const effects={heavy_work:{resources:8},light_work:{resources:4},walk:{connection:5},practice:{growth:7},rest:{rest:6}};
+ const offers=Object.keys(rules).map(id=>({id,world_id:"W",actor_id:"B",kind:"action",action_id:id,goal_ids:[],effects:dims(effects[id]),risk:0,effort:1,requirements:[{key:id,value:"available",channels:["direct"]}],perceived_feasible:capable(h,id),valid_until:now}));
+ return decide(profile,knowledge,offers);
+}
+// Revalidate own actor condition against the prepared proof at actual admission.
+// Full fixture health fingerprint is a test oracle, NOT a proposed persisted schema.
+const preparePhysical=(s,action)=>({action,actor:"B",epoch:s.epoch,health:JSON.stringify(s.health.B)});
+function guardedAdmission(s,p){
+ ok(p.epoch===s.epoch&&p.actor==="B"&&p.health===JSON.stringify(s.health.B)&&capable(s.health.B,p.action),"stale or infeasible condition");
+ return true;
+}
+let n2=0;const test2=(name,fn)=>{fn();n2++;console.log("PASS "+name)};
+test2("healthy income-oriented actor selects heavy work",()=>ok(chooseLife(fixture(),{resources:8}).action_id==="heavy_work"));
+test2("actual injury redirects actor to light work",()=>ok(chooseLife(hit(),{resources:8}).action_id==="light_work"));
+test2("arm injury preserves walking",()=>ok(chooseLife(hit(),{connection:8}).action_id==="walk"));
+test2("arm-dependent practice unavailable while injured",()=>ok(chooseLife(hit(),{growth:8}).kind==="wait"));
+test2("injured actor can choose rest over work",()=>ok(chooseLife(hit(),{resources:1,rest:8}).action_id==="rest"));
+test2("injured actor need not rest when no positive motivation",()=>ok(chooseLife(hit(),{}).kind==="wait"));
+test2("unobserved light work cannot be chosen",()=>ok(chooseLife(hit(),{resources:8},["heavy_work","walk","rest"]).kind==="wait"));
+test2("actual partial recovery restores heavy work eligibility",()=>{const s=apply(adv(hit(),7),"heal",{proof:"heal"});ok(s.health.B.function.arm===8&&chooseLife(s,{resources:8}).action_id==="heavy_work")});
+test2("uncommitted healing cannot restore eligibility",()=>{const s=adv(hit(),7),before=JSON.stringify(s);reject(s,cmd(s,"heal",{proof:"heal"}),true);ok(JSON.stringify(s)===before&&chooseLife(s,{resources:8}).action_id==="light_work")});
+test2("serialized injury preserves decision",()=>{const s=hit();ok(eq(chooseLife(s,{resources:8}),chooseLife(copy(s),{resources:8})))});
+test2("condition-aware admission rejects pre-injury offer",()=>{const s=adv(start(),2),p=preparePhysical(s,"heavy_work");ok(guardedAdmission(s,p));let threw=false;try{guardedAdmission(adv(s,5),p)}catch{threw=true}ok(threw)});
+test2("newly prepared feasible light work admitted by test guard",()=>{const s=hit();ok(guardedAdmission(s,preparePhysical(s,"light_work")))});
+test2("V1 physical condition not bound to actor revision: reproduce stale offer admission",()=>{
+ let s=adv(start(),2);const x=executor(initial,s.clock),b=x.state().actors[1];
+ x.publishOffer({world_id:"W",actor_id:"B",actor_revision:b.revision,knowledge_revision:b.knowledge_revision,opportunity_id:"heavy",action_id:"heavy_work",kind:"action",valid_until:10,feasible:true,exclusive_target:null,credit_cap:10,phases:[{kind:"execution",duration:2,cost:0,interruptible:true,credit_per_tick:1}]});
+ s={...s,clock:x.exportCheckpoint()};const injured=adv(s,5),y=executor(initial,injured.clock),bb=y.state().actors[1];
+ ok(bb.revision===b.revision&&!capable(injured.health.B,"heavy_work"));
+ const result=y.admit({kind:"intent",world_id:"W",actor_id:"B",actor_revision:bb.revision,knowledge_revision:bb.knowledge_revision,decision_tick:5,opportunity_id:"heavy",action_id:"heavy_work",disposition:"action"},"heavy_attempt");
+ ok(result.accepted===true,"baseline limitation no longer reproduced; revise diagnostic");
+});
+test2("foreign epoch invalidates condition proof",()=>{const s=fixture(),p=preparePhysical(s,"heavy_work");let threw=false;try{guardedAdmission({...s,epoch:2},p)}catch{threw=true}ok(threw)});
+console.log(n2+"/"+n2+" condition feedback checks PASS; baseline stale physical admission reproduced");
