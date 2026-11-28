@@ -1,0 +1,153 @@
+{
+  "version": "qa-m1a-finance-v0.1",
+  "status": "review_only_inactive",
+  "activation_allowed": false,
+  "source": {
+    "main": "f75bdd14827bd6ea8555f6ca428132e91cff97c3",
+    "decision": "#103 D1/D3/D4",
+    "parent_finance_commit": "1e23727a553ae11f89e50d41ea0c39756cf591d9",
+    "wage_check_blob": "4e0726a2a7dbe1e7abb3d3173380d7e5534955ef",
+    "role_reference": "NPC-0001 caretaker, ORG-0001 building management; not actual activated identities",
+    "route_reference": "RTE-0002 LOC-0002 to LOC-0003 9m walk/stairs",
+    "rows_reference": [
+      "I-002",
+      "I-003",
+      "I-019"
+    ]
+  },
+  "scope": "Bounded pre-phenomenon M1-A financial inputs only. Separate hypothetical fixture runs from same initial state, no live save, no canonical opening date or actual NPC admission. Player age 16, no employment. All inputs await 01/02/04 and owner review. No forced NPC decision.",
+  "units": {
+    "clock_candidate": "integer milliseconds",
+    "currency_candidate": "100 minor units per CR",
+    "wage_denominator": 3600000,
+    "rate_minor_per_hour": 1800,
+    "rate_source": "18 CR/hour source caretaker reference; synthetic agreement only"
+  },
+  "initial_fixture": {
+    "time_basis": "relative to reviewed opening instant during a candidate weekday work window; absolute civil date not set",
+    "accounts": [
+      {
+        "id": "FIX-EMPLOYER",
+        "owner": "fixture management entity",
+        "lot": "FIX-ENDOWMENT",
+        "clean_minor": 100,
+        "dirty_minor": 0
+      },
+      {
+        "id": "FIX-WORKER",
+        "owner": "fixture adult worker",
+        "clean_minor": 0,
+        "dirty_minor": 0
+      }
+    ],
+    "opening_source": "Explicit synthetic one-time 100 minor-unit endowment; not derived from actual ORG-0001 balance; no recurring revenue.",
+    "agreement": {
+      "id": "FIX-AGREEMENT",
+      "version": 1,
+      "employer": "FIX-EMPLOYER",
+      "worker": "FIX-WORKER",
+      "status": "proposal_requires_reviewed_mutual_acceptance",
+      "compensable_activity": "authorized feasible maintenance only when worker independently chooses and actual work receipt proves elapsed time",
+      "pay_policy": "accrue only in M1-A; separate approved funded settlement needed",
+      "rate_minor_per_hour": 1800,
+      "carry": 0,
+      "earned_minor": 0,
+      "paid_minor": 0
+    },
+    "player_financial_status": "not part of this fixture; no inferred funds or purchases",
+    "actor_permissions": "unresolved; actual residence/workplace/rest access must be reviewed separately"
+  },
+  "paths": [
+    {
+      "id": "walk",
+      "player_choice": "I-002",
+      "movement_length_mm": 9000,
+      "synthetic_speed_mm_per_second": 1000,
+      "elapsed_ms": 9000,
+      "worker_work_control": {
+        "eligible_elapsed_ms": 9000,
+        "earned_minor": 4,
+        "carry": 1800000,
+        "paid_minor": 0,
+        "payable_minor": 4
+      },
+      "worker_nonwork_control": {
+        "eligible_elapsed_ms": 0,
+        "earned_minor": 0,
+        "carry": 0,
+        "paid_minor": 0,
+        "payable_minor": 0
+      },
+      "notes": "9 seconds only if all route traversal conditions hold and no interruption; no assumption the worker is present or willing to answer I-003."
+    },
+    {
+      "id": "rest",
+      "player_choice": "I-019",
+      "elapsed_ms": 60000,
+      "worker_work_control": {
+        "eligible_elapsed_ms": 60000,
+        "earned_minor": 30,
+        "carry": 0,
+        "paid_minor": 0,
+        "payable_minor": 30
+      },
+      "worker_nonwork_control": {
+        "eligible_elapsed_ms": 0,
+        "earned_minor": 0,
+        "carry": 0,
+        "paid_minor": 0,
+        "payable_minor": 0
+      },
+      "notes": "60-second synthetic authorized rest; no guaranteed physiological restoration. A different player action does not by itself force a different worker decision."
+    }
+  ],
+  "cross_boundary_controls": {
+    "interruption": {
+      "elapsed_ms": 3000,
+      "earned_minor": 1,
+      "carry": 1800000,
+      "paid_minor": 0,
+      "payable_minor": 1
+    },
+    "same_horizon_work": {
+      "walk_first_ms": 9000,
+      "remaining_elapsed_ms": 51000,
+      "combined_earned_minor": 30,
+      "combined_carry": 0,
+      "notes": "Compare only if worker actually performs identical compensable work across the common 60-second horizon; different decisions may legitimately produce different outcomes."
+    },
+    "settlement": {
+      "earned_minor": 30,
+      "maximum_funded_payment_minor": 30,
+      "example_partial_payment_minor": 20,
+      "remaining_payable_minor": 10,
+      "employer_after_minor": 80,
+      "worker_after_minor": 20,
+      "notes": "Separate synthetic settlement control, not automatic payment or part of M1-A accrual requirement."
+    }
+  },
+  "required_authority": [
+    "Reviewed explicit synthetic account ownership and agreement authority",
+    "Actual time/phase/eligibility facts from authoritative coordinator, not player-supplied wage amount",
+    "Atomic accrual with world clock, movement, worker condition and reservation effects; one public scoped receipt after commit",
+    "Carry and obligations persisted; rejected or retried commands do not double-accrue",
+    "No wage amount, hidden account or private work outcome in unrelated player prose",
+    "No overlapping compensable time across agreements absent reviewed compatibility rule"
+  ],
+  "native_verification": {
+    "environment": "Node.js v22.16.0, local container",
+    "command": "node check_wage_rate_boundary.mjs",
+    "source_verification": "git hash-object matched exact committed blob 4e0726a2a7dbe1e7abb3d3173380d7e5534955ef",
+    "passed": 20,
+    "total": 20,
+    "scope": "existing standalone wage arithmetic diagnostic; not M1-A runtime, durable CAS or Android"
+  },
+  "unresolved": [
+    "D1 units and 100 minor units/CR approval",
+    "D2 real atomic world transaction and actor-scoped receipt",
+    "D3 complete reviewed actor, care/access, settings, seed and condition fixture",
+    "D4 actual agreement/authority, payment and terminal carry policy",
+    "D6 prepared interaction and scoped rendering",
+    "D8 owner and peer review"
+  ]
+}
