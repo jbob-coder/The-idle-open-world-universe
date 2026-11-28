@@ -1,0 +1,31 @@
+diff --git a/tools/world_persistence_reference.mjs b/tools/world_persistence_reference.mjs
+index 351280a..ed1f1df 100644
+--- a/tools/world_persistence_reference.mjs
++++ b/tools/world_persistence_reference.mjs
+@@ -89,7 +89,8 @@ export function createWorldPersistenceReference(store,createExecutor,createSched
+  // Privileged validation gate only: no journal mutation and no unchecked checkpoint installation.
+  function privateEnvelope(root,runtime){
+   ensure(typeof runtime.s.exportCheckpoint==="function","private checkpoint unsupported");
+-  return {format:"world-private-checkpoint-v1",adapter_version:root.adapter_version,world_id:root.world_id,seed:root.seed,player_id:root.player_id,revision:root.revision,initial:clone(root.initial),runtime:runtime.s.exportCheckpoint()};
++  const paired=typeof runtime.x.exportCheckpoint==="function";
++  return {format:paired?"world-private-checkpoint-v2":"world-private-checkpoint-v1",adapter_version:root.adapter_version,world_id:root.world_id,seed:root.seed,player_id:root.player_id,revision:root.revision,initial:clone(root.initial),runtime:paired?{executor:runtime.x.exportCheckpoint(),scheduler:runtime.s.exportCheckpoint()}:runtime.s.exportCheckpoint()};
+  }
+  function exportPrivateCheckpoint(){
+   const {root,runtime}=readRoot();return clone(privateEnvelope(root,runtime));
+@@ -99,13 +100,14 @@ export function createWorldPersistenceReference(store,createExecutor,createSched
+   ensure(Array.isArray(commands)&&commands.length<=256&&Object.keys(commands).length===commands.length,"invalid verification command batch");
+   const batch=clone(commands);
+   ensure(same(saved,privateEnvelope(root,runtime)),"checkpoint does not match current committed record");
+-  const x=createExecutor(clone(root.initial),clone(saved.runtime)),s=createScheduler(x,root.player_id,reviewNpc,clone(saved.runtime)),direct={x,s};
++  const paired=saved.format==="world-private-checkpoint-v2";
++  const x=createExecutor(clone(root.initial),clone(paired?saved.runtime.executor:saved.runtime)),s=createScheduler(x,root.player_id,reviewNpc,clone(paired?saved.runtime.scheduler:saved.runtime)),direct={x,s};
+   ensure(same(privateEnvelope(root,direct),saved)&&same(capture(direct),capture(runtime)),"initial direct restore differs");
+   for(const cmd of batch){
+    apply(runtime,clone(cmd));apply(direct,clone(cmd));
+    ensure(same(capture(runtime),capture(direct))&&same(privateEnvelope(root,runtime),privateEnvelope(root,direct)),"restored continuation differs");
+   }
+-  return {world_id:root.world_id,base_revision:root.revision,verified_commands:batch.length,checkpoint:clone(capture(direct)),private_state:clone(direct.s.exportCheckpoint())};
++  return {world_id:root.world_id,base_revision:root.revision,verified_commands:batch.length,checkpoint:clone(capture(direct)),private_state:clone(privateEnvelope(root,direct).runtime)};
+  }
+  return Object.freeze({initialize,recover,commit,exportPrivateCheckpoint,verifyCheckpointContinuation});
+ }
